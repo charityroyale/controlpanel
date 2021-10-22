@@ -1,0 +1,14 @@
+{
+	"name": "@pftp/common",
+	"private": true,
+	"main": "shared.js",
+	"version": "1.0.0",
+	"author": "Patrick Obermüller",
+	"license": "MIT",
+	"scripts": {
+		"build": "tsc --build"
+	},
+	"dependencies": {
+		"dotenv": "^10.0.0"
+	}
+}
