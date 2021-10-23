@@ -2,12 +2,18 @@ import React from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../pages/controlpanel'
 import { styled } from '../../styles/Theme'
+import { FatButton } from './FatButton'
+import { AiFillEye } from 'react-icons/ai/index'
 
 export const LeftPanel: FunctionComponent = () => {
 	return (
 		<GridLeftPanel>
 			<Label>Layers</Label>
-			<Content>TBA</Content>
+			<Content>
+				<FatButton icon={<AiFillEye size="24px" />} active={false}>
+					<span>Pig Visible</span>
+				</FatButton>
+			</Content>
 		</GridLeftPanel>
 	)
 }

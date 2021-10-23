@@ -105,9 +105,6 @@ export const Label = styled.div`
 `
 
 export const Content = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	padding: ${(p) => p.theme.space.s}px;
 	height: 100%;
 `
