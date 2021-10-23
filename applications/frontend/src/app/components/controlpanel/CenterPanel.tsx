@@ -41,7 +41,13 @@ export const CenterPanel: FunctionComponent = () => {
 				Pigview
 			</Label>
 			<Content ref={contentRef} style={{ padding: 0 }}>
-				<OverlayIframe title="overlay" src="/overlay" height={1080} width={1920} scale={scale}></OverlayIframe>
+				<OverlayIframe
+					title="overlay"
+					src="/overlay?unlocked=true"
+					height={1080}
+					width={1920}
+					scale={scale}
+				></OverlayIframe>
 			</Content>
 		</GridCenterPanel>
 	)

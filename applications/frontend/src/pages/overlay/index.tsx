@@ -1,5 +1,5 @@
 import React from 'react'
-import { NextPage, GetStaticProps } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
@@ -7,7 +7,8 @@ import styled from 'styled-components'
 import { Overlay } from '../../app/components/overlay/Overlay'
 
 export interface OverlayPageProps {
-	title?: string
+	title: string
+	isLockedInteraction: boolean
 }
 
 const OverlayWrapper = styled.div`
@@ -16,7 +17,7 @@ const OverlayWrapper = styled.div`
 `
 
 const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
-	const { title } = props
+	const { title, isLockedInteraction } = props
 	return (
 		<>
 			<Head>
@@ -25,17 +26,27 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 			<OverlayWrapper>
 				<Overlay />
 			</OverlayWrapper>
+			{isLockedInteraction && <LockInteraction />}
 		</>
 	)
 }
 
-export const getStaticProps: GetStaticProps<OverlayPageProps> = async () => {
+export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async ({ query }) => {
 	return {
 		props: {
 			title: 'Overlay',
+			isLockedInteraction: !(query?.unlocked ? true : false),
 		},
 	}
 }
 ;(OverlayPage as PageWithLayoutType).layout = MainLayout
+
+const LockInteraction = styled.div`
+	position: absolute;
+	z-index: 100;
+	width: 100%;
+	height: 100%;
+	top: 0;
+`
 
 export default OverlayPage
