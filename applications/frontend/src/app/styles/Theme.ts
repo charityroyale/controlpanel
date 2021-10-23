@@ -18,7 +18,7 @@ export const theme = {
 		blackPeral: '#050F1A',
 		decentBeton: '#E6E6E6',
 		emerald: '#50C878',
-		recordRed: '#F16373',
+		recordRed: '#e81224',
 		disabled: '#9e9e9e',
 		veniPurple: '#231565',
 		willhaben: '#049EE7',
@@ -26,6 +26,7 @@ export const theme = {
 		charityBlue: '#0999F9',
 		charityTeal: '#7DF8FF',
 		background: '#18181B',
+		piggyPink: '#EEADB6',
 		highlighbackground: '#1f1f23',
 	},
 	fontSize: {
