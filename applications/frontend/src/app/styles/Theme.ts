@@ -20,6 +20,13 @@ export const theme = {
 		emerald: '#50C878',
 		recordRed: '#F16373',
 		disabled: '#9e9e9e',
+		veniPurple: '#231565',
+		willhaben: '#049EE7',
+		charityPink: '#C03BE4',
+		charityBlue: '#0999F9',
+		charityTeal: '#7DF8FF',
+		background: '#18181B',
+		highlighbackground: '#1f1f23',
 	},
 	fontSize: {
 		s: 12,
