@@ -5,7 +5,6 @@ export const GlobalStyle = createGlobalStyle`
 	html {
 		width: 100%;
 		height: 100%;
-		overflow: hidden;
 	}
 
 
@@ -33,5 +32,6 @@ export const GlobalStyle = createGlobalStyle`
 	* {
 		box-sizing: border-box;
 		font-family: 'Roboto', sans-serif;
+		color: #efeff1;
 	}
 `
