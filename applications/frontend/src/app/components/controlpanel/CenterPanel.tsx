@@ -65,7 +65,7 @@ const LiveEmoji = styled.span`
 	margin-right: ${(p) => p.theme.space.xs}px;
 `
 
-const GridCenterPanel = styled.div`
+export const GridCenterPanel = styled.div`
 	background-color: ${(p) => p.theme.color.background};
 	grid-area: center-panel;
 	aspect-ratio: 16/9;

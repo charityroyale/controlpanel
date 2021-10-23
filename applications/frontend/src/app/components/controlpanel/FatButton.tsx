@@ -2,8 +2,8 @@ import React, { FunctionComponent, ReactElement } from 'react'
 import { styled } from '../../styles/Theme'
 
 interface FatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-	active: boolean
-	icon: ReactElement
+	active?: boolean
+	icon?: ReactElement
 	value?: string
 	children?: ReactElement
 }
@@ -16,7 +16,7 @@ export const FatButton: FunctionComponent<FatButtonProps> = ({
 	...props
 }: FatButtonProps) => {
 	return (
-		<Button {...props} value={value} isActive={active}>
+		<Button {...props} value={value} isActive={active ? true : false}>
 			{icon}
 			{children}
 		</Button>
@@ -33,7 +33,6 @@ const Button = styled.button<{ isActive: boolean }>`
 	flex-direction: column;
 	padding: ${(p) => p.theme.space.m}px ${(p) => p.theme.space.xl}px;
 	width: 100%;
-	margin-bottom: ${(p) => p.theme.space.s}px;
 	cursor: pointer;
 
 	* {
