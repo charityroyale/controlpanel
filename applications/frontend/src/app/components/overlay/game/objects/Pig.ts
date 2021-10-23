@@ -23,7 +23,6 @@ export class Pig extends Phaser.GameObjects.Image {
 		this.setInteractive()
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
-			console.log('Pig position updated.')
 			socket.emit(CHARACTER_UPDATE, {
 				position: {
 					x: this.x,
