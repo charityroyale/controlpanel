@@ -13,7 +13,9 @@ export const CenterPanel: FunctionComponent = () => {
 				</LiveEmoji>
 				Pigview
 			</Label>
-			<Content>16:9</Content>
+			<Content>
+				<iframe title="overlay" src="/overlay"></iframe>
+			</Content>
 		</GridCenterPanel>
 	)
 }

@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import styled from 'styled-components'
+import { Overlay } from '../../app/components/overlay/Overlay'
 
 export interface OverlayPageProps {
 	title?: string
@@ -21,7 +22,9 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 			<Head>
 				<title>{title}</title>
 			</Head>
-			<OverlayWrapper>{title}</OverlayWrapper>
+			<OverlayWrapper>
+				<Overlay />
+			</OverlayWrapper>
 		</>
 	)
 }
