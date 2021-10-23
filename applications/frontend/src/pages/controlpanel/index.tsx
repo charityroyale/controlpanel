@@ -4,17 +4,17 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { styled } from '../../app/styles/Theme'
-import { Header } from '../../app/components/controlpanel/Header'
-import { LeftPanel } from '../../app/components/controlpanel/LeftPanel'
-import { CenterPanel } from '../../app/components/controlpanel/CenterPanel'
-import { BottomPanel, GridBottomPanel } from '../../app/components/controlpanel/BottomPanel'
-import { RightPanel } from '../../app/components/controlpanel/RightPanel'
+import { GridBottomPanel } from '../../app/components/controlpanel/BottomPanel'
+import { useGlobalState } from '../../app/hooks/useGlobalState'
+import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
+
 export interface ControlPanelPageProps {
 	title?: string
 }
 
 const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPageProps) => {
 	const { title } = props
+	const { globalState } = useGlobalState()
 
 	return (
 		<>
@@ -22,13 +22,7 @@ const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPa
 				<title>{title}</title>
 			</Head>
 
-			<Grid>
-				<Header>Header</Header>
-				<LeftPanel>Left-Panel</LeftPanel>
-				<CenterPanel>Center-Panel</CenterPanel>
-				<RightPanel>Right-Panel</RightPanel>
-				<BottomPanel>Bottom-Panel</BottomPanel>
-			</Grid>
+			<Grid>{globalState && <ControlPanel globalState={globalState} />}</Grid>
 		</>
 	)
 }

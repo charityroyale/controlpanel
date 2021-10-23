@@ -11,8 +11,6 @@ export const CenterPanel: FunctionComponent = () => {
 	const updateIframeSize = useCallback(() => {
 		if (contentRef.current) {
 			const { offsetHeight } = contentRef.current
-			console.log(offsetHeight)
-
 			let newHeightScale
 			if (window.screen.width <= responsiveMaxSizeThreshold.phone) {
 				// Mobile iFrame hack

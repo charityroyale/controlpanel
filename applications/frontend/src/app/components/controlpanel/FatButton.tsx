@@ -1,21 +1,22 @@
-import React, { FunctionComponent, ReactElement, useCallback, useState } from 'react'
+import React, { FunctionComponent, ReactElement } from 'react'
 import { styled } from '../../styles/Theme'
 
-interface FatButtonProps {
+interface FatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 	active: boolean
 	icon: ReactElement
+	value?: string
 	children?: ReactElement
 }
 
-export const FatButton: FunctionComponent<FatButtonProps> = ({ children, active, icon }: FatButtonProps) => {
-	const [isActive, setIsActive] = useState(active)
-
-	const onClick = useCallback(() => {
-		setIsActive(!isActive)
-	}, [isActive])
-
+export const FatButton: FunctionComponent<FatButtonProps> = ({
+	children,
+	active,
+	icon,
+	value,
+	...props
+}: FatButtonProps) => {
 	return (
-		<Button isActive={isActive} onClick={onClick}>
+		<Button {...props} value={value} isActive={active}>
 			{icon}
 			{children}
 		</Button>

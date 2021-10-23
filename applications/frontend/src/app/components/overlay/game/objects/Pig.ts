@@ -1,3 +1,4 @@
+import { CharacterState } from '@pftp/common'
 import Phaser from 'phaser'
 
 interface PigProps {
@@ -7,11 +8,11 @@ interface PigProps {
 }
 
 export class Pig extends Phaser.GameObjects.Image {
-	constructor(scene: Phaser.Scene, options: PigProps) {
+	constructor(scene: Phaser.Scene, options: PigProps, characterState: CharacterState) {
 		super(scene, options.x, options.y, options.texture)
 		this.setName('pig')
-		this.setScale(0.5)
-		scene.add.existing(this)
+		this.setScale(1)
+		this.setIsVisible(characterState.isVisible)
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
@@ -23,5 +24,20 @@ export class Pig extends Phaser.GameObjects.Image {
 			this.x = dragX
 			this.y = dragY
 		})
+
+		scene.physics.add.existing(this)
+		this.handleState(characterState)
+		scene.add.existing(this)
+	}
+
+	public handleState(state: CharacterState) {
+		if (this.visible != state.isVisible) {
+			this.setIsVisible(state.isVisible)
+		}
+	}
+
+	public setIsVisible(visible: boolean) {
+		if (this.visible === visible) return
+		this.visible = visible
 	}
 }
