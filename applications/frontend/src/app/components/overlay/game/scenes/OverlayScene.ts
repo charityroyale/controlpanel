@@ -28,7 +28,7 @@ export class OverlayScene extends Phaser.Scene {
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		const { socket, initialState } = config
-		new Pig(this, { x: 300, y: 300, texture: PIG_PLACEHOLDER_SPRITESHEET_KEY }, initialState.character)
+		new Pig(this, { x: 300, y: 300, texture: PIG_PLACEHOLDER_SPRITESHEET_KEY }, initialState.character, socket)
 		socket.emit(REQUEST_STATE)
 	}
 

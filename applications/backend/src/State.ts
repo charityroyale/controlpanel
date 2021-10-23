@@ -3,6 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialCharacterState: CharacterState = {
 	isVisible: true,
+	position: {
+		x: 1080 / 2,
+		y: 1920 / 2,
+	},
 }
 const characterSlice = createSlice({
 	name: 'character',

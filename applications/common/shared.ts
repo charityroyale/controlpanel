@@ -1,9 +1,12 @@
 export interface GlobalState {
 	character: CharacterState
 }
-
 export interface CharacterState {
 	isVisible: boolean
+	position: {
+		x: number
+		y: number
+	}
 }
 
 export const CHARACTER_UPDATE = 'characterUpdate'

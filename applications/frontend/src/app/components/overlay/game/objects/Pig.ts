@@ -1,5 +1,6 @@
-import { CharacterState } from '@pftp/common'
+import { CharacterState, CHARACTER_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
 import Phaser from 'phaser'
+import { Socket } from 'socket.io-client'
 
 interface PigProps {
 	texture: string
@@ -8,7 +9,12 @@ interface PigProps {
 }
 
 export class Pig extends Phaser.GameObjects.Image {
-	constructor(scene: Phaser.Scene, options: PigProps, characterState: CharacterState) {
+	constructor(
+		scene: Phaser.Scene,
+		options: PigProps,
+		characterState: CharacterState,
+		socket: Socket<PFTPSocketEventsMap>
+	) {
 		super(scene, options.x, options.y, options.texture)
 		this.setName('pig')
 		this.setScale(1)
@@ -18,6 +24,12 @@ export class Pig extends Phaser.GameObjects.Image {
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
 			console.log('Pig position updated.')
+			socket.emit(CHARACTER_UPDATE, {
+				position: {
+					x: this.x,
+					y: this.y,
+				},
+			})
 		})
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
@@ -31,6 +43,9 @@ export class Pig extends Phaser.GameObjects.Image {
 	}
 
 	public handleState(state: CharacterState) {
+		this.x = state.position.x
+		this.y = state.position.y
+
 		if (this.visible != state.isVisible) {
 			this.setIsVisible(state.isVisible)
 		}
