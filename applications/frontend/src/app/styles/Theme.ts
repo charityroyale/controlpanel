@@ -3,7 +3,7 @@ import baseStyled, { ThemedStyledInterface } from 'styled-components'
 // References to https://blog.agney.dev/styled-components-&-typescript/
 const customMediaQuery = (minWidth: number): string => `@media (min-width: ${minWidth}px)`
 
-const responsiveMaxSizeThreshold = {
+export const responsiveMaxSizeThreshold = {
 	phone: 576,
 	tablet: 910,
 }

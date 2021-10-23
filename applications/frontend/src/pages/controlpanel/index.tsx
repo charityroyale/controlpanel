@@ -45,13 +45,19 @@ export const getStaticProps: GetStaticProps<ControlPanelPageProps> = async () =>
 const Grid = styled.div`
 	display: grid;
 	height: 100vh;
+	background-color: ${(p) => p.theme.color.background};
 
 	& > div:not(${GridBottomPanel}) {
 		border-bottom: 1px solid ${(p) => p.theme.color.willhaben};
 	}
 
+	// Mobile hacks for responsive iFrame
+	grid-template-columns: minmax(100vw, 0.5fr);
+
+	// Mobile hack
+	overflow-x: hidden;
+
 	// Mobile
-	grid-template-columns: 1fr;
 	grid-auto-rows: 50px auto 1fr 1fr 1fr;
 	grid-template-areas:
 		'header'
@@ -61,11 +67,12 @@ const Grid = styled.div`
 		'bottom-panel';
 
 	${(p) => p.theme.media.tablet} {
+		overflow-x: auto;
 		grid-template-columns: 1fr 1fr;
 		grid-auto-rows: 50px auto 1fr 1fr;
 		grid-template-areas:
 			'header header'
-			'center-panel center-panel '
+			'center-panel center-panel'
 			'left-panel  right-panel'
 			'bottom-panel  bottom-panel';
 
@@ -107,6 +114,13 @@ export const Label = styled.div`
 export const Content = styled.div`
 	padding: ${(p) => p.theme.space.s}px;
 	height: 100%;
+
+	// Mobile hack for padding
+	max-width: calc(100vw - 16px);
+
+	${(p) => p.theme.media.tablet} {
+		max-width: unset;
+	}
 `
 
 export default ControlPanelPage
