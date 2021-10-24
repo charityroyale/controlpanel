@@ -39,6 +39,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 			>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="top-left"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -47,6 +48,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 				</FatButton>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="top-center"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -55,6 +57,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 				</FatButton>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="top-right"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -63,6 +66,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 				</FatButton>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="center-left"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -71,6 +75,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 				</FatButton>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="center"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -79,6 +84,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 				</FatButton>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="center-right"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -88,6 +94,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="bottom-left"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -96,6 +103,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 				</FatButton>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="bottom-center"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}
@@ -104,6 +112,7 @@ export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 				</FatButton>
 				<FatButton
 					active={positionPresetButtonsDisabled}
+					disabled={!positionPresetButtonsDisabled}
 					value="bottom-right"
 					onClick={emitCharacterPosition}
 					style={{ backgroundColor: FatButtonBackgroundColor }}

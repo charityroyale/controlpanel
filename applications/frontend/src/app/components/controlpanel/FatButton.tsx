@@ -6,6 +6,7 @@ interface FatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 	icon?: ReactElement
 	value?: string
 	children?: ReactElement
+	disabled?: boolean
 }
 
 export const FatButton: FunctionComponent<FatButtonProps> = ({
@@ -13,10 +14,11 @@ export const FatButton: FunctionComponent<FatButtonProps> = ({
 	active,
 	icon,
 	value,
+	disabled,
 	...props
 }: FatButtonProps) => {
 	return (
-		<Button {...props} value={value} isActive={active ? true : false} disabled={!active ? true : false}>
+		<Button {...props} value={value} isActive={active ? true : false} disabled={disabled}>
 			{icon}
 			{children}
 		</Button>
