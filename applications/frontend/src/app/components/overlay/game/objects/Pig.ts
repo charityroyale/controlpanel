@@ -9,6 +9,8 @@ interface PigProps {
 }
 
 export class Pig extends Phaser.GameObjects.Image {
+	private isLocked
+
 	constructor(
 		scene: Phaser.Scene,
 		options: PigProps,
@@ -19,6 +21,7 @@ export class Pig extends Phaser.GameObjects.Image {
 		this.setName('pig')
 		this.setScale(1)
 		this.setIsVisible(characterState.isVisible)
+		this.isLocked = characterState.isLocked
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
@@ -32,8 +35,10 @@ export class Pig extends Phaser.GameObjects.Image {
 		})
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			this.x = dragX
-			this.y = dragY
+			if (!this.isLocked) {
+				this.x = dragX
+				this.y = dragY
+			}
 		})
 
 		scene.physics.add.existing(this)
@@ -42,8 +47,14 @@ export class Pig extends Phaser.GameObjects.Image {
 	}
 
 	public handleState(state: CharacterState) {
-		this.x = state.position.x
-		this.y = state.position.y
+		if (!this.isLocked) {
+			this.x = state.position.x
+			this.y = state.position.y
+		}
+
+		if (this.isLocked !== state.isLocked) {
+			this.isLocked = state.isLocked
+		}
 
 		if (this.visible != state.isVisible) {
 			this.setIsVisible(state.isVisible)

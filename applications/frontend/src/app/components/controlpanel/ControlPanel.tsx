@@ -13,7 +13,7 @@ export const ControlPanel: FunctionComponent<{ globalState: GlobalState }> = ({ 
 			<LeftPanel globalState={globalState}>Left-Panel</LeftPanel>
 			<CenterPanel globalState={globalState}>Center-Panel</CenterPanel>
 			<RightPanel>Right-Panel</RightPanel>
-			<BottomPanel>Bottom-Panel</BottomPanel>
+			<BottomPanel globalState={globalState}>Bottom-Panel</BottomPanel>
 		</React.Fragment>
 	)
 }

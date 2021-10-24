@@ -16,7 +16,7 @@ export const FatButton: FunctionComponent<FatButtonProps> = ({
 	...props
 }: FatButtonProps) => {
 	return (
-		<Button {...props} value={value} isActive={active ? true : false}>
+		<Button {...props} value={value} isActive={active ? true : false} disabled={!active ? true : false}>
 			{icon}
 			{children}
 		</Button>
@@ -33,7 +33,10 @@ const Button = styled.button<{ isActive: boolean }>`
 	flex-direction: column;
 	padding: ${(p) => p.theme.space.m}px ${(p) => p.theme.space.xl}px;
 	width: 100%;
-	cursor: pointer;
+
+	&:not(:disabled) {
+		cursor: pointer;
+	}
 
 	* {
 		color: ${(p) => (p.isActive ? p.theme.color.white : 'rgba(255, 255, 255, 0.2)')};
