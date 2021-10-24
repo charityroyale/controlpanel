@@ -3,7 +3,7 @@ import { OverlayScene } from './scenes/OverlayScene'
 
 export const gameConfig = {
 	type: Phaser.AUTO,
-	transparent: false,
+	transparent: true,
 	scale: {
 		parent: 'pftp-overlay',
 		width: 1920,

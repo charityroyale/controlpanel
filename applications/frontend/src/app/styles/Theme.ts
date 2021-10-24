@@ -25,6 +25,7 @@ export const theme = {
 		charityPink: '#C03BE4',
 		charityBlue: '#0999F9',
 		charityTeal: '#7DF8FF',
+		charityGold: '#ffd76e',
 		background: '#18181B',
 		piggyPink: '#EEADB6',
 		highlighbackground: '#1f1f23',
