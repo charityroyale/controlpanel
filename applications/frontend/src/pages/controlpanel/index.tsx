@@ -4,7 +4,6 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { styled } from '../../app/styles/Theme'
-import { GridBottomPanel } from '../../app/components/controlpanel/BottomPanel'
 import { useGlobalState } from '../../app/hooks/useGlobalState'
 import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
 
@@ -41,17 +40,6 @@ const Grid = styled.div`
 	height: 100vh;
 	background-color: ${(p) => p.theme.color.background};
 
-	& > div:not(${GridBottomPanel}) {
-		border-bottom: 1px solid ${(p) => p.theme.color.willhaben};
-	}
-
-	// Mobile hacks for responsive iFrame
-	grid-template-columns: minmax(100vw, 0.5fr);
-
-	// Mobile hack
-	overflow-x: hidden;
-
-	// Mobile
 	grid-auto-rows: 50px auto 1fr 1fr 1fr;
 	grid-template-areas:
 		'header'
@@ -61,7 +49,6 @@ const Grid = styled.div`
 		'bottom-panel';
 
 	${(p) => p.theme.media.tablet} {
-		overflow-x: auto;
 		grid-template-columns: 1fr 1fr;
 		grid-auto-rows: 50px auto 1fr 1fr;
 		grid-template-areas:
@@ -69,11 +56,6 @@ const Grid = styled.div`
 			'center-panel center-panel'
 			'left-panel  right-panel'
 			'bottom-panel  bottom-panel';
-
-		// Left-Panel
-		& > div:nth-child(2) {
-			border-right: 1px solid ${(p) => p.theme.color.willhaben};
-		}
 	}
 
 	${(p) => p.theme.media.desktop} {
@@ -83,17 +65,6 @@ const Grid = styled.div`
 			'header header header'
 			'left-panel center-panel right-panel'
 			'left-panel bottom-panel right-panel';
-
-		// Right-Panel
-		& > div:nth-child(4) {
-			border-left: 1px solid ${(p) => p.theme.color.willhaben};
-			border-bottom: 0;
-		}
-
-		// Left-Panel
-		& > div:nth-child(2) {
-			border-bottom: 0;
-		}
 	}
 `
 
@@ -103,14 +74,12 @@ export const Label = styled.div`
 	padding: ${(p) => p.theme.space.xs}px ${(p) => p.theme.space.m}px;
 	display: flex;
 	align-items: center;
+	height: 30px;
 `
 
 export const Content = styled.div`
 	padding: ${(p) => p.theme.space.s}px;
-	height: 100%;
-
-	// Mobile hack for padding
-	max-width: calc(100vw - 16px);
+	height: calc(100% - 30px);
 
 	${(p) => p.theme.media.tablet} {
 		max-width: unset;

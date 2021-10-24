@@ -17,6 +17,7 @@ const GridHeader = styled.div`
 	display: flex;
 	align-items: center;
 	padding: ${(p) => p.theme.space.xs}px ${(p) => p.theme.space.s}px;
+	border-bottom: 1px solid ${(p) => p.theme.color.charityGold};
 `
 
 const Logo = styled.img`

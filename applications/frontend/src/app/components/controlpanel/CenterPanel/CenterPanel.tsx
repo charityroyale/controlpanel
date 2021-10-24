@@ -3,7 +3,7 @@ import { GlobalState } from '@pftp/common'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
-import { responsiveMaxSizeThreshold, styled } from '../../../styles/Theme'
+import { styled } from '../../../styles/Theme'
 import { LockCharacterPositionButton } from './LockCharacterPositionButton'
 
 export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
@@ -13,14 +13,7 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 	const updateIframeSize = useCallback(() => {
 		if (contentRef.current) {
 			const { offsetHeight } = contentRef.current
-			let newHeightScale
-			if (window.screen.width <= responsiveMaxSizeThreshold.phone) {
-				// Mobile iFrame hack
-				newHeightScale = (offsetHeight - 8) / 1080
-			} else {
-				newHeightScale = offsetHeight / 1080
-			}
-
+			const newHeightScale = offsetHeight / 1080
 			setScale(Number(newHeightScale.toFixed(10)))
 		}
 	}, [])
@@ -46,7 +39,7 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 
 				<LockCharacterPositionButton isLocked={globalState.character.isLocked} />
 			</Label>
-			<Content ref={contentRef} style={{ padding: 0 }}>
+			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>
 				<OverlayIframe
 					title="overlay"
 					src="/overlay?unlocked=true"
@@ -62,7 +55,9 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 const OverlayIframe = styled.iframe<{ scale: number }>`
 	border: none;
 	display: block;
-	transform: scale(${(p) => p.scale});
+	position: absolute;
+	left: 50%;
+	transform: scale(${(p) => p.scale}) translateX(-50%);
 	transform-origin: 0 0;
 `
 
