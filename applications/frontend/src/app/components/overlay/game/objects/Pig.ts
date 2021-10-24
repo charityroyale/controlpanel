@@ -61,9 +61,10 @@ export class Pig extends Phaser.GameObjects.Image {
 		}
 	}
 
-	public handleDonation(donation: Donation) {
+	/** placeholder function until pig handling with animations starts */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public handleDonation(_donation: Donation) {
 		this.setScale(Math.random() + 1)
-		console.log(`${donation.user} donated ${donation.amount}€.`)
 	}
 
 	public setIsVisible(visible: boolean) {
