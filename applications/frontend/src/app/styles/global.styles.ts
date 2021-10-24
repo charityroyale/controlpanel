@@ -12,6 +12,14 @@ export const GlobalStyle = createGlobalStyle`
 		display: block;
 	}
 
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 6px;
+	}
+	
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: #666; 
+	}
+
 	body {
 		margin: 0;
 		padding: 0;

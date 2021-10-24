@@ -1,4 +1,4 @@
-import { CharacterState, CHARACTER_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
+import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
 
@@ -59,6 +59,11 @@ export class Pig extends Phaser.GameObjects.Image {
 		if (this.visible != state.isVisible) {
 			this.setIsVisible(state.isVisible)
 		}
+	}
+
+	public handleDonation(donation: Donation) {
+		this.setScale(Math.random() + 1)
+		console.log(`${donation.user} donated ${donation.amount}€.`)
 	}
 
 	public setIsVisible(visible: boolean) {

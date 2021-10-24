@@ -4,7 +4,7 @@ import { BottomPanel } from './BottomPanel'
 import { CenterPanel } from './CenterPanel/CenterPanel'
 import { Header } from './Header'
 import { LeftPanel } from './LeftPanel'
-import { RightPanel } from './RightPanel'
+import { RightPanel } from './RightPanel/RightPanel'
 
 export const ControlPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	return (
