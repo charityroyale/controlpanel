@@ -1,4 +1,4 @@
-import { GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import { Donation, DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
@@ -15,6 +15,13 @@ export class OverlayScene extends Phaser.Scene {
 			const activePigs = this.getActiveGameObjectsByName<Pig>('pig')
 			for (const pig of activePigs) {
 				pig.handleState(state.character)
+			}
+		})
+
+		config.socket.on(DONATION_TRIGGER, (donation: Donation) => {
+			const activePigs = this.getActiveGameObjectsByName<Pig>('pig')
+			for (const pig of activePigs) {
+				pig.handleDonation(donation)
 			}
 		})
 	}

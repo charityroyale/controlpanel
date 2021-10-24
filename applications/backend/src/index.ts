@@ -1,6 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { logger } from './logger'
-import { CHARACTER_UPDATE, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import {
+	CHARACTER_UPDATE,
+	Donation,
+	DONATION_TRIGGER,
+	GlobalState,
+	PFTPSocketEventsMap,
+	REQUEST_STATE,
+	STATE_UPDATE,
+} from '@pftp/common'
 import { characterReducer, updateCharacter } from './State'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
@@ -22,6 +30,9 @@ io.on('connection', (socket) => {
 		logger.info(`socket ${socket.id} disconnected with reason: ${reason}`)
 	})
 
+	socket.on(DONATION_TRIGGER, (donation: Donation) => {
+		io.emit(DONATION_TRIGGER, donation)
+	})
 	socket.emit(STATE_UPDATE, store.getState())
 	socket.on(REQUEST_STATE, () => socket.emit(STATE_UPDATE, store.getState()))
 })
