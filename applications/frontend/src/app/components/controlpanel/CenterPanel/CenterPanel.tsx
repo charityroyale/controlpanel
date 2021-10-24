@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
+import { GlobalState } from '@pftp/common'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FunctionComponent } from 'react'
-import { Label, Content } from '../../../pages/controlpanel'
-import { responsiveMaxSizeThreshold, styled } from '../../styles/Theme'
+import { Label, Content } from '../../../../pages/controlpanel'
+import { responsiveMaxSizeThreshold, styled } from '../../../styles/Theme'
+import { LockCharacterPositionButton } from './LockCharacterPositionButton'
 
-export const CenterPanel: FunctionComponent = () => {
+export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const contentRef = useRef<null | HTMLDivElement>(null)
 	const [scale, setScale] = useState(0)
 
@@ -34,11 +36,15 @@ export const CenterPanel: FunctionComponent = () => {
 
 	return (
 		<GridCenterPanel>
-			<Label>
-				<LiveEmoji role="img" aria-label="Live-Icon">
-					🔴
-				</LiveEmoji>
-				Pigview
+			<Label style={{ justifyContent: 'space-between', paddingRight: 0 }}>
+				<div>
+					<LiveEmoji role="img" aria-label="Live-Icon">
+						🔴
+					</LiveEmoji>
+					Pigview
+				</div>
+
+				<LockCharacterPositionButton isLocked={globalState.character.isLocked} />
 			</Label>
 			<Content ref={contentRef} style={{ padding: 0 }}>
 				<OverlayIframe

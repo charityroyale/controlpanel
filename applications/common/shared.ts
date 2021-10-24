@@ -3,6 +3,7 @@ export interface GlobalState {
 }
 export interface CharacterState {
 	isVisible: boolean
+	isLocked: boolean
 	position: {
 		x: number
 		y: number

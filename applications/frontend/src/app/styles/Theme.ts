@@ -28,6 +28,7 @@ export const theme = {
 		background: '#18181B',
 		piggyPink: '#EEADB6',
 		highlighbackground: '#1f1f23',
+		slightlyTransparent: 'rgba(255, 255, 255, 0.2)',
 	},
 	fontSize: {
 		s: 12,
