@@ -1,4 +1,6 @@
+import { CharacterState, CHARACTER_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
 import Phaser from 'phaser'
+import { Socket } from 'socket.io-client'
 
 interface PigProps {
 	texture: string
@@ -7,21 +9,60 @@ interface PigProps {
 }
 
 export class Pig extends Phaser.GameObjects.Image {
-	constructor(scene: Phaser.Scene, options: PigProps) {
+	private isLocked
+
+	constructor(
+		scene: Phaser.Scene,
+		options: PigProps,
+		characterState: CharacterState,
+		socket: Socket<PFTPSocketEventsMap>
+	) {
 		super(scene, options.x, options.y, options.texture)
 		this.setName('pig')
-		this.setScale(0.5)
-		scene.add.existing(this)
+		this.setScale(1)
+		this.setIsVisible(characterState.isVisible)
+		this.isLocked = characterState.isLocked
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
-			console.log('Pig position updated.')
+			socket.emit(CHARACTER_UPDATE, {
+				position: {
+					x: this.x,
+					y: this.y,
+				},
+			})
 		})
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			this.x = dragX
-			this.y = dragY
+			if (!this.isLocked) {
+				this.x = dragX
+				this.y = dragY
+			}
 		})
+
+		scene.physics.add.existing(this)
+		this.handleState(characterState)
+		scene.add.existing(this)
+	}
+
+	public handleState(state: CharacterState) {
+		if (!this.isLocked) {
+			this.x = state.position.x
+			this.y = state.position.y
+		}
+
+		if (this.isLocked !== state.isLocked) {
+			this.isLocked = state.isLocked
+		}
+
+		if (this.visible != state.isVisible) {
+			this.setIsVisible(state.isVisible)
+		}
+	}
+
+	public setIsVisible(visible: boolean) {
+		if (this.visible === visible) return
+		this.visible = visible
 	}
 }

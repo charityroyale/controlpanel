@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../pages/controlpanel'
 import { styled } from '../../styles/Theme'
 import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { FaPiggyBank } from 'react-icons/fa'
+import { CHARACTER_UPDATE, GlobalState } from '@pftp/common'
+import { useSocket } from '../../hooks/useSocket'
 
-export const LeftPanel: FunctionComponent = () => {
+export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
+	const { socket } = useSocket()
+
+	const emitCharacterIsVisibleUpdate = useCallback(() => {
+		socket?.emit(CHARACTER_UPDATE, {
+			isVisible: !globalState.character.isVisible,
+		})
+	}, [globalState.character.isVisible, socket])
+
 	return (
 		<GridLeftPanel>
 			<Label>
@@ -16,7 +26,12 @@ export const LeftPanel: FunctionComponent = () => {
 				Character
 			</Label>
 			<Content>
-				<FatButton icon={<AiFillEye size="24px" />} active={false}>
+				<FatButton
+					icon={<AiFillEye size="24px" />}
+					active={globalState.character.isVisible}
+					value={globalState?.character.isVisible === true ? 'true' : 'false'}
+					onClick={emitCharacterIsVisibleUpdate}
+				>
 					<span>Pig Visible</span>
 				</FatButton>
 			</Content>

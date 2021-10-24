@@ -1,21 +1,24 @@
-import React, { FunctionComponent, ReactElement, useCallback, useState } from 'react'
+import React, { FunctionComponent, ReactElement } from 'react'
 import { styled } from '../../styles/Theme'
 
-interface FatButtonProps {
-	active: boolean
-	icon: ReactElement
+interface FatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+	active?: boolean
+	icon?: ReactElement
+	value?: string
 	children?: ReactElement
+	disabled?: boolean
 }
 
-export const FatButton: FunctionComponent<FatButtonProps> = ({ children, active, icon }: FatButtonProps) => {
-	const [isActive, setIsActive] = useState(active)
-
-	const onClick = useCallback(() => {
-		setIsActive(!isActive)
-	}, [isActive])
-
+export const FatButton: FunctionComponent<FatButtonProps> = ({
+	children,
+	active,
+	icon,
+	value,
+	disabled,
+	...props
+}: FatButtonProps) => {
 	return (
-		<Button isActive={isActive} onClick={onClick}>
+		<Button {...props} value={value} isActive={active ? true : false} disabled={disabled}>
 			{icon}
 			{children}
 		</Button>
@@ -32,8 +35,10 @@ const Button = styled.button<{ isActive: boolean }>`
 	flex-direction: column;
 	padding: ${(p) => p.theme.space.m}px ${(p) => p.theme.space.xl}px;
 	width: 100%;
-	margin-bottom: ${(p) => p.theme.space.s}px;
-	cursor: pointer;
+
+	&:not(:disabled) {
+		cursor: pointer;
+	}
 
 	* {
 		color: ${(p) => (p.isActive ? p.theme.color.white : 'rgba(255, 255, 255, 0.2)')};

@@ -7,6 +7,8 @@ import { GlobalStyle } from '../app/styles/global.styles'
 import { theme } from '../app/styles/Theme'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { GlobalStateProvider } from '../app/provider/GlobalStateProvider'
+import { SocketProvider } from '../app/provider/SocketProvider'
 
 function App({ Component, pageProps }: AppProps) {
 	// Casting to any workaround for static prop
@@ -17,15 +19,19 @@ function App({ Component, pageProps }: AppProps) {
 	return (
 		<React.Fragment>
 			<GlobalStyle />
-			<ThemeProvider theme={theme}>
-				{/**
-				 * Produces the following warnings:
-				 * Warning: Invalid prop `statusCode` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
-				 */}
-				<Layout {...pageProps}>
-					<Component {...pageProps} />
-				</Layout>
-			</ThemeProvider>
+			<SocketProvider>
+				<GlobalStateProvider>
+					<ThemeProvider theme={theme}>
+						{/**
+						 * Produces the following warnings:
+						 * Warning: Invalid prop `statusCode` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+						 */}
+						<Layout {...pageProps}>
+							<Component {...pageProps} />
+						</Layout>
+					</ThemeProvider>
+				</GlobalStateProvider>
+			</SocketProvider>
 			<ToastContainer
 				position="top-right"
 				autoClose={3000}
