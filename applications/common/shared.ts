@@ -13,7 +13,7 @@ export interface CharacterState {
 export interface Donation {
 	user: string
 	amount: number
-	timestamp: Date
+	timestamp: string
 }
 
 export const CHARACTER_UPDATE = 'characterUpdate'

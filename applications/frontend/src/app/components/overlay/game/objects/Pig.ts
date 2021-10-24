@@ -62,7 +62,7 @@ export class Pig extends Phaser.GameObjects.Image {
 	}
 
 	public handleDonation(donation: Donation) {
-		this.setScale(1.25)
+		this.setScale(Math.random() + 1)
 		console.log(`${donation.user} donated ${donation.amount}€.`)
 	}
 
