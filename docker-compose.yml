@@ -6,55 +6,29 @@ services:
       context: ./
       dockerfile: Dockerfile.frontend
     image: pftp/frontend
-    ports:
-      - '4200:4200'
-    environment:
-      VIRTUAL_HOST: 'pftp.redcouch.at'
-      LETSENCRYPT_HOST: 'pftp.redcouch.at'
-      VIRTUAL_PORT: '4200'
-      LETSENCRYPT_EMAIL: 'patzi@2die4.com'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pftp-frontend.rule=Host(`pftp.redcouch.at`)"
+      - "traefik.http.routers.pftp-frontend.entrypoints=websecure"
+      - "traefik.http.routers.pftp-frontend.tls.certresolver=myresolver"
+    networks:
+      internal:
+    restart: always
 
   backend:
     build:
       context: ./
       dockerfile: Dockerfile.backend
     image: pftp/backend
-    ports:
-      - '5200:5200'
-    environment:
-      VIRTUAL_HOST: 'pftp.backend.redcouch.at'
-      LETSENCRYPT_HOST: 'pftp.backend.redcouch.at'
-      VIRTUAL_PORT: '5200'
-      LETSENCRYPT_EMAIL: 'patzi@2die4.com'
-
-  nginx-proxy:
-    image: nginxproxy/nginx-proxy
-    container_name: nginx-proxy
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - conf:/etc/nginx/conf.d
-      - vhost:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-      - dhparam:/etc/nginx/dhparam
-      - certs:/etc/nginx/certs:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-
-  acme-companion:
-    image: nginxproxy/acme-companion
-    container_name: nginx-proxy-acme
-    volumes_from:
-      - nginx-proxy
-    volumes:
-      - certs:/etc/nginx/certs:rw
-      - acme:/etc/acme.sh
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-
-volumes:
-  conf:
-  vhost:
-  html:
-  dhparam:
-  certs:
-  acme:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pftp-backend.rule=Host(`pftp.backend.redcouch.at`)"
+      - "traefik.http.routers.pftp-backend.entrypoints=websecure"
+      - "traefik.http.routers.pftp-backend.tls.certresolver=myresolver"
+    networks:
+      internal:
+    restart: always
+networks:
+  internal:
+    external:
+      name: paddy_internal
