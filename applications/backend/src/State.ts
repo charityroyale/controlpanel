@@ -1,4 +1,4 @@
-import { CharacterState } from '@pftp/common'
+import { CharacterState, SettingsState } from '@pftp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialCharacterState: CharacterState = {
@@ -22,5 +22,24 @@ const characterSlice = createSlice({
 	},
 })
 
+const initialSettingsState: SettingsState = {
+	volume: 1,
+}
+const settingsSlice = createSlice({
+	name: 'settings',
+	initialState: initialSettingsState,
+	reducers: {
+		update: (state, action: PayloadAction<Partial<SettingsState>>) => {
+			return {
+				...state,
+				...action.payload,
+			}
+		},
+	},
+})
+
 export const characterReducer = characterSlice.reducer
 export const updateCharacter = characterSlice.actions.update
+
+export const settingsReducer = settingsSlice.reducer
+export const updateSettings = settingsSlice.actions.update

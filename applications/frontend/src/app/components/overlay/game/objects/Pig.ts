@@ -6,10 +6,12 @@ interface PigProps {
 	texture: string
 	x: number
 	y: number
+	pigLaugh: Phaser.Sound.BaseSound
 }
 
 export class Pig extends Phaser.GameObjects.Image {
 	private isLocked
+	private pigLaugh
 
 	constructor(
 		scene: Phaser.Scene,
@@ -21,17 +23,20 @@ export class Pig extends Phaser.GameObjects.Image {
 		this.setName('pig')
 		this.setScale(1)
 		this.setIsVisible(characterState.isVisible)
+		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
-			socket.emit(CHARACTER_UPDATE, {
-				position: {
-					x: this.x,
-					y: this.y,
-				},
-			})
+			if (!this.isLocked) {
+				socket.emit(CHARACTER_UPDATE, {
+					position: {
+						x: this.x,
+						y: this.y,
+					},
+				})
+			}
 		})
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
@@ -64,7 +69,12 @@ export class Pig extends Phaser.GameObjects.Image {
 	/** placeholder function until pig handling with animations starts */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handleDonation(_donation: Donation) {
+		this.playLaughSound()
 		this.setScale(Math.random() + 1)
+	}
+
+	public playLaughSound() {
+		this.pigLaugh.play()
 	}
 
 	public setIsVisible(visible: boolean) {
