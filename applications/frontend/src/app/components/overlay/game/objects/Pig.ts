@@ -1,16 +1,17 @@
 import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
-import { PIG_LAUGH_AUDIO_KEY } from '../scenes/OverlayScene'
 
 interface PigProps {
 	texture: string
 	x: number
 	y: number
+	pigLaugh: Phaser.Sound.BaseSound
 }
 
 export class Pig extends Phaser.GameObjects.Image {
 	private isLocked
+	private pigLaugh
 
 	constructor(
 		scene: Phaser.Scene,
@@ -22,6 +23,7 @@ export class Pig extends Phaser.GameObjects.Image {
 		this.setName('pig')
 		this.setScale(1)
 		this.setIsVisible(characterState.isVisible)
+		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
 
 		this.setInteractive()
@@ -65,8 +67,12 @@ export class Pig extends Phaser.GameObjects.Image {
 	/** placeholder function until pig handling with animations starts */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handleDonation(_donation: Donation) {
-		this.scene.sound.play(PIG_LAUGH_AUDIO_KEY)
+		this.playLaughSound()
 		this.setScale(Math.random() + 1)
+	}
+
+	public playLaughSound() {
+		this.pigLaugh.play()
 	}
 
 	public setIsVisible(visible: boolean) {

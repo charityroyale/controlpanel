@@ -7,15 +7,17 @@ import {
 	GlobalState,
 	PFTPSocketEventsMap,
 	REQUEST_STATE,
+	SETTINGS_UPDATE,
 	STATE_UPDATE,
 } from '@pftp/common'
-import { characterReducer, updateCharacter } from './State'
+import { characterReducer, settingsReducer, updateCharacter, updateSettings } from './State'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 
 const store = configureStore<GlobalState>({
 	reducer: {
 		character: characterReducer,
+		settings: settingsReducer,
 	},
 })
 
@@ -26,6 +28,8 @@ io.on('connection', (socket) => {
 	logger.info(`new connection from ${socket.id}!`)
 
 	socket.on(CHARACTER_UPDATE, (characterUpdate) => store.dispatch(updateCharacter(characterUpdate)))
+	socket.on(SETTINGS_UPDATE, (settingsUpdate) => store.dispatch(updateSettings(settingsUpdate)))
+
 	socket.on('disconnect', (reason) => {
 		logger.info(`socket ${socket.id} disconnected with reason: ${reason}`)
 	})

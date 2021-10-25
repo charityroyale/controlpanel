@@ -17,6 +17,10 @@ export class OverlayScene extends Phaser.Scene {
 			for (const pig of activePigs) {
 				pig.handleState(state.character)
 			}
+
+			if (this.sound.volume !== state.settings.volume) {
+				this.sound.volume = state.settings.volume
+			}
 		})
 
 		config.socket.on(DONATION_TRIGGER, (donation: Donation) => {
@@ -37,7 +41,15 @@ export class OverlayScene extends Phaser.Scene {
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		const { socket, initialState } = config
-		new Pig(this, { x: 300, y: 300, texture: PIG_PLACEHOLDER_SPRITESHEET_KEY }, initialState.character, socket)
+		const pigLaugh = this.sound.add(PIG_LAUGH_AUDIO_KEY)
+		this.sound.pauseOnBlur = false
+
+		new Pig(
+			this,
+			{ x: 1920 / 2, y: 1080 / 2, texture: PIG_PLACEHOLDER_SPRITESHEET_KEY, pigLaugh },
+			initialState.character,
+			socket
+		)
 		socket.emit(REQUEST_STATE)
 	}
 
