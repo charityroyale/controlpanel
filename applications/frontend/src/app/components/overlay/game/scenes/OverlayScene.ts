@@ -5,6 +5,7 @@ import { SCENES } from '../gameConfig'
 import { Pig } from '../objects/Pig'
 
 const PIG_PLACEHOLDER_SPRITESHEET_KEY = 'pigPlaceHolder'
+export const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 export class OverlayScene extends Phaser.Scene {
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -31,6 +32,7 @@ export class OverlayScene extends Phaser.Scene {
 			frameWidth: 225,
 			frameHeight: 225,
 		})
+		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 	}
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {

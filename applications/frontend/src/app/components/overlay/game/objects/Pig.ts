@@ -1,6 +1,7 @@
 import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
+import { PIG_LAUGH_AUDIO_KEY } from '../scenes/OverlayScene'
 
 interface PigProps {
 	texture: string
@@ -64,6 +65,7 @@ export class Pig extends Phaser.GameObjects.Image {
 	/** placeholder function until pig handling with animations starts */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handleDonation(_donation: Donation) {
+		this.scene.sound.play(PIG_LAUGH_AUDIO_KEY)
 		this.setScale(Math.random() + 1)
 	}
 
