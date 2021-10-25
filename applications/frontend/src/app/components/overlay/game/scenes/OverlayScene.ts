@@ -5,7 +5,8 @@ import { SCENES } from '../gameConfig'
 import { Pig } from '../objects/Pig'
 
 const PIG_PLACEHOLDER_SPRITESHEET_KEY = 'pigPlaceHolder'
-export const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
+const VOLUME_CHANGE_AUDIO_KEY = 'voluemChangeAudio'
+const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 export class OverlayScene extends Phaser.Scene {
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -20,6 +21,7 @@ export class OverlayScene extends Phaser.Scene {
 
 			if (this.sound.volume !== state.settings.volume) {
 				this.sound.volume = state.settings.volume
+				this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
 			}
 		})
 
@@ -37,6 +39,7 @@ export class OverlayScene extends Phaser.Scene {
 			frameHeight: 225,
 		})
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
+		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
 	}
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
