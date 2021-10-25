@@ -29,12 +29,14 @@ export class Pig extends Phaser.GameObjects.Image {
 		this.setInteractive()
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
-			socket.emit(CHARACTER_UPDATE, {
-				position: {
-					x: this.x,
-					y: this.y,
-				},
-			})
+			if (!this.isLocked) {
+				socket.emit(CHARACTER_UPDATE, {
+					position: {
+						x: this.x,
+						y: this.y,
+					},
+				})
+			}
 		})
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
