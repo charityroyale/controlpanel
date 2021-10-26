@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
 import { styled } from '../../../styles/Theme'
+import { CopyBrowserSource } from './CopyBrowserSource'
 import { LockCharacterPositionButton } from './LockCharacterPositionButton'
 
 export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
@@ -36,8 +37,10 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 					</LiveEmoji>
 					Pigview
 				</div>
-
-				<LockCharacterPositionButton isLocked={globalState.character.isLocked} />
+				<PanelButtonWrapper>
+					<CopyBrowserSource />
+					<LockCharacterPositionButton isLocked={globalState.character.isLocked} />
+				</PanelButtonWrapper>
 			</Label>
 			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>
 				<OverlayIframe
@@ -51,6 +54,11 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 		</GridCenterPanel>
 	)
 }
+
+const PanelButtonWrapper = styled.div`
+	display: flex;
+	align-items: center;
+`
 
 const OverlayIframe = styled.iframe<{ scale: number }>`
 	border: none;
