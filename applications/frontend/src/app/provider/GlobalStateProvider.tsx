@@ -1,28 +1,38 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { createContext, FunctionComponent, useState } from 'react'
-import { GlobalState } from '@pftp/common'
+import { GlobalState, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import { useSocket } from '../hooks/useSocket'
 
 export interface GlobalStateContextState {
 	globalState: GlobalState | null
-	setGlobalState: React.Dispatch<React.SetStateAction<GlobalState | null>>
 }
 
 const globalStateDefaultValue: GlobalStateContextState = {
 	globalState: null,
-	setGlobalState: () => {
-		return
-	},
 }
 
 export const GlobalStateContext = createContext<GlobalStateContextState>(globalStateDefaultValue)
 export const GlobalStateProvider: FunctionComponent = ({ children }) => {
 	const [globalState, setGlobalState] = useState<GlobalState | null>(globalStateDefaultValue.globalState)
+	const { socket, isConnected } = useSocket()
+
+	const updateGlobalState = useCallback((state: GlobalState) => {
+		setGlobalState(state)
+	}, [])
+
+	useEffect(() => {
+		if (isConnected && socket) {
+			socket.on(STATE_UPDATE, updateGlobalState)
+			socket.emit(REQUEST_STATE)
+		} else if (!isConnected && socket) {
+			socket.off(STATE_UPDATE, updateGlobalState)
+		}
+	}, [socket, updateGlobalState, isConnected])
 
 	return (
 		<GlobalStateContext.Provider
 			value={{
 				globalState,
-				setGlobalState,
 			}}
 		>
 			{children}
