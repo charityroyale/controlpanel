@@ -1,16 +1,18 @@
 import React from 'react'
-import { NextPage, GetStaticProps } from 'next'
+import { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { PageWithLayoutType } from '../app/layout/PageWithLayout'
 import { MainLayout } from '../app/layout/Layout'
 import { FatButton } from '../app/components/controlpanel/FatButton'
 import { styled } from '../app/styles/Theme'
+import { withSession, ServerSideHandler } from '../app/lib/session'
+import { UserDTO } from './api/sessions'
 
-export interface InitialAppProps {
+export interface StartPageProps {
 	title?: string
 }
 
-const IndexPage: NextPage<InitialAppProps> = (props: InitialAppProps) => {
+const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
 	const { title } = props
 	return (
 		<>
@@ -40,13 +42,21 @@ const IndexPage: NextPage<InitialAppProps> = (props: InitialAppProps) => {
 	)
 }
 
-export const getStaticProps: GetStaticProps<InitialAppProps> = async () => {
-	return {
-		props: {
-			title: 'Project: Feed the Pig',
-		},
+export const getServerSideProps: GetServerSideProps<StartPageProps> = withSession<ServerSideHandler>(
+	async ({ req, res }) => {
+		const user = req.session.get('user') as UserDTO
+
+		if (!user) {
+			res.statusCode = 404
+			res.end()
+			return { props: {} as StartPageProps }
+		}
+
+		return {
+			props: { title: 'Project: Feed the Pig' },
+		}
 	}
-}
+)
 ;(IndexPage as PageWithLayoutType).layout = MainLayout
 
 const StartPage = styled.div`

@@ -5,12 +5,14 @@ import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
 import { DONATION_TRIGGER } from '@pftp/common'
+import { withSession, ServerSideHandler } from '../../app/lib/session'
+import { UserDTO } from '../api/sessions'
 
-export interface OverlayPageProps {
+export interface TestUIPageProps {
 	title: string
 }
 
-const TestUIPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
+const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	const { title } = props
 	const { socket } = useSocket()
 
@@ -48,13 +50,21 @@ const TestUIPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async () => {
-	return {
-		props: {
-			title: 'TestUI',
-		},
+export const getServerSideProps: GetServerSideProps<TestUIPageProps> = withSession<ServerSideHandler>(
+	async ({ req, res }) => {
+		const user = req.session.get('user') as UserDTO
+
+		if (!user) {
+			res.statusCode = 404
+			res.end()
+			return { props: {} as TestUIPageProps }
+		}
+
+		return {
+			props: { title: 'TestUI' },
+		}
 	}
-}
+)
 ;(TestUIPage as PageWithLayoutType).layout = MainLayout
 
 export default TestUIPage
