@@ -3,6 +3,8 @@ import { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { PageWithLayoutType } from '../app/layout/PageWithLayout'
 import { MainLayout } from '../app/layout/Layout'
+import { FatButton } from '../app/components/controlpanel/FatButton'
+import { styled } from '../app/styles/Theme'
 
 export interface InitialAppProps {
 	title?: string
@@ -13,9 +15,27 @@ const IndexPage: NextPage<InitialAppProps> = (props: InitialAppProps) => {
 	return (
 		<>
 			<Head>
-				<title>Index Page</title>
+				<title>{title}</title>
 			</Head>
-			<div>{title}</div>
+			<StartPage>
+				<StartPageContent>
+					<img src="/charity_royale_logo.png" alt="Logo" />
+					<h1>Project: Feed the Pig</h1>
+
+					<ButtonsWrapper>
+						<FatButton
+							active={true}
+							style={{ marginRight: '8px' }}
+							onClick={() => window.open('/controlpanel', '_blank')}
+						>
+							<span>Control Panel</span>
+						</FatButton>
+						<FatButton active={true} onClick={() => window.open('/overlay', '_blank')}>
+							<span>Browser Source</span>
+						</FatButton>
+					</ButtonsWrapper>
+				</StartPageContent>
+			</StartPage>
 		</>
 	)
 }
@@ -28,5 +48,27 @@ export const getStaticProps: GetStaticProps<InitialAppProps> = async () => {
 	}
 }
 ;(IndexPage as PageWithLayoutType).layout = MainLayout
+
+const StartPage = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+
+	background-color: ${(p) => p.theme.color.background};
+`
+
+const StartPageContent = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: -200px;
+`
+
+const ButtonsWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`
 
 export default IndexPage
