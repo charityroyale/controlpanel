@@ -1,6 +1,6 @@
 import { withSession } from '../../app/lib/session'
 
-const USER_PASSWORD = process.env.PASSWORD
+const APPLICATION_PASSWORD = process.env.APPLICATION_PASSWORD
 
 export interface UserDTO {
 	username: string
@@ -11,7 +11,7 @@ export default withSession(async (req, res) => {
 	if (req.method === 'POST') {
 		const { username, password } = req.body
 
-		if (typeof USER_PASSWORD === 'string' && password === USER_PASSWORD) {
+		if (typeof APPLICATION_PASSWORD === 'string' && password === APPLICATION_PASSWORD) {
 			const user: UserDTO = { username }
 			req.session.set('user', user)
 			await req.session.save()
