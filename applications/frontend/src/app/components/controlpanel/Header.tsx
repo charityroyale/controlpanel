@@ -2,6 +2,7 @@ import React from 'react'
 import { FunctionComponent } from 'react'
 import { UserDTO } from '../../../pages/api/sessions'
 import { styled } from '../../styles/Theme'
+import { RiLogoutBoxRLine } from 'react-icons/ri'
 
 export const Header: FunctionComponent<{ user: UserDTO }> = ({ user }) => {
 	return (
@@ -12,11 +13,30 @@ export const Header: FunctionComponent<{ user: UserDTO }> = ({ user }) => {
 			</HeaderLeft>
 
 			<HeaderRight>
-				<p>Welcome back {user.username}</p>
+				<p>
+					Welcome back <UserName>{user.username}</UserName>
+				</p>
+				<LogoutLink href="/logout">
+					<RiLogoutBoxRLine />
+				</LogoutLink>
 			</HeaderRight>
 		</GridHeader>
 	)
 }
+
+const UserName = styled.span`
+	color: ${(p) => p.theme.color.charityGold};
+`
+
+const LogoutLink = styled.a`
+	border: none;
+	border-radius: ${(p) => p.theme.space.xs}px;
+	background-color: ${(p) => p.theme.color.willhaben};
+	display: flex;
+	align-items: center;
+	padding: ${(p) => p.theme.space.xs}px ${(p) => p.theme.space.xs}px;
+	margin-left: ${(p) => p.theme.space.s}px;
+`
 
 const GridHeader = styled.div`
 	background-color: ${(p) => p.theme.color.background};
