@@ -19,7 +19,12 @@ export class OverlayScene extends Phaser.Scene {
 				pig.handleState(state.character)
 			}
 
-			if (this.sound.volume !== state.settings.volume) {
+			/**
+			 * Somehow numbers with decimals end up having more decimals
+			 * than assigned, therefore it is rounded to one decimal.
+			 */
+			const normalizedSoundValue = Math.round(this.sound.volume * 10) / 10
+			if (normalizedSoundValue !== state.settings.volume) {
 				this.sound.volume = state.settings.volume
 				this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
 			}
