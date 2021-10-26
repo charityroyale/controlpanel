@@ -40,7 +40,4 @@ const LabelButton = styled.button`
 const IconWrapper = styled.span`
 	display: flex;
 	align-items: center;
-	* {
-		color: ${(p) => p.theme.color.slightlyTransparent};
-	}
 `

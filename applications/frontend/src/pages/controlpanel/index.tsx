@@ -1,18 +1,22 @@
 import React from 'react'
-import { NextPage, GetStaticProps } from 'next'
+import { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { styled } from '../../app/styles/Theme'
 import { useGlobalState } from '../../app/hooks/useGlobalState'
 import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
+import { withSession, ServerSideHandler } from '../../app/lib/session'
+import { OverlayPageProps } from '../overlay'
+import { UserDTO } from '../api/sessions'
 
 export interface ControlPanelPageProps {
 	title?: string
+	user: UserDTO
 }
 
 const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPageProps) => {
-	const { title } = props
+	const { title, user } = props
 	const { globalState } = useGlobalState()
 
 	return (
@@ -21,18 +25,26 @@ const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPa
 				<title>{title}</title>
 			</Head>
 
-			<Grid>{globalState && <ControlPanel globalState={globalState} />}</Grid>
+			<Grid>{globalState && <ControlPanel globalState={globalState} user={user} />}</Grid>
 		</>
 	)
 }
 
-export const getStaticProps: GetStaticProps<ControlPanelPageProps> = async () => {
-	return {
-		props: {
-			title: 'Controlpanel',
-		},
+export const getServerSideProps: GetServerSideProps<ControlPanelPageProps> = withSession<ServerSideHandler>(
+	async ({ req, res }) => {
+		const user = req.session.get('user') as UserDTO
+
+		if (!user) {
+			res.statusCode = 404
+			res.end()
+			return { props: {} as OverlayPageProps }
+		}
+
+		return {
+			props: { user, title: 'Control Panel' },
+		}
 	}
-}
+)
 ;(ControlPanelPage as PageWithLayoutType).layout = MainLayout
 
 const Grid = styled.div`
