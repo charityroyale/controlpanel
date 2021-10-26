@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps<StartPageProps> = withSessio
 		const user = req.session.get('user') as UserDTO
 
 		if (!user) {
-			res.statusCode = 404
+			res.writeHead(301, { Location: '/login' })
 			res.end()
 			return { props: {} as StartPageProps }
 		}
