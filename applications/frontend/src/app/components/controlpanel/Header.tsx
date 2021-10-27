@@ -16,8 +16,8 @@ export const Header: FunctionComponent<{ user: UserDTO }> = ({ user }) => {
 				<p>
 					Welcome back <UserName>{user.username}</UserName>
 				</p>
-				<LogoutLink href="/logout">
-					<RiLogoutBoxRLine />
+				<LogoutLink href="/logout" title="Logout">
+					<RiLogoutBoxRLine size="20px" />
 				</LogoutLink>
 			</HeaderRight>
 		</GridHeader>
@@ -31,7 +31,6 @@ const UserName = styled.span`
 const LogoutLink = styled.a`
 	border: none;
 	border-radius: ${(p) => p.theme.space.xs}px;
-	background-color: ${(p) => p.theme.color.willhaben};
 	display: flex;
 	align-items: center;
 	padding: ${(p) => p.theme.space.xs}px ${(p) => p.theme.space.xs}px;
