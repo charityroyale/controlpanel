@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
 import { styled } from '../../../styles/Theme'
-import { CopyBrowserSource } from './CopyBrowserSource'
+import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
 import { LockCharacterPositionButton } from './LockCharacterPositionButton'
 
 export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
@@ -38,8 +38,8 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 					Pigview
 				</div>
 				<PanelButtonWrapper>
-					<CopyBrowserSource />
-					<LockCharacterPositionButton isLocked={globalState.character.isLocked} />
+					<CopyBrowserSourceButton title={'Copy overlay URL'} />
+					<LockCharacterPositionButton isLocked={globalState.character.isLocked} title={'Lock character position'} />
 				</PanelButtonWrapper>
 			</Label>
 			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>

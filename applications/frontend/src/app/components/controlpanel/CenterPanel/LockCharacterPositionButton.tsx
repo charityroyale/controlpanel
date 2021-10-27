@@ -3,10 +3,14 @@ import { styled } from '../../../styles/Theme'
 import { ImLock, ImUnlocked } from 'react-icons/im'
 import { CHARACTER_UPDATE } from '@pftp/common'
 import { useSocket } from '../../../hooks/useSocket'
-import ReactTooltip from 'react-tooltip'
+
+interface LockCharacterPositionButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	isLocked: boolean
+}
 
 const iconSize = '14px'
-export const LockCharacterPositionButton: FunctionComponent<{ isLocked: boolean }> = ({ isLocked }) => {
+export const LockCharacterPositionButton: FunctionComponent<LockCharacterPositionButton> = (props) => {
+	const { isLocked } = props
 	const { socket } = useSocket()
 
 	const emiteCharacterIsLocked = useCallback(() => {
@@ -16,16 +20,7 @@ export const LockCharacterPositionButton: FunctionComponent<{ isLocked: boolean 
 	}, [socket, isLocked])
 
 	return (
-		<LabelButton
-			aria-label="Lock character position"
-			onClick={emiteCharacterIsLocked}
-			data-tip="Lock character position."
-			data-border-color="#049EE7"
-			data-border={true}
-			data-effect="solid"
-			data-delay-show={500}
-		>
-			<ReactTooltip />
+		<LabelButton aria-label="Lock character position" onClick={emiteCharacterIsLocked} {...props}>
 			<IconWrapper>{isLocked ? <ImLock size={iconSize} /> : <ImUnlocked size={iconSize} />}</IconWrapper>
 		</LabelButton>
 	)
