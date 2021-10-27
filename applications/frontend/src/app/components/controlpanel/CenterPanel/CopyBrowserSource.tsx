@@ -1,22 +1,15 @@
 import React from 'react'
 import { AiOutlineLink } from 'react-icons/ai'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import ReactTooltip from 'react-tooltip'
 import { styled } from '../../../styles/Theme'
 
+const iconSize = '18px'
 export const CopyBrowserSource = () => {
 	return (
-		<CopyLinkWrapper
-			data-tip="Copy BrowserSource."
-			data-border-color="#049EE7"
-			data-border={true}
-			data-effect="solid"
-			data-delay-show={500}
-		>
+		<CopyLinkWrapper>
 			<CopyToClipboard text={window.location.origin + '/overlay'}>
-				<AiOutlineLink />
+				<AiOutlineLink size={iconSize} />
 			</CopyToClipboard>
-			<ReactTooltip />
 		</CopyLinkWrapper>
 	)
 }
