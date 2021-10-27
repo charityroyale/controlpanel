@@ -7,6 +7,7 @@ import { Donation, DONATION_TRIGGER } from '@pftp/common'
 import { Donations } from './DonationList'
 import { useSocket } from '../../../hooks/useSocket'
 
+const maxDonationsToDisplay = 50
 export const RightPanel: FunctionComponent = () => {
 	const { socket } = useSocket()
 	const [donations, setDonations] = useState<Donation[]>([])
@@ -28,6 +29,10 @@ export const RightPanel: FunctionComponent = () => {
 			}
 			const donationsCopy = donations
 			donationsCopy.unshift(donation)
+
+			if (donationsCopy.length > maxDonationsToDisplay) {
+				donationsCopy.pop()
+			}
 			setDonations([...donationsCopy])
 		})
 		/**
@@ -35,6 +40,7 @@ export const RightPanel: FunctionComponent = () => {
 		 * as it would re-add the socketIO listener exponentially. This is dangerous nevertheless,
 		 * as state-changes might get lost.
 		 */
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, setDonations, setShowScrollBottom])
 
 	const onScroll = useCallback(() => {
@@ -61,7 +67,7 @@ export const RightPanel: FunctionComponent = () => {
 				<IconWrapper>
 					<GrMoney size="14px" style={{ marginRight: '6px' }} />
 				</IconWrapper>
-				Recent Donations
+				Latest 50 donations
 			</Label>
 			<Content>
 				<DonationContent className="custom-scrollbar" onScroll={onScroll} ref={donationContentRef}>
