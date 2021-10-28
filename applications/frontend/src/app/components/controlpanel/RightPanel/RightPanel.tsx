@@ -121,7 +121,7 @@ const IconWrapper = styled.span`
 	display: flex;
 	align-items: center;
 	* {
-		stroke: ${(p) => p.theme.color.piggyPink};
+		stroke: ${(p) => p.theme.color.charityGold};
 	}
 `
 
