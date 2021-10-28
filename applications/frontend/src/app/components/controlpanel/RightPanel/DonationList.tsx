@@ -2,6 +2,7 @@ import { Donation } from '@pftp/common'
 import React, { FunctionComponent } from 'react'
 import { styled } from '../../../styles/Theme'
 import { FaCoins } from 'react-icons/fa'
+import { formatCurrency, formatTimeStamp } from '../../../lib/utils'
 
 export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donations }) => {
 	return (
@@ -18,7 +19,7 @@ export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donati
 							</DonationUserWithIcon>
 						</DonationHeader>
 						<DonationBottom>
-							<DonationDate>{formatDate(new Date(donation.timestamp))}</DonationDate>
+							<DonationDate>{formatTimeStamp(donation.timestamp)}</DonationDate>
 							<DonationAmount>{formatCurrency(donation.amount)}</DonationAmount>
 						</DonationBottom>
 					</DonationItem>
@@ -68,11 +69,3 @@ const IconWrapper = styled.span`
 		color: ${(p) => p.theme.color.charityGold};
 	}
 `
-
-const formatDate = (date: Date) => {
-	return new Intl.DateTimeFormat('de-AT', { dateStyle: 'short', timeStyle: 'short' }).format(date)
-}
-
-const formatCurrency = (amount: number) => {
-	return new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' }).format(amount)
-}
