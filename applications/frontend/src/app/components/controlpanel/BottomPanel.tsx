@@ -128,7 +128,7 @@ const IconWrapper = styled.span`
 	display: flex;
 	align-items: center;
 	* {
-		color: ${(p) => p.theme.color.recordRed};
+		color: ${(p) => p.theme.color.charityGold};
 	}
 `
 

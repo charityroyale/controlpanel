@@ -15,10 +15,13 @@ export interface CharacterState {
 	}
 }
 
+/**
+ * Sync with /donation endpoint
+ */
 export interface Donation {
 	user: string
 	amount: number
-	timestamp: string
+	timestamp: number
 }
 
 export const CHARACTER_UPDATE = 'characterUpdate'

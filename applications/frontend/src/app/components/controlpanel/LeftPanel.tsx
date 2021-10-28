@@ -29,7 +29,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		<GridLeftPanel>
 			<Label>
 				<IconWrapper>
-					<FaPiggyBank size="14px" color="#D8B864" style={{ marginRight: '6px' }} />
+					<FaPiggyBank size="14px" style={{ marginRight: '6px' }} />
 				</IconWrapper>
 				Character
 			</Label>
@@ -111,7 +111,7 @@ const IconWrapper = styled.span`
 	display: flex;
 	align-items: center;
 	* {
-		color: #d8b864;
+		color: ${(p) => p.theme.color.piggyPink};
 	}
 `
 

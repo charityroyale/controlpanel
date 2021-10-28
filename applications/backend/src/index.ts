@@ -13,6 +13,12 @@ import {
 import { characterReducer, settingsReducer, updateCharacter, updateSettings } from './State'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
+import express from 'express'
+import { body, validationResult } from 'express-validator'
+const app = express()
+const httpServer = createServer(app)
+const io = new Server<PFTPSocketEventsMap>(httpServer, {})
+app.use(express.json())
 
 const store = configureStore<GlobalState>({
 	reducer: {
@@ -21,8 +27,21 @@ const store = configureStore<GlobalState>({
 	},
 })
 
-const httpServer = createServer()
-const io = new Server<PFTPSocketEventsMap>(httpServer, {})
+app.post(
+	'/donation',
+	body('user').isString(),
+	body('amount').isInt(),
+	body('timestamp').isInt(),
+	(request, response) => {
+		const errors = validationResult(request)
+		if (!errors.isEmpty()) {
+			return response.status(400).json({ errors: errors.array() })
+		}
+
+		io.emit(DONATION_TRIGGER, request.body as Donation)
+		response.send(request.body)
+	}
+)
 
 io.on('connection', (socket) => {
 	logger.info(`new connection from ${socket.id}!`)

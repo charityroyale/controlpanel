@@ -22,8 +22,8 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		const randomnum =
 			Math.floor(Math.random() * (maxAmount * precision - 1 * precision) + 1 * precision) / (1 * precision)
 
-		const a = ['Veni', 'HeideltrautEUW', 'Uglywerwer']
-		const b = ['MrYRichardXX120', 'Fraunz', 'AlexanderRR']
+		const a = ['Veni', 'HeideltrautEUW', 'Birgit']
+		const b = ['MrYRichardXX120', 'Fraunz', 'AlexanderAAA']
 
 		const rA = Math.floor(Math.random() * a.length)
 		const rB = Math.floor(Math.random() * b.length)
@@ -32,7 +32,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		socket?.emit(DONATION_TRIGGER, {
 			user: name,
 			amount: randomnum,
-			timestamp: new Date().toString(),
+			timestamp: new Date().getUTCMilliseconds(),
 		})
 	}, [socket])
 
