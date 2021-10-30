@@ -13,8 +13,16 @@ import {
 import { characterReducer, settingsReducer, updateCharacter, updateSettings } from './State'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
+import jwt from 'jsonwebtoken'
+import path from 'path'
+import dotenv from 'dotenv'
+
+dotenv.config({
+	path: path.resolve(__dirname, '../.env'),
+})
+
 const app = express()
 const httpServer = createServer(app)
 const io = new Server<PFTPSocketEventsMap>(httpServer, {})
@@ -27,11 +35,47 @@ const store = configureStore<GlobalState>({
 	},
 })
 
+app.post('/token', body('client_id').isString(), (request, response) => {
+	const errors = validationResult(request)
+	if (!errors.isEmpty() && request.body.client_id === process.env.CLIENT_ID_SECRET) {
+		return response.status(400).json({ errors: errors.array() })
+	}
+
+	const clientId = request.body.client_id
+	const client = { clientId }
+	const accessToken = generateAccessToken(client)
+
+	logger.info(`Generated new AccessToken for client ${clientId}`)
+
+	response.json({ accessToken })
+})
+
+const generateAccessToken = (client: {}) => {
+	return jwt.sign(client, process.env.ACCESS_TOKEN_SECRET as string)
+}
+
+const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
+	const authHeader = req.headers.authorization
+	const token = authHeader?.split(' ')[1]
+
+	if (token == null) return res.sendStatus(401)
+
+	try {
+		const { clientId } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as any
+		logger.info(`ClientId gained access ${clientId}`)
+		next()
+	} catch (error) {
+		logger.info(`Denied access for ${req.ip}`)
+		res.sendStatus(403)
+	}
+}
+
 app.post(
 	'/donation',
 	body('user').isString(),
 	body('amount').isInt(),
 	body('timestamp').isInt(),
+	authenticateJWT,
 	(request, response) => {
 		const errors = validationResult(request)
 		if (!errors.isEmpty()) {
