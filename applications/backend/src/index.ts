@@ -23,9 +23,27 @@ dotenv.config({
 	path: path.resolve(__dirname, '../.env'),
 })
 
+const whiteListedCommunicationOrigins = [
+	'http://localhost:4200',
+	'https://pftp.redcouch.at',
+	'https://streamer.make-a-wish.at',
+]
 const app = express()
 const httpServer = createServer(app)
-const io = new Server<PFTPSocketEventsMap>(httpServer, {})
+const io = new Server<PFTPSocketEventsMap>(httpServer, {
+	transports: ['websocket', 'polling'],
+	allowRequest: (req, callback) => {
+		const allowed =
+			whiteListedCommunicationOrigins.findIndex((element) => element.includes(req.headers.origin ?? '')) !== -1
+		if (!allowed) {
+			logger.info(`Denied access from  ${req.headers.origin}`)
+		}
+		callback(null, allowed)
+	},
+	cors: {
+		origin: whiteListedCommunicationOrigins,
+	},
+})
 app.use(express.json())
 
 const store = configureStore<GlobalState>({
