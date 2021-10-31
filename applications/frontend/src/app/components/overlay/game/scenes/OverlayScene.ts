@@ -67,6 +67,13 @@ export class OverlayScene extends Phaser.Scene {
 			repeat: 2,
 		})
 
+		this.anims.create({
+			key: PigAnimationKeys.dragging,
+			frameRate: 5,
+			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 22, end: 23 }),
+			repeat: -1,
+		})
+
 		new Pig(
 			this,
 			{ x: 1920 / 2, y: 1080 / 2, texture: PIG_PLACEHOLDER_SPRITESHEET_KEY, pigLaugh },

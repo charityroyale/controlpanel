@@ -7,7 +7,7 @@ export interface SettingsState {
 	volume: number
 }
 
-export type PigStateType = 'idle' | 'donation1'
+export type PigStateType = 'idle' | 'donation1' | 'dragging'
 export interface CharacterState {
 	isVisible: boolean
 	isLocked: boolean

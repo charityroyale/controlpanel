@@ -12,6 +12,7 @@ interface PigProps {
 export const PigAnimationKeys = {
 	idle: 'idle',
 	donation1: 'donation1',
+	dragging: 'dragging',
 }
 
 export class Pig extends Phaser.GameObjects.Sprite {
@@ -37,6 +38,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
 			if (!this.isLocked) {
+				this.play('idle')
 				socket.emit(CHARACTER_UPDATE, {
 					position: {
 						x: this.x,
@@ -48,6 +50,9 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
 			if (!this.isLocked) {
+				if (this.anims.currentAnim.key !== 'dragging') {
+					this.play('dragging')
+				}
 				this.x = dragX
 				this.y = dragY
 			}
