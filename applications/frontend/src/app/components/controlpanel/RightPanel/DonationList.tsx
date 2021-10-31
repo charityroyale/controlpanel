@@ -20,7 +20,7 @@ export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donati
 						</DonationHeader>
 						<DonationBottom>
 							<DonationDate>{formatTimeStamp(donation.timestamp)}</DonationDate>
-							<DonationAmount>{formatCurrency(donation.amount)}</DonationAmount>
+							<DonationAmount highlight={donation.amount >= 50}>{formatCurrency(donation.amount)}</DonationAmount>
 						</DonationBottom>
 					</DonationItem>
 				)
@@ -51,7 +51,10 @@ const DonationUserWithIcon = styled.div`
 	align-items: center;
 `
 
-const DonationAmount = styled.div``
+const DonationAmount = styled.div<{ highlight: boolean }>`
+	color: ${(p) => (p.highlight ? p.theme.color.charityGold : 'inherit')};
+	font-weight: ${(p) => (p.highlight ? 'bold' : 'normal')}; ;
+`
 
 const DonationDate = styled.div`
 	color: #7c7c7c;
