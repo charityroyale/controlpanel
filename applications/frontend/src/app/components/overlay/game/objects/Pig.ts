@@ -38,7 +38,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
 			if (!this.isLocked) {
-				this.play('idle')
+				this.changeState('idle')
 				socket.emit(CHARACTER_UPDATE, {
 					position: {
 						x: this.x,
@@ -51,7 +51,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
 			if (!this.isLocked) {
 				if (this.anims.currentAnim.key !== 'dragging') {
-					this.play('dragging')
+					this.changeState('dragging')
 				}
 				this.x = dragX
 				this.y = dragY
@@ -90,8 +90,8 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		if (this.behaviour !== behaviour) {
 			this.behaviour = behaviour
 
-			if (this.behaviour !== 'idle') {
-				this.play(PigAnimationKeys.donation1).on('animationcomplete', () => {
+			if (this.behaviour !== 'idle' && behaviour !== 'dragging') {
+				this.play(PigAnimationKeys.donation1).once('animationcomplete', () => {
 					this.changeState('idle')
 				})
 			} else {
