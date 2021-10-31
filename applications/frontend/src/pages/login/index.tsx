@@ -83,8 +83,6 @@ const LoginPageWrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
-
-	background-color: ${(p) => p.theme.color.background};
 `
 
 const LoginPageContent = styled.div`

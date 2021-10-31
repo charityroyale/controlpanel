@@ -10,5 +10,5 @@ const DynamicPhaserGame = dynamic(() => import('./PhaserGame'), { ssr: false })
 
 export const Overlay = () => {
 	const { globalState } = useGlobalState()
-	return <div style={{ backgroundColor: 'white' }}>{globalState && <DynamicPhaserGame />}</div>
+	return <div>{globalState && <DynamicPhaserGame />}</div>
 }

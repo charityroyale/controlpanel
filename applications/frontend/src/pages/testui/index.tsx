@@ -4,16 +4,18 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
-import { DONATION_TRIGGER } from '@pftp/common'
+import { DONATION_TRIGGER, getBehaviourFromDonation } from '@pftp/common'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
+import { Header } from '../../app/components/controlpanel/Header'
 
 export interface TestUIPageProps {
 	title: string
+	user: UserDTO
 }
 
 const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
-	const { title } = props
+	const { title, user } = props
 	const { socket } = useSocket()
 
 	const emitDonation = useCallback(() => {
@@ -29,11 +31,13 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		const rB = Math.floor(Math.random() * b.length)
 		const name = a[rA] + b[rB]
 
-		socket?.emit(DONATION_TRIGGER, {
+		const donation = {
 			user: name,
 			amount: randomnum,
 			timestamp: new Date().getUTCMilliseconds(),
-		})
+		}
+
+		socket?.emit(DONATION_TRIGGER, donation, getBehaviourFromDonation(donation))
 	}, [socket])
 
 	return (
@@ -41,6 +45,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 			<Head>
 				<title>{title}</title>
 			</Head>
+			<Header user={user}>Header</Header>
 			<div>
 				<button onClick={emitDonation} style={{ color: 'black' }}>
 					Send random donation
@@ -61,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<TestUIPageProps> = withSessi
 		}
 
 		return {
-			props: { title: 'TestUI' },
+			props: { title: 'TestUI', user },
 		}
 	}
 )

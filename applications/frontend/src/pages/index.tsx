@@ -6,31 +6,41 @@ import { MainLayout } from '../app/layout/Layout'
 import { styled } from '../app/styles/Theme'
 import { withSession, ServerSideHandler } from '../app/lib/session'
 import { UserDTO } from './api/sessions'
+import { Header } from '../app/components/controlpanel/Header'
 
 export interface StartPageProps {
 	title?: string
+	user: UserDTO
 }
 
 const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
-	const { title } = props
+	const { title, user } = props
 	return (
 		<>
 			<Head>
 				<title>{title}</title>
 			</Head>
+			<Header user={user}>Header</Header>
 			<StartPage>
 				<StartPageContent>
 					<img src="/charity_royale_logo.png" alt="Logo" />
 					<h1>Project: Feed the Pig</h1>
 
 					<ButtonsWrapper>
-						<LinkAsButton href="/controlpanel" style={{ marginRight: '8px' }}>
+						<LinkAsButton href="/controlpanel" style={{ marginRight: '4px', marginLeft: '0' }}>
 							<span>Control Panel</span>
 						</LinkAsButton>
 						<LinkAsButton href="/overlay" target="_blank">
 							<span>Browser Source</span>
 						</LinkAsButton>
 					</ButtonsWrapper>
+					<LinkAsButton
+						href="/testui"
+						target="_blank"
+						style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', marginTop: '8px', marginLeft: '0' }}
+					>
+						<span>Developer Test-UI</span>
+					</LinkAsButton>
 				</StartPageContent>
 			</StartPage>
 		</>
@@ -48,7 +58,7 @@ export const getServerSideProps: GetServerSideProps<StartPageProps> = withSessio
 		}
 
 		return {
-			props: { title: 'Project: Feed the Pig' },
+			props: { title: 'Project: Feed the Pig', user },
 		}
 	}
 )
@@ -60,11 +70,14 @@ const LinkAsButton = styled.a`
 	background-color: ${(p) => p.theme.color.willhaben};
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	padding: ${(p) => p.theme.space.xs}px ${(p) => p.theme.space.xs}px;
-	margin-left: ${(p) => p.theme.space.s}px;
+	margin-left: ${(p) => p.theme.space.xs}px;
 	padding: ${(p) => p.theme.space.m}px ${(p) => p.theme.space.xl}px;
 	text-decoration: none;
 	font-size: ${(p) => p.theme.fontSize.m}px;
+	width: 100%;
+	white-space: nowrap;
 `
 
 const StartPage = styled.div`
@@ -72,8 +85,6 @@ const StartPage = styled.div`
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
-
-	background-color: ${(p) => p.theme.color.background};
 `
 
 const StartPageContent = styled.div`
@@ -85,7 +96,7 @@ const StartPageContent = styled.div`
 
 const ButtonsWrapper = styled.div`
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 `
 

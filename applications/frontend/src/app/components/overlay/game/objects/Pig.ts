@@ -1,4 +1,4 @@
-import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap } from '@pftp/common'
+import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap, PigStateType } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
 
@@ -9,7 +9,14 @@ interface PigProps {
 	pigLaugh: Phaser.Sound.BaseSound
 }
 
-export class Pig extends Phaser.GameObjects.Image {
+export const PigAnimationKeys = {
+	idle: 'idle',
+	donation1: 'donation1',
+	dragging: 'dragging',
+}
+
+export class Pig extends Phaser.GameObjects.Sprite {
+	private behaviour: PigStateType | undefined
 	private isLocked
 	private pigLaugh
 
@@ -21,15 +28,17 @@ export class Pig extends Phaser.GameObjects.Image {
 	) {
 		super(scene, options.x, options.y, options.texture)
 		this.setName('pig')
-		this.setScale(1)
+		this.setScale(5)
 		this.setIsVisible(characterState.isVisible)
 		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
+		this.changeState('idle')
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
 		this.on('pointerout', () => {
 			if (!this.isLocked) {
+				this.changeState('idle')
 				socket.emit(CHARACTER_UPDATE, {
 					position: {
 						x: this.x,
@@ -41,6 +50,9 @@ export class Pig extends Phaser.GameObjects.Image {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
 			if (!this.isLocked) {
+				if (this.anims.currentAnim.key !== 'dragging') {
+					this.changeState('dragging')
+				}
 				this.x = dragX
 				this.y = dragY
 			}
@@ -68,9 +80,24 @@ export class Pig extends Phaser.GameObjects.Image {
 
 	/** placeholder function until pig handling with animations starts */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public handleDonation(_donation: Donation) {
+	public handleDonation(_donation: Donation, behaviour: PigStateType) {
+		this.changeState(behaviour)
+
 		this.playLaughSound()
-		this.setScale(Math.random() + 1)
+	}
+
+	private changeState(behaviour: PigStateType) {
+		if (this.behaviour !== behaviour) {
+			this.behaviour = behaviour
+
+			if (this.behaviour !== 'idle' && behaviour !== 'dragging') {
+				this.play(PigAnimationKeys.donation1).once('animationcomplete', () => {
+					this.changeState('idle')
+				})
+			} else {
+				this.play(this.behaviour)
+			}
+		}
 	}
 
 	public playLaughSound() {

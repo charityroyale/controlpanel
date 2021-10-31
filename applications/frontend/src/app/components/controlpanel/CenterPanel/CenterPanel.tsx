@@ -67,6 +67,12 @@ const OverlayIframe = styled.iframe<{ scale: number }>`
 	left: 50%;
 	transform: scale(${(p) => p.scale}) translateX(-50%);
 	transform-origin: 0 0;
+	background-color: #18181b;
+	background-image: url('/charity_royale_logo.png');
+	background-blend-mode: overlay;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 35%;
 `
 
 const LiveEmoji = styled.span`
@@ -75,7 +81,6 @@ const LiveEmoji = styled.span`
 `
 
 export const GridCenterPanel = styled.div`
-	background-color: ${(p) => p.theme.color.background};
 	grid-area: center-panel;
 	aspect-ratio: 16/9;
 `

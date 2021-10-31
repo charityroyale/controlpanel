@@ -8,7 +8,9 @@ export const Header: FunctionComponent<{ user: UserDTO }> = ({ user }) => {
 	return (
 		<GridHeader>
 			<HeaderLeft>
-				<Logo src="/charity_royale_logo.png" alt="Charity Royale logo" height="36px" />
+				<a href="/" style={{ display: 'flex' }}>
+					<Logo src="/charity_royale_logo.png" alt="Charity Royale logo" height="36px" />
+				</a>
 				<Heading>PROJECT: Feed the Pig</Heading>
 			</HeaderLeft>
 
@@ -38,13 +40,13 @@ const LogoutLink = styled.a`
 `
 
 const GridHeader = styled.div`
-	background-color: ${(p) => p.theme.color.background};
 	grid-area: header;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	padding: ${(p) => p.theme.space.xs}px ${(p) => p.theme.space.s}px;
 	border-bottom: 1px solid ${(p) => p.theme.color.charityGold};
+	height: 50px;
 `
 
 const HeaderLeft = styled.div`
