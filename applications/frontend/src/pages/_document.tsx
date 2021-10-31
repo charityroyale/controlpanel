@@ -62,8 +62,9 @@ export default class MyDocument extends Document {
 					<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png"></link>
 					<link rel="manifest" href="/favicon/manifest.json"></link>
 					<meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png"></meta>
-					<meta name="msapplication-TileColor" content="#231565"></meta>
-					<meta name="theme-color" content="#231565"></meta>
+					<meta name="msapplication-TileColor" content="##18181B"></meta>
+					<meta name="theme-color" content="#18181B"></meta>
+					<meta charSet="utf-8" />
 				</Head>
 				<body id="pftp-body">
 					<Main />
