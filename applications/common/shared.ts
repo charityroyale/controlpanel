@@ -6,6 +6,8 @@ export interface GlobalState {
 export interface SettingsState {
 	volume: number
 }
+
+export type PigStateType = 'idle' | 'donation1'
 export interface CharacterState {
 	isVisible: boolean
 	isLocked: boolean
@@ -34,5 +36,13 @@ export interface PFTPSocketEventsMap {
 	[SETTINGS_UPDATE]: (settingsUpdate: Partial<SettingsState>) => void
 	[STATE_UPDATE]: (state: GlobalState) => void
 	[REQUEST_STATE]: () => void
-	[DONATION_TRIGGER]: (donation: Donation) => void
+	[DONATION_TRIGGER]: (donation: Donation, behaviour: PigStateType) => void
+}
+
+export const getBehaviourFromDonation = (donation: Donation): PigStateType => {
+	if (donation.amount >= 2) {
+		return 'donation1'
+	} else {
+		return 'idle'
+	}
 }

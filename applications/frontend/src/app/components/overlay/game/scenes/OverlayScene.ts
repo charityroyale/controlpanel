@@ -1,10 +1,11 @@
-import { Donation, DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
-import { Pig } from '../objects/Pig'
+import { Pig, PigAnimationKeys } from '../objects/Pig'
 
 const PIG_PLACEHOLDER_SPRITESHEET_KEY = 'pigPlaceHolder'
+
 const VOLUME_CHANGE_AUDIO_KEY = 'voluemChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 export class OverlayScene extends Phaser.Scene {
@@ -13,7 +14,7 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
-		config.socket.on(STATE_UPDATE, (state: GlobalState) => {
+		config.socket.on(STATE_UPDATE, (state) => {
 			const activePigs = this.getActiveGameObjectsByName<Pig>('pig')
 			for (const pig of activePigs) {
 				pig.handleState(state.character)
@@ -30,18 +31,18 @@ export class OverlayScene extends Phaser.Scene {
 			}
 		})
 
-		config.socket.on(DONATION_TRIGGER, (donation: Donation) => {
+		config.socket.on(DONATION_TRIGGER, (donation, behaviour) => {
 			const activePigs = this.getActiveGameObjectsByName<Pig>('pig')
 			for (const pig of activePigs) {
-				pig.handleDonation(donation)
+				pig.handleDonation(donation, behaviour)
 			}
 		})
 	}
 
 	preload() {
-		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/pig_placeholder.png', {
-			frameWidth: 225,
-			frameHeight: 225,
+		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/game/character.png', {
+			frameWidth: 77.42857142857143,
+			frameHeight: 57.272727272727,
 		})
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -51,6 +52,20 @@ export class OverlayScene extends Phaser.Scene {
 		const { socket, initialState } = config
 		const pigLaugh = this.sound.add(PIG_LAUGH_AUDIO_KEY)
 		this.sound.pauseOnBlur = false
+
+		this.anims.create({
+			key: PigAnimationKeys.idle,
+			frameRate: 6,
+			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 0, end: 3 }),
+			repeat: -1,
+		})
+
+		this.anims.create({
+			key: PigAnimationKeys.donation1,
+			frameRate: 7,
+			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 43, end: 48 }),
+			repeat: 2,
+		})
 
 		new Pig(
 			this,

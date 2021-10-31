@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
-import { DONATION_TRIGGER } from '@pftp/common'
+import { DONATION_TRIGGER, getBehaviourFromDonation } from '@pftp/common'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 
@@ -29,11 +29,13 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		const rB = Math.floor(Math.random() * b.length)
 		const name = a[rA] + b[rB]
 
-		socket?.emit(DONATION_TRIGGER, {
+		const donation = {
 			user: name,
 			amount: randomnum,
 			timestamp: new Date().getUTCMilliseconds(),
-		})
+		}
+
+		socket?.emit(DONATION_TRIGGER, donation, getBehaviourFromDonation(donation))
 	}, [socket])
 
 	return (

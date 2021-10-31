@@ -4,8 +4,10 @@ import {
 	CHARACTER_UPDATE,
 	Donation,
 	DONATION_TRIGGER,
+	getBehaviourFromDonation,
 	GlobalState,
 	PFTPSocketEventsMap,
+	PigStateType,
 	REQUEST_STATE,
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
@@ -99,8 +101,9 @@ app.post(
 		if (!errors.isEmpty()) {
 			return response.status(400).json({ errors: errors.array() })
 		}
-
-		io.emit(DONATION_TRIGGER, request.body as Donation)
+		const donation = request.body as Donation
+		const behaviour = getBehaviourFromDonation(donation)
+		io.emit(DONATION_TRIGGER, donation, behaviour)
 		response.send(request.body)
 	}
 )
@@ -115,8 +118,8 @@ io.on('connection', (socket) => {
 		logger.info(`socket ${socket.id} disconnected with reason: ${reason}`)
 	})
 
-	socket.on(DONATION_TRIGGER, (donation: Donation) => {
-		io.emit(DONATION_TRIGGER, donation)
+	socket.on(DONATION_TRIGGER, (donation: Donation, behaviour: PigStateType) => {
+		io.emit(DONATION_TRIGGER, donation, behaviour)
 	})
 	socket.emit(STATE_UPDATE, store.getState())
 	socket.on(REQUEST_STATE, () => socket.emit(STATE_UPDATE, store.getState()))
