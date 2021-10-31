@@ -45,6 +45,7 @@ const GridHeader = styled.div`
 	justify-content: space-between;
 	padding: ${(p) => p.theme.space.xs}px ${(p) => p.theme.space.s}px;
 	border-bottom: 1px solid ${(p) => p.theme.color.charityGold};
+	height: 50px;
 `
 
 const HeaderLeft = styled.div`

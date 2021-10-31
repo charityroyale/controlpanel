@@ -6,18 +6,21 @@ import { MainLayout } from '../app/layout/Layout'
 import { styled } from '../app/styles/Theme'
 import { withSession, ServerSideHandler } from '../app/lib/session'
 import { UserDTO } from './api/sessions'
+import { Header } from '../app/components/controlpanel/Header'
 
 export interface StartPageProps {
 	title?: string
+	user: UserDTO
 }
 
 const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
-	const { title } = props
+	const { title, user } = props
 	return (
 		<>
 			<Head>
 				<title>{title}</title>
 			</Head>
+			<Header user={user}>Header</Header>
 			<StartPage>
 				<StartPageContent>
 					<img src="/charity_royale_logo.png" alt="Logo" />
@@ -48,7 +51,7 @@ export const getServerSideProps: GetServerSideProps<StartPageProps> = withSessio
 		}
 
 		return {
-			props: { title: 'Project: Feed the Pig' },
+			props: { title: 'Project: Feed the Pig', user },
 		}
 	}
 )
