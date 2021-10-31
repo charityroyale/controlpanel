@@ -40,7 +40,6 @@ const LogoutLink = styled.a`
 `
 
 const GridHeader = styled.div`
-	background-color: ${(p) => p.theme.color.background};
 	grid-area: header;
 	display: flex;
 	align-items: center;

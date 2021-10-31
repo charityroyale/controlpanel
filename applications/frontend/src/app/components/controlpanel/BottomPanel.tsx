@@ -181,6 +181,5 @@ const getPositionFromPreset = (preset: PositionPresetType) => {
 }
 
 export const GridBottomPanel = styled.div`
-	background-color: ${(p) => p.theme.color.background};
 	grid-area: bottom-panel;
 `

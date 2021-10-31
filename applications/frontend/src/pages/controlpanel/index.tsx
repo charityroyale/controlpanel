@@ -50,7 +50,6 @@ export const getServerSideProps: GetServerSideProps<ControlPanelPageProps> = wit
 const Grid = styled.div`
 	display: grid;
 	height: 100vh;
-	background-color: ${(p) => p.theme.color.background};
 
 	grid-auto-rows: 50px auto 1fr 1fr 1fr;
 	grid-template-areas:

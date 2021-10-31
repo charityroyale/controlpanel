@@ -126,7 +126,6 @@ const IconWrapper = styled.span`
 `
 
 const GridRightPanel = styled.div`
-	background-color: ${(p) => p.theme.color.background};
 	grid-area: right-panel;
 	position: relative;
 `

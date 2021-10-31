@@ -22,6 +22,11 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 		<>
 			<Head>
 				<title>{title}</title>
+				<style>{'\
+				body{\
+					background-color: transparent !important;\
+				}\
+			'}</style>
 			</Head>
 			<OverlayWrapper>
 				<Overlay />

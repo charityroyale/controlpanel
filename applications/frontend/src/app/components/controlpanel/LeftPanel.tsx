@@ -116,7 +116,6 @@ const IconWrapper = styled.span`
 `
 
 export const GridLeftPanel = styled.div`
-	background-color: ${(p) => p.theme.color.background};
 	grid-area: left-panel;
 `
 
