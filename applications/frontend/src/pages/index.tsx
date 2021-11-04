@@ -91,7 +91,6 @@ const StartPageContent = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-top: -200px;
 `
 
 const ButtonsWrapper = styled.div`
