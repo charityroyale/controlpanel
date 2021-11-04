@@ -40,11 +40,12 @@ const LoginPage = () => {
 								type="text"
 								value={username}
 								onChange={(e) => setUsername(e.currentTarget.value)}
+								required
 							/>
 						</InputRow>
 						<InputRow>
 							<label htmlFor="password">Passwort</label>
-							<input type="password" value={password} onChange={(e) => setPassword(e.currentTarget.value)} />
+							<input type="password" value={password} onChange={(e) => setPassword(e.currentTarget.value)} required />
 						</InputRow>
 					</FormContent>
 
