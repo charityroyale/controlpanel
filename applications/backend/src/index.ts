@@ -81,8 +81,8 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 	if (token == null) return res.sendStatus(401)
 
 	try {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { clientId } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as any
-		logger.info(`ClientId gained access ${clientId}`)
 		next()
 	} catch (error) {
 		logger.info(`Denied access for ${req.ip}`)
@@ -93,7 +93,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 app.post(
 	'/donation',
 	body('user').isString(),
-	body('amount').isInt(),
+	body('amount').isFloat(),
 	body('timestamp').isInt(),
 	authenticateJWT,
 	(request, response) => {
