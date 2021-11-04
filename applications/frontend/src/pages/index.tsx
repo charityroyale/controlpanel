@@ -84,7 +84,7 @@ const StartPage = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100vh;
+	height: calc(100% - 50px);
 `
 
 const StartPageContent = styled.div`
