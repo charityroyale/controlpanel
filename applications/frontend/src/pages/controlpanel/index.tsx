@@ -7,8 +7,8 @@ import { styled } from '../../app/styles/Theme'
 import { useGlobalState } from '../../app/hooks/useGlobalState'
 import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
-import { OverlayPageProps } from '../overlay'
 import { UserDTO } from '../api/sessions'
+import jwt from 'jsonwebtoken'
 
 export interface ControlPanelPageProps {
 	title?: string
@@ -37,11 +37,22 @@ export const getServerSideProps: GetServerSideProps<ControlPanelPageProps> = wit
 		if (!user) {
 			res.statusCode = 404
 			res.end()
-			return { props: {} as OverlayPageProps }
+			return { props: {} as ControlPanelPageProps }
+		}
+
+		const auth = {
+			token: jwt.sign(
+				{
+					channel: user.username,
+					mode: 'readwrite',
+				},
+				'secret'
+			),
+			channel: user.username,
 		}
 
 		return {
-			props: { user, title: 'Control Panel' },
+			props: { user, title: 'Control Panel', auth },
 		}
 	}
 )

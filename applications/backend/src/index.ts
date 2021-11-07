@@ -1,18 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
 import { logger } from './logger'
 import {
-	CHARACTER_UPDATE,
 	Donation,
 	DONATION_TRIGGER,
 	getBehaviourFromDonation,
-	GlobalState,
 	PFTPSocketEventsMap,
-	PigStateType,
-	REQUEST_STATE,
-	SETTINGS_UPDATE,
-	STATE_UPDATE,
 } from '@pftp/common'
-import { characterReducer, settingsReducer, updateCharacter, updateSettings } from './State'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import express, { NextFunction, Request, Response } from 'express'
@@ -20,6 +12,7 @@ import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import path from 'path'
 import dotenv from 'dotenv'
+import SessionManager from './SessionManager'
 
 dotenv.config({
 	path: path.resolve(__dirname, '../.env'),
@@ -47,13 +40,6 @@ const io = new Server<PFTPSocketEventsMap>(httpServer, {
 	},
 })
 app.use(express.json())
-
-const store = configureStore<GlobalState>({
-	reducer: {
-		character: characterReducer,
-		settings: settingsReducer,
-	},
-})
 
 app.post('/token', body('client_id').isString(), (request, response) => {
 	const errors = validationResult(request)
@@ -108,27 +94,8 @@ app.post(
 	}
 )
 
-io.on('connection', (socket) => {
-	logger.info(`new connection from ${socket.id}!`)
-
-	socket.on(CHARACTER_UPDATE, (characterUpdate) => store.dispatch(updateCharacter(characterUpdate)))
-	socket.on(SETTINGS_UPDATE, (settingsUpdate) => store.dispatch(updateSettings(settingsUpdate)))
-
-	socket.on('disconnect', (reason) => {
-		logger.info(`socket ${socket.id} disconnected with reason: ${reason}`)
-	})
-
-	socket.on(DONATION_TRIGGER, (donation: Donation, behaviour: PigStateType) => {
-		io.emit(DONATION_TRIGGER, donation, behaviour)
-	})
-	socket.emit(STATE_UPDATE, store.getState())
-	socket.on(REQUEST_STATE, () => socket.emit(STATE_UPDATE, store.getState()))
-})
-
-store.subscribe(() => {
-	io.emit(STATE_UPDATE, store.getState())
-	console.log(store.getState())
-})
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const sessionManager = new SessionManager(io)
 
 const port = process.env.PORT_BACKEND ?? 5200
 httpServer.listen(port)

@@ -36,11 +36,12 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async ({ query, params }) => {
 	return {
 		props: {
 			title: 'Overlay',
 			isLockedInteraction: !(query?.unlocked ? true : false),
+			auth: { channel: params!.user },
 		},
 	}
 }
