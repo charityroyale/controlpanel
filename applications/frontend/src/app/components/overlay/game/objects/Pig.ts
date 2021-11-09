@@ -27,15 +27,16 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	) {
 		super(scene, options.x, options.y, options.texture)
 		this.setName('pig')
-		this.setScale(0.7)
+		this.setScale(characterState.scale)
 		this.setIsVisible(characterState.isVisible)
 		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
+		this.flipX = characterState.flipX
 		this.changeState('idle')
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
-		this.on('pointerout', () => {
+		this.on('dragend', () => {
 			if (!this.isLocked) {
 				socket.emit(CHARACTER_UPDATE, {
 					position: {
@@ -59,7 +60,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	}
 
 	public handleState(state: CharacterState) {
-		if (!this.isLocked) {
+		if (!this.isLocked && (this.x !== state.position.x || this.y !== state.position.y)) {
 			this.x = state.position.x
 			this.y = state.position.y
 		}
@@ -70,6 +71,14 @@ export class Pig extends Phaser.GameObjects.Sprite {
 
 		if (this.visible != state.isVisible) {
 			this.setIsVisible(state.isVisible)
+		}
+
+		if (this.scale != state.scale) {
+			this.setScale(state.scale)
+		}
+
+		if (this.flipX != state.flipX) {
+			this.flipX = state.flipX
 		}
 	}
 
