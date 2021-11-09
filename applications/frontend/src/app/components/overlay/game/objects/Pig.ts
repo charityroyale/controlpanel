@@ -31,6 +31,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.setIsVisible(characterState.isVisible)
 		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
+		this.flipX = characterState.flipX
 		this.changeState('idle')
 
 		this.setInteractive()
@@ -74,6 +75,10 @@ export class Pig extends Phaser.GameObjects.Sprite {
 
 		if (this.scale != state.scale) {
 			this.setScale(state.scale)
+		}
+
+		if (this.flipX != state.flipX) {
+			this.flipX = state.flipX
 		}
 	}
 

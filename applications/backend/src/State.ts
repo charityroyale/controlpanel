@@ -5,6 +5,7 @@ const initialCharacterState: CharacterState = {
 	isVisible: true,
 	isLocked: false,
 	scale: 1,
+	flipX: false,
 	position: {
 		x: 1080 / 2,
 		y: 1920 / 2,

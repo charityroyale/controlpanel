@@ -12,6 +12,7 @@ export interface CharacterState {
 	isVisible: boolean
 	isLocked: boolean
 	scale: number
+	flipX: boolean
 	position: {
 		x: number
 		y: number

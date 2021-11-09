@@ -11,6 +11,7 @@ import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
 import { useDebouncedCallback } from 'use-debounce'
+import { MdFlip } from 'react-icons/md'
 
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
@@ -28,6 +29,12 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			volume: newVolume,
 		})
 	}, [globalState.settings.volume, socket])
+
+	const emitFlipUpdate = useCallback(() => {
+		socket?.emit(CHARACTER_UPDATE, {
+			flipX: !globalState.character.flipX,
+		})
+	}, [globalState.character.flipX, socket])
 
 	const emitScaleChange = useDebouncedCallback((scale: number) => {
 		socket?.emit(CHARACTER_UPDATE, {
@@ -65,6 +72,15 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						onClick={emitVolumeUpdate}
 					>
 						<VolumeIndicator volume={globalState.settings.volume} />
+					</FatButton>
+
+					<FatButton
+						icon={<MdFlip size="24px" />}
+						active={globalState?.character.flipX}
+						value={globalState?.character.flipX.toString()}
+						onClick={emitFlipUpdate}
+					>
+						<span>Flip</span>
 					</FatButton>
 
 					<FatButton style={{ cursor: 'default' }}>
