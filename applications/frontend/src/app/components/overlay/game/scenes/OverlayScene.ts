@@ -8,6 +8,12 @@ const PIG_PLACEHOLDER_SPRITESHEET_KEY = 'pigPlaceHolder'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'voluemChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
+
+const frameCount = 44 // frames of the spritesheet file
+const spritesheetWidth = 12887 // width of the spritesheet file
+const frameWidth = Math.round(spritesheetWidth / frameCount)
+const frameHeight = 443 // equals height of the spritesheet file as it is one rowed
+
 export class OverlayScene extends Phaser.Scene {
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -41,8 +47,8 @@ export class OverlayScene extends Phaser.Scene {
 
 	preload() {
 		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/game/piggy.png', {
-			frameWidth: 292.8863636363636,
-			frameHeight: 443,
+			frameWidth,
+			frameHeight,
 		})
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
