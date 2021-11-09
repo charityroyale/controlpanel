@@ -6,7 +6,7 @@ import { Pig, PigAnimationKeys } from '../objects/Pig'
 
 const PIG_PLACEHOLDER_SPRITESHEET_KEY = 'pigPlaceHolder'
 
-const VOLUME_CHANGE_AUDIO_KEY = 'voluemChangeAudio'
+const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 
 const frameCount = 44 // frames of the spritesheet file
