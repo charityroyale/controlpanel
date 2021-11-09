@@ -11,6 +11,7 @@ export type PigStateType = 'idle' | 'sleep'
 export interface CharacterState {
 	isVisible: boolean
 	isLocked: boolean
+	scale: number
 	position: {
 		x: number
 		y: number

@@ -27,7 +27,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	) {
 		super(scene, options.x, options.y, options.texture)
 		this.setName('pig')
-		this.setScale(0.7)
+		this.setScale(characterState.scale)
 		this.setIsVisible(characterState.isVisible)
 		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
@@ -70,6 +70,10 @@ export class Pig extends Phaser.GameObjects.Sprite {
 
 		if (this.visible != state.isVisible) {
 			this.setIsVisible(state.isVisible)
+		}
+
+		if (this.scale != state.scale) {
+			this.setScale(state.scale)
 		}
 	}
 

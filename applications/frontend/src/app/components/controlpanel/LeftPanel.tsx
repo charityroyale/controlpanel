@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../pages/controlpanel'
 import { styled } from '../../styles/Theme'
@@ -10,10 +10,11 @@ import { CHARACTER_UPDATE, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
+import { useDebouncedCallback } from 'use-debounce'
 
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
-	const [scale, setScale] = useState([1])
+	const [scale, setScale] = useState([globalState.character.scale])
 
 	const emitCharacterIsVisibleUpdate = useCallback(() => {
 		socket?.emit(CHARACTER_UPDATE, {
@@ -27,6 +28,16 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			volume: newVolume,
 		})
 	}, [globalState.settings.volume, socket])
+
+	const emitScaleChange = useDebouncedCallback((scale: number) => {
+		socket?.emit(CHARACTER_UPDATE, {
+			scale,
+		})
+	}, 125)
+
+	useEffect(() => {
+		emitScaleChange(scale[0])
+	}, [emitScaleChange, scale])
 
 	return (
 		<GridLeftPanel>
