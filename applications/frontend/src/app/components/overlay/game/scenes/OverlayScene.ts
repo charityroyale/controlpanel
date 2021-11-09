@@ -40,9 +40,9 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/game/character.png', {
-			frameWidth: 77.42857142857143,
-			frameHeight: 57.272727272727,
+		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/game/piggy.png', {
+			frameWidth: 292.8863636363636,
+			frameHeight: 443,
 		})
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -56,22 +56,15 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create({
 			key: PigAnimationKeys.idle,
 			frameRate: 6,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 0, end: 3 }),
+			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 0, end: 21 }),
 			repeat: -1,
 		})
 
 		this.anims.create({
-			key: PigAnimationKeys.donation1,
+			key: PigAnimationKeys.sleep,
 			frameRate: 7,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 43, end: 48 }),
+			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 22, end: 42 }),
 			repeat: 0,
-		})
-
-		this.anims.create({
-			key: PigAnimationKeys.dragging,
-			frameRate: 5,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 22, end: 23 }),
-			repeat: -1,
 		})
 
 		new Pig(
