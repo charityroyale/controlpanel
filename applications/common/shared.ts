@@ -49,7 +49,7 @@ export const getBehaviourFromDonation = (donation: Donation): PigStateType => {
 	}
 }
 
-export interface WebSocketJwtPayload {
+export interface SocketJwtPayload {
 	channel: string
 	mode: 'read' | 'readwrite'
 }

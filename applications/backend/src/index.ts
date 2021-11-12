@@ -84,10 +84,10 @@ app.post(
 	}
 )
 
-if (typeof process.env.WEBSOCKET_AUTH_SECRET !== 'string') {
-	logger.warn('No secret for websocket auth set. Please set the env variable WEBSOCKET_AUTH_SECRET')
+if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
+	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')
 }
-const jwtSecret = process.env.WEBSOCKET_AUTH_SECRET ?? 'secret'
+const jwtSecret = process.env.SOCKETIO_AUTH_SECRET ?? 'secret'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sessionManager = new SessionManager(io, jwtSecret)
 
