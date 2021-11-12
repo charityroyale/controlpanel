@@ -46,13 +46,17 @@ export default class Session {
 		this.registerReadHandlers(socket)
 	}
 
+	public sendDonation(donation: Donation, behaviour: PigStateType) {
+		this.io.to(this.channel).emit(DONATION_TRIGGER, donation, behaviour)
+	}
+
 	private registerReadHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
 		socket.on(REQUEST_STATE, () => socket.emit(STATE_UPDATE, this.store.getState()))
 	}
 
 	private registerWriteHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
 		socket.on(DONATION_TRIGGER, (donation: Donation, behaviour: PigStateType) => {
-			this.io.to(this.channel).emit(DONATION_TRIGGER, donation, behaviour)
+			this.sendDonation(donation, behaviour)
 		})
 		socket.on(CHARACTER_UPDATE, (characterUpdate) => this.store.dispatch(updateCharacter(characterUpdate)))
 		socket.on(SETTINGS_UPDATE, (settingsUpdate) => this.store.dispatch(updateSettings(settingsUpdate)))

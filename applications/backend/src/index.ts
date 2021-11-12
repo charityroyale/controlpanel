@@ -80,6 +80,11 @@ app.post(
 		const donation = request.body as Donation
 		const behaviour = getBehaviourFromDonation(donation)
 		io.emit(DONATION_TRIGGER, donation, behaviour)
+
+		// TODO: get target channel from request to delegate to correct overlay
+		// const targetChannel = 'TODO'
+		// sessionManager.getOrCreateSession(targetChannel).sendDonation(donation, behaviour);
+
 		response.send(request.body)
 	}
 )
