@@ -1,22 +1,12 @@
+import './env'
 import { logger } from './logger'
-import {
-	Donation,
-	DONATION_TRIGGER,
-	getBehaviourFromDonation,
-	PFTPSocketEventsMap,
-} from '@pftp/common'
+import { Donation, DONATION_TRIGGER, getBehaviourFromDonation, PFTPSocketEventsMap } from '@pftp/common'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
-import path from 'path'
-import dotenv from 'dotenv'
 import SessionManager from './SessionManager'
-
-dotenv.config({
-	path: path.resolve(__dirname, '../.env'),
-})
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
