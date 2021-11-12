@@ -12,7 +12,7 @@ import {
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
 import { characterReducer, settingsReducer, updateCharacter, updateSettings } from './State'
-import { logger } from './logger'
+import { sessionLogger as logger } from './logger'
 
 export default class Session {
 	private readonly store = configureStore<GlobalState>({
@@ -38,7 +38,7 @@ export default class Session {
 		await socket.join(this.channel)
 
 		socket.on('disconnect', (reason) => {
-			logger.info(`socket ${socket.id} disconnected with reason: ${reason}`)
+			logger.info(`Socket ${socket.id} disconnected with reason: ${reason}`)
 		})
 
 		socket.emit(STATE_UPDATE, this.store.getState())

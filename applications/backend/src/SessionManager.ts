@@ -1,7 +1,7 @@
 import { PFTPSocketEventsMap, WebSocketJwtPayload } from '@pftp/common'
 import { Server } from 'socket.io'
 import Session from './Session'
-import { logger } from './logger'
+import { sessionLogger as logger } from './logger'
 import jwt from 'jsonwebtoken'
 
 export default class SessionManager {
@@ -9,7 +9,7 @@ export default class SessionManager {
 
 	constructor(private readonly io: Server<PFTPSocketEventsMap>, jwtSecret: string) {
 		io.on('connection', async (socket) => {
-			logger.info(`new connection from ${socket.id}!`)
+			logger.info(`New connection from ${socket.id}!`)
 			logger.debug(`auth: ${JSON.stringify(socket.handshake.auth)}`)
 
 			const channel = socket.handshake.auth.channel
@@ -18,14 +18,12 @@ export default class SessionManager {
 			if (typeof socket.handshake.auth.token === 'string') {
 				try {
 					const auth = jwt.verify(socket.handshake.auth.token, jwtSecret) as WebSocketJwtPayload
-					logger.debug(JSON.stringify(auth))
+					logger.debug(`JWT payload: ${JSON.stringify(auth)}`)
 					writeAccess = auth.mode === 'readwrite'
 				} catch {
 					logger.info(`could not verify auth`)
 				}
 			}
-
-			logger.debug(`auth - channel: ${channel} writeAccess: ${writeAccess}`)
 
 			if (typeof channel !== 'string') {
 				logger.info('Connection without channel information - closing')

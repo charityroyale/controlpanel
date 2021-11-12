@@ -25,7 +25,6 @@ export const SocketProvider: FunctionComponent<{ auth?: SocketAuth }> = ({ child
 	const [socket, setSocket] = useState<Socket<PFTPSocketEventsMap> | null>(socketDefaultValue.socket)
 
 	useEffect(() => {
-		console.log(`Authorization: ${auth}`)
 		const options: Partial<ManagerOptions & SocketOptions> = {
 			transports: ['websocket', 'polling'],
 		}
