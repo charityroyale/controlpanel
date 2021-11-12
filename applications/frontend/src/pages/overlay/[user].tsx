@@ -5,10 +5,12 @@ import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import styled from 'styled-components'
 import { Overlay } from '../../app/components/overlay/Overlay'
+import { SocketAuth } from '../../app/provider/SocketProvider'
 
 export interface OverlayPageProps {
 	title: string
 	isLockedInteraction: boolean
+	auth: SocketAuth
 }
 
 const OverlayWrapper = styled.div`
@@ -41,7 +43,7 @@ export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async ({
 		props: {
 			title: 'Overlay',
 			isLockedInteraction: !(query?.unlocked ? true : false),
-			auth: { channel: params!.user },
+			auth: { channel: params!.user as string },
 		},
 	}
 }

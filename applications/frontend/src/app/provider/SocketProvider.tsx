@@ -10,16 +10,18 @@ export interface SockerContextState {
 	isConnected: boolean
 }
 
+export interface SocketAuth {
+	channel: string
+	token?: string
+}
+
 const socketDefaultValue: SockerContextState = {
 	socket: null,
 	isConnected: false,
 }
 
 export const SocketContext = createContext<SockerContextState>(socketDefaultValue)
-export const SocketProvider: FunctionComponent<{ auth?: { token: string; channel: string } }> = ({
-	children,
-	auth,
-}) => {
+export const SocketProvider: FunctionComponent<{ auth?: SocketAuth }> = ({ children, auth }) => {
 	const [socket, setSocket] = useState<Socket<PFTPSocketEventsMap> | null>(socketDefaultValue.socket)
 
 	useEffect(() => {

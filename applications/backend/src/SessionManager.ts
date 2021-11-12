@@ -1,4 +1,4 @@
-import { PFTPSocketEventsMap } from '@pftp/common'
+import { PFTPSocketEventsMap, WebSocketJwtPayload } from '@pftp/common'
 import { Server } from 'socket.io'
 import Session from './Session'
 import { logger } from './logger'
@@ -17,10 +17,7 @@ export default class SessionManager {
 
 			if (typeof socket.handshake.auth.token === 'string') {
 				try {
-					const auth = jwt.verify(socket.handshake.auth.token, jwtSecret) as {
-						user: { username: string }
-						mode: string
-					}
+					const auth = jwt.verify(socket.handshake.auth.token, jwtSecret) as WebSocketJwtPayload
 					logger.debug(JSON.stringify(auth))
 					writeAccess = auth.mode === 'readwrite'
 				} catch {
