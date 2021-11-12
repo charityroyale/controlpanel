@@ -8,9 +8,8 @@ import { useGlobalState } from '../../app/hooks/useGlobalState'
 import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
-import jwt from 'jsonwebtoken'
-import { WebSocketJwtPayload } from '@pftp/common'
 import { SocketAuth } from '../../app/provider/SocketProvider'
+import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
 
 export interface ControlPanelPageProps {
 	title?: string
@@ -43,15 +42,7 @@ export const getServerSideProps: GetServerSideProps<ControlPanelPageProps> = wit
 			return { props: {} as ControlPanelPageProps }
 		}
 
-		const jwtPayload: WebSocketJwtPayload = {
-			channel: user.username,
-			mode: 'readwrite',
-		}
-
-		const auth = {
-			token: jwt.sign(jwtPayload, process.env.WEBSOCKET_AUTH_SECRET ?? 'secret'),
-			channel: user.username,
-		}
+		const auth = generateSocketAuthForUser(user, 'readwrite')
 
 		// explicit type for type-safety, because return type is typed too lax (TODO)
 		const props: ControlPanelPageProps = {

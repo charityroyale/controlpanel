@@ -8,6 +8,7 @@ import { withSession, ServerSideHandler } from '../app/lib/session'
 import { UserDTO } from './api/sessions'
 import { Header } from '../app/components/controlpanel/Header'
 import { SocketAuth } from '../app/provider/SocketProvider'
+import { generateSocketAuthForUser } from '../app/lib/socketUtils'
 
 export interface StartPageProps {
 	title?: string
@@ -62,7 +63,7 @@ export const getServerSideProps: GetServerSideProps<StartPageProps> = withSessio
 		const props: StartPageProps = {
 			title: 'Project: Feed the Pig',
 			user,
-			auth: { channel: user.username },
+			auth: generateSocketAuthForUser(user, 'read'),
 		}
 
 		return {
