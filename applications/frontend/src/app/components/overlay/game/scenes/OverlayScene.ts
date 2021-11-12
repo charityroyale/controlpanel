@@ -6,8 +6,14 @@ import { Pig, PigAnimationKeys } from '../objects/Pig'
 
 const PIG_PLACEHOLDER_SPRITESHEET_KEY = 'pigPlaceHolder'
 
-const VOLUME_CHANGE_AUDIO_KEY = 'voluemChangeAudio'
+const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
+
+const frameCount = 44 // frames of the spritesheet file
+const spritesheetWidth = 12887 // width of the spritesheet file
+const frameWidth = Math.round(spritesheetWidth / frameCount)
+const frameHeight = 443 // equals height of the spritesheet file as it is one rowed
+
 export class OverlayScene extends Phaser.Scene {
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -40,9 +46,9 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/game/character.png', {
-			frameWidth: 77.42857142857143,
-			frameHeight: 57.272727272727,
+		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/game/piggy.png', {
+			frameWidth,
+			frameHeight,
 		})
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -56,22 +62,15 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create({
 			key: PigAnimationKeys.idle,
 			frameRate: 6,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 0, end: 3 }),
+			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 0, end: 21 }),
 			repeat: -1,
 		})
 
 		this.anims.create({
-			key: PigAnimationKeys.donation1,
+			key: PigAnimationKeys.sleep,
 			frameRate: 7,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 43, end: 48 }),
+			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 22, end: 42 }),
 			repeat: 0,
-		})
-
-		this.anims.create({
-			key: PigAnimationKeys.dragging,
-			frameRate: 5,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 22, end: 23 }),
-			repeat: -1,
 		})
 
 		new Pig(
