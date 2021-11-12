@@ -7,10 +7,12 @@ import { styled } from '../app/styles/Theme'
 import { withSession, ServerSideHandler } from '../app/lib/session'
 import { UserDTO } from './api/sessions'
 import { Header } from '../app/components/controlpanel/Header'
+import { SocketAuth } from '../app/provider/SocketProvider'
 
 export interface StartPageProps {
 	title?: string
 	user: UserDTO
+	auth: SocketAuth
 }
 
 const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
@@ -30,7 +32,7 @@ const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
 						<LinkAsButton href="/controlpanel" style={{ marginRight: '4px', marginLeft: '0' }}>
 							<span>Control Panel</span>
 						</LinkAsButton>
-						<LinkAsButton href="/overlay" target="_blank">
+						<LinkAsButton href={`/overlay/${props.auth.channel}`} target="_blank">
 							<span>Browser Source</span>
 						</LinkAsButton>
 					</ButtonsWrapper>
@@ -57,8 +59,14 @@ export const getServerSideProps: GetServerSideProps<StartPageProps> = withSessio
 			return { props: {} as StartPageProps }
 		}
 
+		const props: StartPageProps = {
+			title: 'Project: Feed the Pig',
+			user,
+			auth: { channel: user.username },
+		}
+
 		return {
-			props: { title: 'Project: Feed the Pig', user },
+			props,
 		}
 	}
 )
