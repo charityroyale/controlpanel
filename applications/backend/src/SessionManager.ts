@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 export default class SessionManager {
 	private readonly sessions = new Map<string, Session>()
 
-	constructor(private readonly io: Server<PFTPSocketEventsMap>) {
+	constructor(private readonly io: Server<PFTPSocketEventsMap>, jwtSecret: string) {
 		io.on('connection', async (socket) => {
 			logger.info(`new connection from ${socket.id}!`)
 			logger.debug(`auth: ${JSON.stringify(socket.handshake.auth)}`)
@@ -17,7 +17,10 @@ export default class SessionManager {
 
 			if (typeof socket.handshake.auth.token === 'string') {
 				try {
-					const auth = jwt.verify(socket.handshake.auth.token, 'secret') as { user: { username: string }; mode: string }
+					const auth = jwt.verify(socket.handshake.auth.token, jwtSecret) as {
+						user: { username: string }
+						mode: string
+					}
 					logger.debug(JSON.stringify(auth))
 					writeAccess = auth.mode === 'readwrite'
 				} catch {

@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<ControlPanelPageProps> = wit
 					channel: user.username,
 					mode: 'readwrite',
 				},
-				'secret'
+				process.env.WEBSOCKET_AUTH_SECRET ?? 'secret'
 			),
 			channel: user.username,
 		}

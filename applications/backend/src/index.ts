@@ -84,8 +84,12 @@ app.post(
 	}
 )
 
+if (typeof process.env.WEBSOCKET_AUTH_SECRET !== 'string') {
+	logger.warn('No secret for websocket auth set. Please set the env variable WEBSOCKET_AUTH_SECRET')
+}
+const jwtSecret = process.env.WEBSOCKET_AUTH_SECRET ?? 'secret'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sessionManager = new SessionManager(io)
+const sessionManager = new SessionManager(io, jwtSecret)
 
 const port = process.env.PORT_BACKEND ?? 5200
 httpServer.listen(port)
