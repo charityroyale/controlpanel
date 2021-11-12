@@ -7,10 +7,12 @@ export interface SettingsState {
 	volume: number
 }
 
-export type PigStateType = 'idle' | 'donation1' | 'dragging'
+export type PigStateType = 'idle' | 'sleep'
 export interface CharacterState {
 	isVisible: boolean
 	isLocked: boolean
+	scale: number
+	flipX: boolean
 	position: {
 		x: number
 		y: number
@@ -41,7 +43,7 @@ export interface PFTPSocketEventsMap {
 
 export const getBehaviourFromDonation = (donation: Donation): PigStateType => {
 	if (donation.amount >= 2) {
-		return 'donation1'
+		return 'sleep'
 	} else {
 		return 'idle'
 	}

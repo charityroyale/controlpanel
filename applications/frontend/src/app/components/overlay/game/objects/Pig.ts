@@ -11,8 +11,7 @@ interface PigProps {
 
 export const PigAnimationKeys = {
 	idle: 'idle',
-	donation1: 'donation1',
-	dragging: 'dragging',
+	sleep: 'sleep',
 }
 
 export class Pig extends Phaser.GameObjects.Sprite {
@@ -28,17 +27,17 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	) {
 		super(scene, options.x, options.y, options.texture)
 		this.setName('pig')
-		this.setScale(5)
+		this.setScale(characterState.scale)
 		this.setIsVisible(characterState.isVisible)
 		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
+		this.flipX = characterState.flipX
 		this.changeState('idle')
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
-		this.on('pointerout', () => {
+		this.on('dragend', () => {
 			if (!this.isLocked) {
-				this.changeState('idle')
 				socket.emit(CHARACTER_UPDATE, {
 					position: {
 						x: this.x,
@@ -50,9 +49,6 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
 			if (!this.isLocked) {
-				if (this.anims.currentAnim.key !== 'dragging') {
-					this.changeState('dragging')
-				}
 				this.x = dragX
 				this.y = dragY
 			}
@@ -64,7 +60,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	}
 
 	public handleState(state: CharacterState) {
-		if (!this.isLocked) {
+		if (!this.isLocked && (this.x !== state.position.x || this.y !== state.position.y)) {
 			this.x = state.position.x
 			this.y = state.position.y
 		}
@@ -76,6 +72,14 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		if (this.visible != state.isVisible) {
 			this.setIsVisible(state.isVisible)
 		}
+
+		if (this.scale != state.scale) {
+			this.setScale(state.scale)
+		}
+
+		if (this.flipX != state.flipX) {
+			this.flipX = state.flipX
+		}
 	}
 
 	/** placeholder function until pig handling with animations starts */
@@ -86,12 +90,12 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.playLaughSound()
 	}
 
-	private changeState(behaviour: PigStateType) {
-		if (this.behaviour !== behaviour) {
-			this.behaviour = behaviour
+	private changeState(newBehaviour: PigStateType) {
+		if (this.behaviour !== newBehaviour) {
+			this.behaviour = newBehaviour
 
-			if (this.behaviour !== 'idle' && behaviour !== 'dragging') {
-				this.play(PigAnimationKeys.donation1).once('animationcomplete', () => {
+			if (this.behaviour !== 'idle') {
+				this.play(PigAnimationKeys.sleep).once('animationcomplete', () => {
 					this.changeState('idle')
 				})
 			} else {
