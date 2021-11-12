@@ -29,7 +29,7 @@ export default class Session {
 		})
 	}
 
-	public async handleNewWriteConnection(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
+	public async handleNewReadWriteConnection(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
 		await this.handleNewReadConnection(socket)
 		this.registerWriteHandlers(socket)
 	}

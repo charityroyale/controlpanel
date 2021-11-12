@@ -36,7 +36,7 @@ export default class SessionManager {
 			const session = this.getOrCreateSession(channel)
 			logger.info(`Handle new connection for channel ${channel} (write: ${writeAccess}, id: ${socket.id})`)
 			if (writeAccess) {
-				await session.handleNewWriteConnection(socket)
+				await session.handleNewReadWriteConnection(socket)
 			} else {
 				await session.handleNewReadConnection(socket)
 			}
