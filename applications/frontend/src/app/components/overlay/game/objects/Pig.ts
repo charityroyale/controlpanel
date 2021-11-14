@@ -12,6 +12,7 @@ interface PigProps {
 export const PigAnimationKeys = {
 	idle: 'idle',
 	sleep: 'sleep',
+	scratch: 'scratch',
 }
 
 export class Pig extends Phaser.GameObjects.Sprite {
