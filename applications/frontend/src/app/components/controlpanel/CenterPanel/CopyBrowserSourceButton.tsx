@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { AiOutlineLink } from 'react-icons/ai'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { styled } from '../../../styles/Theme'
+import styled from 'styled-components'
 import { toast } from 'react-toastify'
 
 const iconSize = '18px'

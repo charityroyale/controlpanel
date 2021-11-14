@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
-import { styled } from '../../../styles/Theme'
+import styled from 'styled-components'
 import { GrMoney } from 'react-icons/gr'
 import { Donation, DONATION_TRIGGER } from '@pftp/common'
 import { Donations } from './DonationList'

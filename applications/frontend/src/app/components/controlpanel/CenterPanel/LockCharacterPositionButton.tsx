@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback } from 'react'
-import { styled } from '../../../styles/Theme'
+import styled from 'styled-components'
 import { ImLock, ImUnlocked } from 'react-icons/im'
 import { CHARACTER_UPDATE } from '@pftp/common'
 import { useSocket } from '../../../hooks/useSocket'
