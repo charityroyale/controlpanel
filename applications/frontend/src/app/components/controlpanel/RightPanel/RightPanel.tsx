@@ -27,21 +27,17 @@ export const RightPanel: FunctionComponent = () => {
 					setShowScrollBottom(true)
 				}
 			}
-			const donationsCopy = donations
-			donationsCopy.unshift(donation)
 
-			if (donationsCopy.length > maxDonationsToDisplay) {
-				donationsCopy.pop()
-			}
-			setDonations([...donationsCopy])
+			setDonations((donations) => {
+				const updatedDonations = [donation, ...donations]
+
+				if (updatedDonations.length > maxDonationsToDisplay) {
+					updatedDonations.pop()
+				}
+				return updatedDonations
+			})
 		})
-		/**
-		 * Unfortunately there is no better implementation YET with the missing donations dependency
-		 * as it would re-add the socketIO listener exponentially. This is dangerous nevertheless,
-		 * as state-changes might get lost.
-		 */
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [socket, setDonations, setShowScrollBottom])
+	}, [socket])
 
 	const onScroll = useCallback(() => {
 		if (donationContentRef.current) {
