@@ -1,5 +1,3 @@
-import baseStyled, { ThemedStyledInterface } from 'styled-components'
-
 // References to https://blog.agney.dev/styled-components-&-typescript/
 const customMediaQuery = (minWidth: number): string => `@media (min-width: ${minWidth}px)`
 
@@ -57,6 +55,4 @@ export const theme = {
 	},
 }
 
-// Stronlgy typed theme https://github.com/styled-components/styled-components/issues/1589
 export type Theme = typeof theme
-export const styled = baseStyled as ThemedStyledInterface<Theme>

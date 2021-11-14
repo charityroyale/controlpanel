@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactElement } from 'react'
-import { styled } from '../../styles/Theme'
+import styled from 'styled-components'
 
 interface FatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 	active?: boolean

@@ -1,7 +1,7 @@
 import React from 'react'
 import { FunctionComponent } from 'react'
 import { UserDTO } from '../../../pages/api/sessions'
-import { styled } from '../../styles/Theme'
+import styled from 'styled-components'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 
 export const Header: FunctionComponent<{ user: UserDTO }> = ({ user }) => {

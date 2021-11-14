@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useGlobalState } from '../../hooks/useGlobalState'
 import { useIsMounted } from '../../hooks/useIsMounted'
 import { useSocket } from '../../hooks/useSocket'
-import { styled } from '../../styles/Theme'
+import styled from 'styled-components'
 import { ProjectFeedThePigGame } from './game/ProjectFeedThePigGame'
 
 const PhaserDiv = styled.div`

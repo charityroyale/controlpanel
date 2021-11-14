@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../pages/controlpanel'
-import { styled } from '../../styles/Theme'
+import styled from 'styled-components'
 import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'

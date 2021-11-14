@@ -3,7 +3,7 @@ import { GlobalState } from '@pftp/common'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
-import { styled } from '../../../styles/Theme'
+import styled from 'styled-components'
 import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
 import { LockCharacterPositionButton } from './LockCharacterPositionButton'
 
