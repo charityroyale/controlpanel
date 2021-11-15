@@ -4,15 +4,19 @@ import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
 import { Pig, PigAnimationKeys } from '../objects/Pig'
 
-const PIG_PLACEHOLDER_SPRITESHEET_KEY = 'pigPlaceHolder'
-
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 
-const frameCount = 44 // frames of the spritesheet file
-const spritesheetWidth = 12887 // width of the spritesheet file
-const frameWidth = Math.round(spritesheetWidth / frameCount)
-const frameHeight = 443 // equals height of the spritesheet file as it is one rowed
+const pigAtlasKey = 'pigAtlas'
+const pigIdleFrame = 'idleFrame'
+const pigSleepFrame = 'sleepFrame'
+const pigScratchFrame = 'scratchFrame'
+
+export const pigIdleKey = 'idle'
+export const pigSleepKey = 'sleep'
+export const pigScratchKey = 'scratch'
+
+const frameSize = 500
 
 export class OverlayScene extends Phaser.Scene {
 	constructor() {
@@ -46,10 +50,8 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.spritesheet(PIG_PLACEHOLDER_SPRITESHEET_KEY, '/game/piggy.png', {
-			frameWidth,
-			frameHeight,
-		})
+		this.load.atlas(pigAtlasKey, '/game/test.png', '/game/test.json')
+
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
 	}
@@ -59,33 +61,53 @@ export class OverlayScene extends Phaser.Scene {
 		const pigLaugh = this.sound.add(PIG_LAUGH_AUDIO_KEY)
 		this.sound.pauseOnBlur = false
 
-		this.anims.create({
-			key: PigAnimationKeys.idle,
-			frameRate: 6,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 0, end: 21 }),
+		this.textures.addSpriteSheetFromAtlas(pigIdleFrame, {
+			atlas: pigAtlasKey,
+			frame: 'idle',
+			frameWidth: frameSize,
+			frameHeight: frameSize,
+		})
+
+		this.textures.addSpriteSheetFromAtlas(pigSleepFrame, {
+			atlas: pigAtlasKey,
+			frame: 'sleep',
+			frameWidth: frameSize,
+			frameHeight: frameSize,
+		})
+
+		this.textures.addSpriteSheetFromAtlas(pigScratchFrame, {
+			atlas: pigAtlasKey,
+			frame: 'scratch',
+			frameWidth: frameSize,
+			frameHeight: frameSize,
+		})
+
+		const pigIdleConfig = {
+			key: pigIdleKey,
+			frames: this.anims.generateFrameNumbers(pigIdleFrame, { start: 0, end: 21 }),
+			frameRate: 7,
 			repeat: -1,
-		})
+		}
 
-		this.anims.create({
-			key: PigAnimationKeys.sleep,
+		const pigSleepConfig = {
+			key: pigSleepKey,
+			frames: this.anims.generateFrameNumbers(pigSleepFrame, { start: 0, end: 21 }),
 			frameRate: 7,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 22, end: 42 }),
 			repeat: 0,
-		})
+		}
 
-		this.anims.create({
-			key: PigAnimationKeys.scratch,
+		const pigScratchConfig = {
+			key: pigScratchKey,
+			frames: this.anims.generateFrameNumbers(pigScratchFrame, { start: 0, end: 12 }),
 			frameRate: 7,
-			frames: this.anims.generateFrameNumbers(PIG_PLACEHOLDER_SPRITESHEET_KEY, { start: 43, end: 55 }),
 			repeat: 0,
-		})
+		}
 
-		new Pig(
-			this,
-			{ x: 1920 / 2, y: 1080 / 2, texture: PIG_PLACEHOLDER_SPRITESHEET_KEY, pigLaugh },
-			initialState.character,
-			socket
-		)
+		this.anims.create(pigIdleConfig)
+		this.anims.create(pigSleepConfig)
+		this.anims.create(pigScratchConfig)
+
+		new Pig(this, { x: 1920 / 2, y: 1080 / 2, texture: pigAtlasKey, pigLaugh }, initialState.character, socket)
 		socket.emit(REQUEST_STATE)
 	}
 

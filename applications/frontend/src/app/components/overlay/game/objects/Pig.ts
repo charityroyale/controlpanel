@@ -1,6 +1,7 @@
 import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap, PigStateType } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
+import { Behaviour } from './behaviour/Behaviour'
 
 interface PigProps {
 	texture: string
@@ -16,7 +17,7 @@ export const PigAnimationKeys = {
 }
 
 export class Pig extends Phaser.GameObjects.Sprite {
-	private behaviour: PigStateType | undefined
+	private behaviour: Behaviour
 	private isLocked
 	private pigLaugh
 
@@ -27,13 +28,17 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		socket: Socket<PFTPSocketEventsMap>
 	) {
 		super(scene, options.x, options.y, options.texture)
+
 		this.setName('pig')
 		this.setScale(characterState.scale)
 		this.setIsVisible(characterState.isVisible)
+
 		this.pigLaugh = options.pigLaugh
 		this.isLocked = characterState.isLocked
 		this.flipX = characterState.flipX
-		this.changeState('idle')
+
+		this.behaviour = new Behaviour(this)
+		this.behaviour.idle()
 
 		this.setInteractive()
 		scene.input.setDraggable(this)
@@ -84,25 +89,10 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	}
 
 	/** placeholder function until pig handling with animations starts */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handleDonation(_donation: Donation, behaviour: PigStateType) {
-		this.changeState(behaviour)
+		this.behaviour.addToQueue(_donation)
 
 		this.playLaughSound()
-	}
-
-	private changeState(newBehaviour: PigStateType) {
-		if (this.behaviour !== newBehaviour) {
-			this.behaviour = newBehaviour
-
-			if (this.behaviour !== 'idle') {
-				this.play(PigAnimationKeys.sleep).once('animationcomplete', () => {
-					this.changeState('idle')
-				})
-			} else {
-				this.play(this.behaviour)
-			}
-		}
 	}
 
 	public playLaughSound() {
