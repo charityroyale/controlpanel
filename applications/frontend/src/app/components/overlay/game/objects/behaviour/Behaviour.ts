@@ -4,43 +4,37 @@ import { DonationBehaviour } from './DonationBehaviour'
 import { Sleep } from './Sleep'
 
 export interface PigBehaviour {
-	startInterval: () => void
-	stopInterval: () => void
+	start: () => void
+	stop: () => void
+	reset: () => void
 }
 
 export class Behaviour {
 	private character: Pig
-	private queue: DonationBehaviour
-
-	private isIdle = true
-
-	private scratchTimer = 10000
-	private scratchTimerId = null
+	private queue: Donation[] = []
 
 	private sleepBehaviour: Sleep
+	private donationBehaviour: DonationBehaviour
 
 	constructor(character: Pig) {
 		this.character = character
-		this.queue = new DonationBehaviour(this.character)
+		this.donationBehaviour = new DonationBehaviour(this.character, this.queue)
 		this.sleepBehaviour = new Sleep(this.character)
 	}
 
 	public idle() {
-		console.log(this.character)
 		this.character.play(PigAnimationKeys.idle)
-
-		this.sleepBehaviour.startInterval()
-
-		this.isIdle = true
+		this.sleepBehaviour.start()
+		this.donationBehaviour.start()
 	}
 
-	public endIdle() {
-		this.sleepBehaviour.stopInterval()
-
-		this.isIdle = false
+	public resetSleepBehaviourTimer() {
+		this.sleepBehaviour.reset()
 	}
 
 	public addToQueue(donation: Donation) {
-		this.queue.addToQueue(donation)
+		console.log('added to queue')
+		this.resetSleepBehaviourTimer()
+		this.queue.push(donation)
 	}
 }

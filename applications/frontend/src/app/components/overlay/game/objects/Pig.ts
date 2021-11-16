@@ -91,7 +91,6 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	/** placeholder function until pig handling with animations starts */
 	public handleDonation(_donation: Donation, behaviour: PigStateType) {
 		this.behaviour.addToQueue(_donation)
-
 		this.playLaughSound()
 	}
 

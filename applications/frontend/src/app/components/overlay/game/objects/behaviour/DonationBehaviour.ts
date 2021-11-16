@@ -1,5 +1,5 @@
 import { Donation } from '@pftp/common'
-import { pigIdleKey, pigSleepKey } from '../../scenes/OverlayScene'
+import { pigIdleKey, pigScratchKey, pigSleepKey, pigSleepOutKey } from '../../scenes/OverlayScene'
 import { Pig } from '../Pig'
 
 export class DonationBehaviour {
@@ -8,29 +8,43 @@ export class DonationBehaviour {
 	 * start donation animation.
 	 */
 	private checkQueueTimerId: undefined | number
-	private checkQueueTimer = 1000
+	private checkQueueTimer = 500
 	private character: Pig
+	private queue
 
-	private queue: Donation[] = []
-
-	constructor(character: Pig) {
+	constructor(character: Pig, queue: Donation[]) {
 		this.character = character
+		this.queue = queue
 		this.start()
 	}
 
-	private start() {
+	public start() {
 		this.checkQueueTimerId = window.setInterval(() => {
-			if (this.queue.length > 0 && this.character.anims.currentAnim.key !== pigSleepKey) {
-				this.queue.pop()
-				console.log('hi?')
-				this.character.play(pigSleepKey).on('animationcomplete', () => {
-					this.character.play(pigIdleKey)
-				})
+			if (
+				this.queue.length > 0 &&
+				this.character.anims.currentAnim.key !== pigScratchKey &&
+				this.character.anims.currentAnim.key !== pigSleepOutKey
+			) {
+				if (this.character.anims.currentAnim.key === pigIdleKey) {
+					this.queue.pop()
+					this.character.play(pigScratchKey).chain(pigIdleKey)
+				}
+
+				if (this.character.anims.currentAnim.key === pigSleepKey) {
+					this.queue.pop()
+					this.character.play(pigSleepOutKey).chain(pigScratchKey).chain(pigIdleKey)
+				}
 			}
 		}, this.checkQueueTimer)
 	}
 
-	public addToQueue(donation: Donation) {
-		this.queue.push(donation)
+	public stop() {
+		window.clearInterval(this.checkQueueTimerId)
+		this.checkQueueTimerId = undefined
+	}
+
+	public reset() {
+		this.stop()
+		this.start()
 	}
 }
