@@ -3,13 +3,13 @@ import { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
-import { styled } from '../../app/styles/Theme'
 import { useGlobalState } from '../../app/hooks/useGlobalState'
 import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { SocketAuth } from '../../app/provider/SocketProvider'
 import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
+import styled from 'styled-components'
 
 export interface ControlPanelPageProps {
 	title?: string

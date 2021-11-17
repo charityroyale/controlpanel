@@ -1,6 +1,6 @@
 import { Donation } from '@pftp/common'
 import React, { FunctionComponent } from 'react'
-import { styled } from '../../../styles/Theme'
+import styled from 'styled-components'
 import { FaCoins } from 'react-icons/fa'
 import { formatCurrency, formatTimeStamp } from '../../../lib/utils'
 

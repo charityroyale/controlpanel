@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../pages/controlpanel'
-import { styled } from '../../styles/Theme'
+import styled from 'styled-components'
 import { RiListSettingsFill } from 'react-icons/ri'
 import { FatButton } from './FatButton'
 import { CHARACTER_UPDATE, GlobalState } from '@pftp/common'

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { styled } from '../../app/styles/Theme'
+import styled from 'styled-components'
 
 const LoginPage = () => {
 	const router = useRouter()
