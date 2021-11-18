@@ -2,10 +2,14 @@ import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STAT
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
+import { Container } from '../objects/Container'
 import { Pig } from '../objects/Pig'
+import { Sign } from '../objects/Sign'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
+
+const signKey = 'sign'
 
 const pigAtlasKey = 'pigAtlas'
 const pigIdleFrame = 'idleFrame'
@@ -23,16 +27,17 @@ export const pigDonationKey = 'donation'
 const frameSize = 500
 
 export class OverlayScene extends Phaser.Scene {
+	public pigWithSignContainer: Container | null = null
+
 	constructor() {
 		super({ key: SCENES.OVERLAY })
 	}
 
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		config.socket.on(STATE_UPDATE, (state) => {
-			const activePigs = this.getActiveGameObjectsByName<Pig>('pig')
-			for (const pig of activePigs) {
-				pig.handleState(state.character)
-			}
+			this.pigWithSignContainer?.handleState(state.character)
+			const pig = this.pigWithSignContainer?.getByName('pig') as Pig
+			pig.handleState(state.character)
 
 			/**
 			 * Somehow numbers with decimals end up having more decimals
@@ -46,15 +51,17 @@ export class OverlayScene extends Phaser.Scene {
 		})
 
 		config.socket.on(DONATION_TRIGGER, (donation) => {
-			const activePigs = this.getActiveGameObjectsByName<Pig>('pig')
-			for (const pig of activePigs) {
-				pig.handleDonation(donation)
-			}
+			const pig = this.pigWithSignContainer?.getByName('pig') as Pig
+			pig.handleDonation(donation)
 		})
 	}
 
 	preload() {
 		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
+		this.load.spritesheet(signKey, '/game/sign.png', {
+			frameWidth: 500,
+			frameHeight: 500,
+		})
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -62,6 +69,7 @@ export class OverlayScene extends Phaser.Scene {
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		const { socket, initialState } = config
+
 		const pigLaugh = this.sound.add(PIG_LAUGH_AUDIO_KEY)
 		this.sound.pauseOnBlur = false
 
@@ -142,7 +150,14 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigScratchConfig)
 		this.anims.create(pigDonationConfig)
 
-		new Pig(this, { x: 1920 / 2, y: 1080 / 2, texture: pigAtlasKey, pigLaugh }, initialState.character, socket)
+		const pig = new Pig(this, { x: 0, y: 0, texture: pigAtlasKey, pigLaugh }, initialState.character)
+		const sign = new Sign(this, -195, 0, signKey)
+
+		this.pigWithSignContainer = new Container(this, initialState.character, socket, {
+			children: [pig, sign],
+		})
+		this.input.setDraggable(this.pigWithSignContainer)
+
 		socket.emit(REQUEST_STATE)
 	}
 
