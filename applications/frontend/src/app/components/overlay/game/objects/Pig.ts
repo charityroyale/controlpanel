@@ -1,4 +1,4 @@
-import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap, PigStateType } from '@pftp/common'
+import { CharacterState, CHARACTER_UPDATE, Donation, PFTPSocketEventsMap } from '@pftp/common'
 import Phaser from 'phaser'
 import { Socket } from 'socket.io-client'
 import { Behaviour } from './behaviour/Behaviour'
@@ -89,8 +89,8 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	}
 
 	/** placeholder function until pig handling with animations starts */
-	public handleDonation(_donation: Donation, behaviour: PigStateType) {
-		this.behaviour.addToQueue(_donation)
+	public handleDonation(donation: Donation) {
+		this.behaviour.addToQueue(donation)
 		this.playLaughSound()
 	}
 

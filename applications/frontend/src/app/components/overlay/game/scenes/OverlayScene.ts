@@ -11,12 +11,14 @@ const pigAtlasKey = 'pigAtlas'
 const pigIdleFrame = 'idleFrame'
 const pigSleepSpriteSheet = 'sleepFrame'
 const pigScratchFrame = 'scratchFrame'
+const pigDonationFrame = 'donationFrame'
 
 export const pigIdleKey = 'idle'
 export const pigSleepKey = 'sleep'
 export const pigSleepInKey = 'sleepIn'
 export const pigSleepOutKey = 'sleepOut'
 export const pigScratchKey = 'scratch'
+export const pigDonationKey = 'donation'
 
 const frameSize = 500
 
@@ -43,16 +45,16 @@ export class OverlayScene extends Phaser.Scene {
 			}
 		})
 
-		config.socket.on(DONATION_TRIGGER, (donation, behaviour) => {
+		config.socket.on(DONATION_TRIGGER, (donation) => {
 			const activePigs = this.getActiveGameObjectsByName<Pig>('pig')
 			for (const pig of activePigs) {
-				pig.handleDonation(donation, behaviour)
+				pig.handleDonation(donation)
 			}
 		})
 	}
 
 	preload() {
-		this.load.atlas(pigAtlasKey, '/game/test.png', '/game/test.json')
+		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -77,11 +79,32 @@ export class OverlayScene extends Phaser.Scene {
 			frameHeight: frameSize,
 		})
 
+		this.textures.addSpriteSheetFromAtlas(pigDonationFrame, {
+			atlas: pigAtlasKey,
+			frame: 'donation',
+			frameWidth: frameSize,
+			frameHeight: frameSize,
+		})
+
+		this.textures.addSpriteSheetFromAtlas(pigSleepSpriteSheet, {
+			atlas: pigAtlasKey,
+			frame: 'sleep',
+			frameWidth: frameSize,
+			frameHeight: frameSize,
+		})
+
 		const pigIdleConfig: Phaser.Types.Animations.Animation = {
 			key: pigIdleKey,
 			frames: this.anims.generateFrameNumbers(pigIdleFrame, { end: 21 }),
 			duration: 3750,
 			repeat: -1,
+		}
+
+		const pigDonationConfig: Phaser.Types.Animations.Animation = {
+			key: pigDonationKey,
+			frames: this.anims.generateFrameNumbers(pigDonationFrame, { start: 0, end: 17 }),
+			duration: 2150,
+			repeat: 0,
 		}
 
 		const pigScratchConfig: Phaser.Types.Animations.Animation = {
@@ -90,13 +113,6 @@ export class OverlayScene extends Phaser.Scene {
 			duration: 1800,
 			repeat: 0,
 		}
-
-		this.textures.addSpriteSheetFromAtlas(pigSleepSpriteSheet, {
-			atlas: pigAtlasKey,
-			frame: 'sleep',
-			frameWidth: frameSize,
-			frameHeight: frameSize,
-		})
 
 		const pigSleepInConfig: Phaser.Types.Animations.Animation = {
 			key: pigSleepInKey,
@@ -124,6 +140,7 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigSleepInConfig)
 		this.anims.create(pigSleepOutConfig)
 		this.anims.create(pigScratchConfig)
+		this.anims.create(pigDonationConfig)
 
 		new Pig(this, { x: 1920 / 2, y: 1080 / 2, texture: pigAtlasKey, pigLaugh }, initialState.character, socket)
 		socket.emit(REQUEST_STATE)

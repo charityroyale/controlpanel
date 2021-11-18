@@ -1,16 +1,16 @@
 {
 	"textures": [
 		{
-			"image": "test-0.png",
+			"image": "pig_atlas.png",
 			"format": "RGBA8888",
 			"size": {
 				"w": 11000,
-				"h": 1500
+				"h": 2000
 			},
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "idle",
+					"filename": "donation",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -31,7 +31,7 @@
 					}
 				},
 				{
-					"filename": "scratch",
+					"filename": "idle",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -52,7 +52,7 @@
 					}
 				},
 				{
-					"filename": "sleep",
+					"filename": "scratch",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -71,6 +71,27 @@
 						"w": 11000,
 						"h": 500
 					}
+				},
+				{
+					"filename": "sleep",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 11000,
+						"h": 500
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 11000,
+						"h": 500
+					},
+					"frame": {
+						"x": 0,
+						"y": 1500,
+						"w": 11000,
+						"h": 500
+					}
 				}
 			]
 		}
@@ -78,6 +99,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:b72d10074727a1eac70f543555143879:71140317240303830571e03b829882c0:2f85e5c9165c43ef1585901681b659dd$"
+		"smartupdate": "$TexturePacker:SmartUpdate:aeb548576645b2c5a52e0b58ccee119c:fbb10ed18ec1186b978825dad9303f60:dc38091911aac40a9cff599ead761108$"
 	}
 }

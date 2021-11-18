@@ -1,5 +1,5 @@
 import { Donation } from '@pftp/common'
-import { pigIdleKey, pigScratchKey, pigSleepKey, pigSleepOutKey } from '../../scenes/OverlayScene'
+import { pigDonationKey, pigIdleKey, pigSleepKey, pigSleepOutKey } from '../../scenes/OverlayScene'
 import { Pig } from '../Pig'
 
 export class DonationBehaviour {
@@ -11,6 +11,7 @@ export class DonationBehaviour {
 	private checkQueueTimer = 500
 	private character: Pig
 	private queue
+	private donationAnimationKey = pigDonationKey
 
 	constructor(character: Pig, queue: Donation[]) {
 		this.character = character
@@ -22,17 +23,17 @@ export class DonationBehaviour {
 		this.checkQueueTimerId = window.setInterval(() => {
 			if (
 				this.queue.length > 0 &&
-				this.character.anims.currentAnim.key !== pigScratchKey &&
+				this.character.anims.currentAnim.key !== this.donationAnimationKey &&
 				this.character.anims.currentAnim.key !== pigSleepOutKey
 			) {
 				if (this.character.anims.currentAnim.key === pigIdleKey) {
 					this.queue.pop()
-					this.character.play(pigScratchKey).chain(pigIdleKey)
+					this.character.play(this.donationAnimationKey).chain(pigIdleKey)
 				}
 
 				if (this.character.anims.currentAnim.key === pigSleepKey) {
 					this.queue.pop()
-					this.character.play(pigSleepOutKey).chain(pigScratchKey).chain(pigIdleKey)
+					this.character.play(pigSleepOutKey).chain(this.donationAnimationKey).chain(pigIdleKey)
 				}
 			}
 		}, this.checkQueueTimer)

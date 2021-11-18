@@ -38,13 +38,5 @@ export interface PFTPSocketEventsMap {
 	[SETTINGS_UPDATE]: (settingsUpdate: Partial<SettingsState>) => void
 	[STATE_UPDATE]: (state: GlobalState) => void
 	[REQUEST_STATE]: () => void
-	[DONATION_TRIGGER]: (donation: Donation, behaviour: PigStateType) => void
-}
-
-export const getBehaviourFromDonation = (donation: Donation): PigStateType => {
-	if (donation.amount >= 2) {
-		return 'sleep'
-	} else {
-		return 'idle'
-	}
+	[DONATION_TRIGGER]: (donation: Donation) => void
 }
