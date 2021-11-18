@@ -7,7 +7,7 @@ export class Coin extends Phaser.GameObjects.Sprite {
 	constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture, pig: Pig) {
 		super(scene, x, y, texture)
 
-		this.setScale(1.5)
+		this.setScale(pig.scale)
 		this.pig = pig
 
 		this.scene.tweens.add({
@@ -44,7 +44,6 @@ export class Coin extends Phaser.GameObjects.Sprite {
 			this,
 			target,
 			(currentGameObject) => {
-				console.log(currentGameObject)
 				currentGameObject.destroy()
 				collider.destroy()
 				body.destroy()

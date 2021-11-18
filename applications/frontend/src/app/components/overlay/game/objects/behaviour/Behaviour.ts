@@ -33,7 +33,6 @@ export class Behaviour {
 	}
 
 	public addToQueue(donation: Donation) {
-		console.log('added to queue')
 		this.resetSleepBehaviourTimer()
 		this.queue.push(donation)
 	}
