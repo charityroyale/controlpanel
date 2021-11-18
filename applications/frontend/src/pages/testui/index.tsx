@@ -19,8 +19,8 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	const { socket } = useSocket()
 
 	const emitDonation = useCallback(() => {
-		const precision = 100
-		const maxAmount = 10002
+		const precision = 2
+		const maxAmount = 1000
 		const randomnum =
 			Math.floor(Math.random() * (maxAmount * precision - 1 * precision) + 1 * precision) / (1 * precision)
 

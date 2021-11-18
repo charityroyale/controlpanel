@@ -11,6 +11,15 @@ const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 
 const signKey = 'sign'
 
+export const coin1Key = 'coin1'
+export const coin2Key = 'coin2'
+export const coin3Key = 'coin3'
+export const coin4Key = 'coin4'
+export const coin5Key = 'coin5'
+export const coin6Key = 'coin6'
+export const coin7Key = 'coin7'
+export const coin8Key = 'coin8'
+
 const pigAtlasKey = 'pigAtlas'
 const pigIdleFrame = 'idleFrame'
 const pigSleepSpriteSheet = 'sleepFrame'
@@ -23,8 +32,11 @@ export const pigSleepInKey = 'sleepIn'
 export const pigSleepOutKey = 'sleepOut'
 export const pigScratchKey = 'scratch'
 export const pigDonationKey = 'donation'
+export const pigDonationInKey = 'donationIn'
+export const pigDonationOutKey = 'donationOut'
 
 const frameSize = 500
+const coinSize = 128
 
 export class OverlayScene extends Phaser.Scene {
 	public pigWithSignContainer: Container | null = null
@@ -62,6 +74,13 @@ export class OverlayScene extends Phaser.Scene {
 			frameWidth: 500,
 			frameHeight: 500,
 		})
+
+		for (let i = 1; i <= 8; i++) {
+			this.load.spritesheet(`coin${i}`, `/game/coins/coin${i}.png`, {
+				frameWidth: coinSize,
+				frameHeight: coinSize,
+			})
+		}
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -108,10 +127,24 @@ export class OverlayScene extends Phaser.Scene {
 			repeat: -1,
 		}
 
+		const pigDonationInConfig: Phaser.Types.Animations.Animation = {
+			key: pigDonationInKey,
+			frames: this.anims.generateFrameNumbers(pigDonationFrame, { start: 0, end: 8 }),
+			duration: 1000,
+			repeat: 0,
+		}
+
 		const pigDonationConfig: Phaser.Types.Animations.Animation = {
 			key: pigDonationKey,
-			frames: this.anims.generateFrameNumbers(pigDonationFrame, { start: 0, end: 17 }),
-			duration: 2150,
+			frames: this.anims.generateFrameNumbers(pigDonationFrame, { start: 9, end: 10 }),
+			duration: 200,
+			repeat: -1,
+		}
+
+		const pigDonationOutConfig: Phaser.Types.Animations.Animation = {
+			key: pigDonationOutKey,
+			frames: this.anims.generateFrameNumbers(pigDonationFrame, { start: 11, end: 17 }),
+			duration: 1000,
 			repeat: 0,
 		}
 
@@ -149,6 +182,8 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigSleepOutConfig)
 		this.anims.create(pigScratchConfig)
 		this.anims.create(pigDonationConfig)
+		this.anims.create(pigDonationInConfig)
+		this.anims.create(pigDonationOutConfig)
 
 		const pig = new Pig(this, { x: 0, y: 0, texture: pigAtlasKey, pigLaugh }, initialState.character)
 		const sign = new Sign(this, -195, 0, signKey)
@@ -159,9 +194,5 @@ export class OverlayScene extends Phaser.Scene {
 		this.input.setDraggable(this.pigWithSignContainer)
 
 		socket.emit(REQUEST_STATE)
-	}
-
-	private getActiveGameObjectsByName<T>(name: string) {
-		return this.children.list.filter((child) => child.name === name) as never as T[]
 	}
 }
