@@ -35,13 +35,11 @@ export class DonationBehaviour {
 				this.character.anims.currentAnim.key !== pigSleepOutKey
 			) {
 				if (this.character.anims.currentAnim.key === pigIdleKey) {
-					console.log('trying to do stuff')
 					this.queue.pop()
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
 				}
 
 				if (this.character.anims.currentAnim.key === pigSleepKey) {
-					console.log('trying to do stuff2')
 					this.queue.pop()
 					this.character.play(pigSleepOutKey).chain(pigDonationInKey).chain(pigDonationKey)
 				}

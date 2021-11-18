@@ -15,7 +15,6 @@ export class Sleep implements PigBehaviour {
 	public start() {
 		this.sleepTimerId = window.setTimeout(() => {
 			if (this.character.anims.currentAnim.key === pigIdleKey) {
-				console.log('trying to sleep')
 				this.character.play(pigSleepInKey).chain(pigSleepKey)
 			}
 		}, this.sleepTimer)
