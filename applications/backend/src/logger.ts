@@ -7,8 +7,10 @@ const createLogger = (label: string): Logger =>
 			format.label({ label }),
 			format.printf((info) => `${info.timestamp} - [${info.level}] - [${info.label}] - ${info.message}`)
 		),
-		level: 'info',
+		level: process.env.LOG_LEVEL ?? 'info',
 		transports: new winston.transports.Console(),
 	})
 
 export const logger = createLogger('Web')
+export const sessionLogger = createLogger('Session')
+export const databaseServiceLogger = createLogger('DatabaseService')

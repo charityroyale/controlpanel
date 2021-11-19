@@ -1,35 +1,24 @@
-import { configureStore } from '@reduxjs/toolkit'
+import './env'
 import { logger } from './logger'
-import {
-	CHARACTER_UPDATE,
-	Donation,
-	DONATION_TRIGGER,
-	getBehaviourFromDonation,
-	GlobalState,
-	PFTPSocketEventsMap,
-	PigStateType,
-	REQUEST_STATE,
-	SETTINGS_UPDATE,
-	STATE_UPDATE,
-} from '@pftp/common'
-import { characterReducer, settingsReducer, updateCharacter, updateSettings } from './State'
+import { Donation, getBehaviourFromDonation, PFTPSocketEventsMap } from '@pftp/common'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
+import SessionManager from './SessionManager'
+import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
-import dotenv from 'dotenv'
-
-dotenv.config({
-	path: path.resolve(__dirname, '../.env'),
-})
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
 	'https://pftp.redcouch.at',
 	'https://streamer.make-a-wish.at',
 ]
+
+const port = process.env.PORT_BACKEND ?? 5200
+const simpleUserDbService = new SimpleUserDbService(process.env.USER_DB ?? `http://localhost:${port}/userdb.yml`)
+
 const app = express()
 const httpServer = createServer(app)
 const io = new Server<PFTPSocketEventsMap>(httpServer, {
@@ -47,13 +36,6 @@ const io = new Server<PFTPSocketEventsMap>(httpServer, {
 	},
 })
 app.use(express.json())
-
-const store = configureStore<GlobalState>({
-	reducer: {
-		character: characterReducer,
-		settings: settingsReducer,
-	},
-})
 
 app.post('/token', body('client_id').isString(), (request, response) => {
 	const errors = validationResult(request)
@@ -95,6 +77,7 @@ app.post(
 	body('user').isString(),
 	body('amount').isFloat(),
 	body('timestamp').isInt(),
+	body('streamerId').isString(),
 	authenticateJWT,
 	(request, response) => {
 		const errors = validationResult(request)
@@ -103,33 +86,26 @@ app.post(
 		}
 		const donation = request.body as Donation
 		const behaviour = getBehaviourFromDonation(donation)
-		io.emit(DONATION_TRIGGER, donation, behaviour)
+
+		const targetChannel = simpleUserDbService.userNameFromId(request.body.streamerId)
+		if (targetChannel !== undefined) {
+			sessionManager.getOrCreateSession(targetChannel).sendDonation(donation, behaviour)
+		}
+
 		response.send(request.body)
 	}
 )
 
-io.on('connection', (socket) => {
-	logger.info(`new connection from ${socket.id}!`)
-
-	socket.on(CHARACTER_UPDATE, (characterUpdate) => store.dispatch(updateCharacter(characterUpdate)))
-	socket.on(SETTINGS_UPDATE, (settingsUpdate) => store.dispatch(updateSettings(settingsUpdate)))
-
-	socket.on('disconnect', (reason) => {
-		logger.info(`socket ${socket.id} disconnected with reason: ${reason}`)
-	})
-
-	socket.on(DONATION_TRIGGER, (donation: Donation, behaviour: PigStateType) => {
-		io.emit(DONATION_TRIGGER, donation, behaviour)
-	})
-	socket.emit(STATE_UPDATE, store.getState())
-	socket.on(REQUEST_STATE, () => socket.emit(STATE_UPDATE, store.getState()))
+app.get('/userdb.yml', (req, res) => {
+	res.sendFile(path.join(__dirname, '../public/userdb.yml'))
 })
 
-store.subscribe(() => {
-	io.emit(STATE_UPDATE, store.getState())
-	console.log(store.getState())
-})
+if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
+	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')
+}
+const jwtSecret = process.env.SOCKETIO_AUTH_SECRET ?? 'secret'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const sessionManager = new SessionManager(io, jwtSecret)
 
-const port = process.env.PORT_BACKEND ?? 5200
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)

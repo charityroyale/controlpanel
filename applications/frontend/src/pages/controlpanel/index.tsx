@@ -6,13 +6,15 @@ import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useGlobalState } from '../../app/hooks/useGlobalState'
 import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
-import { OverlayPageProps } from '../overlay'
 import { UserDTO } from '../api/sessions'
+import { SocketAuth } from '../../app/provider/SocketProvider'
+import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
 import styled from 'styled-components'
 
 export interface ControlPanelPageProps {
 	title?: string
 	user: UserDTO
+	auth: SocketAuth
 }
 
 const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPageProps) => {
@@ -37,11 +39,20 @@ export const getServerSideProps: GetServerSideProps<ControlPanelPageProps> = wit
 		if (!user) {
 			res.statusCode = 404
 			res.end()
-			return { props: {} as OverlayPageProps }
+			return { props: {} as ControlPanelPageProps }
+		}
+
+		const auth = generateSocketAuthForUser(user, 'readwrite')
+
+		// explicit type for type-safety, because return type is typed too lax (TODO)
+		const props: ControlPanelPageProps = {
+			user,
+			auth,
+			title: 'Control Panel',
 		}
 
 		return {
-			props: { user, title: 'Control Panel' },
+			props,
 		}
 	}
 )

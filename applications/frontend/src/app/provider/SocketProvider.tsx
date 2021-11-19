@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { createContext, FunctionComponent, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { io, ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
 import { PFTPSocketEventsMap } from '@pftp/common'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/dist/client/router'
@@ -10,18 +10,30 @@ export interface SockerContextState {
 	isConnected: boolean
 }
 
+export interface SocketAuth {
+	channel: string
+	token?: string
+}
+
 const socketDefaultValue: SockerContextState = {
 	socket: null,
 	isConnected: false,
 }
 
 export const SocketContext = createContext<SockerContextState>(socketDefaultValue)
-export const SocketProvider: FunctionComponent = ({ children }) => {
+export const SocketProvider: FunctionComponent<{ auth?: SocketAuth }> = ({ children, auth }) => {
 	const [socket, setSocket] = useState<Socket<PFTPSocketEventsMap> | null>(socketDefaultValue.socket)
 
 	useEffect(() => {
-		setSocket(io(process.env.NEXT_PUBLIC_SOCKET_URL as string, { transports: ['websocket', 'polling'] }))
-	}, [])
+		const options: Partial<ManagerOptions & SocketOptions> = {
+			transports: ['websocket', 'polling'],
+		}
+		if (auth !== undefined) {
+			options.auth = { token: auth.token, channel: auth.channel }
+		}
+
+		setSocket(io(process.env.NEXT_PUBLIC_SOCKET_URL as string, options))
+	}, [auth])
 
 	const [isConnected, setIsConnected] = useState(socket ? socket.connected : false)
 	const router = useRouter()
