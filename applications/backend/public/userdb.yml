@@ -1,0 +1,8 @@
+# Example user database
+- userName: 'kappauser'
+  channelname: 'kappauser'
+  channelId: '4567453'
+
+- userName: 'otheruser'
+  channelname: 'otheruser'
+  channelId: '5633'

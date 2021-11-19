@@ -40,3 +40,8 @@ export interface PFTPSocketEventsMap {
 	[REQUEST_STATE]: () => void
 	[DONATION_TRIGGER]: (donation: Donation) => void
 }
+
+export interface SocketJwtPayload {
+	channel: string
+	mode: 'read' | 'readwrite'
+}

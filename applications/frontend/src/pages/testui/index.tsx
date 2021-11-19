@@ -8,10 +8,13 @@ import { DONATION_TRIGGER } from '@pftp/common'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { Header } from '../../app/components/controlpanel/Header'
+import { SocketAuth } from '../../app/provider/SocketProvider'
+import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
 
 export interface TestUIPageProps {
 	title: string
 	user: UserDTO
+	auth: SocketAuth
 }
 
 const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
@@ -66,7 +69,11 @@ export const getServerSideProps: GetServerSideProps<TestUIPageProps> = withSessi
 		}
 
 		return {
-			props: { title: 'TestUI', user },
+			props: {
+				title: 'TestUI',
+				user,
+				auth: generateSocketAuthForUser(user, 'readwrite'),
+			},
 		}
 	}
 )

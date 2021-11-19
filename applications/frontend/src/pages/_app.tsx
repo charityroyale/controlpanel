@@ -19,7 +19,7 @@ function App({ Component, pageProps }: AppProps) {
 	return (
 		<React.Fragment>
 			<GlobalStyle />
-			<SocketProvider>
+			<SocketProvider auth={pageProps.auth}>
 				<GlobalStateProvider>
 					<ThemeProvider theme={theme}>
 						{/**
