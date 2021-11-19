@@ -6,8 +6,9 @@ import { Label, Content } from '../../../../pages/controlpanel'
 import styled from 'styled-components'
 import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
 import { LockCharacterPositionButton } from './LockCharacterPositionButton'
+import { UserDTO } from '../../../../pages/api/sessions'
 
-export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
+export const CenterPanel: FunctionComponent<{ globalState: GlobalState; user: UserDTO }> = ({ globalState, user }) => {
 	const contentRef = useRef<null | HTMLDivElement>(null)
 	const [scale, setScale] = useState(0)
 
@@ -45,7 +46,7 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>
 				<OverlayIframe
 					title="overlay"
-					src="/overlay?unlocked=true"
+					src={`/overlay/${user.username}?unlocked=true`}
 					height={1080}
 					width={1920}
 					scale={scale}

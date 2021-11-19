@@ -12,7 +12,9 @@ export const ControlPanel: FunctionComponent<{ globalState: GlobalState; user: U
 		<React.Fragment>
 			<Header user={user}>Header</Header>
 			<LeftPanel globalState={globalState}>Left-Panel</LeftPanel>
-			<CenterPanel globalState={globalState}>Center-Panel</CenterPanel>
+			<CenterPanel globalState={globalState} user={user}>
+				Center-Panel
+			</CenterPanel>
 			<RightPanel>Right-Panel</RightPanel>
 			<BottomPanel globalState={globalState}>Bottom-Panel</BottomPanel>
 		</React.Fragment>
