@@ -6,8 +6,12 @@ import { Label, Content } from '../../../../pages/controlpanel'
 import styled from 'styled-components'
 import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
 import { LockCharacterPositionButton } from './LockCharacterPositionButton'
+import { SocketAuth } from '../../../provider/SocketProvider'
 
-export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
+export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({
+	globalState,
+	auth,
+}) => {
 	const contentRef = useRef<null | HTMLDivElement>(null)
 	const [scale, setScale] = useState(0)
 
@@ -45,7 +49,7 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState }> = ({ g
 			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>
 				<OverlayIframe
 					title="overlay"
-					src="/overlay?unlocked=true"
+					src={`/overlay/${auth.channel}?unlocked=true&token=${auth.token}`}
 					height={1080}
 					width={1920}
 					scale={scale}

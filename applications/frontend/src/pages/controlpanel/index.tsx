@@ -18,7 +18,7 @@ export interface ControlPanelPageProps {
 }
 
 const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPageProps) => {
-	const { title, user } = props
+	const { title, user, auth } = props
 	const { globalState } = useGlobalState()
 
 	return (
@@ -27,7 +27,7 @@ const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPa
 				<title>{title}</title>
 			</Head>
 
-			<Grid>{globalState && <ControlPanel globalState={globalState} user={user} />}</Grid>
+			<Grid>{globalState && <ControlPanel globalState={globalState} user={user} auth={auth} />}</Grid>
 		</>
 	)
 }
