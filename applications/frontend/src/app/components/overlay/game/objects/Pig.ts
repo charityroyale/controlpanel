@@ -1,18 +1,7 @@
 import { CharacterState, Donation } from '@pftp/common'
 import Phaser, { Physics } from 'phaser'
-import {
-	coin1Key,
-	coin2Key,
-	coin3Key,
-	coin4Key,
-	coin5Key,
-	coin6Key,
-	coin7Key,
-	coin8Key,
-	OverlayScene,
-} from '../scenes/OverlayScene'
+import { OverlayScene } from '../scenes/OverlayScene'
 import { Behaviour } from './behaviour/Behaviour'
-import { Coin } from './Coin'
 
 interface PigProps {
 	texture: string
@@ -43,7 +32,8 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.behaviour = new Behaviour(this)
 		this.behaviour.idle()
 
-		const body = new Physics.Arcade.StaticBody(this.scene.physics.world, this)
+		const body = new Physics.Arcade.Body(this.scene.physics.world, this)
+		body.allowGravity = false
 		this.body = body
 		scene.physics.add.existing(this)
 		this.handleState(characterState)
@@ -62,9 +52,6 @@ export class Pig extends Phaser.GameObjects.Sprite {
 			return
 		}
 		this.behaviour.addToQueue(donation)
-
-		const coin = new Coin(this.scene, 0, -350, this.getCoinKeyFromAmount(donation.amount), this)
-		this.parentContainer.add(coin)
 		this.playLaughSound()
 	}
 
@@ -75,25 +62,5 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	public setIsVisible(visible: boolean) {
 		if (this.visible === visible) return
 		this.visible = visible
-	}
-
-	private getCoinKeyFromAmount(amount: number) {
-		if (amount >= 1000) {
-			return coin8Key
-		} else if (amount >= 500) {
-			return coin7Key
-		} else if (amount >= 250) {
-			return coin6Key
-		} else if (amount >= 100) {
-			return coin5Key
-		} else if (amount >= 50) {
-			return coin4Key
-		} else if (amount >= 10) {
-			return coin3Key
-		} else if (amount >= 5) {
-			return coin2Key
-		} else {
-			return coin1Key
-		}
 	}
 }

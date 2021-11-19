@@ -3,12 +3,18 @@ import { pigDonationOutKey, pigIdleKey } from '../scenes/OverlayScene'
 import { Pig } from './Pig'
 
 export class Coin extends Phaser.GameObjects.Sprite {
-	private pig
-	constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture, pig: Pig) {
+	private container
+	constructor(
+		scene: Phaser.Scene,
+		x: number,
+		y: number,
+		texture: string | Phaser.Textures.Texture,
+		container: Phaser.GameObjects.Container
+	) {
 		super(scene, x, y, texture)
-
-		this.setScale(pig.scale)
-		this.pig = pig
+		this.name = 'coin'
+		this.container = container
+		this.setScale(1)
 
 		this.scene.tweens.add({
 			targets: this,
@@ -26,6 +32,7 @@ export class Coin extends Phaser.GameObjects.Sprite {
 		const body = new Physics.Arcade.Body(this.scene.physics.world, this)
 		this.body = body
 		this.body.allowGravity = false
+		console.log(this.scale)
 		this.addMouthCollider()
 		scene.physics.add.existing(this)
 	}
@@ -38,7 +45,7 @@ export class Coin extends Phaser.GameObjects.Sprite {
 		collider.body.allowGravity = false
 		collider.body.setSize(170, 170)
 		const target = this.scene.physics.add.existing(collider)
-		this.pig.parentContainer.add(collider)
+		this.container.add(collider)
 
 		this.scene.physics.add.overlap(
 			this,
@@ -48,7 +55,8 @@ export class Coin extends Phaser.GameObjects.Sprite {
 				collider.destroy()
 				body.destroy()
 				target.destroy()
-				this.pig.play(pigDonationOutKey).chain(pigIdleKey)
+				const pig = this.container.getByName('pig') as Pig
+				pig.play(pigDonationOutKey).chain(pigIdleKey)
 			},
 			undefined,
 			this

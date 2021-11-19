@@ -15,7 +15,7 @@ export const gameConfig = {
 		arcade: {
 			debug: true,
 			enabled: true,
-			gravity: { y: 260 },
+			gravity: { y: 1000 },
 			showBody: true,
 			showStaticBody: true,
 			debugBodyColor: 0xff00ff,
