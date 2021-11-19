@@ -7,12 +7,18 @@ import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import SessionManager from './SessionManager'
+import SimpleUserDbService from './SimpleUserDbService'
+import path from 'path'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
 	'https://pftp.redcouch.at',
 	'https://streamer.make-a-wish.at',
 ]
+
+const port = process.env.PORT_BACKEND ?? 5200
+const simpleUserDbService = new SimpleUserDbService(process.env.USER_DB ?? `http://localhost:${port}/userdb.yml`)
+
 const app = express()
 const httpServer = createServer(app)
 const io = new Server<PFTPSocketEventsMap>(httpServer, {
@@ -89,6 +95,10 @@ app.post(
 	}
 )
 
+app.get('/userdb.yml', (req, res) => {
+	res.sendFile(path.join(__dirname, '../public/userdb.yml'))
+})
+
 if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
 	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')
 }
@@ -96,6 +106,5 @@ const jwtSecret = process.env.SOCKETIO_AUTH_SECRET ?? 'secret'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sessionManager = new SessionManager(io, jwtSecret)
 
-const port = process.env.PORT_BACKEND ?? 5200
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)

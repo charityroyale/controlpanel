@@ -13,3 +13,4 @@ const createLogger = (label: string): Logger =>
 
 export const logger = createLogger('Web')
 export const sessionLogger = createLogger('Session')
+export const databaseServiceLogger = createLogger('DatabaseService')
