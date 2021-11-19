@@ -1,6 +1,6 @@
 import './env'
 import { logger } from './logger'
-import { Donation, DONATION_TRIGGER, getBehaviourFromDonation, PFTPSocketEventsMap } from '@pftp/common'
+import { Donation, getBehaviourFromDonation, PFTPSocketEventsMap } from '@pftp/common'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import express, { NextFunction, Request, Response } from 'express'
@@ -77,6 +77,7 @@ app.post(
 	body('user').isString(),
 	body('amount').isFloat(),
 	body('timestamp').isInt(),
+	body('streamerId').isString(),
 	authenticateJWT,
 	(request, response) => {
 		const errors = validationResult(request)
@@ -85,11 +86,11 @@ app.post(
 		}
 		const donation = request.body as Donation
 		const behaviour = getBehaviourFromDonation(donation)
-		io.emit(DONATION_TRIGGER, donation, behaviour)
 
-		// TODO: get target channel from request to delegate to correct overlay
-		// const targetChannel = 'TODO'
-		// sessionManager.getOrCreateSession(targetChannel).sendDonation(donation, behaviour);
+		const targetChannel = simpleUserDbService.userNameFromId(request.body.streamerId)
+		if (targetChannel !== undefined) {
+			sessionManager.getOrCreateSession(targetChannel).sendDonation(donation, behaviour)
+		}
 
 		response.send(request.body)
 	}
