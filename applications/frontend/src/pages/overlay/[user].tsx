@@ -39,11 +39,16 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async ({ query, params }) => {
+	const auth: SocketAuth = { channel: params!.user as string }
+	if (query && typeof query.token === 'string') {
+		auth.token = query.token
+	}
+
 	return {
 		props: {
 			title: 'Overlay',
 			isLockedInteraction: !(query?.unlocked ? true : false),
-			auth: { channel: params!.user as string },
+			auth,
 		},
 	}
 }
