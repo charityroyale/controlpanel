@@ -7,7 +7,6 @@ export interface SettingsState {
 	volume: number
 }
 
-export type PigStateType = 'idle' | 'sleep'
 export interface CharacterState {
 	isVisible: boolean
 	isLocked: boolean
