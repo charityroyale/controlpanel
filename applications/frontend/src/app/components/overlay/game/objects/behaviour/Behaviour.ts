@@ -1,5 +1,6 @@
 import { Donation } from '@pftp/common'
-import { Pig, PigAnimationKeys } from '../Pig'
+import { pigIdleKey } from '../../scenes/OverlayScene'
+import { Pig } from '../Pig'
 import { DonationBehaviour } from './DonationBehaviour'
 import { Scratch } from './Scratch'
 import { Sleep } from './Sleep'
@@ -26,7 +27,7 @@ export class Behaviour {
 	}
 
 	public idle() {
-		this.character.play(PigAnimationKeys.idle)
+		this.character.play(pigIdleKey)
 		this.sleepBehaviour.start()
 		this.donationBehaviour.start()
 		this.scratchBehaviour.start()

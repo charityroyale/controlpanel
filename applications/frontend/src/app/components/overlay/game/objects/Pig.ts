@@ -1,5 +1,5 @@
 import { CharacterState, Donation } from '@pftp/common'
-import Phaser, { Physics } from 'phaser'
+import Phaser from 'phaser'
 import { OverlayScene } from '../scenes/OverlayScene'
 import { Behaviour } from './behaviour/Behaviour'
 
@@ -8,12 +8,6 @@ interface PigProps {
 	x: number
 	y: number
 	pigLaugh: Phaser.Sound.BaseSound
-}
-
-export const PigAnimationKeys = {
-	idle: 'idle',
-	sleep: 'sleep',
-	scratch: 'scratch',
 }
 
 export class Pig extends Phaser.GameObjects.Sprite {
@@ -37,11 +31,8 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.behaviour = new Behaviour(this, coinGroup)
 		this.behaviour.idle()
 
-		const body = new Physics.Arcade.Body(this.scene.physics.world, this)
-		body.allowGravity = false
-		this.body = body
-		scene.physics.add.existing(this)
 		this.handleState(characterState)
+		this.scene.add.existing(this)
 	}
 
 	public handleState(state: CharacterState) {
