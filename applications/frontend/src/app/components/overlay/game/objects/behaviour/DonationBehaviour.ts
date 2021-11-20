@@ -12,6 +12,7 @@ import {
 	pigDonationKey,
 	pigDonationOutKey,
 	pigIdleKey,
+	pigScratchKey,
 	pigSleepKey,
 	pigSleepOutKey,
 } from '../../scenes/OverlayScene'
@@ -38,17 +39,19 @@ export class DonationBehaviour {
 
 	public start() {
 		this.checkQueueTimerId = window.setInterval(() => {
-			if (
-				this.queue.length > 0 &&
-				this.character.anims.currentAnim.key !== pigDonationKey &&
-				this.character.anims.currentAnim.key !== pigDonationInKey &&
-				this.character.anims.currentAnim.key !== pigDonationOutKey &&
-				this.character.anims.currentAnim.key !== pigSleepOutKey
-			) {
+			if (this.isInDonationStartState()) {
+				/**
+				 * Default case when in Idle state.
+				 */
 				if (this.character.anims.currentAnim.key === pigIdleKey) {
 					const donation = this.queue.pop()!
+					this.character.anims.stopAfterRepeat(1)
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
 					this.createCoin(donation, this.coinGroup)
+					/**
+					 * Sleeping can be seen as another idle state from which the wakeUp
+					 * animation needs to bestarted additional
+					 */
 				} else if (this.character.anims.currentAnim.key === pigSleepKey) {
 					const donation = this.queue.pop()!
 					this.character.anims.stopAfterRepeat(1)
@@ -57,6 +60,17 @@ export class DonationBehaviour {
 				}
 			}
 		}, this.checkQueueTimer)
+	}
+
+	private isInDonationStartState() {
+		return (
+			this.queue.length > 0 &&
+			this.character.anims.currentAnim.key !== pigDonationKey &&
+			this.character.anims.currentAnim.key !== pigDonationInKey &&
+			this.character.anims.currentAnim.key !== pigDonationOutKey &&
+			this.character.anims.currentAnim.key !== pigScratchKey &&
+			this.character.anims.currentAnim.key !== pigSleepOutKey
+		)
 	}
 
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
