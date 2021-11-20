@@ -27,10 +27,12 @@ export class DonationBehaviour {
 	private checkQueueTimer = 500
 	private character: Pig
 	private queue
+	private coinGroup
 
-	constructor(character: Pig, queue: Donation[]) {
+	constructor(character: Pig, queue: Donation[], coinGroup: Phaser.GameObjects.Group) {
 		this.character = character
 		this.queue = queue
+		this.coinGroup = coinGroup
 		this.start()
 	}
 
@@ -46,27 +48,22 @@ export class DonationBehaviour {
 				if (this.character.anims.currentAnim.key === pigIdleKey) {
 					const donation = this.queue.pop()!
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
-					this.createCoin(donation)
+					this.createCoin(donation, this.coinGroup)
 				} else if (this.character.anims.currentAnim.key === pigSleepKey) {
 					const donation = this.queue.pop()!
 					this.character.anims.stopAfterRepeat(1)
 					this.character.play(pigSleepOutKey).chain(pigDonationInKey).chain(pigDonationKey)
-					this.createCoin(donation)
+					this.createCoin(donation, this.coinGroup)
 				}
 			}
 		}, this.checkQueueTimer)
 	}
 
-	private createCoin(donation: Donation) {
-		this.character.parentContainer.add(
-			new Coin(
-				this.character.scene,
-				0,
-				-350,
-				this.getCoinKeyFromAmount(donation.amount),
-				this.character.parentContainer
-			)
-		)
+	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
+		const coin = new Coin(this.character.scene, 0, -350, this.getCoinKeyFromAmount(donation.amount))
+
+		this.character.parentContainer.add(coin)
+		coinGroup.add(coin)
 	}
 
 	private getCoinKeyFromAmount(amount: number) {

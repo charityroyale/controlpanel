@@ -20,7 +20,12 @@ export class Pig extends Phaser.GameObjects.Sprite {
 	private behaviour: Behaviour
 	private pigLaugh
 
-	constructor(scene: OverlayScene, options: PigProps, characterState: CharacterState) {
+	constructor(
+		scene: OverlayScene,
+		options: PigProps,
+		characterState: CharacterState,
+		coinGroup: Phaser.GameObjects.Group
+	) {
 		super(scene, options.x, options.y, options.texture)
 
 		this.setName('pig')
@@ -29,7 +34,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.pigLaugh = options.pigLaugh
 		this.flipX = characterState.flipX
 
-		this.behaviour = new Behaviour(this)
+		this.behaviour = new Behaviour(this, coinGroup)
 		this.behaviour.idle()
 
 		const body = new Physics.Arcade.Body(this.scene.physics.world, this)

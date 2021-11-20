@@ -1,5 +1,5 @@
 import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
-import Phaser from 'phaser'
+import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
 import { Container } from '../objects/Container'
@@ -41,6 +41,7 @@ const coinMediumSize = 148
 
 export class OverlayScene extends Phaser.Scene {
 	public pigWithSignContainer: Container | null = null
+	public lol = 's'
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -212,14 +213,42 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigDonationInConfig)
 		this.anims.create(pigDonationOutConfig)
 
-		const pig = new Pig(this, { x: 0, y: 0, texture: pigAtlasKey, pigLaugh }, initialState.character)
+		const coinGroup = this.add.group([], { key: 'coin' })
+
+		const pig = new Pig(this, { x: 0, y: 0, texture: pigAtlasKey, pigLaugh }, initialState.character, coinGroup)
 		const sign = new Sign(this, -195, 0, signKey)
 
 		this.pigWithSignContainer = new Container(this, initialState.character, socket, {
 			children: [pig, sign],
 		})
 		this.input.setDraggable(this.pigWithSignContainer)
+		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
 
 		socket.emit(REQUEST_STATE)
+	}
+
+	public addMouthCollider(container: Phaser.GameObjects.Container, coinGroup: Phaser.GameObjects.Group) {
+		const spriteCollider = new Phaser.GameObjects.Sprite(this, 0, 0, '')
+		const body = new Physics.Arcade.Body(this.physics.world, spriteCollider)
+		const target = this.physics.add.existing(spriteCollider)
+
+		target.body = body
+		target.setVisible(false)
+		target.body.allowGravity = false
+		target.body.setSize(170, 170)
+
+		container.add(spriteCollider)
+
+		this.physics.add.overlap(
+			coinGroup,
+			target,
+			(currentGameObject) => {
+				currentGameObject.destroy()
+				const pig = container.getByName('pig') as Pig
+				pig.play(pigDonationOutKey).chain(pigIdleKey)
+			},
+			undefined,
+			coinGroup
+		)
 	}
 }

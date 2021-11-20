@@ -16,9 +16,9 @@ export class Behaviour {
 	private sleepBehaviour: Sleep
 	private donationBehaviour: DonationBehaviour
 
-	constructor(character: Pig) {
+	constructor(character: Pig, coinGroup: Phaser.GameObjects.Group) {
 		this.character = character
-		this.donationBehaviour = new DonationBehaviour(this.character, this.queue)
+		this.donationBehaviour = new DonationBehaviour(this.character, this.queue, coinGroup)
 		this.sleepBehaviour = new Sleep(this.character)
 	}
 
