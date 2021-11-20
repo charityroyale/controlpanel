@@ -5,7 +5,7 @@ import { PigBehaviour } from './Behaviour'
 export class Sleep implements PigBehaviour {
 	private character: Pig
 
-	private sleepTimer = 2000
+	private sleepTimer = 20000
 	private sleepTimerId: undefined | number = undefined
 
 	constructor(character: Pig) {
@@ -13,7 +13,7 @@ export class Sleep implements PigBehaviour {
 	}
 
 	public start() {
-		this.sleepTimerId = window.setTimeout(() => {
+		this.sleepTimerId = window.setInterval(() => {
 			if (this.character.anims.currentAnim.key === pigIdleKey) {
 				this.character.anims.stopAfterRepeat(1)
 				this.character.play(pigSleepInKey).chain(pigSleepKey)
@@ -22,7 +22,7 @@ export class Sleep implements PigBehaviour {
 	}
 
 	public stop() {
-		window.clearTimeout(this.sleepTimerId)
+		window.clearInterval(this.sleepTimerId)
 		this.sleepTimerId = undefined
 	}
 
