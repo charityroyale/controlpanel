@@ -52,6 +52,7 @@ export class DonationBehaviour {
 				if (this.character.anims.currentAnim.key === pigIdleKey) {
 					const donation = this.queue.pop()!
 					this.character.anims.stopAfterRepeat(1)
+					this.character.playLaughSound()
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
 					this.createCoin(donation, this.coinGroup)
 					/**
@@ -61,6 +62,7 @@ export class DonationBehaviour {
 				} else if (this.character.anims.currentAnim.key === pigSleepKey) {
 					const donation = this.queue.pop()!
 					this.character.anims.stopAfterRepeat(1)
+					this.character.playLaughSound()
 					this.character.play(pigSleepOutKey).chain(pigDonationInKey).chain(pigDonationKey)
 					this.createCoin(donation, this.coinGroup)
 				}

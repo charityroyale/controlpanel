@@ -46,7 +46,6 @@ export class Pig extends Phaser.GameObjects.Sprite {
 			return
 		}
 		this.behaviour.addToQueue(donation)
-		this.playLaughSound()
 	}
 
 	public playLaughSound() {
