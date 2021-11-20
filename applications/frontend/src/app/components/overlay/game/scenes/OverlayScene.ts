@@ -222,22 +222,22 @@ export class OverlayScene extends Phaser.Scene {
 			children: [pig, sign],
 		})
 		this.input.setDraggable(this.pigWithSignContainer)
-		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
 
+		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
 		socket.emit(REQUEST_STATE)
 	}
 
 	public addMouthCollider(container: Phaser.GameObjects.Container, coinGroup: Phaser.GameObjects.Group) {
-		const spriteCollider = new Phaser.GameObjects.Sprite(this, 0, 0, '')
-		const body = new Physics.Arcade.Body(this.physics.world, spriteCollider)
-		const target = this.physics.add.existing(spriteCollider)
+		const colliderSprite = new Phaser.GameObjects.Sprite(this, 0, 0, '')
+		const physicsBody = new Physics.Arcade.Body(this.physics.world, colliderSprite)
 
-		target.body = body
-		target.setVisible(false)
-		target.body.allowGravity = false
-		target.body.setSize(170, 170)
+		colliderSprite.body = physicsBody
+		colliderSprite.setVisible(false)
+		colliderSprite.body.allowGravity = false
+		colliderSprite.body.setSize(170, 170)
 
-		container.add(spriteCollider)
+		const target = this.physics.add.existing(colliderSprite)
+		container.add(colliderSprite)
 
 		this.physics.add.overlap(
 			coinGroup,
