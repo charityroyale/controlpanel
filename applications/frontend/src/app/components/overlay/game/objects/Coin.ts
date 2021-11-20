@@ -14,7 +14,6 @@ export class Coin extends Phaser.GameObjects.Sprite {
 		super(scene, x, y, texture)
 		this.name = 'coin'
 		this.container = container
-		this.setScale(1)
 
 		this.scene.tweens.add({
 			targets: this,

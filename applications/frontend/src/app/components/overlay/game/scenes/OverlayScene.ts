@@ -37,6 +37,7 @@ export const pigDonationOutKey = 'donationOut'
 
 const frameSize = 500
 const coinSize = 128
+const coinMediumSize = 148
 
 export class OverlayScene extends Phaser.Scene {
 	public pigWithSignContainer: Container | null = null
@@ -75,12 +76,38 @@ export class OverlayScene extends Phaser.Scene {
 			frameHeight: 500,
 		})
 
-		for (let i = 1; i <= 8; i++) {
-			this.load.spritesheet(`coin${i}`, `/game/coins/coin${i}.png`, {
-				frameWidth: coinSize,
-				frameHeight: coinSize,
-			})
-		}
+		this.load.spritesheet(coin1Key, `/game/coins/coin1.png`, {
+			frameWidth: coinSize,
+			frameHeight: coinSize,
+		})
+		this.load.spritesheet(coin2Key, `/game/coins/coin2.png`, {
+			frameWidth: coinSize,
+			frameHeight: coinSize,
+		})
+		this.load.spritesheet(coin3Key, `/game/coins/coin3.png`, {
+			frameWidth: coinMediumSize,
+			frameHeight: coinMediumSize,
+		})
+		this.load.spritesheet(coin4Key, `/game/coins/coin4.png`, {
+			frameWidth: coinSize,
+			frameHeight: coinSize,
+		})
+		this.load.spritesheet(coin5Key, `/game/coins/coin5.png`, {
+			frameWidth: coinMediumSize,
+			frameHeight: coinMediumSize,
+		})
+		this.load.spritesheet(coin6Key, `/game/coins/coin6.png`, {
+			frameWidth: coinSize,
+			frameHeight: coinSize,
+		})
+		this.load.spritesheet(coin7Key, `/game/coins/coin7.png`, {
+			frameWidth: coinMediumSize,
+			frameHeight: coinMediumSize,
+		})
+		this.load.spritesheet(coin8Key, `/game/coins/coin8.png`, {
+			frameWidth: coinSize,
+			frameHeight: coinSize,
+		})
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
