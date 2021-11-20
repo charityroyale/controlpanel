@@ -215,7 +215,7 @@ export class OverlayScene extends Phaser.Scene {
 
 		const coinGroup = this.add.group([], { key: 'coin' })
 
-		const sign = new Sign(this, -195, -15, signKey)
+		const sign = new Sign(this, -175, 0, signKey)
 		const pig = new Pig(this, { x: 0, y: 0, texture: pigAtlasKey, pigLaugh }, initialState.character, coinGroup)
 
 		this.pigWithSignContainer = new Container(this, initialState.character, socket, {
