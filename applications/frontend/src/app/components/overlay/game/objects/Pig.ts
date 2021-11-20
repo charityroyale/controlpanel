@@ -42,8 +42,6 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.body = body
 		scene.physics.add.existing(this)
 		this.handleState(characterState)
-
-		scene.add.existing(this)
 	}
 
 	public handleState(state: CharacterState) {

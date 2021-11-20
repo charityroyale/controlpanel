@@ -2,7 +2,7 @@ import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STAT
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
-import { Container } from '../objects/Container'
+import { OverlayContainer } from '../objects/OverlayContainer'
 import { Pig } from '../objects/Pig'
 import { Sign } from '../objects/Sign'
 
@@ -42,8 +42,7 @@ const coinSize = 128
 const coinMediumSize = 148
 
 export class OverlayScene extends Phaser.Scene {
-	public pigWithSignContainer: Container | null = null
-	public lol = 's'
+	public pigWithSignContainer: OverlayContainer | null = null
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -225,23 +224,25 @@ export class OverlayScene extends Phaser.Scene {
 		const sign = new Sign(this, -175, 0, signKey)
 		const pig = new Pig(this, { x: 0, y: 0, texture: pigAtlasKey, pigLaugh }, initialState.character, coinGroup)
 
-		this.pigWithSignContainer = new Container(this, initialState.character, socket, {
+		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
 			children: [sign, pig],
 		})
 		this.input.setDraggable(this.pigWithSignContainer)
 
 		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
+
 		socket.emit(REQUEST_STATE)
 	}
 
 	public addMouthCollider(container: Phaser.GameObjects.Container, coinGroup: Phaser.GameObjects.Group) {
-		const colliderSprite = new Phaser.GameObjects.Sprite(this, 0, 0, '')
+		const colliderSprite = new Phaser.GameObjects.Sprite(this, 0, 0, coin2Key)
 		const physicsBody = new Physics.Arcade.Body(this.physics.world, colliderSprite)
 
 		colliderSprite.body = physicsBody
 		colliderSprite.setVisible(false)
 		colliderSprite.body.allowGravity = false
 		colliderSprite.body.setSize(170, 170)
+		colliderSprite.name = 'colliderSprite'
 
 		const target = this.physics.add.existing(colliderSprite)
 		container.add(colliderSprite)
