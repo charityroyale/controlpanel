@@ -20,6 +20,8 @@ export const coin6Key = 'coin6'
 export const coin7Key = 'coin7'
 export const coin8Key = 'coin8'
 
+export const titleKey = 'title'
+
 const pigAtlasKey = 'pigAtlas'
 const pigIdleFrame = 'idleFrame'
 const pigSleepSpriteSheet = 'sleepFrame'
@@ -108,6 +110,11 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.spritesheet(coin8Key, `/game/coins/coin8.png`, {
 			frameWidth: coinSize,
 			frameHeight: coinSize,
+		})
+
+		this.load.spritesheet(titleKey, '/game/strip.png', {
+			frameWidth: 1188,
+			frameHeight: 145,
 		})
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')

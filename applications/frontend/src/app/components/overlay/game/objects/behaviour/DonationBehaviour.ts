@@ -1,4 +1,5 @@
 import { Donation } from '@pftp/common'
+import { CoinTextAmount } from '../CoinTextAmount'
 import {
 	coin1Key,
 	coin2Key,
@@ -15,9 +16,13 @@ import {
 	pigScratchKey,
 	pigSleepKey,
 	pigSleepOutKey,
+	titleKey,
 } from '../../scenes/OverlayScene'
 import { Coin } from '../Coin'
 import { Pig } from '../Pig'
+import { CoinTextDonator } from '../CoinTextDonator'
+import { CoinTextDonatorWithMessageBackground } from '../CointTextDonatorWithMessageBackground'
+import { CoinTextDonatorMessage } from '../CoinTextDonatorMessage'
 
 export class DonationBehaviour {
 	/**
@@ -29,6 +34,7 @@ export class DonationBehaviour {
 	private character: Pig
 	private queue
 	private coinGroup
+	private startPositionOffset = -350
 
 	constructor(character: Pig, queue: Donation[], coinGroup: Phaser.GameObjects.Group) {
 		this.character = character
@@ -74,9 +80,36 @@ export class DonationBehaviour {
 	}
 
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
-		const coin = new Coin(this.character.scene, 0, -350, this.getCoinKeyFromAmount(donation.amount))
+		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, this.getCoinKeyFromAmount(donation.amount))
+		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
+			donation.amount
+		)
+		const coinText = new CoinTextAmount(this.character.scene, 0, this.startPositionOffset, formatedDonationAmount)
+		const coinTextDonatorWithMessageBackground = new CoinTextDonatorWithMessageBackground(
+			this.character.scene,
+			-250,
+			100,
+			titleKey
+		)
+		const coinTextDonator = new CoinTextDonator(
+			this.character.scene,
+			coinTextDonatorWithMessageBackground.x + 20,
+			coinTextDonatorWithMessageBackground.y + 30,
+			donation.user
+		)
+
+		const coinTextDonatorMessage = new CoinTextDonatorMessage(
+			this.character.scene,
+			coinTextDonatorWithMessageBackground.x + 20,
+			coinTextDonatorWithMessageBackground.y + 75,
+			'asdfia fansdf e ge rg e rg er gergerg ergergerg'
+		)
 
 		this.character.parentContainer.add(coin)
+		this.character.parentContainer.add(coinText)
+		this.character.parentContainer.add(coinTextDonatorWithMessageBackground)
+		this.character.parentContainer.add(coinTextDonator)
+		this.character.parentContainer.add(coinTextDonatorMessage)
 		coinGroup.add(coin)
 	}
 

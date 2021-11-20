@@ -1,10 +1,23 @@
 import { Physics } from 'phaser'
 
-export class Coin extends Phaser.GameObjects.Sprite {
-	constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
-		super(scene, x, y, texture)
-		this.name = 'coin'
-		this.setScale(1.5)
+const defaultStyles = {
+	fontFamily: 'Roboto',
+	fontSize: '30px',
+	color: ' #BA4D76',
+	align: 'center',
+}
+
+export class CoinTextAmount extends Phaser.GameObjects.Text {
+	constructor(
+		scene: Phaser.Scene,
+		x: number,
+		y: number,
+		text: string | string[],
+		style: Phaser.Types.GameObjects.Text.TextStyle = defaultStyles
+	) {
+		super(scene, x, y, text, style)
+		this.name = 'cointext'
+		this.setOrigin(0.5)
 
 		this.alpha = 0
 
@@ -19,7 +32,7 @@ export class Coin extends Phaser.GameObjects.Sprite {
 		this.scene.tweens.add({
 			targets: this,
 			props: {
-				scale: 0.3,
+				scale: 0,
 			},
 			delay: 5000,
 			duration: 500,
