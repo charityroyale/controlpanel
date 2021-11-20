@@ -254,6 +254,9 @@ export class OverlayScene extends Phaser.Scene {
 				currentGameObject.destroy()
 				const pig = container.getByName('pig') as Pig
 				pig.play(pigDonationOutKey).chain(pigIdleKey)
+				console.log(container.getAll())
+				console.log(container.getAll('name', 'cointext'))
+				container.getAll('name', 'cointext').map((el) => el.destroy())
 			},
 			undefined,
 			coinGroup
