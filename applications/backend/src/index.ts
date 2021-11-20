@@ -39,7 +39,7 @@ app.use(express.json())
 
 app.post('/token', body('client_id').isString(), (request, response) => {
 	const errors = validationResult(request)
-	if (!errors.isEmpty() && request.body.client_id === process.env.CLIENT_ID_SECRET) {
+	if (!errors.isEmpty() || request.body.client_id !== process.env.CLIENT_ID_SECRET) {
 		return response.status(400).json({ errors: errors.array() })
 	}
 
