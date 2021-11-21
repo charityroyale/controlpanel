@@ -25,7 +25,7 @@ export interface Donation {
 	user: string
 	amount: number
 	message: string
-	streamerId: string
+	streamer: string
 	timestamp: number
 }
 
