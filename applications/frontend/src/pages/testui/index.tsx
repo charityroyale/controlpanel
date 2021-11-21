@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
-import { DONATION_TRIGGER } from '@pftp/common'
+import { Donation, DONATION_TRIGGER } from '@pftp/common'
 import { withSession, ServerSideHandler } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { Header } from '../../app/components/controlpanel/Header'
@@ -27,18 +27,26 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		const randomnum =
 			Math.floor(Math.random() * (maxAmount * precision - 1 * precision) + 1 * precision) / (1 * precision)
 
-		const a = ['Veni', 'HeideltrautEUW', 'Birgit']
-		const b = ['MrYRichardXX120', 'Fraunz', 'AlexanderAAA']
+		const a = ['Test1', 'Test2', 'Test3']
+		const b = ['Veni', 'FraunzZZZZZZZ', 'Birgit', 'PatrickKKKKKKK', 'Alex', 'MrY']
 
 		const rA = Math.floor(Math.random() * a.length)
 		const rB = Math.floor(Math.random() * b.length)
 		const name = a[rA] + b[rB]
 
-		const donation = {
+		const testMessages = [
+			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
+			'Lorem ipsum dolor sit amet, consetetur sadipscingddd elitr, sed diam nonumy ei Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
+		]
+		const message = testMessages[Math.floor(Math.random() * testMessages.length)]
+
+		const donation: Donation = {
 			user: name,
 			amount: randomnum,
 			timestamp: new Date().getUTCMilliseconds(),
-			streamId: '4567453',
+			streamerId: '4567453',
+			message,
 		}
 
 		socket?.emit(DONATION_TRIGGER, donation)

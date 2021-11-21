@@ -19,7 +19,7 @@ export class CoinTextDonatorMessage extends Phaser.GameObjects.Text {
 	) {
 		super(scene, x, y, text, style)
 		this.name = 'cointext'
-		this.setOrigin(0, 0.5)
+		this.setOrigin(0, 0)
 		this.alpha = 0
 		this.body = new Physics.Arcade.Body(this.scene.physics.world, this)
 		this.body.allowGravity = false

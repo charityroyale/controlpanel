@@ -103,8 +103,8 @@ export class DonationBehaviour {
 		const coinTextDonatorMessage = new CoinTextDonatorMessage(
 			this.character.scene,
 			coinTextDonatorWithMessageBackground.x + 20,
-			coinTextDonatorWithMessageBackground.y + 75,
-			'asdfia fansdf e ge rg e rg er gergerg ergergerg'
+			coinTextDonatorWithMessageBackground.y + 45,
+			donation.message
 		)
 
 		this.character.parentContainer.add(coin)

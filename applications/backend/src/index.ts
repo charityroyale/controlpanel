@@ -77,6 +77,7 @@ app.post(
 	body('user').isString(),
 	body('amount').isFloat(),
 	body('timestamp').isInt(),
+	body('message').isString(),
 	body('streamerId').isString(),
 	authenticateJWT,
 	(request, response) => {
