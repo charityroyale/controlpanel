@@ -7,6 +7,7 @@ const defaultStyles = {
 	fontSize: '24px',
 	color: '#41291C',
 	wordWrap: { width: 400 - 40 },
+	maxLines: 6,
 }
 
 export class CoinTextDonatorMessage extends Phaser.GameObjects.Text {
