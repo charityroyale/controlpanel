@@ -13,13 +13,17 @@ const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 const signKey = 'sign'
 
 export const coin1Key = 'coin1'
+export const coin1TextColor = '#433166'
 export const coin2Key = 'coin2'
+export const coin2TextColor = '#5c6b1f'
 export const coin3Key = 'coin3'
+export const coin3TextColor = '#af471e'
 export const coin4Key = 'coin4'
+export const coin4TextColor = '#7f2422'
 export const coin5Key = 'coin5'
+export const coin5TextColor = '#357a96'
 export const coin6Key = 'coin6'
-export const coin7Key = 'coin7'
-export const coin8Key = 'coin8'
+export const coin6TextColor = '#d17a1c'
 
 export const titleKey = 'title'
 
@@ -40,8 +44,7 @@ export const pigDonationInKey = 'donationIn'
 export const pigDonationOutKey = 'donationOut'
 
 const frameSize = 500
-const coinSize = 128
-const coinMediumSize = 148
+const coinSize = 500
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
 const fireworksEmitterConfig = {
@@ -108,26 +111,18 @@ export class OverlayScene extends Phaser.Scene {
 			frameHeight: coinSize,
 		})
 		this.load.spritesheet(coin3Key, `/game/coins/coin3.png`, {
-			frameWidth: coinMediumSize,
-			frameHeight: coinMediumSize,
+			frameWidth: coinSize,
+			frameHeight: coinSize,
 		})
 		this.load.spritesheet(coin4Key, `/game/coins/coin4.png`, {
 			frameWidth: coinSize,
 			frameHeight: coinSize,
 		})
 		this.load.spritesheet(coin5Key, `/game/coins/coin5.png`, {
-			frameWidth: coinMediumSize,
-			frameHeight: coinMediumSize,
-		})
-		this.load.spritesheet(coin6Key, `/game/coins/coin6.png`, {
 			frameWidth: coinSize,
 			frameHeight: coinSize,
 		})
-		this.load.spritesheet(coin7Key, `/game/coins/coin7.png`, {
-			frameWidth: coinMediumSize,
-			frameHeight: coinMediumSize,
-		})
-		this.load.spritesheet(coin8Key, `/game/coins/coin8.png`, {
+		this.load.spritesheet(coin6Key, `/game/coins/coin6.png`, {
 			frameWidth: coinSize,
 			frameHeight: coinSize,
 		})
