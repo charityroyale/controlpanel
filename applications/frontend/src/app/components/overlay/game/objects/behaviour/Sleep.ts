@@ -5,7 +5,7 @@ import { PigBehaviour } from './Behaviour'
 export class Sleep implements PigBehaviour {
 	private character: Pig
 
-	private sleepTimer = 20000
+	private sleepTimer = 900000 // 15 minutes
 	private sleepTimerId: undefined | number = undefined
 
 	constructor(character: Pig) {
