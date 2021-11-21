@@ -18,7 +18,7 @@ export class CoinTextDonatorMessage extends Phaser.GameObjects.Text {
 		text: string | string[],
 		style: Phaser.Types.GameObjects.Text.TextStyle = defaultStyles
 	) {
-		super(scene, x, y, text, style)
+		super(scene, x, y, text ? text : 'Keine Nachricht. Vielen Dank für deine Spende. <3', style)
 		this.name = 'cointext'
 		this.setOrigin(0, 0)
 		this.alpha = 0
