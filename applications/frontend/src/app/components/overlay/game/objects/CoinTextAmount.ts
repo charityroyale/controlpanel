@@ -3,7 +3,7 @@ import { fadeIn } from './tweens/fadeIn'
 import { scaleOut } from './tweens/scaleOut'
 
 const defaultStyles = {
-	fontFamily: 'Roboto',
+	fontFamily: 'Saira Condensed',
 	fontSize: '30px',
 	color: ' #BA4D76',
 	align: 'center',
