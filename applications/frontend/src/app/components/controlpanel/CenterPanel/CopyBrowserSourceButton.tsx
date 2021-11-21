@@ -5,11 +5,14 @@ import styled from 'styled-components'
 import { toast } from 'react-toastify'
 
 const iconSize = '18px'
-export const CopyBrowserSourceButton: FunctionComponent<React.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
+interface CopyBrowserSourceButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	username: string
+}
+export const CopyBrowserSourceButton: FunctionComponent<CopyBrowserSourceButtonProps> = (props) => {
 	return (
 		<CopyToClipBoardButton {...props}>
 			<CopyToClipboard
-				text={window.location.origin + '/overlay'}
+				text={window.location.origin + '/overlay/' + props.username}
 				onCopy={() => toast('Browser source for stream copied.', { type: 'success' })}
 			>
 				<AiOutlineLink size={iconSize} />

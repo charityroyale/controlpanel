@@ -20,6 +20,7 @@ export const PhaserGame = () => {
 		if (isMounted && socket && globalState) {
 			new ProjectFeedThePigGame(socket, 1080, 1920, globalState)
 		}
+
 		// at this point we can be sure that globalState and socketIo connectin are given
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted])

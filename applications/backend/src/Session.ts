@@ -4,7 +4,6 @@ import {
 	DONATION_TRIGGER,
 	GlobalState,
 	PFTPSocketEventsMap,
-	PigStateType,
 	REQUEST_STATE,
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
@@ -46,8 +45,8 @@ export default class Session {
 		this.registerReadHandlers(socket)
 	}
 
-	public sendDonation(donation: Donation, behaviour: PigStateType) {
-		this.io.to(this.channel).emit(DONATION_TRIGGER, donation, behaviour)
+	public sendDonation(donation: Donation) {
+		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
 	}
 
 	private registerReadHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
@@ -55,8 +54,8 @@ export default class Session {
 	}
 
 	private registerWriteHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
-		socket.on(DONATION_TRIGGER, (donation: Donation, behaviour: PigStateType) => {
-			this.sendDonation(donation, behaviour)
+		socket.on(DONATION_TRIGGER, (donation: Donation) => {
+			this.sendDonation(donation)
 		})
 		socket.on(CHARACTER_UPDATE, (characterUpdate) => this.store.dispatch(updateCharacter(characterUpdate)))
 		socket.on(SETTINGS_UPDATE, (settingsUpdate) => this.store.dispatch(updateSettings(settingsUpdate)))

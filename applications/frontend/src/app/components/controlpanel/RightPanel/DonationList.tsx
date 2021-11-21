@@ -1,7 +1,6 @@
 import { Donation } from '@pftp/common'
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { FaCoins } from 'react-icons/fa'
 import { formatCurrency, formatTimeStamp } from '../../../lib/utils'
 
 export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donations }) => {
@@ -11,15 +10,11 @@ export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donati
 				return (
 					<DonationItem key={donation.user + i}>
 						<DonationHeader>
-							<DonationUserWithIcon>
-								<IconWrapper>
-									<FaCoins style={{ paddingRight: '4px' }} size="18px" />
-								</IconWrapper>
-								{donation.user}
-							</DonationUserWithIcon>
-						</DonationHeader>
-						<DonationBottom>
+							<DonationUser>{donation.user}</DonationUser>
 							<DonationDate>{formatTimeStamp(donation.timestamp)}</DonationDate>
+						</DonationHeader>
+						<DonationCenter>{donation.message}</DonationCenter>
+						<DonationBottom>
 							<DonationAmount highlight={donation.amount >= 50}>{formatCurrency(donation.amount)}</DonationAmount>
 						</DonationBottom>
 					</DonationItem>
@@ -28,6 +23,10 @@ export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donati
 		</DonationList>
 	)
 }
+
+const DonationUser = styled.span`
+	color: ${(p) => p.theme.color.charityGold};
+`
 
 const DonationList = styled.div`
 	& > div:not(:last-child) {
@@ -41,14 +40,14 @@ const DonationItem = styled.div`
 	padding-bottom: ${(p) => p.theme.space.s}px;
 `
 
-const DonationHeader = styled.div`
+const DonationCenter = styled.div`
 	display: flex;
-	justify-content: space-between;
 `
 
-const DonationUserWithIcon = styled.div`
+const DonationHeader = styled.div`
 	display: flex;
-	align-items: center;
+	padding-bottom: 2px;
+	justify-content: space-between;
 `
 
 const DonationAmount = styled.div<{ highlight: boolean }>`
@@ -62,13 +61,6 @@ const DonationDate = styled.div`
 
 const DonationBottom = styled.div`
 	display: flex;
-	justify-content: space-between;
-`
-
-const IconWrapper = styled.span`
-	display: flex;
-	align-items: center;
-	* {
-		color: ${(p) => p.theme.color.charityGold};
-	}
+	justify-content: flex-end;
+	padding-top: 2px;
 `

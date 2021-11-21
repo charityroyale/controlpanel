@@ -1,12 +1,12 @@
 import './env'
 import { logger } from './logger'
-import { Donation, getBehaviourFromDonation, PFTPSocketEventsMap } from '@pftp/common'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import SessionManager from './SessionManager'
+import { PFTPSocketEventsMap, Donation } from '@pftp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
 
@@ -77,6 +77,7 @@ app.post(
 	body('user').isString(),
 	body('amount').isFloat(),
 	body('timestamp').isInt(),
+	body('message').isString(),
 	body('streamerId').isString(),
 	authenticateJWT,
 	(request, response) => {
@@ -85,11 +86,10 @@ app.post(
 			return response.status(400).json({ errors: errors.array() })
 		}
 		const donation = request.body as Donation
-		const behaviour = getBehaviourFromDonation(donation)
 
 		const targetChannel = simpleUserDbService.userNameFromId(request.body.streamerId)
 		if (targetChannel !== undefined) {
-			sessionManager.getOrCreateSession(targetChannel).sendDonation(donation, behaviour)
+			sessionManager.getOrCreateSession(targetChannel).sendDonation(donation)
 		}
 
 		response.send(request.body)

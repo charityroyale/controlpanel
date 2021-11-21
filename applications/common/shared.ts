@@ -7,7 +7,6 @@ export interface SettingsState {
 	volume: number
 }
 
-export type PigStateType = 'idle' | 'sleep'
 export interface CharacterState {
 	isVisible: boolean
 	isLocked: boolean
@@ -25,6 +24,8 @@ export interface CharacterState {
 export interface Donation {
 	user: string
 	amount: number
+	message: string
+	streamerId: string
 	timestamp: number
 }
 
@@ -38,15 +39,7 @@ export interface PFTPSocketEventsMap {
 	[SETTINGS_UPDATE]: (settingsUpdate: Partial<SettingsState>) => void
 	[STATE_UPDATE]: (state: GlobalState) => void
 	[REQUEST_STATE]: () => void
-	[DONATION_TRIGGER]: (donation: Donation, behaviour: PigStateType) => void
-}
-
-export const getBehaviourFromDonation = (donation: Donation): PigStateType => {
-	if (donation.amount >= 2) {
-		return 'sleep'
-	} else {
-		return 'idle'
-	}
+	[DONATION_TRIGGER]: (donation: Donation) => void
 }
 
 export interface SocketJwtPayload {

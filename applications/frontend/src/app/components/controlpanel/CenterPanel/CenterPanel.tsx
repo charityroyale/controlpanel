@@ -42,7 +42,7 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: So
 					Pigview
 				</div>
 				<PanelButtonWrapper>
-					<CopyBrowserSourceButton title={'Copy overlay URL'} />
+					<CopyBrowserSourceButton title={'Copy overlay URL'} username={auth.channel} />
 					<LockCharacterPositionButton isLocked={globalState.character.isLocked} title={'Lock character position'} />
 				</PanelButtonWrapper>
 			</Label>
