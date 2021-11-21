@@ -18,7 +18,8 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		scene: OverlayScene,
 		options: PigProps,
 		characterState: CharacterState,
-		coinGroup: Phaser.GameObjects.Group
+		coinGroup: Phaser.GameObjects.Group,
+		emitter: Phaser.GameObjects.Particles.ParticleEmitter
 	) {
 		super(scene, options.x, options.y, options.texture)
 
@@ -28,7 +29,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.pigLaugh = options.pigLaugh
 		this.flipX = characterState.flipX
 
-		this.behaviour = new Behaviour(this, coinGroup)
+		this.behaviour = new Behaviour(this, coinGroup, emitter)
 		this.behaviour.idle()
 
 		this.handleState(characterState)

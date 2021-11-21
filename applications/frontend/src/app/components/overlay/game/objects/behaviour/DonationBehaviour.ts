@@ -35,11 +35,18 @@ export class DonationBehaviour {
 	private queue
 	private coinGroup
 	private startPositionOffset = -350
+	private emitter
 
-	constructor(character: Pig, queue: Donation[], coinGroup: Phaser.GameObjects.Group) {
+	constructor(
+		character: Pig,
+		queue: Donation[],
+		coinGroup: Phaser.GameObjects.Group,
+		emitter: Phaser.GameObjects.Particles.ParticleEmitter
+	) {
 		this.character = character
 		this.queue = queue
 		this.coinGroup = coinGroup
+		this.emitter = emitter
 		this.start()
 	}
 
@@ -119,6 +126,14 @@ export class DonationBehaviour {
 		if (amount >= 1000) {
 			return coin8Key
 		} else if (amount >= 500) {
+			this.emitter.start()
+			this.character.scene.time.addEvent({
+				delay: 5000,
+				repeat: 0,
+				callback: () => {
+					this.emitter.stop()
+				},
+			})
 			return coin7Key
 		} else if (amount >= 250) {
 			return coin6Key
