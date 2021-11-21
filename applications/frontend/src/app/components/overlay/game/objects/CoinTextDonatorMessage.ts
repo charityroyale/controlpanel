@@ -1,4 +1,6 @@
 import { Physics } from 'phaser'
+import { fadeIn } from './tweens/fadeIn'
+import { fadeOut } from './tweens/fadeOut'
 
 const defaultStyles = {
 	fontFamily: 'Roboto',
@@ -18,32 +20,13 @@ export class CoinTextDonatorMessage extends Phaser.GameObjects.Text {
 		super(scene, x, y, text, style)
 		this.name = 'cointext'
 		this.setOrigin(0, 0.5)
-
 		this.alpha = 0
-
-		this.scene.tweens.add({
-			targets: this,
-			props: {
-				alpha: 1,
-			},
-			duration: 500,
-		})
-
-		this.scene.tweens.add({
-			targets: this,
-			props: {
-				alpha: 0,
-			},
-			delay: 5000,
-			duration: 500,
-			onComplete: () => {
-				this.destroy()
-			},
-		})
-
-		const body = new Physics.Arcade.Body(this.scene.physics.world, this)
-		this.body = body
+		this.body = new Physics.Arcade.Body(this.scene.physics.world, this)
 		this.body.allowGravity = false
+
+		fadeIn(scene, this)
+		fadeOut(scene, this, () => this.destroy())
+
 		scene.physics.add.existing(this)
 	}
 }

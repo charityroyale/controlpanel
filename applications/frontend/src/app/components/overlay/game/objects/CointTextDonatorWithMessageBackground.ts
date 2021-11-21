@@ -1,3 +1,6 @@
+import { fadeIn } from './tweens/fadeIn'
+import { fadeOut } from './tweens/fadeOut'
+
 export class CoinTextDonatorWithMessageBackground extends Phaser.GameObjects.Sprite {
 	constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
 		super(scene, x, y, texture)
@@ -6,25 +9,8 @@ export class CoinTextDonatorWithMessageBackground extends Phaser.GameObjects.Spr
 		this.setDisplaySize(400, 225)
 		this.alpha = 0
 
-		this.scene.tweens.add({
-			targets: this,
-			props: {
-				alpha: 1,
-			},
-			duration: 500,
-		})
-
-		this.scene.tweens.add({
-			targets: this,
-			props: {
-				alpha: 0,
-			},
-			delay: 5000,
-			duration: 500,
-			onComplete: () => {
-				this.destroy()
-			},
-		})
+		fadeIn(scene, this)
+		fadeOut(scene, this, () => this.destroy())
 
 		scene.add.existing(this)
 	}

@@ -1,37 +1,22 @@
 import { Physics } from 'phaser'
+import { fadeIn } from './tweens/fadeIn'
+import { scaleOut } from './tweens/scaleOut'
 
 export class Coin extends Phaser.GameObjects.Sprite {
 	constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
 		super(scene, x, y, texture)
 		this.name = 'coin'
 		this.setScale(1.5)
-
 		this.alpha = 0
-
-		this.scene.tweens.add({
-			targets: this,
-			props: {
-				alpha: 1,
-			},
-			duration: 650,
-		})
-
-		this.scene.tweens.add({
-			targets: this,
-			props: {
-				scale: 0.3,
-			},
-			delay: 5000,
-			duration: 500,
-			onComplete: () => {
-				const body = this.body as Physics.Arcade.Body
-				body.allowGravity = true
-			},
-		})
-
-		const body = new Physics.Arcade.Body(this.scene.physics.world, this)
-		this.body = body
+		this.body = new Physics.Arcade.Body(this.scene.physics.world, this)
 		this.body.allowGravity = false
+
+		fadeIn(scene, this)
+		scaleOut(scene, this, () => {
+			const body = this.body as Physics.Arcade.Body
+			body.allowGravity = true
+		})
+
 		scene.physics.add.existing(this)
 	}
 }
