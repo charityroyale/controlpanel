@@ -44,7 +44,7 @@ const coinSize = 128
 const coinMediumSize = 148
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
-const emitterConfig = {
+const fireworksEmitterConfig = {
 	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
 	angle: { start: 0, end: 360, steps: 100 },
 	blendMode: 'ADD',
@@ -242,9 +242,9 @@ export class OverlayScene extends Phaser.Scene {
 
 		const coinGroup = this.add.group()
 
-		const particles = this.add.particles(flaresAtlasKey)
-		const emitter = particles.createEmitter(emitterConfig)
-		emitter.stop()
+		const flareParticles = this.add.particles(flaresAtlasKey)
+		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
+		fireworksEmitter.stop()
 
 		const sign = new Sign(this, -175, 0, signKey)
 		const pig = new Pig(
@@ -252,7 +252,7 @@ export class OverlayScene extends Phaser.Scene {
 			{ x: 0, y: 0, texture: pigAtlasKey, pigLaugh },
 			initialState.character,
 			coinGroup,
-			emitter
+			fireworksEmitter
 		)
 
 		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
@@ -268,7 +268,7 @@ export class OverlayScene extends Phaser.Scene {
 		this.time.addEvent({
 			repeat: -1,
 			callback: () => {
-				emitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
+				fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
 			},
 		})
 
