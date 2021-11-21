@@ -19,9 +19,13 @@ export class Behaviour {
 	private donationBehaviour: DonationBehaviour
 	private scratchBehaviour: Scratch
 
-	constructor(character: Pig, coinGroup: Phaser.GameObjects.Group) {
+	constructor(
+		character: Pig,
+		coinGroup: Phaser.GameObjects.Group,
+		emitter: Phaser.GameObjects.Particles.ParticleEmitter
+	) {
 		this.character = character
-		this.donationBehaviour = new DonationBehaviour(this.character, this.queue, coinGroup)
+		this.donationBehaviour = new DonationBehaviour(this.character, this.queue, coinGroup, emitter)
 		this.sleepBehaviour = new Sleep(this.character)
 		this.scratchBehaviour = new Scratch(this.character)
 	}

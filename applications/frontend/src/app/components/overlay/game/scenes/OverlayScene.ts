@@ -5,6 +5,7 @@ import { SCENES } from '../gameConfig'
 import { OverlayContainer } from '../objects/OverlayContainer'
 import { Pig } from '../objects/Pig'
 import { Sign } from '../objects/Sign'
+const { FloatBetween } = Phaser.Math
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
@@ -22,6 +23,7 @@ export const coin8Key = 'coin8'
 
 export const titleKey = 'title'
 
+const flaresAtlasKey = 'flaresAtlas'
 const pigAtlasKey = 'pigAtlas'
 const pigIdleFrame = 'idleFrame'
 const pigSleepSpriteSheet = 'sleepFrame'
@@ -40,6 +42,23 @@ export const pigDonationOutKey = 'donationOut'
 const frameSize = 500
 const coinSize = 128
 const coinMediumSize = 148
+
+// Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
+const fireworksEmitterConfig = {
+	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
+	angle: { start: 0, end: 360, steps: 100 },
+	blendMode: 'ADD',
+	frame: { frames: ['red', 'yellow', 'blue'], cycle: true, quantity: 500 },
+	frequency: 1000,
+	gravityY: 600,
+	lifespan: 1800,
+	quantity: 500,
+	reserve: 500,
+	scale: { min: 0.02, max: 0.35 },
+	speed: { min: 200, max: 600 },
+	x: 550,
+	y: 350,
+}
 
 export class OverlayScene extends Phaser.Scene {
 	public pigWithSignContainer: OverlayContainer | null = null
@@ -73,6 +92,8 @@ export class OverlayScene extends Phaser.Scene {
 
 	preload() {
 		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
+		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
+
 		this.load.spritesheet(signKey, '/game/sign.png', {
 			frameWidth: 500,
 			frameHeight: 500,
@@ -221,8 +242,18 @@ export class OverlayScene extends Phaser.Scene {
 
 		const coinGroup = this.add.group()
 
+		const flareParticles = this.add.particles(flaresAtlasKey)
+		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
+		fireworksEmitter.stop()
+
 		const sign = new Sign(this, -175, 0, signKey)
-		const pig = new Pig(this, { x: 0, y: 0, texture: pigAtlasKey, pigLaugh }, initialState.character, coinGroup)
+		const pig = new Pig(
+			this,
+			{ x: 0, y: 0, texture: pigAtlasKey, pigLaugh },
+			initialState.character,
+			coinGroup,
+			fireworksEmitter
+		)
 
 		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
 			children: [sign, pig],
@@ -230,6 +261,16 @@ export class OverlayScene extends Phaser.Scene {
 		this.input.setDraggable(this.pigWithSignContainer)
 
 		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
+
+		const { width, height } = this.scale
+
+		// mhmhm
+		this.time.addEvent({
+			repeat: -1,
+			callback: () => {
+				fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
+			},
+		})
 
 		socket.emit(REQUEST_STATE)
 	}
