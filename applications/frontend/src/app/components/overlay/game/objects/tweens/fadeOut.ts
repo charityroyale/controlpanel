@@ -1,7 +1,7 @@
 import { GameObjects, Scene } from 'phaser'
 
 const fadeOutDuration = 500
-const fadeOutDelay = 5000
+const fadeOutDelay = 6000
 export const fadeOut = (scene: Scene, target: GameObjects.GameObject, onComplete: () => void) => {
 	scene.tweens.add({
 		targets: target,
