@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { useEffect } from 'react'
 import { useGlobalState } from '../../hooks/useGlobalState'
 import { useIsMounted } from '../../hooks/useIsMounted'
@@ -15,7 +15,6 @@ export const PhaserGame = () => {
 	const isMounted = useIsMounted()
 	const { socket } = useSocket()
 	const { globalState } = useGlobalState()
-	const phaserContainerRef = useRef<HTMLDivElement | null>(null)
 
 	useEffect(() => {
 		if (isMounted && socket && globalState) {
@@ -26,7 +25,7 @@ export const PhaserGame = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted])
 
-	return <PhaserDiv id="pftp-overlay" ref={phaserContainerRef} />
+	return <PhaserDiv id="pftp-overlay" />
 }
 
 export default PhaserGame
