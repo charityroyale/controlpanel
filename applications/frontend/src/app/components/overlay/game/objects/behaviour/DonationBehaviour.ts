@@ -2,13 +2,23 @@ import { Donation } from '@pftp/common'
 import { CoinTextAmount } from '../CoinTextAmount'
 import {
 	coin1Key,
+	coin1TextColor,
 	coin2Key,
+	coin2TextColor,
 	coin3Key,
+	coin3TextColor,
 	coin4Key,
+	coin4TextColor,
 	coin5Key,
+	coin5TextColor,
 	coin6Key,
-	coin7Key,
-	coin8Key,
+	coin6TextColor,
+	donationBackground1Key,
+	donationBackground2Key,
+	donationBackground3Key,
+	donationBackground4Key,
+	donationBackground5Key,
+	donationBackground6Key,
 	pigDonationInKey,
 	pigDonationKey,
 	pigDonationOutKey,
@@ -16,7 +26,6 @@ import {
 	pigScratchKey,
 	pigSleepKey,
 	pigSleepOutKey,
-	titleKey,
 } from '../../scenes/OverlayScene'
 import { Coin } from '../Coin'
 import { Pig } from '../Pig'
@@ -89,16 +98,23 @@ export class DonationBehaviour {
 	}
 
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
-		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, this.getCoinKeyFromAmount(donation.amount))
+		const { coinTexture, textColor, messageBackgroundTexture } = this.getCoinKeyFromAmount(donation.amount)
+		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
 		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
 			donation.amount
 		)
-		const coinText = new CoinTextAmount(this.character.scene, 0, this.startPositionOffset, formatedDonationAmount)
+		const coinText = new CoinTextAmount(
+			this.character.scene,
+			0,
+			this.startPositionOffset,
+			formatedDonationAmount,
+			textColor
+		)
 		const coinTextDonatorWithMessageBackground = new CoinTextDonatorWithMessageBackground(
 			this.character.scene,
 			-250,
 			100,
-			titleKey
+			messageBackgroundTexture
 		)
 		const coinTextDonator = new CoinTextDonator(
 			this.character.scene,
@@ -124,7 +140,7 @@ export class DonationBehaviour {
 
 	private getCoinKeyFromAmount(amount: number) {
 		if (amount >= 1000) {
-			return coin8Key
+			return { coinTexture: coin6Key, textColor: coin6TextColor, messageBackgroundTexture: donationBackground6Key }
 		} else if (amount >= 500) {
 			this.emitter.start()
 			this.character.scene.time.addEvent({
@@ -134,19 +150,15 @@ export class DonationBehaviour {
 					this.emitter.stop()
 				},
 			})
-			return coin7Key
-		} else if (amount >= 250) {
-			return coin6Key
+			return { coinTexture: coin5Key, textColor: coin5TextColor, messageBackgroundTexture: donationBackground5Key }
 		} else if (amount >= 100) {
-			return coin5Key
+			return { coinTexture: coin4Key, textColor: coin4TextColor, messageBackgroundTexture: donationBackground4Key }
 		} else if (amount >= 50) {
-			return coin4Key
+			return { coinTexture: coin3Key, textColor: coin3TextColor, messageBackgroundTexture: donationBackground3Key }
 		} else if (amount >= 10) {
-			return coin3Key
-		} else if (amount >= 2) {
-			return coin2Key
+			return { coinTexture: coin2Key, textColor: coin2TextColor, messageBackgroundTexture: donationBackground2Key }
 		} else {
-			return coin1Key
+			return { coinTexture: coin1Key, textColor: coin1TextColor, messageBackgroundTexture: donationBackground1Key }
 		}
 	}
 
