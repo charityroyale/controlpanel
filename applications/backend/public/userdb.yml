@@ -1,8 +1,6 @@
 # Example user database
-- userName: 'kappauser'
-  channelname: 'kappauser'
-  channelId: '4567453'
+- streamer: 'veni'
+  channel: 'veni'
 
-- userName: 'otheruser'
-  channelname: 'otheruser'
-  channelId: '5633'
+- streamer: 'heideltrautEUW'
+  channel: 'heideltrautEUW'

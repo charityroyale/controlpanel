@@ -46,7 +46,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 			user: name,
 			amount: randomnum,
 			timestamp: new Date().getUTCMilliseconds(),
-			streamerId: '4567453',
+			streamer: '',
 			message,
 		}
 

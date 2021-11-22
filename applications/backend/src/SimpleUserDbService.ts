@@ -3,9 +3,8 @@ import fetch from 'node-fetch'
 import { databaseServiceLogger as logger } from './logger'
 
 interface UserEntry {
-	userName: string
-	channelId: string
-	channelName: string
+	streamer: string
+	channel: string
 }
 
 export default class SimpleUserDbService {
@@ -39,21 +38,13 @@ export default class SimpleUserDbService {
 	}
 
 	private checkDatabase(database: any): database is UserEntry[] {
-		if (database[0] === undefined || database[0].userName === undefined) {
+		if (database[0] === undefined || database[0].streamer === undefined || database[0].channel === undefined) {
 			return false
 		}
 		return true
 	}
 
-	public channelNameFromId(channelId: string) {
-		return this.userDatabase.find((entry) => entry.channelId === channelId)?.channelName
-	}
-
-	public userNameFromId(channelId: string) {
-		return this.userDatabase.find((entry) => entry.channelId === channelId)?.userName
-	}
-
-	public channelNameFromUsername(userName: string) {
-		return this.userDatabase.find((entry) => entry.userName === userName)?.channelName
+	public findChannelByStreamer(streamer: string) {
+		return this.userDatabase.find((entry) => entry.streamer === streamer)?.channel
 	}
 }

@@ -78,7 +78,7 @@ app.post(
 	body('amount').isFloat(),
 	body('timestamp').isInt(),
 	body('message').isString(),
-	body('streamerId').isString(),
+	body('streamer').isString(),
 	authenticateJWT,
 	(request, response) => {
 		const errors = validationResult(request)
@@ -87,7 +87,7 @@ app.post(
 		}
 		const donation = request.body as Donation
 
-		const targetChannel = simpleUserDbService.userNameFromId(request.body.streamerId)
+		const targetChannel = simpleUserDbService.findChannelByStreamer(request.body.streamer)
 		if (targetChannel !== undefined) {
 			sessionManager.getOrCreateSession(targetChannel).sendDonation(donation)
 		}
