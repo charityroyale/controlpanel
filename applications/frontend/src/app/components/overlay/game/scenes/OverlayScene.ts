@@ -5,12 +5,16 @@ import { SCENES } from '../gameConfig'
 import { OverlayContainer } from '../objects/OverlayContainer'
 import { Pig } from '../objects/Pig'
 import { Sign } from '../objects/Sign'
+import { Star } from '../objects/Star'
 const { FloatBetween } = Phaser.Math
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 
 const signKey = 'sign'
+
+const blueStarKey = 'blueStar'
+const whiteStarFollowerKey = 'whiteFollower'
 
 export const coin1Key = 'coin1'
 export const donationBackground1Key = 'donationBackground1'
@@ -75,6 +79,19 @@ const fireworksEmitterConfig = {
 	y: 350,
 }
 
+/* const rainEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
+	frame: 'blue',
+	x: { min: 0, max: 1920 },
+	y: 0,
+	lifespan: 10000,
+	speedY: { min: 200, max: 400 },
+	scale: { start: 0.4, end: 0 },
+	quantity: 4,
+	blendMode: 'ADD',
+	bounce: 0.5,
+	collideBottom: true,
+}*/
+
 export class OverlayScene extends Phaser.Scene {
 	public pigWithSignContainer: OverlayContainer | null = null
 
@@ -108,6 +125,13 @@ export class OverlayScene extends Phaser.Scene {
 	preload() {
 		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
 		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
+
+		this.load.spritesheet(blueStarKey, '/game/stars/blue_star.png', {
+			frameWidth: 250,
+			frameHeight: 250,
+		})
+
+		this.load.image(whiteStarFollowerKey, '/game/stars/star_flare.png')
 
 		this.load.spritesheet(signKey, '/game/sign.png', {
 			frameWidth: 500,
@@ -267,11 +291,48 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigDonationInConfig)
 		this.anims.create(pigDonationOutConfig)
 
+		const { width, height } = this.scale
+
 		const coinGroup = this.add.group()
+		const starGroup = this.add.group()
 
 		const flareParticles = this.add.particles(flaresAtlasKey)
 		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
 		fireworksEmitter.stop()
+
+		const followParticle = this.add.particles(whiteStarFollowerKey)
+		this.time.addEvent({
+			callback: () => {
+				for (let i = 0; i <= 3; i++) {
+					starGroup.add(new Star(this, Phaser.Math.Between(20, 1900), 0, blueStarKey, followParticle))
+				}
+			},
+			callbackScope: this,
+			delay: 100, // 1000 = 1 second
+			loop: true,
+		})
+
+		const starColliderSprite = new Phaser.Physics.Arcade.Sprite(this, 960, height + 40, blueStarKey)
+		const physicsBody = new Physics.Arcade.Body(this.physics.world, starColliderSprite)
+		physicsBody.setSize(1920, 10)
+		physicsBody.allowGravity = false
+		physicsBody.immovable = true
+		starColliderSprite.body = physicsBody
+
+		this.physics.add.existing(starColliderSprite)
+		this.physics.world.setBoundsCollision(true, true, false, false)
+		this.physics.add.collider(starGroup, starColliderSprite, (blueStar, starColliderSprite) => {
+			const star = blueStar as Star
+			star.setVelocityX(Phaser.Math.Between(-200, 200))
+
+			if (star.bumps >= 1) {
+				star.starEmitter.killAll()
+				star.starEmitter.remove()
+				star.destroy()
+			} else {
+				star.bumps += 1
+			}
+		})
 
 		const sign = new Sign(this, -175, 0, signKey)
 		const pig = new Pig(
@@ -288,8 +349,6 @@ export class OverlayScene extends Phaser.Scene {
 		this.input.setDraggable(this.pigWithSignContainer)
 
 		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
-
-		const { width, height } = this.scale
 
 		// mhmhm
 		this.time.addEvent({
