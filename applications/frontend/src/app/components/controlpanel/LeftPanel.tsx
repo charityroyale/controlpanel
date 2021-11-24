@@ -6,7 +6,7 @@ import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { FaPiggyBank } from 'react-icons/fa'
-import { CHARACTER_UPDATE, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
+import { CHARACTER_UPDATE, DONATION_ALERT_UPDATE, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
@@ -42,6 +42,12 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		})
 	}, 125)
 
+	const emiteDonationAlertVisibleUpdate = useCallback(() => {
+		socket?.emit(DONATION_ALERT_UPDATE, {
+			isVisible: !globalState.donationAlert.isVisible,
+		})
+	}, [globalState.donationAlert.isVisible, socket])
+
 	useEffect(() => {
 		emitScaleChange(scale[0])
 	}, [emitScaleChange, scale])
@@ -62,7 +68,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						value={globalState?.character.isVisible === true ? 'true' : 'false'}
 						onClick={emitCharacterIsVisibleUpdate}
 					>
-						<span>Pig Visible</span>
+						<span>Pig</span>
 					</FatButton>
 
 					<FatButton
@@ -141,6 +147,15 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 								)}
 							/>
 						</React.Fragment>
+					</FatButton>
+
+					<FatButton
+						icon={<AiFillEye size="24px" />}
+						active={globalState.donationAlert.isVisible}
+						value={globalState?.donationAlert.isVisible === true ? 'true' : 'false'}
+						onClick={emiteDonationAlertVisibleUpdate}
+					>
+						<span>Donation Banner</span>
 					</FatButton>
 				</ButtonsWrapper>
 			</Content>

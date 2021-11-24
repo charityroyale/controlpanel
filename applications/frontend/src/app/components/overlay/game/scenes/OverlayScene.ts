@@ -2,6 +2,7 @@ import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STAT
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
+import { DonationBanner } from '../objects/DonationBanner'
 import { OverlayContainer } from '../objects/OverlayContainer'
 import { Pig } from '../objects/Pig'
 import { Sign } from '../objects/Sign'
@@ -39,6 +40,8 @@ export const coin5TextColor = '#357a96'
 export const coin6Key = 'coin6'
 export const donationBackground6Key = 'donationBackground6'
 export const coin6TextColor = '#d17a1c'
+
+const donationBannerVideoKey = 'donationBannerVideo'
 
 const flaresAtlasKey = 'flaresAtlas'
 const pigAtlasKey = 'pigAtlas'
@@ -92,6 +95,14 @@ export class OverlayScene extends Phaser.Scene {
 			const pig = this.pigWithSignContainer?.getByName('pig') as Pig
 			pig.handleState(state.character)
 
+			console.log(this.children.getAll())
+
+			const donationBanner = this.children.getByName('donationBanner')
+			if (donationBanner) {
+				const banner = donationBanner as DonationBanner
+				banner.handleState(state.donationAlert)
+			}
+
 			/**
 			 * Somehow numbers with decimals end up having more decimals
 			 * than assigned, therefore it is rounded to one decimal.
@@ -112,6 +123,7 @@ export class OverlayScene extends Phaser.Scene {
 	preload() {
 		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
 		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
+		this.load.video(donationBannerVideoKey, '/game/myvideo.mp4', 'loadeddata', false, true)
 
 		this.load.spritesheet(blueStarKey, '/game/stars/blue_star.png', {
 			frameWidth: 250,
@@ -321,6 +333,8 @@ export class OverlayScene extends Phaser.Scene {
 			starFollowParticle,
 			fireworksEmitter
 		)
+
+		new DonationBanner(this, 400, 300, initialState.donationAlert, socket, donationBannerVideoKey)
 
 		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
 			children: [sign, pig],

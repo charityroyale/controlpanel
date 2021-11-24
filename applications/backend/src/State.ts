@@ -1,4 +1,4 @@
-import { CharacterState, SettingsState } from '@pftp/common'
+import { CharacterState, DonationAlertState, SettingsState } from '@pftp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialCharacterState: CharacterState = {
@@ -40,8 +40,28 @@ const settingsSlice = createSlice({
 	},
 })
 
+const initialDonationAlertState: DonationAlertState = {
+	isVisible: true,
+	scale: 1,
+}
+const donationAlertSlice = createSlice({
+	name: 'donationalert',
+	initialState: initialDonationAlertState,
+	reducers: {
+		update: (state, action: PayloadAction<Partial<DonationAlertState>>) => {
+			return {
+				...state,
+				...action.payload,
+			}
+		},
+	},
+})
+
 export const characterReducer = characterSlice.reducer
 export const updateCharacter = characterSlice.actions.update
+
+export const donationAlertReducer = donationAlertSlice.reducer
+export const updateDonationAlert = donationAlertSlice.actions.update
 
 export const settingsReducer = settingsSlice.reducer
 export const updateSettings = settingsSlice.actions.update
