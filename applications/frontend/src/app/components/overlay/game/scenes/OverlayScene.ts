@@ -13,7 +13,7 @@ const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 
 const signKey = 'sign'
 
-const blueStarKey = 'blueStar'
+export const blueStarKey = 'blueStar'
 const whiteStarFollowerKey = 'whiteFollower'
 
 export const coin1Key = 'coin1'
@@ -300,17 +300,7 @@ export class OverlayScene extends Phaser.Scene {
 		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
 		fireworksEmitter.stop()
 
-		const followParticle = this.add.particles(whiteStarFollowerKey)
-		this.time.addEvent({
-			callback: () => {
-				for (let i = 0; i <= 3; i++) {
-					starGroup.add(new Star(this, Phaser.Math.Between(20, 1900), 0, blueStarKey, followParticle))
-				}
-			},
-			callbackScope: this,
-			delay: 100, // 1000 = 1 second
-			loop: true,
-		})
+		const starFollowParticle = this.add.particles(whiteStarFollowerKey)
 
 		const starColliderSprite = new Phaser.Physics.Arcade.Sprite(this, 960, height + 40, blueStarKey)
 		const physicsBody = new Physics.Arcade.Body(this.physics.world, starColliderSprite)
@@ -340,6 +330,8 @@ export class OverlayScene extends Phaser.Scene {
 			{ x: 0, y: 0, texture: pigAtlasKey, pigLaugh },
 			initialState.character,
 			coinGroup,
+			starGroup,
+			starFollowParticle,
 			fireworksEmitter
 		)
 

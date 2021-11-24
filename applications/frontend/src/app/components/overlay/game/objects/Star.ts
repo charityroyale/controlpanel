@@ -29,10 +29,11 @@ export class Star extends Phaser.Physics.Arcade.Sprite {
 			frequency: 7,
 			radial: false,
 			alpha: 0.2,
-			lifespan: 2000,
+			lifespan: 1000,
 			maxParticles: 200,
 			scale: 0.5,
 		})
+
 		this.starEmitter.startFollow(this)
 	}
 }
