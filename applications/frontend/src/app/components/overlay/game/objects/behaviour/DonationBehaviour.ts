@@ -1,6 +1,7 @@
 import { Donation } from '@pftp/common'
 import { CoinTextAmount } from '../CoinTextAmount'
 import {
+	blueStarKey,
 	coin1Key,
 	coin1TextColor,
 	coin2Key,
@@ -32,6 +33,7 @@ import { Pig } from '../Pig'
 import { CoinTextDonator } from '../CoinTextDonator'
 import { CoinTextDonatorWithMessageBackground } from '../CointTextDonatorWithMessageBackground'
 import { CoinTextDonatorMessage } from '../CoinTextDonatorMessage'
+import { Star } from '../Star'
 
 export class DonationBehaviour {
 	/**
@@ -43,6 +45,8 @@ export class DonationBehaviour {
 	private character: Pig
 	private queue
 	private coinGroup
+	private starGroup
+	private starFollowParticle
 	private startPositionOffset = -350
 	private emitter
 
@@ -50,11 +54,15 @@ export class DonationBehaviour {
 		character: Pig,
 		queue: Donation[],
 		coinGroup: Phaser.GameObjects.Group,
+		starGroup: Phaser.GameObjects.Group,
+		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
 		emitter: Phaser.GameObjects.Particles.ParticleEmitter
 	) {
 		this.character = character
 		this.queue = queue
 		this.coinGroup = coinGroup
+		this.starGroup = starGroup
+		this.starFollowParticle = starFollowParticle
 		this.emitter = emitter
 		this.start()
 	}
@@ -140,6 +148,19 @@ export class DonationBehaviour {
 
 	private getCoinKeyFromAmount(amount: number) {
 		if (amount >= 1000) {
+			this.character.scene.time.addEvent({
+				callback: () => {
+					for (let i = 0; i <= 3; i++) {
+						this.starGroup.add(
+							new Star(this.character.scene, Phaser.Math.Between(20, 1900), -100, blueStarKey, this.starFollowParticle)
+						)
+					}
+				},
+				callbackScope: this,
+				delay: 200,
+				repeat: 60,
+			})
+
 			return { coinTexture: coin6Key, textColor: coin6TextColor, messageBackgroundTexture: donationBackground6Key }
 		} else if (amount >= 500) {
 			this.emitter.start()
