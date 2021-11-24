@@ -79,19 +79,6 @@ const fireworksEmitterConfig = {
 	y: 350,
 }
 
-/* const rainEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
-	frame: 'blue',
-	x: { min: 0, max: 1920 },
-	y: 0,
-	lifespan: 10000,
-	speedY: { min: 200, max: 400 },
-	scale: { start: 0.4, end: 0 },
-	quantity: 4,
-	blendMode: 'ADD',
-	bounce: 0.5,
-	collideBottom: true,
-}*/
-
 export class OverlayScene extends Phaser.Scene {
 	public pigWithSignContainer: OverlayContainer | null = null
 
