@@ -334,7 +334,7 @@ export class OverlayScene extends Phaser.Scene {
 			fireworksEmitter
 		)
 
-		new DonationBanner(this, 400, 300, initialState.donationAlert, socket, donationBannerVideoKey)
+		new DonationBanner(this, 1920 / 2, 100, initialState.donationAlert, socket, donationBannerVideoKey)
 
 		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
 			children: [sign, pig],

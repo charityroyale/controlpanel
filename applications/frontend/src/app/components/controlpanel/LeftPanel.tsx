@@ -16,6 +16,7 @@ import { MdFlip } from 'react-icons/md'
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
 	const [scale, setScale] = useState([globalState.character.scale])
+	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
 
 	const emitCharacterIsVisibleUpdate = useCallback(() => {
 		socket?.emit(CHARACTER_UPDATE, {
@@ -42,6 +43,12 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		})
 	}, 125)
 
+	const emiteDonationChange = useDebouncedCallback((scale: number) => {
+		socket?.emit(DONATION_ALERT_UPDATE, {
+			scale,
+		})
+	}, 125)
+
 	const emiteDonationAlertVisibleUpdate = useCallback(() => {
 		socket?.emit(DONATION_ALERT_UPDATE, {
 			isVisible: !globalState.donationAlert.isVisible,
@@ -51,6 +58,10 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 	useEffect(() => {
 		emitScaleChange(scale[0])
 	}, [emitScaleChange, scale])
+
+	useEffect(() => {
+		emiteDonationChange(scaleDonationAlert[0])
+	}, [emiteDonationChange, scaleDonationAlert])
 
 	return (
 		<GridLeftPanel>
@@ -156,6 +167,66 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						onClick={emiteDonationAlertVisibleUpdate}
 					>
 						<span>Donation Banner</span>
+					</FatButton>
+
+					<FatButton style={{ cursor: 'default' }}>
+						<React.Fragment>
+							<Range
+								values={scaleDonationAlert}
+								step={0.01}
+								min={0.25}
+								max={3}
+								onChange={(values) => setScaleDonationALert(values)}
+								renderTrack={({ props, children }) => (
+									<div
+										role="button"
+										tabIndex={-1}
+										/* eslint-disable react/prop-types */
+										onMouseDown={props.onMouseDown}
+										onTouchStart={props.onTouchStart}
+										style={{
+											...props.style,
+											height: '40px',
+											display: 'flex',
+											width: '100%',
+										}}
+									>
+										<div
+											ref={props.ref}
+											style={{
+												height: '5px',
+												width: '100%',
+												borderRadius: '2px',
+												alignSelf: 'center',
+												backgroundColor: 'rgba(255,255,255,0.2)',
+											}}
+										>
+											{children}
+										</div>
+									</div>
+								)}
+								renderThumb={({ props }) => (
+									<div
+										{...props}
+										style={{
+											/* eslint-disable react/prop-types */
+											...props.style,
+											height: '28px',
+											width: '28px',
+											borderRadius: '4px',
+											backgroundColor: '#049EE7',
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+										}}
+									>
+										<SizeIconWrapper>
+											<IoMdResize size={24} />
+										</SizeIconWrapper>
+									</div>
+								)}
+							/>
+						</React.Fragment>
 					</FatButton>
 				</ButtonsWrapper>
 			</Content>
