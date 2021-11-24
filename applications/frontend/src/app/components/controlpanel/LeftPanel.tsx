@@ -6,6 +6,7 @@ import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { FaPiggyBank } from 'react-icons/fa'
+import { AiFillNotification } from 'react-icons/ai'
 import { CHARACTER_UPDATE, DONATION_ALERT_UPDATE, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
@@ -159,14 +160,24 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 							/>
 						</React.Fragment>
 					</FatButton>
-
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+						}}
+					>
+						<IconWrapper>
+							<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+						</IconWrapper>
+						Donation Alert
+					</Label>
 					<FatButton
 						icon={<AiFillEye size="24px" />}
 						active={globalState.donationAlert.isVisible}
 						value={globalState?.donationAlert.isVisible === true ? 'true' : 'false'}
 						onClick={emiteDonationAlertVisibleUpdate}
 					>
-						<span>Donation Banner</span>
+						<span>Donation Alert</span>
 					</FatButton>
 
 					<FatButton style={{ cursor: 'default' }}>
