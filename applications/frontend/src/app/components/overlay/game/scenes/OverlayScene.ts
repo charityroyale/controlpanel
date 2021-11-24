@@ -334,7 +334,7 @@ export class OverlayScene extends Phaser.Scene {
 			fireworksEmitter
 		)
 
-		new DonationBanner(this, 1920 / 2, 100, initialState.donationAlert, socket, donationBannerVideoKey)
+		new DonationBanner(this, 1920 / 2, 100, initialState.donationAlert, donationBannerVideoKey)
 
 		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
 			children: [sign, pig],
@@ -374,6 +374,13 @@ export class OverlayScene extends Phaser.Scene {
 				currentGameObject.destroy()
 				const pig = container.getByName('pig') as Pig
 				pig.play(pigDonationOutKey).chain(pigIdleKey)
+
+				const banner = this.children.getByName('donationBanner')
+				if (banner) {
+					const donationBanner = banner as DonationBanner
+					donationBanner.alpha = 0
+					donationBanner.stop()
+				}
 				container.getAll('name', 'cointext').map((el) => el.destroy())
 			},
 			undefined,
