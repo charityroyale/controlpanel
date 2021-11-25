@@ -122,7 +122,6 @@ export class DonationBehaviour {
 			? (container.getByName(donationAlertWithMessageKey) as DonationAlert)
 			: (container.getByName(donationAlertKey) as DonationAlert)
 
-		console.log(banner)
 		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
 			donation.amount
 		)

@@ -106,8 +106,6 @@ export class OverlayScene extends Phaser.Scene {
 				char.handleState(state.character)
 			}
 
-			console.log(this.children.getAll())
-
 			this.donationBannerDontainer?.handleState(state.donationAlert)
 
 			/**
