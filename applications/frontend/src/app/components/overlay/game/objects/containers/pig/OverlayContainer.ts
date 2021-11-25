@@ -7,7 +7,7 @@ interface ContainerOptions {
 	children?: Phaser.GameObjects.GameObject[] | undefined
 }
 
-export class OverlayContainer extends Phaser.GameObjects.Container {
+export class PigContainer extends Phaser.GameObjects.Container {
 	private isLocked
 
 	constructor(
@@ -17,11 +17,11 @@ export class OverlayContainer extends Phaser.GameObjects.Container {
 		options: ContainerOptions | undefined
 	) {
 		super(scene, options?.x, options?.y, options?.children)
-		this.name = 'overlaycontainer'
+		this.name = 'pigcontainer'
+		this.setSize(500, 500)
 		this.setScale(characterState.scale)
 		this.setIsVisible(characterState.isVisible)
 		this.isLocked = characterState.isLocked
-		this.setSize(500, 500)
 
 		this.setInteractive()
 		this.on('dragend', () => {
@@ -32,13 +32,6 @@ export class OverlayContainer extends Phaser.GameObjects.Container {
 						y: this.y,
 					},
 				})
-			}
-		})
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			if (!this.isLocked) {
-				this.x = dragX
-				this.y = dragY
 			}
 		})
 

@@ -25,6 +25,8 @@ export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donati
 }
 
 const DonationUser = styled.span`
+	max-width: 200px;
+	overflow: hidden;
 	color: ${(p) => p.theme.color.charityGold};
 `
 
@@ -41,6 +43,8 @@ const DonationItem = styled.div`
 `
 
 const DonationCenter = styled.div`
+	max-width: 200px;
+	overflow: hidden;
 	display: flex;
 `
 

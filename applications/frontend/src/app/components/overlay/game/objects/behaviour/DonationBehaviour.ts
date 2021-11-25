@@ -1,5 +1,4 @@
 import { Donation } from '@pftp/common'
-import { CoinTextAmount } from '../CoinTextAmount'
 import {
 	blueStarKey,
 	coin1Key,
@@ -14,12 +13,16 @@ import {
 	coin5TextColor,
 	coin6Key,
 	coin6TextColor,
+	donationAlertKey,
+	donationAlertWithMessageKey,
 	donationBackground1Key,
 	donationBackground2Key,
 	donationBackground3Key,
 	donationBackground4Key,
 	donationBackground5Key,
 	donationBackground6Key,
+	FIREWORKS_SOUND_1_AUDIO_KEY,
+	FIREWORKS_SOUND_2_AUDIO_KEY,
 	pigDonationInKey,
 	pigDonationKey,
 	pigDonationOutKey,
@@ -28,12 +31,16 @@ import {
 	pigSleepKey,
 	pigSleepOutKey,
 } from '../../scenes/OverlayScene'
-import { Coin } from '../Coin'
-import { Pig } from '../Pig'
-import { CoinTextDonator } from '../CoinTextDonator'
-import { CoinTextDonatorWithMessageBackground } from '../CointTextDonatorWithMessageBackground'
-import { CoinTextDonatorMessage } from '../CoinTextDonatorMessage'
+import { Coin } from '../containers/pig/Coin'
 import { Star } from '../Star'
+import { DonationAlert } from '../containers/donationalert/DonationBanner'
+import { DonationAlertContainer, donationAlertContainerName } from '../containers/donationalert/DonationAlertContainer'
+import { DonationAlertHeaderText } from '../containers/donationalert/DonationAlertHeaderText'
+import { DonationAlertUserMessageText } from '../containers/donationalert/DonationAlertUserMessageText'
+import { CoinTextAmount } from '../containers/pig/CoinTextAmount'
+import { Pig } from '../containers/pig/Pig'
+import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
+const { FloatBetween } = Phaser.Math
 
 export class DonationBehaviour {
 	/**
@@ -48,7 +55,7 @@ export class DonationBehaviour {
 	private starGroup
 	private starFollowParticle
 	private startPositionOffset = -350
-	private emitter
+	private fireworksEmitter
 
 	constructor(
 		character: Pig,
@@ -56,14 +63,14 @@ export class DonationBehaviour {
 		coinGroup: Phaser.GameObjects.Group,
 		starGroup: Phaser.GameObjects.Group,
 		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		emitter: Phaser.GameObjects.Particles.ParticleEmitter
+		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter
 	) {
 		this.character = character
 		this.queue = queue
 		this.coinGroup = coinGroup
 		this.starGroup = starGroup
 		this.starFollowParticle = starFollowParticle
-		this.emitter = emitter
+		this.fireworksEmitter = fireworksEmitter
 		this.start()
 	}
 
@@ -79,6 +86,7 @@ export class DonationBehaviour {
 					this.character.playLaughSound()
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
 					this.createCoin(donation, this.coinGroup)
+					this.createDonationAlertText(donation)
 					/**
 					 * Sleeping can be seen as another idle state from which the wakeUp
 					 * animation needs to bestarted additional
@@ -89,6 +97,7 @@ export class DonationBehaviour {
 					this.character.playLaughSound()
 					this.character.play(pigSleepOutKey).chain(pigDonationInKey).chain(pigDonationKey)
 					this.createCoin(donation, this.coinGroup)
+					this.createDonationAlertText(donation)
 				}
 			}
 		}, this.checkQueueTimer)
@@ -105,12 +114,60 @@ export class DonationBehaviour {
 		)
 	}
 
-	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
-		const { coinTexture, textColor, messageBackgroundTexture } = this.getCoinKeyFromAmount(donation.amount)
-		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
-		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
-			donation.amount
+	private createDonationAlertText(donation: Donation) {
+		const donationAlertContainer = this.character.scene.children.getByName(
+			donationAlertContainerName
+		) as DonationAlertContainer
+		const donationAlert = donation.message
+			? (donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlert)
+			: (donationAlertContainer.getByName(donationAlertKey) as DonationAlert)
+
+		this.createDonationAlertHeaderText(donation, donationAlert, donationAlertContainer)
+
+		// only create userMessageText object if message is given
+		if (donation.message) {
+			this.createDonationAlertUserMessageText(donation, donationAlert, donationAlertContainer)
+		}
+		donationAlert.alpha = 1
+	}
+
+	private createDonationAlertHeaderText = (
+		donation: Donation,
+		donationAlert: DonationAlert,
+		donationAlertContainer: DonationAlertContainer
+	) => {
+		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount)
+		const donationAlertHeaderText = new DonationAlertHeaderText(
+			this.character.scene,
+			0,
+			donationAlert.displayHeight - 240 * donationAlertContainer.scale,
+			`${donation.user} spendet ${formatedDonationAmount}`,
+			donationAlert.scale
 		)
+		donationAlertContainer.add(donationAlertHeaderText)
+	}
+
+	private createDonationAlertUserMessageText = (
+		donation: Donation,
+		donationAlert: DonationAlert,
+		donationAlertContainer: DonationAlertContainer
+	) => {
+		const donationAlertUserMessageText = new DonationAlertUserMessageText(
+			this.character.scene,
+			donationAlert.x - (donationAlert.displayWidth / 2 - 50),
+			donationAlert.displayHeight - 540 * donationAlertContainer.scale,
+			donation.message,
+			donationAlert.scale,
+			donationAlert.displayWidth - 70 * donationAlertContainer.scale * 2
+		)
+		donationAlertContainer.add(donationAlertUserMessageText)
+	}
+
+	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
+		const { coinTexture, textColor } = this.getCoinKeyFromAmount(donation)
+		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
+		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount)
+
 		const coinText = new CoinTextAmount(
 			this.character.scene,
 			0,
@@ -118,35 +175,29 @@ export class DonationBehaviour {
 			formatedDonationAmount,
 			textColor
 		)
-		const coinTextDonatorWithMessageBackground = new CoinTextDonatorWithMessageBackground(
-			this.character.scene,
-			-250,
-			100,
-			messageBackgroundTexture
-		)
-		const coinTextDonator = new CoinTextDonator(
-			this.character.scene,
-			coinTextDonatorWithMessageBackground.x + 20,
-			coinTextDonatorWithMessageBackground.y + 30,
-			donation.user
-		)
-
-		const coinTextDonatorMessage = new CoinTextDonatorMessage(
-			this.character.scene,
-			coinTextDonatorWithMessageBackground.x + 20,
-			coinTextDonatorWithMessageBackground.y + 45,
-			donation.message
-		)
 
 		this.character.parentContainer.add(coin)
 		this.character.parentContainer.add(coinText)
-		this.character.parentContainer.add(coinTextDonatorWithMessageBackground)
-		this.character.parentContainer.add(coinTextDonator)
-		this.character.parentContainer.add(coinTextDonatorMessage)
 		coinGroup.add(coin)
 	}
 
-	private getCoinKeyFromAmount(amount: number) {
+	private getCoinKeyFromAmount(donation: Donation) {
+		const { amount, message } = donation
+		const donationAlertContainer = this.character.scene.children.getByName(
+			donationAlertContainerName
+		) as DonationAlertContainer
+		const banner = message
+			? donationAlertContainer.getByName(donationAlertWithMessageKey)
+			: donationAlertContainer.getByName(donationAlertKey)
+
+		if (donationAlertContainer && banner) {
+			const donationBanner = banner as DonationAlert
+			donationBanner.play()
+			// Prevents video freeze when game is out of focus (i.e. user changes tab on the browser)
+			donationBanner.setPaused(false)
+			donationBanner.parentContainer.alpha = 1
+		}
+
 		if (amount >= 1000) {
 			this.character.scene.time.addEvent({
 				callback: () => {
@@ -163,12 +214,67 @@ export class DonationBehaviour {
 
 			return { coinTexture: coin6Key, textColor: coin6TextColor, messageBackgroundTexture: donationBackground6Key }
 		} else if (amount >= 500) {
-			this.emitter.start()
+			const { width, height } = this.character.scene.scale
+			const positionTimer = this.character.scene.time.addEvent({
+				repeat: -1,
+				callback: () => {
+					this.fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
+				},
+			})
+			this.character.scene.time.addEvent({
+				delay: 500,
+				repeat: 0,
+				callback: () => {
+					this.fireworksEmitter.start()
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 1500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 2500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_2_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 3500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 4500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
 			this.character.scene.time.addEvent({
 				delay: 5000,
 				repeat: 0,
 				callback: () => {
-					this.emitter.stop()
+					positionTimer.destroy()
+					this.fireworksEmitter.stop()
 				},
 			})
 			return { coinTexture: coin5Key, textColor: coin5TextColor, messageBackgroundTexture: donationBackground5Key }

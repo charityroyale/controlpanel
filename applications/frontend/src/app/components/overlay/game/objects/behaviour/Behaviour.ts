@@ -1,6 +1,6 @@
 import { Donation } from '@pftp/common'
 import { pigIdleKey } from '../../scenes/OverlayScene'
-import { Pig } from '../Pig'
+import { Pig } from '../containers/pig/Pig'
 import { DonationBehaviour } from './DonationBehaviour'
 import { Scratch } from './Scratch'
 import { Sleep } from './Sleep'
@@ -24,7 +24,7 @@ export class Behaviour {
 		coinGroup: Phaser.GameObjects.Group,
 		starGroup: Phaser.GameObjects.Group,
 		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		emitter: Phaser.GameObjects.Particles.ParticleEmitter
+		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter
 	) {
 		this.character = character
 		this.donationBehaviour = new DonationBehaviour(
@@ -33,7 +33,7 @@ export class Behaviour {
 			coinGroup,
 			starGroup,
 			starFollowParticle,
-			emitter
+			fireworksEmitter
 		)
 		this.sleepBehaviour = new Sleep(this.character)
 		this.scratchBehaviour = new Scratch(this.character)

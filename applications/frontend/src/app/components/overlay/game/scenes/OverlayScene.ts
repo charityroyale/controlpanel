@@ -1,15 +1,25 @@
 import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
-import { OverlayContainer } from '../objects/OverlayContainer'
-import { Pig } from '../objects/Pig'
-import { Sign } from '../objects/Sign'
+import {
+	DonationAlertContainer,
+	donationAlertContainerName,
+} from '../objects/containers/donationalert/DonationAlertContainer'
+import { DonationAlert } from '../objects/containers/donationalert/DonationBanner'
+import { PigContainer } from '../objects/containers/pig/OverlayContainer'
+import { Pig } from '../objects/containers/pig/Pig'
+import { Sign } from '../objects/containers/pig/Sign'
 import { Star } from '../objects/Star'
-const { FloatBetween } = Phaser.Math
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
+const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
+const PIG_NOM_NOM_AUDIO_KEY = 'pigNomNomAudio'
+export const FIREWORKS_START_AUDIO_KEY = 'fireworksStartAudio'
+export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
+export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
 
 const signKey = 'sign'
 
@@ -18,27 +28,30 @@ const whiteStarFollowerKey = 'whiteFollower'
 
 export const coin1Key = 'coin1'
 export const donationBackground1Key = 'donationBackground1'
-export const coin1TextColor = '#433166'
+export const coin1TextColor = '#056399'
 
 export const coin2Key = 'coin2'
 export const donationBackground2Key = 'donationBackground2'
-export const coin2TextColor = '#5c6b1f'
+export const coin2TextColor = '#0a053b'
 
 export const coin3Key = 'coin3'
 export const donationBackground3Key = 'donationBackground3'
-export const coin3TextColor = '#af471e'
+export const coin3TextColor = '#800fb0'
 
 export const coin4Key = 'coin4'
 export const donationBackground4Key = 'donationBackground4'
-export const coin4TextColor = '#7f2422'
+export const coin4TextColor = '#802421'
 
 export const coin5Key = 'coin5'
 export const donationBackground5Key = 'donationBackground5'
-export const coin5TextColor = '#357a96'
+export const coin5TextColor = '#c28f1a'
 
 export const coin6Key = 'coin6'
 export const donationBackground6Key = 'donationBackground6'
-export const coin6TextColor = '#d17a1c'
+export const coin6TextColor = '#00a6a6'
+
+export const donationAlertKey = 'donationAlertVideo'
+export const donationAlertWithMessageKey = 'donationAlertWithMessageVideo'
 
 const flaresAtlasKey = 'flaresAtlas'
 const pigAtlasKey = 'pigAtlas'
@@ -63,7 +76,7 @@ const donationBackgroundWidth = 400
 const donationBackgroundHeight = 225
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
-const fireworksEmitterConfig = {
+const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
 	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
 	angle: { start: 0, end: 360, steps: 100 },
 	blendMode: 'ADD',
@@ -80,7 +93,8 @@ const fireworksEmitterConfig = {
 }
 
 export class OverlayScene extends Phaser.Scene {
-	public pigWithSignContainer: OverlayContainer | null = null
+	public pigWithSignContainer: PigContainer | null = null
+	public donationBannerDontainer: DonationAlertContainer | null = null
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -89,8 +103,13 @@ export class OverlayScene extends Phaser.Scene {
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		config.socket.on(STATE_UPDATE, (state) => {
 			this.pigWithSignContainer?.handleState(state.character)
-			const pig = this.pigWithSignContainer?.getByName('pig') as Pig
-			pig.handleState(state.character)
+			const pig = this.pigWithSignContainer?.getByName('pig')
+			if (pig) {
+				const char = pig as Pig
+				char.handleState(state.character)
+			}
+
+			this.donationBannerDontainer?.handleState(state.donationAlert)
 
 			/**
 			 * Somehow numbers with decimals end up having more decimals
@@ -112,6 +131,15 @@ export class OverlayScene extends Phaser.Scene {
 	preload() {
 		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
 		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
+
+		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', 'loadeddata', false, true)
+		this.load.video(
+			donationAlertWithMessageKey,
+			'/game/donationalert/donation_alert_with_message.webm',
+			'loadeddata',
+			false,
+			true
+		)
 
 		this.load.spritesheet(blueStarKey, '/game/stars/blue_star.png', {
 			frameWidth: 250,
@@ -177,13 +205,15 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
+		this.load.audio(DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.mp3')
+		this.load.audio(PIG_NOM_NOM_AUDIO_KEY, '/audio/pig_nom_nom.ogg')
+		this.load.audio(FIREWORKS_START_AUDIO_KEY, '/audio/fireworks.ogg')
+		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
+		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.ogg')
 	}
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		const { socket, initialState } = config
-
-		const pigLaugh = this.sound.add(PIG_LAUGH_AUDIO_KEY)
-		this.sound.pauseOnBlur = false
 
 		this.textures.addSpriteSheetFromAtlas(pigIdleFrame, {
 			atlas: pigAtlasKey,
@@ -278,16 +308,68 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigDonationInConfig)
 		this.anims.create(pigDonationOutConfig)
 
-		const { width, height } = this.scale
-
 		const coinGroup = this.add.group()
 		const starGroup = this.add.group()
 
 		const flareParticles = this.add.particles(flaresAtlasKey)
+
+		// TODO: move emitter logic to donationbehaviour class
 		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
 		fireworksEmitter.stop()
 
-		const starFollowParticle = this.add.particles(whiteStarFollowerKey)
+		this.createStarRainInstance(starGroup)
+
+		// create pig container items
+		const sign = new Sign(this, -175, 0, signKey)
+		const pig = new Pig(
+			this,
+			{ x: 0, y: 0, texture: pigAtlasKey, pigLaugh: this.sound.add(DONATION_ALERT_AUDIO_KEY) },
+			initialState.character,
+			coinGroup,
+			starGroup,
+			this.add.particles(whiteStarFollowerKey),
+			fireworksEmitter
+		)
+
+		// create donationAlerts
+		const dontainerBanner = new DonationAlert(this, 0, 0, initialState.donationAlert, donationAlertKey)
+		const donationAlertWithMessage = new DonationAlert(
+			this,
+			0,
+			0,
+			initialState.donationAlert,
+			donationAlertWithMessageKey
+		)
+
+		// create containers
+		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, socket, {
+			children: [dontainerBanner, donationAlertWithMessage],
+		})
+		this.pigWithSignContainer = new PigContainer(this, initialState.character, socket, {
+			children: [sign, pig],
+		})
+		this.input.setDraggable([this.pigWithSignContainer, this.donationBannerDontainer])
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
+			if (_gameObject.name === 'pigcontainer' && !_gameObject.isLocked) {
+				_gameObject.x = dragX
+				_gameObject.y = dragY
+			} else if (_gameObject.name === donationAlertContainerName) {
+				_gameObject.x = dragX
+				_gameObject.y = dragY
+			}
+		})
+
+		// global world env objects and settings
+		this.sound.pauseOnBlur = false
+		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
+
+		socket.emit(REQUEST_STATE)
+	}
+
+	private createStarRainInstance(starGroup: Phaser.GameObjects.Group) {
+		const { height } = this.scale
 
 		const starColliderSprite = new Phaser.Physics.Arcade.Sprite(this, 960, height + 40, blueStarKey)
 		const physicsBody = new Physics.Arcade.Body(this.physics.world, starColliderSprite)
@@ -298,8 +380,8 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.physics.add.existing(starColliderSprite)
 		this.physics.world.setBoundsCollision(true, true, false, false)
-		this.physics.add.collider(starGroup, starColliderSprite, (blueStar, starColliderSprite) => {
-			const star = blueStar as Star
+		this.physics.add.collider(starGroup, starColliderSprite, (gameObject1) => {
+			const star = gameObject1 as Star
 			star.setVelocityX(Phaser.Math.Between(-200, 200))
 
 			if (star.bumps >= 1) {
@@ -310,34 +392,6 @@ export class OverlayScene extends Phaser.Scene {
 				star.bumps += 1
 			}
 		})
-
-		const sign = new Sign(this, -175, 0, signKey)
-		const pig = new Pig(
-			this,
-			{ x: 0, y: 0, texture: pigAtlasKey, pigLaugh },
-			initialState.character,
-			coinGroup,
-			starGroup,
-			starFollowParticle,
-			fireworksEmitter
-		)
-
-		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
-			children: [sign, pig],
-		})
-		this.input.setDraggable(this.pigWithSignContainer)
-
-		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
-
-		// mhmhm
-		this.time.addEvent({
-			repeat: -1,
-			callback: () => {
-				fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
-			},
-		})
-
-		socket.emit(REQUEST_STATE)
 	}
 
 	public addMouthCollider(container: Phaser.GameObjects.Container, coinGroup: Phaser.GameObjects.Group) {
@@ -359,7 +413,9 @@ export class OverlayScene extends Phaser.Scene {
 			(currentGameObject) => {
 				currentGameObject.destroy()
 				const pig = container.getByName('pig') as Pig
+				/// this.sound.play(PIG_NOM_NOM_AUDIO_KEY)
 				pig.play(pigDonationOutKey).chain(pigIdleKey)
+
 				container.getAll('name', 'cointext').map((el) => el.destroy())
 			},
 			undefined,

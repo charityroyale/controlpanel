@@ -5,3 +5,7 @@ export const formatTimeStamp = (timestamp: number) => {
 export const formatCurrency = (amount: number) => {
 	return new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' }).format(amount)
 }
+
+export const formatDonationAlertCurrenty = (amount: number) => {
+	return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(amount)
+}

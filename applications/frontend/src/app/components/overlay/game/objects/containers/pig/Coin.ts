@@ -1,6 +1,6 @@
 import { Physics } from 'phaser'
-import { fadeIn } from './tweens/fadeIn'
-import { scaleOut } from './tweens/scaleOut'
+import { fadeIn } from '../../tweens/fadeIn'
+import { scaleOut } from '../../tweens/scaleOut'
 
 export class Coin extends Phaser.GameObjects.Sprite {
 	constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
