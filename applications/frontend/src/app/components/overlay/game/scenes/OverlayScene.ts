@@ -212,9 +212,6 @@ export class OverlayScene extends Phaser.Scene {
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		const { socket, initialState } = config
 
-		const pigLaugh = this.sound.add(DONATION_ALERT_AUDIO_KEY)
-		this.sound.pauseOnBlur = false
-
 		this.textures.addSpriteSheetFromAtlas(pigIdleFrame, {
 			atlas: pigAtlasKey,
 			frame: 'idle',
@@ -308,16 +305,57 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigDonationInConfig)
 		this.anims.create(pigDonationOutConfig)
 
-		const { height } = this.scale
-
 		const coinGroup = this.add.group()
 		const starGroup = this.add.group()
 
 		const flareParticles = this.add.particles(flaresAtlasKey)
+
+		// TODO: move emitter logic to donationbehaviour class
 		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
 		fireworksEmitter.stop()
 
-		const starFollowParticle = this.add.particles(whiteStarFollowerKey)
+		this.createStarRainInstance(starGroup)
+
+		// create pig container items
+		const sign = new Sign(this, -175, 0, signKey)
+		const pig = new Pig(
+			this,
+			{ x: 0, y: 0, texture: pigAtlasKey, pigLaugh: this.sound.add(DONATION_ALERT_AUDIO_KEY) },
+			initialState.character,
+			coinGroup,
+			starGroup,
+			this.add.particles(whiteStarFollowerKey),
+			fireworksEmitter
+		)
+
+		// create donationAlerts
+		const dontainerBanner = new DonationAlert(this, 0, 0, initialState.donationAlert, donationAlertKey)
+		const donationAlertWithMessage = new DonationAlert(
+			this,
+			0,
+			0,
+			initialState.donationAlert,
+			donationAlertWithMessageKey
+		)
+
+		// create containers
+		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, {
+			children: [dontainerBanner, donationAlertWithMessage],
+		})
+		this.pigWithSignContainer = new PigContainer(this, initialState.character, socket, {
+			children: [sign, pig],
+		})
+		this.input.setDraggable(this.pigWithSignContainer)
+
+		// global world env objects and settings
+		this.sound.pauseOnBlur = false
+		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
+
+		socket.emit(REQUEST_STATE)
+	}
+
+	private createStarRainInstance(starGroup: Phaser.GameObjects.Group) {
+		const { height } = this.scale
 
 		const starColliderSprite = new Phaser.Physics.Arcade.Sprite(this, 960, height + 40, blueStarKey)
 		const physicsBody = new Physics.Arcade.Body(this.physics.world, starColliderSprite)
@@ -328,8 +366,8 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.physics.add.existing(starColliderSprite)
 		this.physics.world.setBoundsCollision(true, true, false, false)
-		this.physics.add.collider(starGroup, starColliderSprite, (blueStar, starColliderSprite) => {
-			const star = blueStar as Star
+		this.physics.add.collider(starGroup, starColliderSprite, (gameObject1) => {
+			const star = gameObject1 as Star
 			star.setVelocityX(Phaser.Math.Between(-200, 200))
 
 			if (star.bumps >= 1) {
@@ -340,38 +378,6 @@ export class OverlayScene extends Phaser.Scene {
 				star.bumps += 1
 			}
 		})
-
-		const sign = new Sign(this, -175, 0, signKey)
-		const pig = new Pig(
-			this,
-			{ x: 0, y: 0, texture: pigAtlasKey, pigLaugh },
-			initialState.character,
-			coinGroup,
-			starGroup,
-			starFollowParticle,
-			fireworksEmitter
-		)
-
-		const dontainerBanner = new DonationAlert(this, 0, 0, initialState.donationAlert, donationAlertKey)
-		const donationAlertWithMessage = new DonationAlert(
-			this,
-			0,
-			0,
-			initialState.donationAlert,
-			donationAlertWithMessageKey
-		)
-		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, {
-			children: [dontainerBanner, donationAlertWithMessage],
-		})
-
-		this.pigWithSignContainer = new PigContainer(this, initialState.character, socket, {
-			children: [sign, pig],
-		})
-		this.input.setDraggable(this.pigWithSignContainer)
-
-		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
-
-		socket.emit(REQUEST_STATE)
 	}
 
 	public addMouthCollider(container: Phaser.GameObjects.Container, coinGroup: Phaser.GameObjects.Group) {
