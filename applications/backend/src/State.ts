@@ -43,6 +43,10 @@ const settingsSlice = createSlice({
 const initialDonationAlertState: DonationAlertState = {
 	isVisible: true,
 	scale: 0.5,
+	position: {
+		x: 1080 / 2,
+		y: 300,
+	},
 }
 const donationAlertSlice = createSlice({
 	name: 'donationalert',

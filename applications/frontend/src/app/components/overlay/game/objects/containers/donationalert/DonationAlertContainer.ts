@@ -1,4 +1,5 @@
-import { DonationAlertState } from '@pftp/common'
+import { DonationAlertState, DONATION_ALERT_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
+import { Socket } from 'socket.io-client'
 import { donationAlertKey, donationAlertWithMessageKey } from '../../../scenes/OverlayScene'
 import { DonationAlertHeaderText, donationAlertHeaderTextName } from './DonationAlertHeaderText'
 import { DonationAlertUserMessageText, donationAlertUserMessageTextName } from './DonationAlertUserMessageText'
@@ -12,13 +13,28 @@ interface ContainerOptions {
 
 export const donationAlertContainerName = 'donationalertcontainer'
 export class DonationAlertContainer extends Phaser.GameObjects.Container {
-	constructor(scene: Phaser.Scene, state: DonationAlertState, options: ContainerOptions | undefined) {
+	constructor(
+		scene: Phaser.Scene,
+		state: DonationAlertState,
+		socket: Socket<PFTPSocketEventsMap>,
+		options: ContainerOptions | undefined
+	) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = donationAlertContainerName
-		this.setDisplaySize(500, 500)
+		this.setSize(500, 900)
 		this.setScale(state.scale)
 		this.setIsVisible(state.isVisible)
 		this.setPosition(1920 / 2, 100)
+
+		this.setInteractive()
+		this.on('dragend', () => {
+			socket.emit(DONATION_ALERT_UPDATE, {
+				position: {
+					x: this.x,
+					y: this.y,
+				},
+			})
+		})
 
 		this.handleState(state)
 		scene.add.existing(this)
@@ -26,6 +42,11 @@ export class DonationAlertContainer extends Phaser.GameObjects.Container {
 
 	public handleState(state: DonationAlertState) {
 		this.setIsVisible(state.isVisible)
+
+		if (this.x !== state.position.x || this.y !== state.position.y) {
+			this.x = state.position.x
+			this.y = state.position.y
+		}
 
 		if (this.scale != state.scale) {
 			this.setScale(state.scale)

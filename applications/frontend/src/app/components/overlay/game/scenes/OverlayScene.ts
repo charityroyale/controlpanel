@@ -3,7 +3,10 @@ import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STAT
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
-import { DonationAlertContainer } from '../objects/containers/donationalert/DonationAlertContainer'
+import {
+	DonationAlertContainer,
+	donationAlertContainerName,
+} from '../objects/containers/donationalert/DonationAlertContainer'
 import { DonationAlert } from '../objects/containers/donationalert/DonationBanner'
 import { PigContainer } from '../objects/containers/pig/OverlayContainer'
 import { Pig } from '../objects/containers/pig/Pig'
@@ -339,13 +342,24 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		// create containers
-		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, {
+		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, socket, {
 			children: [dontainerBanner, donationAlertWithMessage],
 		})
 		this.pigWithSignContainer = new PigContainer(this, initialState.character, socket, {
 			children: [sign, pig],
 		})
-		this.input.setDraggable(this.pigWithSignContainer)
+		this.input.setDraggable([this.pigWithSignContainer, this.donationBannerDontainer])
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
+			if (_gameObject.name === 'pigcontainer' && !_gameObject.isLocked) {
+				_gameObject.x = dragX
+				_gameObject.y = dragY
+			} else if (_gameObject.name === donationAlertContainerName) {
+				_gameObject.x = dragX
+				_gameObject.y = dragY
+			}
+		})
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false

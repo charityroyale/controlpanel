@@ -34,13 +34,6 @@ export class PigContainer extends Phaser.GameObjects.Container {
 				})
 			}
 		})
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		scene.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			if (!this.isLocked) {
-				this.x = dragX
-				this.y = dragY
-			}
-		})
 
 		this.handleState(characterState)
 		scene.add.existing(this)

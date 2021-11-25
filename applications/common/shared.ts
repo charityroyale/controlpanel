@@ -11,6 +11,10 @@ export interface SettingsState {
 export interface DonationAlertState {
 	isVisible: boolean
 	scale: number
+	position: {
+		x: number
+		y: number
+	}
 }
 
 export interface CharacterState {
