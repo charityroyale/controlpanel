@@ -20,6 +20,9 @@ import {
 	donationBackground4Key,
 	donationBackground5Key,
 	donationBackground6Key,
+	FIREWORKS_SOUND_1_AUDIO_KEY,
+	FIREWORKS_SOUND_2_AUDIO_KEY,
+	FIREWORKS_START_AUDIO_KEY,
 	pigDonationInKey,
 	pigDonationKey,
 	pigDonationOutKey,
@@ -188,7 +191,55 @@ export class DonationBehaviour {
 
 			return { coinTexture: coin6Key, textColor: coin6TextColor, messageBackgroundTexture: donationBackground6Key }
 		} else if (amount >= 500) {
-			this.emitter.start()
+			this.character.scene.time.addEvent({
+				delay: 500,
+				repeat: 0,
+				callback: () => {
+					this.emitter.start()
+				},
+			})
+			this.character.scene.sound.play(FIREWORKS_START_AUDIO_KEY)
+
+			this.character.scene.time.addEvent({
+				delay: 500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 1500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 2500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_2_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 3500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
+			this.character.scene.time.addEvent({
+				delay: 4500,
+				repeat: 0,
+				callback: () => {
+					this.character.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+				},
+			})
+
 			this.character.scene.time.addEvent({
 				delay: 5000,
 				repeat: 0,

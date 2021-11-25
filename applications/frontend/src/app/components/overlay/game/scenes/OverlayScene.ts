@@ -14,6 +14,9 @@ const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
 const PIG_NOM_NOM_AUDIO_KEY = 'pigNomNomAudio'
+export const FIREWORKS_START_AUDIO_KEY = 'fireworksStartAudio'
+export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
+export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
 
 const signKey = 'sign'
 
@@ -69,7 +72,7 @@ const donationBackgroundWidth = 400
 const donationBackgroundHeight = 225
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
-const fireworksEmitterConfig = {
+const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
 	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
 	angle: { start: 0, end: 360, steps: 100 },
 	blendMode: 'ADD',
@@ -194,6 +197,9 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
 		this.load.audio(DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.ogg')
 		this.load.audio(PIG_NOM_NOM_AUDIO_KEY, '/audio/pig_nom_nom.ogg')
+		this.load.audio(FIREWORKS_START_AUDIO_KEY, '/audio/fireworks.ogg')
+		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
+		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.ogg')
 	}
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
