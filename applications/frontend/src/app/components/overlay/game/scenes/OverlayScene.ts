@@ -123,7 +123,7 @@ export class OverlayScene extends Phaser.Scene {
 	preload() {
 		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
 		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
-		this.load.video(donationBannerVideoKey, '/game/bannerAnimation.mp4', 'loadeddata', false, true)
+		this.load.video(donationBannerVideoKey, '/game/bannerAnimation.webm', 'loadeddata', false, true)
 
 		this.load.spritesheet(blueStarKey, '/game/stars/blue_star.png', {
 			frameWidth: 250,
