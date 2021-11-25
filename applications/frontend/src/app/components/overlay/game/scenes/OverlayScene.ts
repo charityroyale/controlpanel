@@ -12,6 +12,8 @@ const { FloatBetween } = Phaser.Math
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
+const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
+const PIG_NOM_NOM_AUDIO_KEY = 'pigNomNomAudio'
 
 const signKey = 'sign'
 
@@ -94,8 +96,11 @@ export class OverlayScene extends Phaser.Scene {
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		config.socket.on(STATE_UPDATE, (state) => {
 			this.pigWithSignContainer?.handleState(state.character)
-			const pig = this.pigWithSignContainer?.getByName('pig') as Pig
-			pig.handleState(state.character)
+			const pig = this.pigWithSignContainer?.getByName('pig')
+			if (pig) {
+				const char = pig as Pig
+				char.handleState(state.character)
+			}
 
 			console.log(this.children.getAll())
 
@@ -187,12 +192,14 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
+		this.load.audio(DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.ogg')
+		this.load.audio(PIG_NOM_NOM_AUDIO_KEY, '/audio/pig_nom_nom.ogg')
 	}
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		const { socket, initialState } = config
 
-		const pigLaugh = this.sound.add(PIG_LAUGH_AUDIO_KEY)
+		const pigLaugh = this.sound.add(DONATION_ALERT_AUDIO_KEY)
 		this.sound.pauseOnBlur = false
 
 		this.textures.addSpriteSheetFromAtlas(pigIdleFrame, {
@@ -374,6 +381,7 @@ export class OverlayScene extends Phaser.Scene {
 			(currentGameObject) => {
 				currentGameObject.destroy()
 				const pig = container.getByName('pig') as Pig
+				/// this.sound.play(PIG_NOM_NOM_AUDIO_KEY)
 				pig.play(pigDonationOutKey).chain(pigIdleKey)
 
 				container.getAll('name', 'cointext').map((el) => el.destroy())
