@@ -19,27 +19,27 @@ const whiteStarFollowerKey = 'whiteFollower'
 
 export const coin1Key = 'coin1'
 export const donationBackground1Key = 'donationBackground1'
-export const coin1TextColor = '#433166'
+export const coin1TextColor = '#056399'
 
 export const coin2Key = 'coin2'
 export const donationBackground2Key = 'donationBackground2'
-export const coin2TextColor = '#5c6b1f'
+export const coin2TextColor = '#0a053b'
 
 export const coin3Key = 'coin3'
 export const donationBackground3Key = 'donationBackground3'
-export const coin3TextColor = '#af471e'
+export const coin3TextColor = '#800fb0'
 
 export const coin4Key = 'coin4'
 export const donationBackground4Key = 'donationBackground4'
-export const coin4TextColor = '#7f2422'
+export const coin4TextColor = '#802421'
 
 export const coin5Key = 'coin5'
 export const donationBackground5Key = 'donationBackground5'
-export const coin5TextColor = '#357a96'
+export const coin5TextColor = '#c28f1a'
 
 export const coin6Key = 'coin6'
 export const donationBackground6Key = 'donationBackground6'
-export const coin6TextColor = '#d17a1c'
+export const coin6TextColor = '#00a6a6'
 
 const donationBannerVideoKey = 'donationBannerVideo'
 
