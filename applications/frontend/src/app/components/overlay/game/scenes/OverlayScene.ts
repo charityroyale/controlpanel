@@ -380,6 +380,7 @@ export class OverlayScene extends Phaser.Scene {
 					const donationBanner = banner as DonationBanner
 					donationBanner.alpha = 0
 					donationBanner.stop()
+					donationBanner.seekTo(0)
 				}
 				container.getAll('name', 'cointext').map((el) => el.destroy())
 			},
