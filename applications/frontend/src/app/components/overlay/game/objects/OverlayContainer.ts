@@ -18,10 +18,10 @@ export class OverlayContainer extends Phaser.GameObjects.Container {
 	) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = 'overlaycontainer'
+		this.setSize(500, 500)
 		this.setScale(characterState.scale)
 		this.setIsVisible(characterState.isVisible)
 		this.isLocked = characterState.isLocked
-		this.setSize(500, 500)
 
 		this.setInteractive()
 		this.on('dragend', () => {

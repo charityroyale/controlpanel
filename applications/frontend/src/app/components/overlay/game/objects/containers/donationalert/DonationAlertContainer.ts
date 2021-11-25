@@ -16,10 +16,10 @@ export class DonationAlertContainer extends Phaser.GameObjects.Container {
 	) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = 'donationalertcontainer'
+		this.setSize(500, 500)
 		this.setScale(state.scale)
 		this.setIsVisible(state.isVisible)
 		this.setPosition(1920 / 2, 100)
-		this.setSize(500, 500)
 
 		this.handleState(state)
 		scene.add.existing(this)
