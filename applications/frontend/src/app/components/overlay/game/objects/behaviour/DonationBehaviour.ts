@@ -140,7 +140,7 @@ export class DonationBehaviour {
 	}
 
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
-		const { coinTexture, textColor, messageBackgroundTexture } = this.getCoinKeyFromAmount(donation.amount)
+		const { coinTexture, textColor } = this.getCoinKeyFromAmount(donation.amount)
 		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
 		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
 			donation.amount

@@ -333,7 +333,7 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		const dontainerBanner = new DonationBanner(this, 0, 0, initialState.donationAlert, donationBannerVideoKey)
-		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, socket, {
+		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, {
 			children: [dontainerBanner],
 		})
 

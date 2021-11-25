@@ -1,5 +1,4 @@
-import { DonationAlertState, PFTPSocketEventsMap } from '@pftp/common'
-import { Socket } from 'socket.io-client'
+import { DonationAlertState } from '@pftp/common'
 
 interface ContainerOptions {
 	x?: number | undefined
@@ -8,12 +7,7 @@ interface ContainerOptions {
 }
 
 export class DonationAlertContainer extends Phaser.GameObjects.Container {
-	constructor(
-		scene: Phaser.Scene,
-		state: DonationAlertState,
-		socket: Socket<PFTPSocketEventsMap>,
-		options: ContainerOptions | undefined
-	) {
+	constructor(scene: Phaser.Scene, state: DonationAlertState, options: ContainerOptions | undefined) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = 'donationalertcontainer'
 		this.setSize(500, 500)
