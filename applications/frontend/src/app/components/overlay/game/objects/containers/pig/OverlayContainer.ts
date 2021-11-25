@@ -7,7 +7,7 @@ interface ContainerOptions {
 	children?: Phaser.GameObjects.GameObject[] | undefined
 }
 
-export class OverlayContainer extends Phaser.GameObjects.Container {
+export class PigContainer extends Phaser.GameObjects.Container {
 	private isLocked
 
 	constructor(
@@ -17,7 +17,7 @@ export class OverlayContainer extends Phaser.GameObjects.Container {
 		options: ContainerOptions | undefined
 	) {
 		super(scene, options?.x, options?.y, options?.children)
-		this.name = 'overlaycontainer'
+		this.name = 'pigcontainer'
 		this.setSize(500, 500)
 		this.setScale(characterState.scale)
 		this.setIsVisible(characterState.isVisible)

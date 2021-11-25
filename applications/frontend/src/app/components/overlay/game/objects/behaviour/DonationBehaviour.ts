@@ -1,5 +1,4 @@
 import { Donation } from '@pftp/common'
-import { CoinTextAmount } from '../CoinTextAmount'
 import {
 	blueStarKey,
 	coin1Key,
@@ -32,13 +31,14 @@ import {
 	pigSleepKey,
 	pigSleepOutKey,
 } from '../../scenes/OverlayScene'
-import { Coin } from '../Coin'
-import { Pig } from '../Pig'
+import { Coin } from '../containers/pig/Coin'
 import { Star } from '../Star'
 import { DonationAlert } from '../containers/donationalert/DonationBanner'
 import { DonationAlertContainer } from '../containers/donationalert/DonationAlertContainer'
 import { DonationAlertHeaderText } from '../containers/donationalert/DonationAlertHeaderText'
 import { DonationAlertUserMessageText } from '../containers/donationalert/DonationAlertUserMessageText'
+import { CoinTextAmount } from '../containers/pig/CoinTextAmount'
+import { Pig } from '../containers/pig/Pig'
 
 export class DonationBehaviour {
 	/**

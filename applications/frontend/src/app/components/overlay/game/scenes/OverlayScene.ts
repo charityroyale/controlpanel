@@ -1,12 +1,13 @@
 import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
 import { DonationAlertContainer } from '../objects/containers/donationalert/DonationAlertContainer'
 import { DonationAlert } from '../objects/containers/donationalert/DonationBanner'
-import { OverlayContainer } from '../objects/OverlayContainer'
-import { Pig } from '../objects/Pig'
-import { Sign } from '../objects/Sign'
+import { PigContainer } from '../objects/containers/pig/OverlayContainer'
+import { Pig } from '../objects/containers/pig/Pig'
+import { Sign } from '../objects/containers/pig/Sign'
 import { Star } from '../objects/Star'
 const { FloatBetween } = Phaser.Math
 
@@ -90,7 +91,7 @@ const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitter
 }
 
 export class OverlayScene extends Phaser.Scene {
-	public pigWithSignContainer: OverlayContainer | null = null
+	public pigWithSignContainer: PigContainer | null = null
 	public donationBannerDontainer: DonationAlertContainer | null = null
 
 	constructor() {
@@ -364,7 +365,7 @@ export class OverlayScene extends Phaser.Scene {
 			children: [dontainerBanner, donationAlertWithMessage],
 		})
 
-		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
+		this.pigWithSignContainer = new PigContainer(this, initialState.character, socket, {
 			children: [sign, pig],
 		})
 		this.input.setDraggable(this.pigWithSignContainer)
