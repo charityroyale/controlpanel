@@ -1,5 +1,5 @@
 import { pigIdleKey, pigScratchKey } from '../../scenes/OverlayScene'
-import { Pig } from '../Pig'
+import { Pig } from '../containers/pig/Pig'
 import { PigBehaviour } from './Behaviour'
 
 export class Scratch implements PigBehaviour {
