@@ -1,5 +1,5 @@
 import { pigIdleKey, pigSleepInKey, pigSleepKey } from '../../scenes/OverlayScene'
-import { Pig } from '../Pig'
+import { Pig } from '../containers/pig/Pig'
 import { PigBehaviour } from './Behaviour'
 
 export class Sleep implements PigBehaviour {
