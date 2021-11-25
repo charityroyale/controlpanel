@@ -2,7 +2,8 @@ import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STAT
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
-import { DonationBanner } from '../objects/DonationBanner'
+import { DonationAlertContainer } from '../objects/containers/donationalert/DonationAlertContainer'
+import { DonationBanner } from '../objects/containers/donationalert/DonationBanner'
 import { OverlayContainer } from '../objects/OverlayContainer'
 import { Pig } from '../objects/Pig'
 import { Sign } from '../objects/Sign'
@@ -84,6 +85,7 @@ const fireworksEmitterConfig = {
 
 export class OverlayScene extends Phaser.Scene {
 	public pigWithSignContainer: OverlayContainer | null = null
+	public donationBannerDontainer: DonationAlertContainer | null = null
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -97,11 +99,7 @@ export class OverlayScene extends Phaser.Scene {
 
 			console.log(this.children.getAll())
 
-			const donationBanner = this.children.getByName('donationBanner')
-			if (donationBanner) {
-				const banner = donationBanner as DonationBanner
-				banner.handleState(state.donationAlert)
-			}
+			this.donationBannerDontainer?.handleState(state.donationAlert)
 
 			/**
 			 * Somehow numbers with decimals end up having more decimals
@@ -334,7 +332,10 @@ export class OverlayScene extends Phaser.Scene {
 			fireworksEmitter
 		)
 
-		new DonationBanner(this, 1920 / 2, 100, initialState.donationAlert, donationBannerVideoKey)
+		const dontainerBanner = new DonationBanner(this, 0, 0, initialState.donationAlert, donationBannerVideoKey)
+		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, socket, {
+			children: [dontainerBanner],
+		})
 
 		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {
 			children: [sign, pig],
@@ -375,10 +376,12 @@ export class OverlayScene extends Phaser.Scene {
 				const pig = container.getByName('pig') as Pig
 				pig.play(pigDonationOutKey).chain(pigIdleKey)
 
-				const banner = this.children.getByName('donationBanner')
-				if (banner) {
+				const donationAlertContainer = this.children.getByName('donationalertcontainer') as DonationAlertContainer
+				const banner = donationAlertContainer.getByName('donationBanner')
+
+				if (donationAlertContainer && banner) {
 					const donationBanner = banner as DonationBanner
-					donationBanner.alpha = 0
+					donationAlertContainer.alpha = 0
 					donationBanner.stop()
 					donationBanner.seekTo(0)
 				}

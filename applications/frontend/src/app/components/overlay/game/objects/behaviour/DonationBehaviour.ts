@@ -34,7 +34,8 @@ import { CoinTextDonator } from '../CoinTextDonator'
 import { CoinTextDonatorWithMessageBackground } from '../CointTextDonatorWithMessageBackground'
 import { CoinTextDonatorMessage } from '../CoinTextDonatorMessage'
 import { Star } from '../Star'
-import { DonationBanner } from '../DonationBanner'
+import { DonationBanner } from '../containers/donationalert/DonationBanner'
+import { DonationAlertContainer } from '../containers/donationalert/DonationAlertContainer'
 
 export class DonationBehaviour {
 	/**
@@ -148,13 +149,16 @@ export class DonationBehaviour {
 	}
 
 	private getCoinKeyFromAmount(amount: number) {
-		const banner = this.character.scene.children.getByName('donationBanner')
-		if (banner) {
+		const donationAlertContainer = this.character.scene.children.getByName(
+			'donationalertcontainer'
+		) as DonationAlertContainer
+		const banner = donationAlertContainer.getByName('donationBanner')
+		if (donationAlertContainer && banner) {
 			const donationBanner = banner as DonationBanner
 			donationBanner.play()
 			// Prevents video freeze when game is out of focus (i.e. user changes tab on the browser)
 			donationBanner.setPaused(false)
-			donationBanner.alpha = 1
+			donationBanner.parentContainer.alpha = 1
 		}
 
 		if (amount >= 1000) {
