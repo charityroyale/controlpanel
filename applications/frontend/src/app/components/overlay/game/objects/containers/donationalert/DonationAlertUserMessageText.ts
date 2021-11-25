@@ -7,6 +7,7 @@ const defaultStyles = {
 	color: '#BA4D76',
 }
 
+export const donationAlertUserMessageTextName = 'donationalertmessagetext'
 export class DonationAlertUserMessageText extends Phaser.GameObjects.Text {
 	constructor(
 		scene: Phaser.Scene,
@@ -21,7 +22,7 @@ export class DonationAlertUserMessageText extends Phaser.GameObjects.Text {
 		this.setColor('#FFFFFF')
 		this.setWordWrapWidth(wordWrap)
 		this.setScale(scale)
-		this.name = 'donationalertmessagetext'
+		this.name = donationAlertUserMessageTextName
 		this.setOrigin(0)
 		this.alpha = 0
 		fadeInDonationMessageText(scene, this)

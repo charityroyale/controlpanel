@@ -1,7 +1,7 @@
 import { DonationAlertState } from '@pftp/common'
 import { donationAlertKey, donationAlertWithMessageKey } from '../../../scenes/OverlayScene'
-import { DonationAlertHeaderText } from './DonationAlertHeaderText'
-import { DonationAlertUserMessageText } from './DonationAlertUserMessageText'
+import { DonationAlertHeaderText, donationAlertHeaderTextName } from './DonationAlertHeaderText'
+import { DonationAlertUserMessageText, donationAlertUserMessageTextName } from './DonationAlertUserMessageText'
 import { DonationAlert } from './DonationBanner'
 
 interface ContainerOptions {
@@ -10,10 +10,11 @@ interface ContainerOptions {
 	children?: Phaser.GameObjects.GameObject[] | undefined
 }
 
+export const donationAlertContainerName = 'donationalertcontainer'
 export class DonationAlertContainer extends Phaser.GameObjects.Container {
 	constructor(scene: Phaser.Scene, state: DonationAlertState, options: ContainerOptions | undefined) {
 		super(scene, options?.x, options?.y, options?.children)
-		this.name = 'donationalertcontainer'
+		this.name = donationAlertContainerName
 		this.setDisplaySize(500, 500)
 		this.setScale(state.scale)
 		this.setIsVisible(state.isVisible)
@@ -28,25 +29,44 @@ export class DonationAlertContainer extends Phaser.GameObjects.Container {
 
 		if (this.scale != state.scale) {
 			this.setScale(state.scale)
-			const banners = this.getAll() as DonationAlert[]
-			banners.map((el) => el.setScale(state.scale))
+			this.scaleContainerItems(state)
 
-			const el = this.getByName('donationalerttext') as DonationAlertHeaderText
+			this.scaleDonationHeaderText()
+			this.scaleDonationUserMessageText()
+		}
+	}
 
-			const banner = this.getByName(donationAlertKey) as DonationAlert
-			if (banner && el) {
-				el.setY(banner.displayHeight - 240 * this.scale)
-			}
+	private scaleContainerItems = (state: DonationAlertState) => {
+		const containerItems = this.getAll() as DonationAlert[]
+		containerItems.map((items) => items.setScale(state.scale))
+	}
 
-			const bannerWithMessage = this.getByName(donationAlertWithMessageKey) as DonationAlert
-			const messageText = this.getByName('donationalertmessagetext') as DonationAlertUserMessageText
-			if (bannerWithMessage && messageText) {
-				el.setY(banner.displayHeight - 240 * this.scale)
-				messageText.setPosition(
-					bannerWithMessage.x - (bannerWithMessage.displayWidth / 2 - 50),
-					bannerWithMessage.displayHeight - 540 * this.scale
-				)
-			}
+	private scaleDonationHeaderText = () => {
+		const donationAlertHeaderText = this.getByName(donationAlertHeaderTextName) as DonationAlertHeaderText
+		const donationAlert = this.getByName(donationAlertKey) as DonationAlert
+
+		if (donationAlert && donationAlertHeaderText) {
+			donationAlertHeaderText.setY(donationAlert.displayHeight - 240 * this.scale)
+		}
+	}
+
+	private scaleDonationUserMessageText = () => {
+		const donationAlertHeaderText = this.getByName(donationAlertHeaderTextName) as DonationAlertHeaderText
+		const donationAlert = this.getByName(donationAlertKey) as DonationAlert
+		const bannerWithMessage = this.getByName(donationAlertWithMessageKey) as DonationAlert
+		const donationAlertUserMessageText = this.getByName(
+			donationAlertUserMessageTextName
+		) as DonationAlertUserMessageText
+
+		if (bannerWithMessage && donationAlertUserMessageText && donationAlert && donationAlertHeaderText) {
+			donationAlertHeaderText.setY(donationAlert.displayHeight - 240 * this.scale)
+			donationAlertUserMessageText.setPosition(
+				bannerWithMessage.x - (bannerWithMessage.displayWidth / 2 - 50),
+				bannerWithMessage.displayHeight - 540 * this.scale
+			)
+			donationAlertUserMessageText.setWordWrapWidth(
+				donationAlert.displayWidth - 70 * bannerWithMessage.parentContainer.scale * 2
+			)
 		}
 	}
 

@@ -34,7 +34,7 @@ import {
 import { Coin } from '../containers/pig/Coin'
 import { Star } from '../Star'
 import { DonationAlert } from '../containers/donationalert/DonationBanner'
-import { DonationAlertContainer } from '../containers/donationalert/DonationAlertContainer'
+import { DonationAlertContainer, donationAlertContainerName } from '../containers/donationalert/DonationAlertContainer'
 import { DonationAlertHeaderText } from '../containers/donationalert/DonationAlertHeaderText'
 import { DonationAlertUserMessageText } from '../containers/donationalert/DonationAlertUserMessageText'
 import { CoinTextAmount } from '../containers/pig/CoinTextAmount'
@@ -112,12 +112,8 @@ export class DonationBehaviour {
 		)
 	}
 
-	/**
-	 * username: max 30
-	 * message: frontend: 200
-	 */
 	private createDonationAlertText(donation: Donation) {
-		const container = this.character.scene.children.getByName('donationalertcontainer') as DonationAlertContainer
+		const container = this.character.scene.children.getByName(donationAlertContainerName) as DonationAlertContainer
 		const banner = donation.message
 			? (container.getByName(donationAlertWithMessageKey) as DonationAlert)
 			: (container.getByName(donationAlertKey) as DonationAlert)
@@ -141,7 +137,7 @@ export class DonationBehaviour {
 				banner.displayHeight - 540 * container.scale,
 				donation.message,
 				banner.scale,
-				banner.displayWidth - 70 * 2
+				banner.displayWidth - 70 * container.scale * 2
 			)
 			container.add(donationAlertUserMessageText)
 		}
@@ -172,7 +168,7 @@ export class DonationBehaviour {
 	private getCoinKeyFromAmount(donation: Donation) {
 		const { amount, message } = donation
 		const donationAlertContainer = this.character.scene.children.getByName(
-			'donationalertcontainer'
+			donationAlertContainerName
 		) as DonationAlertContainer
 		const banner = message
 			? donationAlertContainer.getByName(donationAlertWithMessageKey)

@@ -1,6 +1,6 @@
 import { Physics } from 'phaser'
-import { fadeIn } from './tweens/fadeIn'
-import { scaleOut } from './tweens/scaleOut'
+import { fadeIn } from '../../tweens/fadeIn'
+import { scaleOut } from '../../tweens/scaleOut'
 
 const defaultStyles = {
 	fontFamily: 'Saira Condensed',

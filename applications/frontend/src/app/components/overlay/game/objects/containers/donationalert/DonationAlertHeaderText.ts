@@ -8,6 +8,7 @@ const defaultStyles = {
 	align: 'center',
 }
 
+export const donationAlertHeaderTextName = 'donationalerttext'
 export class DonationAlertHeaderText extends Phaser.GameObjects.Text {
 	constructor(
 		scene: Phaser.Scene,
@@ -19,7 +20,7 @@ export class DonationAlertHeaderText extends Phaser.GameObjects.Text {
 	) {
 		super(scene, x, y, text, style)
 		this.setColor('#FFFFFF')
-		this.name = 'donationalerttext'
+		this.name = donationAlertHeaderTextName
 		this.setOrigin(0.5)
 		this.setScale(scale)
 		this.alpha = 0

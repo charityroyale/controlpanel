@@ -1,7 +1,7 @@
 import { CharacterState, Donation } from '@pftp/common'
 import Phaser from 'phaser'
-import { OverlayScene } from '../scenes/OverlayScene'
-import { Behaviour } from './behaviour/Behaviour'
+import { OverlayScene } from '../../../scenes/OverlayScene'
+import { Behaviour } from '../../behaviour/Behaviour'
 
 interface PigProps {
 	texture: string
