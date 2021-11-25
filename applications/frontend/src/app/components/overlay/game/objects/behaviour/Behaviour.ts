@@ -1,6 +1,6 @@
 import { Donation } from '@pftp/common'
 import { pigIdleKey } from '../../scenes/OverlayScene'
-import { Pig } from '../Pig'
+import { Pig } from '../containers/pig/Pig'
 import { DonationBehaviour } from './DonationBehaviour'
 import { Scratch } from './Scratch'
 import { Sleep } from './Sleep'

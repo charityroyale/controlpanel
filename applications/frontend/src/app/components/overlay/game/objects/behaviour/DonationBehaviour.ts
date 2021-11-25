@@ -39,6 +39,7 @@ import { DonationAlertHeaderText } from '../containers/donationalert/DonationAle
 import { DonationAlertUserMessageText } from '../containers/donationalert/DonationAlertUserMessageText'
 import { CoinTextAmount } from '../containers/pig/CoinTextAmount'
 import { Pig } from '../containers/pig/Pig'
+import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
 
 export class DonationBehaviour {
 	/**
@@ -118,9 +119,7 @@ export class DonationBehaviour {
 			? (container.getByName(donationAlertWithMessageKey) as DonationAlert)
 			: (container.getByName(donationAlertKey) as DonationAlert)
 
-		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
-			donation.amount
-		)
+		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount)
 
 		const donationAlertHeaderText = new DonationAlertHeaderText(
 			this.character.scene,
@@ -149,9 +148,8 @@ export class DonationBehaviour {
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
 		const { coinTexture, textColor } = this.getCoinKeyFromAmount(donation)
 		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
-		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
-			donation.amount
-		)
+		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount)
+
 		const coinText = new CoinTextAmount(
 			this.character.scene,
 			0,
