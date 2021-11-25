@@ -9,7 +9,6 @@ import { PigContainer } from '../objects/containers/pig/OverlayContainer'
 import { Pig } from '../objects/containers/pig/Pig'
 import { Sign } from '../objects/containers/pig/Sign'
 import { Star } from '../objects/Star'
-const { FloatBetween } = Phaser.Math
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
@@ -309,7 +308,7 @@ export class OverlayScene extends Phaser.Scene {
 		this.anims.create(pigDonationInConfig)
 		this.anims.create(pigDonationOutConfig)
 
-		const { width, height } = this.scale
+		const { height } = this.scale
 
 		const coinGroup = this.add.group()
 		const starGroup = this.add.group()
@@ -371,14 +370,6 @@ export class OverlayScene extends Phaser.Scene {
 		this.input.setDraggable(this.pigWithSignContainer)
 
 		this.addMouthCollider(this.pigWithSignContainer, coinGroup)
-
-		// mhmhm
-		this.time.addEvent({
-			repeat: -1,
-			callback: () => {
-				fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
-			},
-		})
 
 		socket.emit(REQUEST_STATE)
 	}

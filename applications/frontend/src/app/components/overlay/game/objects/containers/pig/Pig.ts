@@ -21,7 +21,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		coinGroup: Phaser.GameObjects.Group,
 		starGroup: Phaser.GameObjects.Group,
 		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		emitter: Phaser.GameObjects.Particles.ParticleEmitter
+		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter
 	) {
 		super(scene, options.x, options.y, options.texture)
 
@@ -31,7 +31,7 @@ export class Pig extends Phaser.GameObjects.Sprite {
 		this.pigLaugh = options.pigLaugh
 		this.flipX = characterState.flipX
 
-		this.behaviour = new Behaviour(this, coinGroup, starGroup, starFollowParticle, emitter)
+		this.behaviour = new Behaviour(this, coinGroup, starGroup, starFollowParticle, fireworksEmitter)
 		this.behaviour.idle()
 
 		this.handleState(characterState)

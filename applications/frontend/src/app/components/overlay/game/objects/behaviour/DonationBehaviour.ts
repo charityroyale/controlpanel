@@ -40,6 +40,7 @@ import { DonationAlertUserMessageText } from '../containers/donationalert/Donati
 import { CoinTextAmount } from '../containers/pig/CoinTextAmount'
 import { Pig } from '../containers/pig/Pig'
 import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
+const { FloatBetween } = Phaser.Math
 
 export class DonationBehaviour {
 	/**
@@ -54,7 +55,7 @@ export class DonationBehaviour {
 	private starGroup
 	private starFollowParticle
 	private startPositionOffset = -350
-	private emitter
+	private fireworksEmitter
 
 	constructor(
 		character: Pig,
@@ -62,14 +63,14 @@ export class DonationBehaviour {
 		coinGroup: Phaser.GameObjects.Group,
 		starGroup: Phaser.GameObjects.Group,
 		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		emitter: Phaser.GameObjects.Particles.ParticleEmitter
+		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter
 	) {
 		this.character = character
 		this.queue = queue
 		this.coinGroup = coinGroup
 		this.starGroup = starGroup
 		this.starFollowParticle = starFollowParticle
-		this.emitter = emitter
+		this.fireworksEmitter = fireworksEmitter
 		this.start()
 	}
 
@@ -114,35 +115,52 @@ export class DonationBehaviour {
 	}
 
 	private createDonationAlertText(donation: Donation) {
-		const container = this.character.scene.children.getByName(donationAlertContainerName) as DonationAlertContainer
-		const banner = donation.message
-			? (container.getByName(donationAlertWithMessageKey) as DonationAlert)
-			: (container.getByName(donationAlertKey) as DonationAlert)
+		const donationAlertContainer = this.character.scene.children.getByName(
+			donationAlertContainerName
+		) as DonationAlertContainer
+		const donationAlert = donation.message
+			? (donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlert)
+			: (donationAlertContainer.getByName(donationAlertKey) as DonationAlert)
 
+		this.createDonationAlertHeaderText(donation, donationAlert, donationAlertContainer)
+
+		// only create userMessageText object if message is given
+		if (donation.message) {
+			this.createDonationAlertUserMessageText(donation, donationAlert, donationAlertContainer)
+		}
+		donationAlert.alpha = 1
+	}
+
+	private createDonationAlertHeaderText = (
+		donation: Donation,
+		donationAlert: DonationAlert,
+		donationAlertContainer: DonationAlertContainer
+	) => {
 		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount)
-
 		const donationAlertHeaderText = new DonationAlertHeaderText(
 			this.character.scene,
 			0,
-			banner.displayHeight - 240 * container.scale,
+			donationAlert.displayHeight - 240 * donationAlertContainer.scale,
 			`${donation.user} spendet ${formatedDonationAmount}`,
-			banner.scale
+			donationAlert.scale
 		)
+		donationAlertContainer.add(donationAlertHeaderText)
+	}
 
-		if (donation.message) {
-			const donationAlertUserMessageText = new DonationAlertUserMessageText(
-				this.character.scene,
-				banner.x - (banner.displayWidth / 2 - 50),
-				banner.displayHeight - 540 * container.scale,
-				donation.message,
-				banner.scale,
-				banner.displayWidth - 70 * container.scale * 2
-			)
-			container.add(donationAlertUserMessageText)
-		}
-		banner.alpha = 1
-
-		container.add(donationAlertHeaderText)
+	private createDonationAlertUserMessageText = (
+		donation: Donation,
+		donationAlert: DonationAlert,
+		donationAlertContainer: DonationAlertContainer
+	) => {
+		const donationAlertUserMessageText = new DonationAlertUserMessageText(
+			this.character.scene,
+			donationAlert.x - (donationAlert.displayWidth / 2 - 50),
+			donationAlert.displayHeight - 540 * donationAlertContainer.scale,
+			donation.message,
+			donationAlert.scale,
+			donationAlert.displayWidth - 70 * donationAlertContainer.scale * 2
+		)
+		donationAlertContainer.add(donationAlertUserMessageText)
 	}
 
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
@@ -196,11 +214,18 @@ export class DonationBehaviour {
 
 			return { coinTexture: coin6Key, textColor: coin6TextColor, messageBackgroundTexture: donationBackground6Key }
 		} else if (amount >= 500) {
+			const { width, height } = this.character.scene.scale
+			const positionTimer = this.character.scene.time.addEvent({
+				repeat: -1,
+				callback: () => {
+					this.fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
+				},
+			})
 			this.character.scene.time.addEvent({
 				delay: 500,
 				repeat: 0,
 				callback: () => {
-					this.emitter.start()
+					this.fireworksEmitter.start()
 				},
 			})
 
@@ -248,7 +273,8 @@ export class DonationBehaviour {
 				delay: 5000,
 				repeat: 0,
 				callback: () => {
-					this.emitter.stop()
+					positionTimer.destroy()
+					this.fireworksEmitter.stop()
 				},
 			})
 			return { coinTexture: coin5Key, textColor: coin5TextColor, messageBackgroundTexture: donationBackground5Key }
