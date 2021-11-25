@@ -1,0 +1,15 @@
+import { GameObjects, Scene } from 'phaser'
+
+const fadeOutDuration = 500
+const fadeOutDelay = 6000
+export const fadeOutDonationText = (scene: Scene, target: GameObjects.GameObject, onComplete: () => void) => {
+	scene.tweens.add({
+		targets: target,
+		props: {
+			alpha: 0,
+		},
+		duration: fadeOutDuration,
+		delay: fadeOutDelay,
+		onComplete,
+	})
+}

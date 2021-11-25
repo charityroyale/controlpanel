@@ -376,15 +376,6 @@ export class OverlayScene extends Phaser.Scene {
 				const pig = container.getByName('pig') as Pig
 				pig.play(pigDonationOutKey).chain(pigIdleKey)
 
-				const donationAlertContainer = this.children.getByName('donationalertcontainer') as DonationAlertContainer
-				const banner = donationAlertContainer.getByName('donationBanner')
-
-				if (donationAlertContainer && banner) {
-					const donationBanner = banner as DonationBanner
-					donationAlertContainer.alpha = 0
-					donationBanner.stop()
-					donationBanner.seekTo(0)
-				}
 				container.getAll('name', 'cointext').map((el) => el.destroy())
 			},
 			undefined,

@@ -30,12 +30,12 @@ import {
 } from '../../scenes/OverlayScene'
 import { Coin } from '../Coin'
 import { Pig } from '../Pig'
-import { CoinTextDonator } from '../CoinTextDonator'
-import { CoinTextDonatorWithMessageBackground } from '../CointTextDonatorWithMessageBackground'
-import { CoinTextDonatorMessage } from '../CoinTextDonatorMessage'
 import { Star } from '../Star'
 import { DonationBanner } from '../containers/donationalert/DonationBanner'
 import { DonationAlertContainer } from '../containers/donationalert/DonationAlertContainer'
+import { DonationAlertHeaderText } from '../containers/donationalert/DonationAlertHeaderText'
+import { DonationAlertUserMessageText } from '../containers/donationalert/DonationAlertUserMessageText'
+import { DonationAlertThankYouText } from '../containers/donationalert/DonationAlertThankYouText'
 
 export class DonationBehaviour {
 	/**
@@ -81,6 +81,7 @@ export class DonationBehaviour {
 					this.character.playLaughSound()
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
 					this.createCoin(donation, this.coinGroup)
+					this.createDonationAlertText(donation)
 					/**
 					 * Sleeping can be seen as another idle state from which the wakeUp
 					 * animation needs to bestarted additional
@@ -91,6 +92,7 @@ export class DonationBehaviour {
 					this.character.playLaughSound()
 					this.character.play(pigSleepOutKey).chain(pigDonationInKey).chain(pigDonationKey)
 					this.createCoin(donation, this.coinGroup)
+					this.createDonationAlertText(donation)
 				}
 			}
 		}, this.checkQueueTimer)
@@ -107,6 +109,36 @@ export class DonationBehaviour {
 		)
 	}
 
+	/**
+	 * username: max 30
+	 * message: frontend: 200
+	 */
+	private createDonationAlertText(donation: Donation) {
+		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
+			donation.amount
+		)
+		const donationAlertHeaderText = new DonationAlertHeaderText(
+			this.character.scene,
+			0,
+			170,
+			`${donation.user} spendet ${formatedDonationAmount}`
+		)
+		const donationAlertThankYouText = new DonationAlertThankYouText(this.character.scene, 0, 295)
+		const container = this.character.scene.children.getByName('donationalertcontainer') as DonationAlertContainer
+		const donationAlertUserMessageText = new DonationAlertUserMessageText(
+			this.character.scene,
+			0,
+			375,
+			donation.message
+		)
+
+		const banner = container.getByName('donationBanner') as DonationBanner
+		banner.alpha = 1
+		container.add(donationAlertHeaderText)
+		container.add(donationAlertThankYouText)
+		container.add(donationAlertUserMessageText)
+	}
+
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
 		const { coinTexture, textColor, messageBackgroundTexture } = this.getCoinKeyFromAmount(donation.amount)
 		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
@@ -120,31 +152,9 @@ export class DonationBehaviour {
 			formatedDonationAmount,
 			textColor
 		)
-		const coinTextDonatorWithMessageBackground = new CoinTextDonatorWithMessageBackground(
-			this.character.scene,
-			-250,
-			100,
-			messageBackgroundTexture
-		)
-		const coinTextDonator = new CoinTextDonator(
-			this.character.scene,
-			coinTextDonatorWithMessageBackground.x + 20,
-			coinTextDonatorWithMessageBackground.y + 30,
-			donation.user
-		)
-
-		const coinTextDonatorMessage = new CoinTextDonatorMessage(
-			this.character.scene,
-			coinTextDonatorWithMessageBackground.x + 20,
-			coinTextDonatorWithMessageBackground.y + 45,
-			donation.message
-		)
 
 		this.character.parentContainer.add(coin)
 		this.character.parentContainer.add(coinText)
-		this.character.parentContainer.add(coinTextDonatorWithMessageBackground)
-		this.character.parentContainer.add(coinTextDonator)
-		this.character.parentContainer.add(coinTextDonatorMessage)
 		coinGroup.add(coin)
 	}
 
@@ -153,6 +163,7 @@ export class DonationBehaviour {
 			'donationalertcontainer'
 		) as DonationAlertContainer
 		const banner = donationAlertContainer.getByName('donationBanner')
+
 		if (donationAlertContainer && banner) {
 			const donationBanner = banner as DonationBanner
 			donationBanner.play()
