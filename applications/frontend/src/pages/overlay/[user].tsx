@@ -33,6 +33,17 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 			<OverlayWrapper>
 				<Overlay />
 			</OverlayWrapper>
+			<div
+				style={{
+					fontFamily: 'Saira Condensed, Roboto,Luckiest Guy',
+					position: 'absolute',
+					left: '-99999',
+					visibility: 'hidden',
+					top: '0px',
+				}}
+			>
+				.
+			</div>
 			{isLockedInteraction && <LockInteraction />}
 		</>
 	)
