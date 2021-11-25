@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
@@ -19,9 +19,10 @@ export interface TestUIPageProps {
 
 const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	const { title, user } = props
+	const [message, setMessage] = useState('')
 	const { socket } = useSocket()
 
-	const emitDonation = useCallback(() => {
+	const emitRandomDonation = useCallback(() => {
 		const precision = 2
 		const maxAmount = 6000
 		const randomnum =
@@ -53,45 +54,20 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		socket?.emit(DONATION_TRIGGER, donation)
 	}, [socket])
 
-	const emitMaxCharsDonation = useCallback(() => {
-		let maxMessageLength = ''
-		for (let i = 0; i < 200; i++) {
-			maxMessageLength += 'W'
-		}
-		const donation: Donation = {
-			user: 'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
-			amount: 20,
-			timestamp: new Date().getUTCMilliseconds(),
-			streamer: '',
-			message: maxMessageLength,
-		}
+	const emitDonationByButtonValue = useCallback(
+		(e: React.MouseEvent<HTMLButtonElement>) => {
+			const donation: Donation = {
+				user: 'MyBigAssLasagna',
+				amount: Number(e.currentTarget.value),
+				timestamp: new Date().getUTCMilliseconds(),
+				streamer: '',
+				message,
+			}
 
-		socket?.emit(DONATION_TRIGGER, donation)
-	}, [socket])
-
-	const emit500Donation = useCallback(() => {
-		const donation: Donation = {
-			user: 'Paddy420XXXXX',
-			amount: 510,
-			timestamp: new Date().getUTCMilliseconds(),
-			streamer: '',
-			message: 'Ich liebe dich <3',
-		}
-
-		socket?.emit(DONATION_TRIGGER, donation)
-	}, [socket])
-
-	const emitNoMessageDonation = useCallback(() => {
-		const donation: Donation = {
-			user: 'MyBigAssLasagna',
-			amount: 510,
-			timestamp: new Date().getUTCMilliseconds(),
-			streamer: '',
-			message: '',
-		}
-
-		socket?.emit(DONATION_TRIGGER, donation)
-	}, [socket])
+			socket?.emit(DONATION_TRIGGER, donation)
+		},
+		[socket, message]
+	)
 
 	return (
 		<>
@@ -100,21 +76,32 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 			</Head>
 			<Header user={user}>Header</Header>
 			<div>
-				<button onClick={emitDonation} style={{ color: 'black' }}>
-					Send random donation
+				<button onClick={emitRandomDonation} style={{ color: 'black' }}>
+					Random donation
 				</button>
 
-				<button onClick={emitMaxCharsDonation} style={{ color: 'black' }}>
-					Send max name and max message donation
+				<button onClick={emitDonationByButtonValue} value="2" style={{ color: 'black' }}>
+					2€
 				</button>
 
-				<button onClick={emit500Donation} style={{ color: 'black' }}>
-					510€
+				<button onClick={emitDonationByButtonValue} value="10" style={{ color: 'black' }}>
+					10€
 				</button>
 
-				<button onClick={emitNoMessageDonation} style={{ color: 'black' }}>
-					Send no message donation
+				<button onClick={emitDonationByButtonValue} value="500" style={{ color: 'black' }}>
+					500€
 				</button>
+
+				<button onClick={emitDonationByButtonValue} value="1000" style={{ color: 'black' }}>
+					1000€
+				</button>
+
+				<textarea
+					onChange={(e) => setMessage(e.currentTarget.value)}
+					value={message}
+					style={{ color: 'black' }}
+					maxLength={200}
+				></textarea>
 			</div>
 		</>
 	)

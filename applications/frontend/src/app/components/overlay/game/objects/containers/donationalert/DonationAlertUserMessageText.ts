@@ -1,10 +1,11 @@
 import { fadeInDonationMessageText } from '../../tweens/fadeInDonationMessageText'
 import { fadeOutDonationText } from '../../tweens/fadeOutDonationText'
 
-const defaultStyles = {
+const defaultStyles: Phaser.Types.GameObjects.Text.TextStyle = {
 	fontFamily: 'Saira Condensed',
 	fontSize: '34px',
 	color: '#BA4D76',
+	maxLines: 4,
 }
 
 export const donationAlertUserMessageTextName = 'donationalertmessagetext'
