@@ -1,10 +1,10 @@
 import { DonationAlertState } from '@pftp/common'
 import { DonationAlertContainer } from './DonationAlertContainer'
 
-export class DonationBanner extends Phaser.GameObjects.Video {
-	constructor(scene: Phaser.Scene, x: number, y: number, state: DonationAlertState, key?: string | undefined) {
+export class DonationAlert extends Phaser.GameObjects.Video {
+	constructor(scene: Phaser.Scene, x: number, y: number, state: DonationAlertState, key: string) {
 		super(scene, x, y, key)
-		this.name = 'donationBanner'
+		this.name = key
 		this.setOrigin(0.5, 0)
 		this.alpha = 0
 		this.setScale(state.scale)

@@ -3,7 +3,7 @@ import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
 import { DonationAlertContainer } from '../objects/containers/donationalert/DonationAlertContainer'
-import { DonationBanner } from '../objects/containers/donationalert/DonationBanner'
+import { DonationAlert } from '../objects/containers/donationalert/DonationBanner'
 import { OverlayContainer } from '../objects/OverlayContainer'
 import { Pig } from '../objects/Pig'
 import { Sign } from '../objects/Sign'
@@ -47,7 +47,8 @@ export const coin6Key = 'coin6'
 export const donationBackground6Key = 'donationBackground6'
 export const coin6TextColor = '#00a6a6'
 
-const donationBannerVideoKey = 'donationBannerVideo'
+export const donationAlertKey = 'donationAlertVideo'
+export const donationAlertWithMessageKey = 'donationAlertWithMessageVideo'
 
 const flaresAtlasKey = 'flaresAtlas'
 const pigAtlasKey = 'pigAtlas'
@@ -129,7 +130,15 @@ export class OverlayScene extends Phaser.Scene {
 	preload() {
 		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
 		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
-		this.load.video(donationBannerVideoKey, '/game/bannerAnimation.webm', 'loadeddata', false, true)
+
+		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', 'loadeddata', false, true)
+		this.load.video(
+			donationAlertWithMessageKey,
+			'/game/donationalert/donation_alert_with_message.webm',
+			'loadeddata',
+			false,
+			true
+		)
 
 		this.load.spritesheet(blueStarKey, '/game/stars/blue_star.png', {
 			frameWidth: 250,
@@ -195,7 +204,7 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
-		this.load.audio(DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.ogg')
+		this.load.audio(DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.mp3')
 		this.load.audio(PIG_NOM_NOM_AUDIO_KEY, '/audio/pig_nom_nom.ogg')
 		this.load.audio(FIREWORKS_START_AUDIO_KEY, '/audio/fireworks.ogg')
 		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
@@ -345,9 +354,16 @@ export class OverlayScene extends Phaser.Scene {
 			fireworksEmitter
 		)
 
-		const dontainerBanner = new DonationBanner(this, 0, 0, initialState.donationAlert, donationBannerVideoKey)
+		const dontainerBanner = new DonationAlert(this, 0, 0, initialState.donationAlert, donationAlertKey)
+		const donationAlertWithMessage = new DonationAlert(
+			this,
+			0,
+			0,
+			initialState.donationAlert,
+			donationAlertWithMessageKey
+		)
 		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, {
-			children: [dontainerBanner],
+			children: [dontainerBanner, donationAlertWithMessage],
 		})
 
 		this.pigWithSignContainer = new OverlayContainer(this, initialState.character, socket, {

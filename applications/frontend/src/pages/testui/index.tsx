@@ -81,6 +81,18 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		socket?.emit(DONATION_TRIGGER, donation)
 	}, [socket])
 
+	const emitNoMessageDonation = useCallback(() => {
+		const donation: Donation = {
+			user: 'MyBigAssLasagna',
+			amount: 510,
+			timestamp: new Date().getUTCMilliseconds(),
+			streamer: '',
+			message: '',
+		}
+
+		socket?.emit(DONATION_TRIGGER, donation)
+	}, [socket])
+
 	return (
 		<>
 			<Head>
@@ -98,6 +110,10 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 
 				<button onClick={emit500Donation} style={{ color: 'black' }}>
 					510€
+				</button>
+
+				<button onClick={emitNoMessageDonation} style={{ color: 'black' }}>
+					Send no message donation
 				</button>
 			</div>
 		</>

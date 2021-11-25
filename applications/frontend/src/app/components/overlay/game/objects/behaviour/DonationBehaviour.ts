@@ -14,6 +14,8 @@ import {
 	coin5TextColor,
 	coin6Key,
 	coin6TextColor,
+	donationAlertKey,
+	donationAlertWithMessageKey,
 	donationBackground1Key,
 	donationBackground2Key,
 	donationBackground3Key,
@@ -22,7 +24,6 @@ import {
 	donationBackground6Key,
 	FIREWORKS_SOUND_1_AUDIO_KEY,
 	FIREWORKS_SOUND_2_AUDIO_KEY,
-	FIREWORKS_START_AUDIO_KEY,
 	pigDonationInKey,
 	pigDonationKey,
 	pigDonationOutKey,
@@ -34,11 +35,10 @@ import {
 import { Coin } from '../Coin'
 import { Pig } from '../Pig'
 import { Star } from '../Star'
-import { DonationBanner } from '../containers/donationalert/DonationBanner'
+import { DonationAlert } from '../containers/donationalert/DonationBanner'
 import { DonationAlertContainer } from '../containers/donationalert/DonationAlertContainer'
 import { DonationAlertHeaderText } from '../containers/donationalert/DonationAlertHeaderText'
 import { DonationAlertUserMessageText } from '../containers/donationalert/DonationAlertUserMessageText'
-import { DonationAlertThankYouText } from '../containers/donationalert/DonationAlertThankYouText'
 
 export class DonationBehaviour {
 	/**
@@ -117,33 +117,42 @@ export class DonationBehaviour {
 	 * message: frontend: 200
 	 */
 	private createDonationAlertText(donation: Donation) {
+		const container = this.character.scene.children.getByName('donationalertcontainer') as DonationAlertContainer
+		const banner = donation.message
+			? (container.getByName(donationAlertWithMessageKey) as DonationAlert)
+			: (container.getByName(donationAlertKey) as DonationAlert)
+
+		console.log(banner)
 		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
 			donation.amount
 		)
+
 		const donationAlertHeaderText = new DonationAlertHeaderText(
 			this.character.scene,
 			0,
-			170,
-			`${donation.user} spendet ${formatedDonationAmount}`
-		)
-		const donationAlertThankYouText = new DonationAlertThankYouText(this.character.scene, 0, 295)
-		const container = this.character.scene.children.getByName('donationalertcontainer') as DonationAlertContainer
-		const donationAlertUserMessageText = new DonationAlertUserMessageText(
-			this.character.scene,
-			0,
-			375,
-			donation.message
+			banner.displayHeight - 240 * container.scale,
+			`${donation.user} spendet ${formatedDonationAmount}`,
+			banner.scale
 		)
 
-		const banner = container.getByName('donationBanner') as DonationBanner
+		if (donation.message) {
+			const donationAlertUserMessageText = new DonationAlertUserMessageText(
+				this.character.scene,
+				banner.x - (banner.displayWidth / 2 - 50),
+				banner.displayHeight - 540 * container.scale,
+				donation.message,
+				banner.scale,
+				banner.displayWidth - 70 * 2
+			)
+			container.add(donationAlertUserMessageText)
+		}
 		banner.alpha = 1
+
 		container.add(donationAlertHeaderText)
-		container.add(donationAlertThankYouText)
-		container.add(donationAlertUserMessageText)
 	}
 
 	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
-		const { coinTexture, textColor } = this.getCoinKeyFromAmount(donation.amount)
+		const { coinTexture, textColor } = this.getCoinKeyFromAmount(donation)
 		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
 		const formatedDonationAmount = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(
 			donation.amount
@@ -161,14 +170,17 @@ export class DonationBehaviour {
 		coinGroup.add(coin)
 	}
 
-	private getCoinKeyFromAmount(amount: number) {
+	private getCoinKeyFromAmount(donation: Donation) {
+		const { amount, message } = donation
 		const donationAlertContainer = this.character.scene.children.getByName(
 			'donationalertcontainer'
 		) as DonationAlertContainer
-		const banner = donationAlertContainer.getByName('donationBanner')
+		const banner = message
+			? donationAlertContainer.getByName(donationAlertWithMessageKey)
+			: donationAlertContainer.getByName(donationAlertKey)
 
 		if (donationAlertContainer && banner) {
-			const donationBanner = banner as DonationBanner
+			const donationBanner = banner as DonationAlert
 			donationBanner.play()
 			// Prevents video freeze when game is out of focus (i.e. user changes tab on the browser)
 			donationBanner.setPaused(false)
@@ -198,7 +210,6 @@ export class DonationBehaviour {
 					this.emitter.start()
 				},
 			})
-			this.character.scene.sound.play(FIREWORKS_START_AUDIO_KEY)
 
 			this.character.scene.time.addEvent({
 				delay: 500,

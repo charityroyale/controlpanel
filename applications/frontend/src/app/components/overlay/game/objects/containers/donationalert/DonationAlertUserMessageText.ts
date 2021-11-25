@@ -1,12 +1,10 @@
-import { fadeInDonationText } from '../../tweens/fadeInDonationText'
+import { fadeInDonationMessageText } from '../../tweens/fadeInDonationMessageText'
 import { fadeOutDonationText } from '../../tweens/fadeOutDonationText'
-import { DonationAlertContainer } from './DonationAlertContainer'
 
 const defaultStyles = {
 	fontFamily: 'Saira Condensed',
 	fontSize: '34px',
 	color: '#BA4D76',
-	align: 'center',
 }
 
 export class DonationAlertUserMessageText extends Phaser.GameObjects.Text {
@@ -15,17 +13,18 @@ export class DonationAlertUserMessageText extends Phaser.GameObjects.Text {
 		x: number,
 		y: number,
 		text: string,
+		scale: number,
+		wordWrap: number,
 		style: Phaser.Types.GameObjects.Text.TextStyle = defaultStyles
 	) {
 		super(scene, x, y, text, style)
 		this.setColor('#FFFFFF')
-		this.setWordWrapWidth(
-			(this.scene.children.getByName('donationalertcontainer') as DonationAlertContainer).width - 20
-		)
+		this.setWordWrapWidth(wordWrap)
+		this.setScale(scale)
 		this.name = 'donationalerttext'
-		this.setOrigin(0.5, 0)
+		this.setOrigin(0)
 		this.alpha = 0
-		fadeInDonationText(scene, this)
+		fadeInDonationMessageText(scene, this)
 		fadeOutDonationText(scene, this, () => this.destroy())
 		scene.add.existing(this)
 	}
