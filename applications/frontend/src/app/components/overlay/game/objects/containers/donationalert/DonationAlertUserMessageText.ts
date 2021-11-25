@@ -21,7 +21,7 @@ export class DonationAlertUserMessageText extends Phaser.GameObjects.Text {
 		this.setColor('#FFFFFF')
 		this.setWordWrapWidth(wordWrap)
 		this.setScale(scale)
-		this.name = 'donationalerttext'
+		this.name = 'donationalertmessagetext'
 		this.setOrigin(0)
 		this.alpha = 0
 		fadeInDonationMessageText(scene, this)

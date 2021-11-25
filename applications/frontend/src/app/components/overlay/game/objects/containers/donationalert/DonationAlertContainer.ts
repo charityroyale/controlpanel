@@ -1,4 +1,7 @@
 import { DonationAlertState } from '@pftp/common'
+import { donationAlertKey, donationAlertWithMessageKey } from '../../../scenes/OverlayScene'
+import { DonationAlertHeaderText } from './DonationAlertHeaderText'
+import { DonationAlertUserMessageText } from './DonationAlertUserMessageText'
 import { DonationAlert } from './DonationBanner'
 
 interface ContainerOptions {
@@ -25,8 +28,25 @@ export class DonationAlertContainer extends Phaser.GameObjects.Container {
 
 		if (this.scale != state.scale) {
 			this.setScale(state.scale)
-			const banner = this.getAll() as DonationAlert[]
-			banner.map((el) => el.setScale(state.scale))
+			const banners = this.getAll() as DonationAlert[]
+			banners.map((el) => el.setScale(state.scale))
+
+			const el = this.getByName('donationalerttext') as DonationAlertHeaderText
+
+			const banner = this.getByName(donationAlertKey) as DonationAlert
+			if (banner && el) {
+				el.setY(banner.displayHeight - 240 * this.scale)
+			}
+
+			const bannerWithMessage = this.getByName(donationAlertWithMessageKey) as DonationAlert
+			const messageText = this.getByName('donationalertmessagetext') as DonationAlertUserMessageText
+			if (bannerWithMessage && messageText) {
+				el.setY(banner.displayHeight - 240 * this.scale)
+				messageText.setPosition(
+					bannerWithMessage.x - (bannerWithMessage.displayWidth / 2 - 50),
+					bannerWithMessage.displayHeight - 540 * this.scale
+				)
+			}
 		}
 	}
 
