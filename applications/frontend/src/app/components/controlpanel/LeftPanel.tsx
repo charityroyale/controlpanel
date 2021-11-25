@@ -185,8 +185,8 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 							<Range
 								values={scaleDonationAlert}
 								step={0.01}
-								min={0.25}
-								max={3}
+								min={0.15}
+								max={2}
 								onChange={(values) => setScaleDonationALert(values)}
 								renderTrack={({ props, children }) => (
 									<div
