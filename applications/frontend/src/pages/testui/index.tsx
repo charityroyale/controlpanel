@@ -38,9 +38,9 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		const name = a[rA] + b[rB]
 
 		const testMessages = [
-			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
 			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
-			'',
+			'I love you <3!',
 			'Lorem ipsum dolor sit amet, consetetur sadipscingddd elitr, sed diam nonumy ei Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
 		]
 		const message = testMessages[Math.floor(Math.random() * testMessages.length)]
@@ -59,7 +59,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	const emitDonationByButtonValue = useCallback(
 		(e: React.MouseEvent<HTMLButtonElement>) => {
 			const donation: Donation = {
-				user: 'MyBigAssLasagna',
+				user: 'YourLovelyPiggy',
 				amount: Number(e.currentTarget.value),
 				timestamp: new Date().getUTCMilliseconds(),
 				streamer: '',
