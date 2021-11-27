@@ -5,7 +5,7 @@ interface FatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 	active?: boolean
 	icon?: ReactElement
 	value?: string
-	children?: ReactElement
+	children?: ReactElement | string
 	disabled?: boolean
 }
 
