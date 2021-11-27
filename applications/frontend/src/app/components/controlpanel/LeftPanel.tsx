@@ -7,7 +7,14 @@ import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { FaPiggyBank } from 'react-icons/fa'
 import { AiFillNotification } from 'react-icons/ai'
-import { CHARACTER_UPDATE, DONATION_ALERT_UPDATE, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
+import {
+	CHARACTER_UPDATE,
+	Donation,
+	DONATION_ALERT_UPDATE,
+	DONATION_TRIGGER,
+	GlobalState,
+	SETTINGS_UPDATE,
+} from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
@@ -63,6 +70,38 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 	useEffect(() => {
 		emiteDonationChange(scaleDonationAlert[0])
 	}, [emiteDonationChange, scaleDonationAlert])
+
+	const emitRandomDonation = useCallback(() => {
+		const precision = 2
+		const maxAmount = 1250
+		const randomnum =
+			Math.floor(Math.random() * (maxAmount * precision - 1 * precision) + 1 * precision) / (1 * precision)
+
+		const a = ['TestUserA_', 'TestUserB_', 'TestUserC_']
+		const b = ['Lasagne', 'StrawBerry', 'Spaghetti']
+
+		const rA = Math.floor(Math.random() * a.length)
+		const rB = Math.floor(Math.random() * b.length)
+		const name = a[rA] + b[rB]
+
+		const testMessages = [
+			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
+			'I love you <3!',
+			'Lorem ipsum dolor sit amet, consetetur sadipscingddd elitr, sed diam nonumy ei Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
+		]
+		const message = testMessages[Math.floor(Math.random() * testMessages.length)]
+
+		const donation: Donation = {
+			user: name,
+			amount: randomnum,
+			timestamp: new Date().getUTCMilliseconds(),
+			streamer: '',
+			message,
+		}
+
+		socket?.emit(DONATION_TRIGGER, donation)
+	}, [socket])
 
 	return (
 		<GridLeftPanel>
@@ -164,12 +203,17 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						style={{
 							margin: '0 -8px',
 							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
 						}}
 					>
-						<IconWrapper>
-							<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
-						</IconWrapper>
-						Donation Alert
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							Donation Alert
+						</span>
+						<DemoAlertButton onClick={emitRandomDonation}>Demo</DemoAlertButton>
 					</Label>
 					<FatButton
 						icon={<AiFillEye size="24px" />}
@@ -296,6 +340,17 @@ const CirclesWrapper = styled.div`
 	& > ${VolumeCircle}:not(:last-child) {
 		margin-right: ${(p) => p.theme.space.xs}px;
 	}
+`
+
+const DemoAlertButton = styled.button`
+	outline: none;
+	background-color: #464649;
+	color: ${(p) => p.theme.color.white};
+	border: 0;
+	font-size: 12px;
+	padding: 4px 8px;
+	cursor: pointer;
+	border-radius: 2px;
 `
 
 const ButtonsWrapper = styled.div`
