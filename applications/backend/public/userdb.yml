@@ -1,6 +1,72 @@
-# Example user database
+- streamer: 'nqrmvn'
+  channel: 'nqrmvn'
+
+- streamer: 'revedtv'
+  channel: 'revedtv'
+
+- streamer: 'castcrafter'
+  channel: 'castcrafter'
+
+- streamer: 'gtimetv'
+  channel: 'gtimetv'
+
+- streamer: 'timjacken'
+  channel: 'timjacken'
+
+- streamer: 'nihachu'
+  channel: 'nihachu'
+
+- streamer: 'niekbeats'
+  channel: 'niekbeats'
+
+- streamer: 'mrsxeniatv'
+  channel: 'mrsxeniatv'
+
+- streamer: 'sintica'
+  channel: 'sintica'
+
+- streamer: 'stegi'
+  channel: 'stegi'
+
+- streamer: 'veylaney'
+  channel: 'veylaney'
+
+- streamer: 'bastighg'
+  channel: 'bastighg'
+
+- streamer: 'henke'
+  channel: 'henke'
+
+- streamer: 'clym'
+  channel: 'clym'
+
+- streamer: 'vlesk'
+  channel: 'vlesk'
+
+- streamer: 'zayuri'
+  channel: 'zayuri'
+
+- streamer: 'shredmir'
+  channel: 'shredmir'
+
+- streamer: 'krokoboss'
+  channel: 'krokoboss'
+
+- streamer: 'clym'
+  channel: 'clym'
+
+- streamer: 'dhalucard'
+  channel: 'dhalucard'
+
 - streamer: 'veni'
   channel: 'veni'
 
-- streamer: 'heideltrautEUW'
-  channel: 'heideltrautEUW'
+# internal users
+- streamer: 'heideltrauteuw'
+  channel: 'heideltrauteuw'
+
+- streamer: 'alex'
+  channel: 'alex'
+
+- streamer: 'franz'
+  channel: 'franz'
