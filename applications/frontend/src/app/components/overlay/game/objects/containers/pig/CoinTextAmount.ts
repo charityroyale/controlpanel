@@ -4,7 +4,7 @@ import { scaleOut } from '../../tweens/scaleOut'
 
 const defaultStyles = {
 	fontFamily: 'Saira Condensed',
-	fontSize: '30px',
+	fontSize: '36px',
 	color: '#BA4D76',
 	align: 'center',
 }

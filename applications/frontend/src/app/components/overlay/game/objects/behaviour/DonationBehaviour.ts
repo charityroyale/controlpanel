@@ -1,18 +1,6 @@
 import { Donation } from '@pftp/common'
 import {
 	blueStarKey,
-	coin1Key,
-	coin1TextColor,
-	coin2Key,
-	coin2TextColor,
-	coin3Key,
-	coin3TextColor,
-	coin4Key,
-	coin4TextColor,
-	coin5Key,
-	coin5TextColor,
-	coin6Key,
-	coin6TextColor,
 	donationAlertKey,
 	donationAlertWithMessageKey,
 	donationBackground1Key,
@@ -23,6 +11,8 @@ import {
 	donationBackground6Key,
 	FIREWORKS_SOUND_1_AUDIO_KEY,
 	FIREWORKS_SOUND_2_AUDIO_KEY,
+	mainCoinKey,
+	mainColor,
 	pigDonationInKey,
 	pigDonationKey,
 	pigDonationOutKey,
@@ -212,7 +202,7 @@ export class DonationBehaviour {
 				repeat: 60,
 			})
 
-			return { coinTexture: coin6Key, textColor: coin6TextColor, messageBackgroundTexture: donationBackground6Key }
+			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground6Key }
 		} else if (amount >= 500) {
 			const { width, height } = this.character.scene.scale
 			const positionTimer = this.character.scene.time.addEvent({
@@ -277,15 +267,15 @@ export class DonationBehaviour {
 					this.fireworksEmitter.stop()
 				},
 			})
-			return { coinTexture: coin5Key, textColor: coin5TextColor, messageBackgroundTexture: donationBackground5Key }
+			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground5Key }
 		} else if (amount >= 100) {
-			return { coinTexture: coin4Key, textColor: coin4TextColor, messageBackgroundTexture: donationBackground4Key }
+			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground4Key }
 		} else if (amount >= 50) {
-			return { coinTexture: coin3Key, textColor: coin3TextColor, messageBackgroundTexture: donationBackground3Key }
+			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground3Key }
 		} else if (amount >= 10) {
-			return { coinTexture: coin2Key, textColor: coin2TextColor, messageBackgroundTexture: donationBackground2Key }
+			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground2Key }
 		} else {
-			return { coinTexture: coin1Key, textColor: coin1TextColor, messageBackgroundTexture: donationBackground1Key }
+			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground1Key }
 		}
 	}
 

@@ -26,6 +26,9 @@ const signKey = 'sign'
 export const blueStarKey = 'blueStar'
 const whiteStarFollowerKey = 'whiteFollower'
 
+export const mainCoinKey = 'mainCoin'
+export const mainColor = '#005799'
+
 export const coin1Key = 'coin1'
 export const donationBackground1Key = 'donationBackground1'
 export const coin1TextColor = '#056399'
@@ -157,6 +160,12 @@ export class OverlayScene extends Phaser.Scene {
 			frameWidth: coinSize,
 			frameHeight: coinSize,
 		})
+
+		this.load.spritesheet(mainCoinKey, `/game/coins/cr2021_coin.png`, {
+			frameWidth: coinSize,
+			frameHeight: coinSize,
+		})
+
 		this.load.spritesheet(coin2Key, `/game/coins/coin2.png`, {
 			frameWidth: coinSize,
 			frameHeight: coinSize,
