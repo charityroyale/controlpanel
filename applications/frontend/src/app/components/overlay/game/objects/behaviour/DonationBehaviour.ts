@@ -20,6 +20,7 @@ import {
 	pigScratchKey,
 	pigSleepKey,
 	pigSleepOutKey,
+	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../../scenes/OverlayScene'
 import { Coin } from '../containers/pig/Coin'
 import { Star } from '../Star'
@@ -189,6 +190,7 @@ export class DonationBehaviour {
 		}
 
 		if (amount >= 1000) {
+			this.character.scene.sound.play(STAR_RAIN_SOUND_AUDIO_KEY)
 			this.character.scene.time.addEvent({
 				callback: () => {
 					for (let i = 0; i <= 3; i++) {
