@@ -17,9 +17,12 @@ const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
 const PIG_NOM_NOM_AUDIO_KEY = 'pigNomNomAudio'
+
 export const FIREWORKS_START_AUDIO_KEY = 'fireworksStartAudio'
 export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
 export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
+export const STRAR_SOUND_AUDIO_KEY = 'starSound'
+export const STAR_RAIN_SOUND_AUDIO_KEY = 'starRainAudio'
 
 const signKey = 'sign'
 
@@ -219,6 +222,8 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.audio(FIREWORKS_START_AUDIO_KEY, '/audio/fireworks.ogg')
 		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
 		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.ogg')
+		this.load.audio(STRAR_SOUND_AUDIO_KEY, '/audio/star_sound.ogg')
+		this.load.audio(STAR_RAIN_SOUND_AUDIO_KEY, '/audio/star_rain.ogg')
 	}
 
 	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
