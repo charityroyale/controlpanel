@@ -72,7 +72,7 @@ export class DonationBehaviour {
 				 * Default case when in Idle state.
 				 */
 				if (this.character.anims.currentAnim.key === pigIdleKey) {
-					const donation = this.queue.pop()!
+					const donation = this.queue.shift()!
 					this.character.anims.stopAfterRepeat(1)
 					this.character.playLaughSound()
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
@@ -83,7 +83,7 @@ export class DonationBehaviour {
 					 * animation needs to bestarted additional
 					 */
 				} else if (this.character.anims.currentAnim.key === pigSleepKey) {
-					const donation = this.queue.pop()!
+					const donation = this.queue.shift()!
 					this.character.anims.stopAfterRepeat(1)
 					this.character.playLaughSound()
 					this.character.play(pigSleepOutKey).chain(pigDonationInKey).chain(pigDonationKey)

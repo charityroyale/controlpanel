@@ -42,7 +42,7 @@ const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
 						target="_blank"
 						style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', marginTop: '8px', marginLeft: '0' }}
 					>
-						<span>Developer Test-UI</span>
+						<span>Testing UI for Demos</span>
 					</LinkAsButton>
 				</StartPageContent>
 			</StartPage>
