@@ -16,6 +16,9 @@
 - streamer: 'nihachu'
   channel: 'nihachu'
 
+- streamer: 'letshugotv'
+  channel: 'letshugotv'
+
 - streamer: 'niekbeats'
   channel: 'niekbeats'
 
@@ -51,9 +54,6 @@
 
 - streamer: 'krokoboss'
   channel: 'krokoboss'
-
-- streamer: 'clym'
-  channel: 'clym'
 
 - streamer: 'dhalucard'
   channel: 'dhalucard'

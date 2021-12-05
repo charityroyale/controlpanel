@@ -1,11 +1,7 @@
 import YAML from 'yaml'
 import fetch from 'node-fetch'
 import { databaseServiceLogger as logger } from './logger'
-
-interface UserEntry {
-	streamer: string
-	channel: string
-}
+import { UserEntry } from '@pftp/common'
 
 export default class SimpleUserDbService {
 	private userDatabase: UserEntry[] = []
@@ -46,5 +42,9 @@ export default class SimpleUserDbService {
 
 	public findChannelByStreamer(streamer: string) {
 		return this.userDatabase.find((entry) => entry.streamer === streamer)?.channel
+	}
+
+	public getAllStreamers() {
+		return this.userDatabase
 	}
 }

@@ -32,7 +32,7 @@ export const SocketProvider: FunctionComponent<{ auth?: SocketAuth }> = ({ child
 			options.auth = { token: auth.token, channel: auth.channel }
 		}
 
-		setSocket(io(process.env.NEXT_PUBLIC_SOCKET_URL as string, options))
+		setSocket(io(process.env.NEXT_PUBLIC_BACKEND_URL as string, options))
 	}, [auth])
 
 	const [isConnected, setIsConnected] = useState(socket ? socket.connected : false)

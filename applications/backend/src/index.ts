@@ -9,6 +9,7 @@ import SessionManager from './SessionManager'
 import { PFTPSocketEventsMap, Donation } from '@pftp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
+import cors from 'cors'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -36,6 +37,11 @@ const io = new Server<PFTPSocketEventsMap>(httpServer, {
 	},
 })
 app.use(express.json())
+app.use(
+	cors({
+		origin: ['http://localhost:4200', 'https://redcouch.at'],
+	})
+)
 
 app.post('/token', body('client_id').isString(), (request, response) => {
 	const errors = validationResult(request)
@@ -106,7 +112,19 @@ app.post(
 )
 
 app.get('/userdb.yml', (req, res) => {
-	res.sendFile(path.join(__dirname, '../public/userdb.yml'))
+	try {
+		res.sendFile(path.join(__dirname, '../public/userdb.yml'))
+	} catch (e) {
+		logger.error(e)
+	}
+})
+
+app.get('/streamers', (req, res) => {
+	try {
+		res.send(simpleUserDbService.getAllStreamers())
+	} catch (e) {
+		logger.error(e)
+	}
 })
 
 if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
