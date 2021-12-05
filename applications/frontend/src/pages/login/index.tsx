@@ -1,13 +1,22 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
+import { UserEntry } from '@pftp/common'
+
+const StreamerSelect = styled.select`
+	color: ${(p) => p.theme.color.background};
+	& option {
+		color: ${(p) => p.theme.color.background};
+	}
+`
 
 const LoginPage = () => {
 	const router = useRouter()
 	const [showError, setShowError] = useState(false)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const [streamerOptions, setStreamerOptions] = useState([])
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -26,6 +35,17 @@ const LoginPage = () => {
 		}
 	}
 
+	useEffect(() => {
+		const fetchData = async () => {
+			const result = await fetch('http://localhost:5200/streamers')
+			const json = await result.json()
+			setStreamerOptions(json)
+			console.log(json)
+		}
+
+		fetchData()
+	}, [])
+
 	return (
 		<LoginPageWrapper>
 			<LoginPageContent>
@@ -34,14 +54,22 @@ const LoginPage = () => {
 				<form onSubmit={handleSubmit}>
 					<FormContent>
 						<InputRow style={{ marginBottom: '8px' }}>
-							<label htmlFor="username">Name</label>
-							<input
+							<label htmlFor="username">Streamer</label>
+							<StreamerSelect
 								name="username"
-								type="text"
 								value={username}
 								onChange={(e) => setUsername(e.currentTarget.value)}
+								onBlur={(e) => setUsername(e.currentTarget.value)}
 								required
-							/>
+							>
+								{streamerOptions.map((el: UserEntry, i: number) => {
+									return (
+										<option key={`${el.channel}-${i}`} value={el.channel}>
+											{el.streamer}
+										</option>
+									)
+								})}
+							</StreamerSelect>
 						</InputRow>
 						<InputRow>
 							<label htmlFor="password">Passwort</label>

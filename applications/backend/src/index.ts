@@ -6,9 +6,12 @@ import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import SessionManager from './SessionManager'
-import { PFTPSocketEventsMap, Donation } from '@pftp/common'
+import { PFTPSocketEventsMap, Donation, UserEntry } from '@pftp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
+import cors from 'cors'
+import fs from 'fs'
+import ymlJs from 'js-yaml'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -36,6 +39,11 @@ const io = new Server<PFTPSocketEventsMap>(httpServer, {
 	},
 })
 app.use(express.json())
+app.use(
+	cors({
+		origin: ['http://localhost:4200', 'https://redcouch.at'],
+	})
+)
 
 app.post('/token', body('client_id').isString(), (request, response) => {
 	const errors = validationResult(request)
@@ -107,6 +115,16 @@ app.post(
 
 app.get('/userdb.yml', (req, res) => {
 	res.sendFile(path.join(__dirname, '../public/userdb.yml'))
+})
+
+app.get('/streamers', (req, res) => {
+	try {
+		const file = fs.readFileSync(path.join(__dirname, '../public/userdb.yml'), 'utf8')
+		const doc = ymlJs.load(file) as UserEntry[]
+		res.send(doc)
+	} catch (e) {
+		console.log(e)
+	}
 })
 
 if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {

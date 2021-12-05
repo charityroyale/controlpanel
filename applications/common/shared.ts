@@ -39,6 +39,11 @@ export interface Donation {
 	timestamp: number
 }
 
+export interface UserEntry {
+	streamer: string
+	channel: string
+}
+
 export const CHARACTER_UPDATE = 'characterUpdate'
 export const DONATION_ALERT_UPDATE = 'donationAlertUpdate'
 export const SETTINGS_UPDATE = 'settingsUpdate'

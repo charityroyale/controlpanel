@@ -1,11 +1,7 @@
 import YAML from 'yaml'
 import fetch from 'node-fetch'
 import { databaseServiceLogger as logger } from './logger'
-
-interface UserEntry {
-	streamer: string
-	channel: string
-}
+import { UserEntry } from '@pftp/common'
 
 export default class SimpleUserDbService {
 	private userDatabase: UserEntry[] = []
