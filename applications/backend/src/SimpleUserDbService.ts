@@ -43,4 +43,8 @@ export default class SimpleUserDbService {
 	public findChannelByStreamer(streamer: string) {
 		return this.userDatabase.find((entry) => entry.streamer === streamer)?.channel
 	}
+
+	public getAllStreamers() {
+		return this.userDatabase
+	}
 }

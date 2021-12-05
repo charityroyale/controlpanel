@@ -6,12 +6,10 @@ import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import SessionManager from './SessionManager'
-import { PFTPSocketEventsMap, Donation, UserEntry } from '@pftp/common'
+import { PFTPSocketEventsMap, Donation } from '@pftp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
 import cors from 'cors'
-import fs from 'fs'
-import ymlJs from 'js-yaml'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -114,16 +112,18 @@ app.post(
 )
 
 app.get('/userdb.yml', (req, res) => {
-	res.sendFile(path.join(__dirname, '../public/userdb.yml'))
+	try {
+		res.sendFile(path.join(__dirname, '../public/userdb.yml'))
+	} catch (e) {
+		logger.error(e)
+	}
 })
 
 app.get('/streamers', (req, res) => {
 	try {
-		const file = fs.readFileSync(path.join(__dirname, '../public/userdb.yml'), 'utf8')
-		const doc = ymlJs.load(file) as UserEntry[]
-		res.send(doc)
+		res.send(simpleUserDbService.getAllStreamers())
 	} catch (e) {
-		console.log(e)
+		logger.error(e)
 	}
 })
 
