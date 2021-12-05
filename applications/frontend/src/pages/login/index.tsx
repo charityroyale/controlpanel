@@ -37,7 +37,7 @@ const LoginPage = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL as string)
+			const result = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL as string}/streamers`)
 			const json = await result.json()
 			setStreamerOptions(json)
 		}
