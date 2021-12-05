@@ -25,7 +25,7 @@ const characterSlice = createSlice({
 })
 
 const initialSettingsState: SettingsState = {
-	volume: 1,
+	volume: 0.6,
 }
 const settingsSlice = createSlice({
 	name: 'settings',
