@@ -39,7 +39,7 @@ const io = new Server<PFTPSocketEventsMap>(httpServer, {
 app.use(express.json())
 app.use(
 	cors({
-		origin: ['http://localhost:4200', 'https://redcouch.at'],
+		origin: ['http://localhost:4200', 'https://redcouch.at', 'https://pftp.redcouch.at'],
 	})
 )
 
