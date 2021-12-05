@@ -15,7 +15,6 @@ import { Star } from '../objects/Star'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
-const PIG_NOM_NOM_AUDIO_KEY = 'pigNomNomAudio'
 
 export const FIREWORKS_START_AUDIO_KEY = 'fireworksStartAudio'
 export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
