@@ -4,11 +4,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 const initialCharacterState: CharacterState = {
 	isVisible: true,
 	isLocked: false,
-	scale: 1,
+	scale: 0.8,
 	flipX: false,
 	position: {
-		x: 1080 / 2,
-		y: 1920 / 2,
+		x: 300,
+		y: 1080 / 2,
 	},
 }
 const characterSlice = createSlice({
@@ -42,10 +42,10 @@ const settingsSlice = createSlice({
 
 const initialDonationAlertState: DonationAlertState = {
 	isVisible: true,
-	scale: 0.5,
+	scale: 0.84,
 	position: {
-		x: 1080 / 2,
-		y: 300,
+		x: 1920 / 2,
+		y: 111,
 	},
 }
 const donationAlertSlice = createSlice({
