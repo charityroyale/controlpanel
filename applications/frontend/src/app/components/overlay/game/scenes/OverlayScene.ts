@@ -14,9 +14,7 @@ import { Sign } from '../objects/containers/pig/Sign'
 import { Star } from '../objects/Star'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
-const PIG_LAUGH_AUDIO_KEY = 'pigLaughAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
-const PIG_NOM_NOM_AUDIO_KEY = 'pigNomNomAudio'
 
 export const FIREWORKS_START_AUDIO_KEY = 'fireworksStartAudio'
 export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
@@ -31,30 +29,6 @@ const whiteStarFollowerKey = 'whiteFollower'
 
 export const mainCoinKey = 'mainCoin'
 export const mainColor = '#005799'
-
-export const coin1Key = 'coin1'
-export const donationBackground1Key = 'donationBackground1'
-export const coin1TextColor = '#056399'
-
-export const coin2Key = 'coin2'
-export const donationBackground2Key = 'donationBackground2'
-export const coin2TextColor = '#0a053b'
-
-export const coin3Key = 'coin3'
-export const donationBackground3Key = 'donationBackground3'
-export const coin3TextColor = '#800fb0'
-
-export const coin4Key = 'coin4'
-export const donationBackground4Key = 'donationBackground4'
-export const coin4TextColor = '#802421'
-
-export const coin5Key = 'coin5'
-export const donationBackground5Key = 'donationBackground5'
-export const coin5TextColor = '#c28f1a'
-
-export const coin6Key = 'coin6'
-export const donationBackground6Key = 'donationBackground6'
-export const coin6TextColor = '#00a6a6'
 
 export const donationAlertKey = 'donationAlertVideo'
 export const donationAlertWithMessageKey = 'donationAlertWithMessageVideo'
@@ -77,9 +51,6 @@ export const pigDonationOutKey = 'donationOut'
 
 const frameSize = 500
 const coinSize = 500
-
-const donationBackgroundWidth = 400
-const donationBackgroundHeight = 225
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
 const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
@@ -135,9 +106,7 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
-		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
-
+		// VIDEOS
 		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', 'loadeddata', false, true)
 		this.load.video(
 			donationAlertWithMessageKey,
@@ -147,82 +116,29 @@ export class OverlayScene extends Phaser.Scene {
 			true
 		)
 
+		// ATLAS, SPRITESHEETS & IMAGES
+		this.load.atlas(pigAtlasKey, '/game/pig_atlas.png', '/game/pig_atlas.json')
+		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
 		this.load.spritesheet(blueStarKey, '/game/stars/blue_star.png', {
 			frameWidth: 250,
 			frameHeight: 250,
 		})
-
 		this.load.image(whiteStarFollowerKey, '/game/stars/star_flare.png')
-
 		this.load.spritesheet(signKey, '/game/sign.png', {
 			frameWidth: 500,
 			frameHeight: 500,
 		})
-
-		this.load.spritesheet(coin1Key, `/game/coins/coin1.png`, {
-			frameWidth: coinSize,
-			frameHeight: coinSize,
-		})
-
 		this.load.spritesheet(mainCoinKey, `/game/coins/cr2021_coin.png`, {
 			frameWidth: coinSize,
 			frameHeight: coinSize,
 		})
 
-		this.load.spritesheet(coin2Key, `/game/coins/coin2.png`, {
-			frameWidth: coinSize,
-			frameHeight: coinSize,
-		})
-		this.load.spritesheet(coin3Key, `/game/coins/coin3.png`, {
-			frameWidth: coinSize,
-			frameHeight: coinSize,
-		})
-		this.load.spritesheet(coin4Key, `/game/coins/coin4.png`, {
-			frameWidth: coinSize,
-			frameHeight: coinSize,
-		})
-		this.load.spritesheet(coin5Key, `/game/coins/coin5.png`, {
-			frameWidth: coinSize,
-			frameHeight: coinSize,
-		})
-		this.load.spritesheet(coin6Key, `/game/coins/coin6.png`, {
-			frameWidth: coinSize,
-			frameHeight: coinSize,
-		})
-
-		this.load.spritesheet(donationBackground1Key, `/game/backgrounds/donation_1_background.png`, {
-			frameWidth: donationBackgroundWidth,
-			frameHeight: donationBackgroundHeight,
-		})
-		this.load.spritesheet(donationBackground2Key, `/game/backgrounds/donation_2_background.png`, {
-			frameWidth: donationBackgroundWidth,
-			frameHeight: donationBackgroundHeight,
-		})
-		this.load.spritesheet(donationBackground3Key, `/game/backgrounds/donation_3_background.png`, {
-			frameWidth: donationBackgroundWidth,
-			frameHeight: donationBackgroundHeight,
-		})
-		this.load.spritesheet(donationBackground4Key, `/game/backgrounds/donation_4_background.png`, {
-			frameWidth: donationBackgroundWidth,
-			frameHeight: donationBackgroundHeight,
-		})
-		this.load.spritesheet(donationBackground5Key, `/game/backgrounds/donation_5_background.png`, {
-			frameWidth: donationBackgroundWidth,
-			frameHeight: donationBackgroundHeight,
-		})
-		this.load.spritesheet(donationBackground6Key, `/game/backgrounds/donation_6_background.png`, {
-			frameWidth: donationBackgroundWidth,
-			frameHeight: donationBackgroundHeight,
-		})
-
-		this.load.audio(PIG_LAUGH_AUDIO_KEY, '/audio/pig_laugh.wav')
+		// AUDIO ASSETS
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
 		this.load.audio(DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.mp3')
-		this.load.audio(PIG_NOM_NOM_AUDIO_KEY, '/audio/pig_nom_nom.ogg')
 		this.load.audio(FIREWORKS_START_AUDIO_KEY, '/audio/fireworks.ogg')
 		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
 		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.ogg')
-		this.load.audio(STRAR_SOUND_AUDIO_KEY, '/audio/star_sound.ogg')
 		this.load.audio(STAR_RAIN_SOUND_AUDIO_KEY, '/audio/star_rain.ogg')
 	}
 
@@ -409,7 +325,7 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	public addMouthCollider(container: Phaser.GameObjects.Container, coinGroup: Phaser.GameObjects.Group) {
-		const colliderSprite = new Phaser.GameObjects.Sprite(this, 0, 0, coin2Key)
+		const colliderSprite = new Phaser.GameObjects.Sprite(this, 0, 0, mainCoinKey)
 		const physicsBody = new Physics.Arcade.Body(this.physics.world, colliderSprite)
 
 		colliderSprite.body = physicsBody
