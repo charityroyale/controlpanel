@@ -1,0 +1,2 @@
+export const ALERT_FIREWORKS_MIN_AMOUNT = 250
+export const ALERT_STAR_RAIN_MIN_AMOUNT = 500

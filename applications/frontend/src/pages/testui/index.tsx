@@ -81,8 +81,8 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 				<TestUIHeadline>
 					<strong>Testing Interface</strong>
 				</TestUIHeadline>
-				<p>Ab 500€+ donation erscheint ein Feuwerk mit Sound</p>
-				<p>Ab 1000€+ donation erscheint ein Sternenregen</p>
+				<p>Ab 250+ donation erscheint ein Feuwerk mit Sound</p>
+				<p>Ab 500€+ donation erscheint ein Sternenregen</p>
 				<p style={{ marginBottom: '24px' }}>
 					Wird eine Nachricht mitgeschickt erscheint eine Box über dem Donationalert
 				</p>
@@ -98,13 +98,11 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 					<FatButton onClick={emitDonationByButtonValue} value="10" active={true} style={{ color: 'white' }}>
 						10€
 					</FatButton>
-
+					<FatButton onClick={emitDonationByButtonValue} value="250" active={true} style={{ color: 'white' }}>
+						250€
+					</FatButton>
 					<FatButton onClick={emitDonationByButtonValue} value="500" active={true} style={{ color: 'white' }}>
 						500€
-					</FatButton>
-
-					<FatButton onClick={emitDonationByButtonValue} value="1000" active={true} style={{ color: 'white' }}>
-						1000€
 					</FatButton>
 				</TestUIButtonWrapper>
 				<TestUIMessageWrapper>

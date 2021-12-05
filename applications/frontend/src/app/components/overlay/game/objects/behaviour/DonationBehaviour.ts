@@ -3,12 +3,6 @@ import {
 	blueStarKey,
 	donationAlertKey,
 	donationAlertWithMessageKey,
-	donationBackground1Key,
-	donationBackground2Key,
-	donationBackground3Key,
-	donationBackground4Key,
-	donationBackground5Key,
-	donationBackground6Key,
 	FIREWORKS_SOUND_1_AUDIO_KEY,
 	FIREWORKS_SOUND_2_AUDIO_KEY,
 	mainCoinKey,
@@ -31,6 +25,7 @@ import { DonationAlertUserMessageText } from '../containers/donationalert/Donati
 import { CoinTextAmount } from '../containers/pig/CoinTextAmount'
 import { Pig } from '../containers/pig/Pig'
 import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
+import { ALERT_FIREWORKS_MIN_AMOUNT, ALERT_STAR_RAIN_MIN_AMOUNT } from '../containers/donationalert/donationConfig'
 const { FloatBetween } = Phaser.Math
 
 export class DonationBehaviour {
@@ -76,8 +71,7 @@ export class DonationBehaviour {
 					this.character.anims.stopAfterRepeat(1)
 					this.character.playLaughSound()
 					this.character.play(pigDonationInKey).chain(pigDonationKey)
-					this.createCoin(donation, this.coinGroup)
-					this.createDonationAlertText(donation)
+					this.triggerAlert(donation)
 					/**
 					 * Sleeping can be seen as another idle state from which the wakeUp
 					 * animation needs to bestarted additional
@@ -87,8 +81,7 @@ export class DonationBehaviour {
 					this.character.anims.stopAfterRepeat(1)
 					this.character.playLaughSound()
 					this.character.play(pigSleepOutKey).chain(pigDonationInKey).chain(pigDonationKey)
-					this.createCoin(donation, this.coinGroup)
-					this.createDonationAlertText(donation)
+					this.triggerAlert(donation)
 				}
 			}
 		}, this.checkQueueTimer)
@@ -105,7 +98,7 @@ export class DonationBehaviour {
 		)
 	}
 
-	private createDonationAlertText(donation: Donation) {
+	private createAlertText(donation: Donation) {
 		const donationAlertContainer = this.character.scene.children.getByName(
 			donationAlertContainerName
 		) as DonationAlertContainer
@@ -154,9 +147,14 @@ export class DonationBehaviour {
 		donationAlertContainer.add(donationAlertUserMessageText)
 	}
 
-	private createCoin(donation: Donation, coinGroup: Phaser.GameObjects.Group) {
-		const { coinTexture, textColor } = this.getCoinKeyFromAmount(donation)
-		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, coinTexture)
+	private triggerAlert(donation: Donation) {
+		this.createAlert(donation)
+		this.createAlertText(donation)
+		this.createCoin(donation)
+	}
+
+	private createCoin(donation: Donation) {
+		const coin = new Coin(this.character.scene, 0, this.startPositionOffset, mainCoinKey)
 		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount)
 
 		const coinText = new CoinTextAmount(
@@ -164,15 +162,15 @@ export class DonationBehaviour {
 			0,
 			this.startPositionOffset,
 			formatedDonationAmount,
-			textColor
+			mainColor
 		)
 
 		this.character.parentContainer.add(coin)
 		this.character.parentContainer.add(coinText)
-		coinGroup.add(coin)
+		this.coinGroup.add(coin)
 	}
 
-	private getCoinKeyFromAmount(donation: Donation) {
+	private createAlert(donation: Donation) {
 		const { amount, message } = donation
 		const donationAlertContainer = this.character.scene.children.getByName(
 			donationAlertContainerName
@@ -189,7 +187,7 @@ export class DonationBehaviour {
 			donationBanner.parentContainer.alpha = 1
 		}
 
-		if (amount >= 1000) {
+		if (amount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
 			this.character.scene.sound.play(STAR_RAIN_SOUND_AUDIO_KEY)
 			this.character.scene.time.addEvent({
 				callback: () => {
@@ -203,9 +201,7 @@ export class DonationBehaviour {
 				delay: 200,
 				repeat: 60,
 			})
-
-			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground6Key }
-		} else if (amount >= 500) {
+		} else if (amount >= ALERT_FIREWORKS_MIN_AMOUNT) {
 			const { width, height } = this.character.scene.scale
 			const positionTimer = this.character.scene.time.addEvent({
 				repeat: -1,
@@ -269,15 +265,6 @@ export class DonationBehaviour {
 					this.fireworksEmitter.stop()
 				},
 			})
-			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground5Key }
-		} else if (amount >= 100) {
-			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground4Key }
-		} else if (amount >= 50) {
-			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground3Key }
-		} else if (amount >= 10) {
-			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground2Key }
-		} else {
-			return { coinTexture: mainCoinKey, textColor: mainColor, messageBackgroundTexture: donationBackground1Key }
 		}
 	}
 
