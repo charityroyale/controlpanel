@@ -16,7 +16,7 @@ const LoginPage = () => {
 	const [showError, setShowError] = useState(false)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const [streamerOptions, setStreamerOptions] = useState([])
+	const [streamerOptions, setStreamerOptions] = useState<UserEntry[]>([])
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -38,8 +38,17 @@ const LoginPage = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const result = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL as string}/streamers`)
-			const json = await result.json()
-			setStreamerOptions(json)
+			const json = (await result.json()) as UserEntry[]
+			const sortedStreamers = json.sort((a, b) => {
+				if (a.channel < b.channel) {
+					return -1
+				}
+				if (a.channel > b.channel) {
+					return 1
+				}
+				return 0
+			})
+			setStreamerOptions(sortedStreamers)
 		}
 
 		fetchData()
