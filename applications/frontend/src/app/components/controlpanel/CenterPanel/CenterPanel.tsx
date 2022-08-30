@@ -5,12 +5,12 @@ import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
 import styled from 'styled-components'
 import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
-import { LockCharacterPositionButton } from './LockCharacterPositionButton'
 import { SocketAuth } from '../../../provider/SocketProvider'
+import { LockOverlay } from './LockOverlay'
 
 export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({
-	globalState,
 	auth,
+	globalState,
 }) => {
 	const contentRef = useRef<null | HTMLDivElement>(null)
 	const [scale, setScale] = useState(0)
@@ -39,12 +39,12 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: So
 					<LiveEmoji role="img" aria-label="Live-Icon">
 						🔴
 					</LiveEmoji>
-					Pigview
+					StreamView
 				</div>
 				<PanelButtonWrapper>
 					<p style={{ fontSize: '12px' }}>{window.location.origin + '/overlay/' + auth.channel}</p>
 					<CopyBrowserSourceButton title={'Copy overlay URL'} username={auth.channel} />
-					<LockCharacterPositionButton isLocked={globalState.character.isLocked} title={'Lock character position'} />
+					<LockOverlay isLocked={globalState.settings.isLockedOverlay} title={'Lock overlay'} />
 				</PanelButtonWrapper>
 			</Label>
 			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>

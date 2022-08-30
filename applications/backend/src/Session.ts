@@ -1,5 +1,4 @@
 import {
-	CHARACTER_UPDATE,
 	Donation,
 	DONATION_ALERT_UPDATE,
 	DONATION_TRIGGER,
@@ -11,20 +10,12 @@ import {
 } from '@pftp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
-import {
-	characterReducer,
-	donationAlertReducer,
-	settingsReducer,
-	updateCharacter,
-	updateDonationAlert,
-	updateSettings,
-} from './State'
+import { donationAlertReducer, settingsReducer, updateDonationAlert, updateSettings } from './State'
 import { sessionLogger as logger } from './logger'
 
 export default class Session {
 	private readonly store = configureStore<GlobalState>({
 		reducer: {
-			character: characterReducer,
 			donationAlert: donationAlertReducer,
 			settings: settingsReducer,
 		},
@@ -66,7 +57,6 @@ export default class Session {
 		socket.on(DONATION_TRIGGER, (donation: Donation) => {
 			this.sendDonation(donation)
 		})
-		socket.on(CHARACTER_UPDATE, (characterUpdate) => this.store.dispatch(updateCharacter(characterUpdate)))
 		socket.on(DONATION_ALERT_UPDATE, (donationAlertUpdate) =>
 			this.store.dispatch(updateDonationAlert(donationAlertUpdate))
 		)

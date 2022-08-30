@@ -11,7 +11,7 @@ export const Header: FunctionComponent<{ user: UserDTO }> = ({ user }) => {
 				<a href="/" style={{ display: 'flex' }}>
 					<Logo src="/charity_royale_logo.png" alt="Charity Royale logo" height="36px" />
 				</a>
-				<Heading>PROJECT: Feed the Pig</Heading>
+				<Heading>Charity Royale: Control Panel</Heading>
 			</HeaderLeft>
 
 			<HeaderRight>

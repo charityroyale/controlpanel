@@ -7,30 +7,15 @@ import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { FaPiggyBank } from 'react-icons/fa'
 import { AiFillNotification } from 'react-icons/ai'
-import {
-	CHARACTER_UPDATE,
-	Donation,
-	DONATION_ALERT_UPDATE,
-	DONATION_TRIGGER,
-	GlobalState,
-	SETTINGS_UPDATE,
-} from '@pftp/common'
+import { Donation, DONATION_ALERT_UPDATE, DONATION_TRIGGER, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
 import { useDebouncedCallback } from 'use-debounce'
-import { MdFlip } from 'react-icons/md'
 
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
-	const [scale, setScale] = useState([globalState.character.scale])
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
-
-	const emitCharacterIsVisibleUpdate = useCallback(() => {
-		socket?.emit(CHARACTER_UPDATE, {
-			isVisible: !globalState.character.isVisible,
-		})
-	}, [globalState.character.isVisible, socket])
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -38,18 +23,6 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			volume: newVolume,
 		})
 	}, [globalState.settings.volume, socket])
-
-	const emitFlipUpdate = useCallback(() => {
-		socket?.emit(CHARACTER_UPDATE, {
-			flipX: !globalState.character.flipX,
-		})
-	}, [globalState.character.flipX, socket])
-
-	const emitScaleChange = useDebouncedCallback((scale: number) => {
-		socket?.emit(CHARACTER_UPDATE, {
-			scale,
-		})
-	}, 125)
 
 	const emiteDonationChange = useDebouncedCallback((scale: number) => {
 		socket?.emit(DONATION_ALERT_UPDATE, {
@@ -62,10 +35,6 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			isVisible: !globalState.donationAlert.isVisible,
 		})
 	}, [globalState.donationAlert.isVisible, socket])
-
-	useEffect(() => {
-		emitScaleChange(scale[0])
-	}, [emitScaleChange, scale])
 
 	useEffect(() => {
 		emiteDonationChange(scaleDonationAlert[0])
@@ -109,19 +78,10 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 				<IconWrapper>
 					<FaPiggyBank size="14px" style={{ marginRight: '6px' }} />
 				</IconWrapper>
-				Character
+				Settings
 			</Label>
 			<Content>
 				<ButtonsWrapper>
-					<FatButton
-						icon={<AiFillEye size="24px" />}
-						active={globalState.character.isVisible}
-						value={globalState?.character.isVisible === true ? 'true' : 'false'}
-						onClick={emitCharacterIsVisibleUpdate}
-					>
-						<span>Pig</span>
-					</FatButton>
-
 					<FatButton
 						icon={globalState.settings.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />}
 						active={globalState.settings.volume > 0}
@@ -131,74 +91,6 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						<VolumeIndicator volume={globalState.settings.volume} />
 					</FatButton>
 
-					<FatButton
-						icon={<MdFlip size="24px" />}
-						active={globalState?.character.flipX}
-						value={globalState?.character.flipX.toString()}
-						onClick={emitFlipUpdate}
-					>
-						<span>Flip</span>
-					</FatButton>
-
-					<FatButton style={{ cursor: 'default' }}>
-						<React.Fragment>
-							<Range
-								values={scale}
-								step={0.01}
-								min={0.25}
-								max={3}
-								onChange={(values) => setScale(values)}
-								renderTrack={({ props, children }) => (
-									<div
-										role="button"
-										tabIndex={-1}
-										/* eslint-disable react/prop-types */
-										onMouseDown={props.onMouseDown}
-										onTouchStart={props.onTouchStart}
-										style={{
-											...props.style,
-											height: '40px',
-											display: 'flex',
-											width: '100%',
-										}}
-									>
-										<div
-											ref={props.ref}
-											style={{
-												height: '5px',
-												width: '100%',
-												borderRadius: '2px',
-												alignSelf: 'center',
-												backgroundColor: 'rgba(255,255,255,0.2)',
-											}}
-										>
-											{children}
-										</div>
-									</div>
-								)}
-								renderThumb={({ props }) => (
-									<div
-										{...props}
-										style={{
-											/* eslint-disable react/prop-types */
-											...props.style,
-											height: '28px',
-											width: '28px',
-											borderRadius: '4px',
-											backgroundColor: '#049EE7',
-											display: 'flex',
-											justifyContent: 'center',
-											alignItems: 'center',
-										}}
-									>
-										<SizeIconWrapper>
-											<IoMdResize size={24} />
-										</SizeIconWrapper>
-									</div>
-								)}
-							/>
-						</React.Fragment>
-					</FatButton>
 					<Label
 						style={{
 							margin: '0 -8px',
