@@ -59,7 +59,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	const emitDonationByButtonValue = useCallback(
 		(e: React.MouseEvent<HTMLButtonElement>) => {
 			const donation: Donation = {
-				user: 'YourLovelyPiggy',
+				user: 'alertUser',
 				amount: Number(e.currentTarget.value),
 				timestamp: new Date().getUTCMilliseconds(),
 				streamer: '',

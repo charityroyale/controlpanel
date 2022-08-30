@@ -1,28 +1,5 @@
-import { CharacterState, DonationAlertState, SettingsState } from '@pftp/common'
+import { DonationAlertState, SettingsState } from '@pftp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-const initialCharacterState: CharacterState = {
-	isVisible: true,
-	isLocked: false,
-	scale: 0.8,
-	flipX: false,
-	position: {
-		x: 300,
-		y: 1080 / 2,
-	},
-}
-const characterSlice = createSlice({
-	name: 'character',
-	initialState: initialCharacterState,
-	reducers: {
-		update: (state, action: PayloadAction<Partial<CharacterState>>) => {
-			return {
-				...state,
-				...action.payload,
-			}
-		},
-	},
-})
 
 const initialSettingsState: SettingsState = {
 	volume: 0.6,
@@ -60,9 +37,6 @@ const donationAlertSlice = createSlice({
 		},
 	},
 })
-
-export const characterReducer = characterSlice.reducer
-export const updateCharacter = characterSlice.actions.update
 
 export const donationAlertReducer = donationAlertSlice.reducer
 export const updateDonationAlert = donationAlertSlice.actions.update
