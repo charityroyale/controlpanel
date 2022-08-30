@@ -2,23 +2,21 @@ import React, { FunctionComponent, useCallback } from 'react'
 import styled from 'styled-components'
 import { ImLock, ImUnlocked } from 'react-icons/im'
 import { useSocket } from '../../../hooks/useSocket'
+import { SETTINGS_UPDATE } from '@pftp/common'
 
 interface LockOverlayProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	isLocked: boolean
 }
 
 const iconSize = '14px'
-// TODO: move isLocked to settings
 export const LockOverlay: FunctionComponent<LockOverlayProps> = (props) => {
 	const { isLocked } = props
 	const { socket } = useSocket()
 
-	// TODO: move isLocked to settings
 	const emiteCharacterIsLocked = useCallback(() => {
-		// socket?.emit(CHARACTER_UPDATE, {
-		//	isLocked: !isLocked,
-		// })
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		socket?.emit(SETTINGS_UPDATE, {
+			isLockedOverlay: !isLocked,
+		})
 	}, [socket, isLocked])
 
 	return (

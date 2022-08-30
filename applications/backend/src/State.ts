@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialSettingsState: SettingsState = {
 	volume: 0.6,
+	isLockedOverlay: false,
 }
 const settingsSlice = createSlice({
 	name: 'settings',

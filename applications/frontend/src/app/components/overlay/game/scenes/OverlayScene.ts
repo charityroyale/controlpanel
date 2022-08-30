@@ -48,6 +48,7 @@ const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitter
 export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
 	public donationBannerDontainer: DonationAlertContainer | null = null
+	public isLockedOverlay = false
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -65,6 +66,8 @@ export class OverlayScene extends Phaser.Scene {
 				this.sound.volume = state.settings.volume
 				this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
 			}
+
+			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
 
 		config.socket.on(DONATION_TRIGGER, (donation) => {
@@ -106,6 +109,8 @@ export class OverlayScene extends Phaser.Scene {
 
 		const flareParticles = this.add.particles(flaresAtlasKey)
 
+		this.isLockedOverlay = initialState.settings.isLockedOverlay
+
 		// TODO: move emitter logic to donationbehaviour class
 		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
 		fireworksEmitter.stop()
@@ -133,7 +138,7 @@ export class OverlayScene extends Phaser.Scene {
 		this.input.setDraggable([this.donationBannerDontainer])
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			if (_gameObject.name === donationAlertContainerName && !_gameObject.isLocked) {
+			if (_gameObject.name === donationAlertContainerName && !this.isLockedOverlay) {
 				_gameObject.x = dragX
 				_gameObject.y = dragY
 			}

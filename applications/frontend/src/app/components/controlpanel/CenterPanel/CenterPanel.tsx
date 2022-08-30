@@ -8,7 +8,10 @@ import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
 import { SocketAuth } from '../../../provider/SocketProvider'
 import { LockOverlay } from './LockOverlay'
 
-export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({ auth }) => {
+export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({
+	auth,
+	globalState,
+}) => {
 	const contentRef = useRef<null | HTMLDivElement>(null)
 	const [scale, setScale] = useState(0)
 
@@ -41,7 +44,7 @@ export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: So
 				<PanelButtonWrapper>
 					<p style={{ fontSize: '12px' }}>{window.location.origin + '/overlay/' + auth.channel}</p>
 					<CopyBrowserSourceButton title={'Copy overlay URL'} username={auth.channel} />
-					<LockOverlay isLocked={false} title={'Lock overlay'} />
+					<LockOverlay isLocked={globalState.settings.isLockedOverlay} title={'Lock overlay'} />
 				</PanelButtonWrapper>
 			</Label>
 			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>

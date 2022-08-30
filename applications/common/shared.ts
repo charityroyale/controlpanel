@@ -5,6 +5,7 @@ export interface GlobalState {
 
 export interface SettingsState {
 	volume: number
+	isLockedOverlay: boolean
 }
 
 export interface DonationAlertState {
