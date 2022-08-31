@@ -124,6 +124,15 @@ export class DonationBehaviour {
 			donationBanner.parentContainer.alpha = 1
 		}
 
+		const speech = new SpeechSynthesisUtterance()
+		speech.text = message
+		speech.pitch = 1
+		speech.volume = 1
+		speech.lang = 'de-AT'
+		speech.rate = 1
+
+		speechSynthesis.speak(speech)
+
 		if (amount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
 			this.alert.scene.sound.play(STAR_RAIN_SOUND_AUDIO_KEY)
 			this.alert.scene.time.addEvent({
