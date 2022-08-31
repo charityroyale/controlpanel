@@ -105,6 +105,7 @@ export class DonationBehaviour {
 	private triggerAlert(donation: Donation) {
 		this.createAlert(donation)
 		this.createAlertText(donation)
+		this.alert.text2speech.speak(donation.message)
 	}
 
 	private createAlert(donation: Donation) {
@@ -123,15 +124,6 @@ export class DonationBehaviour {
 			donationBanner.setPaused(false)
 			donationBanner.parentContainer.alpha = 1
 		}
-
-		const speech = new SpeechSynthesisUtterance()
-		speech.text = message
-		speech.pitch = 1
-		speech.volume = 1
-		speech.lang = 'de-AT'
-		speech.rate = 1
-
-		speechSynthesis.speak(speech)
 
 		if (amount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
 			this.alert.scene.sound.play(STAR_RAIN_SOUND_AUDIO_KEY)

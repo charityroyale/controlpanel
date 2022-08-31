@@ -3,6 +3,7 @@ import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STAT
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
+import { Text2Speech } from '../objects/behaviour/Text2Speech'
 import { Alert } from '../objects/containers/alert/Alert'
 import {
 	DonationAlertContainer,
@@ -49,12 +50,22 @@ export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
 	public donationBannerDontainer: DonationAlertContainer | null = null
 	public isLockedOverlay = false
+	public text2speech: Text2Speech | null = null
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
 	}
 
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
+		this.text2speech = new Text2Speech(
+			config.initialState.donationAlert.text2speech.language,
+			config.initialState.donationAlert.text2speech.volume
+		)
+
+		config.socket.on(STATE_UPDATE, (state) => {
+			this.text2speech?.handleState(state.donationAlert)
+		})
+
 		config.socket.on(STATE_UPDATE, (state) => {
 			this.donationBannerDontainer?.handleState(state.donationAlert)
 			/**
@@ -118,7 +129,13 @@ export class OverlayScene extends Phaser.Scene {
 		this.createStarRainInstance(starGroup)
 
 		// create pig container items
-		this.alert = new Alert(this, starGroup, this.add.particles(whiteStarFollowerKey), fireworksEmitter)
+		this.alert = new Alert(
+			this,
+			this.text2speech!,
+			starGroup,
+			this.add.particles(whiteStarFollowerKey),
+			fireworksEmitter
+		)
 
 		// create donationAlerts
 		const dontainerBanner = new DonationAlert(this, 0, 0, initialState.donationAlert, donationAlertKey)

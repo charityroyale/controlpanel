@@ -25,6 +25,10 @@ const initialDonationAlertState: DonationAlertState = {
 		x: 1920 / 2,
 		y: 111,
 	},
+	text2speech: {
+		volume: 0.5,
+		language: 'de-AT',
+	},
 }
 const donationAlertSlice = createSlice({
 	name: 'donationalert',

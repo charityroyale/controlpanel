@@ -11,6 +11,10 @@ export interface SettingsState {
 export interface DonationAlertState {
 	isVisible: boolean
 	scale: number
+	text2speech: {
+		volume: number
+		language: string
+	}
 	position: {
 		x: number
 		y: number
