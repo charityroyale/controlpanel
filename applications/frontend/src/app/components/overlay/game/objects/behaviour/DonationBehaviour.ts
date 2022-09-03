@@ -53,19 +53,23 @@ export class DonationBehaviour {
 
 	private startListenForDonations() {
 		this.checkQueueTimerId = window.setInterval(() => {
-			const donationAlertContainer = this.alert.scene.children.getByName(
-				donationAlertContainerName
-			) as DonationBannerContainer
-			const bannerWithMessage = donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertBanner
-			const bannerWithoutMessage = donationAlertContainer.getByName(donationAlertKey) as DonationAlertBanner
-
-			const bannerPlaying = bannerWithoutMessage.isPlaying() || bannerWithMessage.isPlaying()
-			const isReadyToPlayNextDonation = this.queue.length > 0 && !this.alert.text2speech.isSpeaking && !bannerPlaying
+			const isReadyToPlayNextDonation =
+				this.queue.length > 0 && !this.alert.text2speech.isSpeaking && !this.isCurrentyBannerShowing()
 
 			if (isReadyToPlayNextDonation) {
 				this.triggerAlert(this.queue.shift()!)
 			}
 		}, this.checkQueueTimer)
+	}
+
+	private isCurrentyBannerShowing() {
+		const donationAlertContainer = this.alert.scene.children.getByName(
+			donationAlertContainerName
+		) as DonationBannerContainer
+		const bannerWithMessage = donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertBanner
+		const bannerWithoutMessage = donationAlertContainer.getByName(donationAlertKey) as DonationAlertBanner
+
+		return bannerWithoutMessage.isPlaying() || bannerWithMessage.isPlaying()
 	}
 
 	private createTextElements(donation: Donation) {
@@ -118,8 +122,11 @@ export class DonationBehaviour {
 	}
 
 	private triggerAlert(donation: Donation) {
+		// default behaviour
 		this.createBanner(donation)
 		this.createTextElements(donation)
+
+		// amount based effects
 		this.createVisualEffects(donation.amount)
 		this.alert.text2speech.speak(donation.message)
 	}

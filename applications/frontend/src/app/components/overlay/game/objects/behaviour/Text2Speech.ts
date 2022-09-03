@@ -1,8 +1,9 @@
 import { SettingsState } from '@pftp/common'
 
 export class Text2Speech {
-	public speechSynthesisUtterance = new SpeechSynthesisUtterance()
 	public isSpeaking = false
+
+	private speechSynthesisUtterance = new SpeechSynthesisUtterance()
 	private speechSynthesis = window.speechSynthesis
 
 	constructor(language: string, volume: number) {
