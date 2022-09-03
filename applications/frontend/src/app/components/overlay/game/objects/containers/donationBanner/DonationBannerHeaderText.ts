@@ -1,15 +1,10 @@
 import { fadeInDonationText } from '../../tweens/fadeInDonationText'
 import { fadeOutDonationText } from '../../tweens/fadeOutDonationText'
 
-const defaultStyles = {
-	fontFamily: 'Saira Condensed',
-	fontSize: '48px',
-	color: '#BA4D76',
-	align: 'center',
-}
-
-export const donationAlertHeaderTextName = 'donationalerttext'
-export class DonationAlertHeaderText extends Phaser.GameObjects.Text {
+/**
+ * Header text for DonationBanner
+ */
+export class DonationBannerHeaderText extends Phaser.GameObjects.Text {
 	constructor(
 		scene: Phaser.Scene,
 		x: number,
@@ -30,3 +25,12 @@ export class DonationAlertHeaderText extends Phaser.GameObjects.Text {
 		scene.add.existing(this)
 	}
 }
+
+const defaultStyles = {
+	fontFamily: 'Saira Condensed',
+	fontSize: '48px',
+	color: '#BA4D76',
+	align: 'center',
+}
+
+export const donationAlertHeaderTextName = 'donationalerttext'

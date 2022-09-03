@@ -1,18 +1,17 @@
 import { DonationAlertState, DONATION_ALERT_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
 import { Socket } from 'socket.io-client'
 import { donationAlertKey, donationAlertWithMessageKey } from '../../../scenes/OverlayScene'
-import { DonationAlertHeaderText, donationAlertHeaderTextName } from './DonationAlertHeaderText'
-import { DonationAlertUserMessageText, donationAlertUserMessageTextName } from './DonationAlertUserMessageText'
-import { DonationAlert } from './DonationBanner'
+import { DonationBannerHeaderText, donationAlertHeaderTextName } from './DonationBannerHeaderText'
+import { DonationBannerMessageText, donationAlertUserMessageTextName } from './DonationBannerMessageText'
+import { DonationAlertBanner } from './DonationBanner'
 
-interface ContainerOptions {
-	x?: number | undefined
-	y?: number | undefined
-	children?: Phaser.GameObjects.GameObject[] | undefined
-}
-
-export const donationAlertContainerName = 'donationalertcontainer'
-export class DonationAlertContainer extends Phaser.GameObjects.Container {
+/**
+ * Container for visual AlertContainer
+ * - Header / Text
+ * - Message / Text
+ * - BackgroundBanner / Video
+ */
+export class DonationBannerContainer extends Phaser.GameObjects.Container {
 	constructor(
 		scene: Phaser.Scene,
 		state: DonationAlertState,
@@ -58,13 +57,13 @@ export class DonationAlertContainer extends Phaser.GameObjects.Container {
 	}
 
 	private scaleContainerItems = (state: DonationAlertState) => {
-		const containerItems = this.getAll() as DonationAlert[]
+		const containerItems = this.getAll() as DonationAlertBanner[]
 		containerItems.map((items) => items.setScale(state.scale))
 	}
 
 	private scaleDonationHeaderText = () => {
-		const donationAlertHeaderText = this.getByName(donationAlertHeaderTextName) as DonationAlertHeaderText
-		const donationAlert = this.getByName(donationAlertKey) as DonationAlert
+		const donationAlertHeaderText = this.getByName(donationAlertHeaderTextName) as DonationBannerHeaderText
+		const donationAlert = this.getByName(donationAlertKey) as DonationAlertBanner
 
 		if (donationAlert && donationAlertHeaderText) {
 			donationAlertHeaderText.setY(donationAlert.displayHeight - 240 * this.scale)
@@ -72,12 +71,10 @@ export class DonationAlertContainer extends Phaser.GameObjects.Container {
 	}
 
 	private scaleDonationUserMessageText = () => {
-		const donationAlertHeaderText = this.getByName(donationAlertHeaderTextName) as DonationAlertHeaderText
-		const donationAlert = this.getByName(donationAlertKey) as DonationAlert
-		const bannerWithMessage = this.getByName(donationAlertWithMessageKey) as DonationAlert
-		const donationAlertUserMessageText = this.getByName(
-			donationAlertUserMessageTextName
-		) as DonationAlertUserMessageText
+		const donationAlertHeaderText = this.getByName(donationAlertHeaderTextName) as DonationBannerHeaderText
+		const donationAlert = this.getByName(donationAlertKey) as DonationAlertBanner
+		const bannerWithMessage = this.getByName(donationAlertWithMessageKey) as DonationAlertBanner
+		const donationAlertUserMessageText = this.getByName(donationAlertUserMessageTextName) as DonationBannerMessageText
 
 		if (bannerWithMessage && donationAlertUserMessageText && donationAlert && donationAlertHeaderText) {
 			donationAlertHeaderText.setY(donationAlert.displayHeight - 240 * this.scale)
@@ -96,3 +93,11 @@ export class DonationAlertContainer extends Phaser.GameObjects.Container {
 		this.visible = visible
 	}
 }
+
+interface ContainerOptions {
+	x?: number | undefined
+	y?: number | undefined
+	children?: Phaser.GameObjects.GameObject[] | undefined
+}
+
+export const donationAlertContainerName = 'donationalertcontainer'

@@ -6,6 +6,10 @@ export interface GlobalState {
 export interface SettingsState {
 	volume: number
 	isLockedOverlay: boolean
+	text2speech: {
+		volume: number
+		language: string
+	}
 }
 
 export interface DonationAlertState {

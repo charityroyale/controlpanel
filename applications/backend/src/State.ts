@@ -4,6 +4,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 const initialSettingsState: SettingsState = {
 	volume: 0.6,
 	isLockedOverlay: false,
+	text2speech: {
+		volume: 0.6,
+		language: 'de-AT',
+	},
 }
 const settingsSlice = createSlice({
 	name: 'settings',

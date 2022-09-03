@@ -5,17 +5,18 @@ import styled from 'styled-components'
 import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
-import { FaPiggyBank } from 'react-icons/fa'
 import { AiFillNotification } from 'react-icons/ai'
 import { Donation, DONATION_ALERT_UPDATE, DONATION_TRIGGER, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
 import { useDebouncedCallback } from 'use-debounce'
+import { FatSelect } from './FatSelect'
 
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
+	const [languages, setLanguages] = useState<{ value: string; label: string }[]>([])
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -23,6 +24,28 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			volume: newVolume,
 		})
 	}, [globalState.settings.volume, socket])
+
+	const emiteLanguageUpdate = useCallback(
+		(e) => {
+			socket?.emit(SETTINGS_UPDATE, {
+				text2speech: {
+					...globalState.settings.text2speech,
+					language: e.currentTarget.value,
+				},
+			})
+		},
+		[globalState.settings.text2speech, socket]
+	)
+
+	const emiteText2SpeechVolume = useCallback(() => {
+		const newVolume = getNewVolumeFromClick(globalState.settings.text2speech.volume)
+		socket?.emit(SETTINGS_UPDATE, {
+			text2speech: {
+				...globalState.settings.text2speech,
+				volume: newVolume,
+			},
+		})
+	}, [globalState.settings.text2speech, socket])
 
 	const emiteDonationChange = useDebouncedCallback((scale: number) => {
 		socket?.emit(DONATION_ALERT_UPDATE, {
@@ -72,25 +95,23 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		socket?.emit(DONATION_TRIGGER, donation)
 	}, [socket])
 
+	useEffect(() => {
+		window.speechSynthesis.onvoiceschanged = () => {
+			const voices = window.speechSynthesis.getVoices()
+			const languages = voices.map((voice) => {
+				return {
+					label: voice.name,
+					value: voice.lang,
+				}
+			})
+			setLanguages(languages)
+		}
+	}, [])
+
 	return (
 		<GridLeftPanel>
-			<Label>
-				<IconWrapper>
-					<FaPiggyBank size="14px" style={{ marginRight: '6px' }} />
-				</IconWrapper>
-				Settings
-			</Label>
 			<Content>
 				<ButtonsWrapper>
-					<FatButton
-						icon={globalState.settings.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />}
-						active={globalState.settings.volume > 0}
-						value={globalState?.settings.volume.toString()}
-						onClick={emitVolumeUpdate}
-					>
-						<VolumeIndicator volume={globalState.settings.volume} />
-					</FatButton>
-
 					<Label
 						style={{
 							margin: '0 -8px',
@@ -115,7 +136,14 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 					>
 						<span>Donation Alert</span>
 					</FatButton>
-
+					<FatButton
+						icon={globalState.settings.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />}
+						active={globalState.settings.volume > 0}
+						value={globalState?.settings.volume.toString()}
+						onClick={emitVolumeUpdate}
+					>
+						<VolumeIndicator volume={globalState.settings.volume} />
+					</FatButton>
 					<FatButton style={{ cursor: 'default' }}>
 						<React.Fragment>
 							<Range
@@ -175,6 +203,38 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 							/>
 						</React.Fragment>
 					</FatButton>
+
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							Text-2-Speech
+						</span>
+					</Label>
+					<FatButton
+						icon={
+							globalState.settings.text2speech.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />
+						}
+						active={globalState.settings.text2speech.volume > 0}
+						value={globalState.settings.text2speech.volume.toString()}
+						onClick={emiteText2SpeechVolume}
+					>
+						<VolumeIndicator volume={globalState.settings.text2speech.volume} />
+					</FatButton>
+					<FatSelect
+						onBlur={emiteLanguageUpdate}
+						onChange={emiteLanguageUpdate}
+						items={languages}
+						value={globalState.settings.text2speech.language}
+					/>
 				</ButtonsWrapper>
 			</Content>
 		</GridLeftPanel>
@@ -255,7 +315,7 @@ const IconWrapper = styled.span`
 	display: flex;
 	align-items: center;
 	* {
-		color: ${(p) => p.theme.color.piggyPink};
+		color: ${(p) => p.theme.color.charityGold};
 	}
 `
 
