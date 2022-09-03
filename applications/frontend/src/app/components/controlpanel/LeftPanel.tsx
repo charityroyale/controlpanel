@@ -16,6 +16,7 @@ import { useDebouncedCallback } from 'use-debounce'
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
+	const [languages, setLanguages] = useState<{ value: string; label: string }[]>([])
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -23,6 +24,18 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			volume: newVolume,
 		})
 	}, [globalState.settings.volume, socket])
+
+	const emiteLanguageUpdate = useCallback(
+		(e) => {
+			socket?.emit(SETTINGS_UPDATE, {
+				text2speech: {
+					...globalState.settings.text2speech,
+					language: e.currentTarget.value,
+				},
+			})
+		},
+		[globalState.settings.text2speech, socket]
+	)
 
 	const emiteText2SpeechVolume = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.text2speech.volume)
@@ -81,6 +94,17 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 
 		socket?.emit(DONATION_TRIGGER, donation)
 	}, [socket])
+
+	const getLanguages = useCallback(() => {
+		const voices = window.speechSynthesis.getVoices()
+		const languages = voices.map((voice) => {
+			return {
+				label: voice.lang,
+				value: voice.lang,
+			}
+		})
+		setLanguages(languages)
+	}, [])
 
 	return (
 		<GridLeftPanel>
@@ -211,6 +235,20 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 					>
 						<VolumeIndicator volume={globalState.settings.text2speech.volume} />
 					</FatButton>
+					<FatButton onClick={getLanguages}>enable speech</FatButton>
+					<select
+						onBlur={emiteLanguageUpdate}
+						onChange={emiteLanguageUpdate}
+						defaultValue={globalState.settings.text2speech.language}
+					>
+						{languages.map((language, i) => {
+							return (
+								<option key={`${language}-${i}`} value={language.value}>
+									{language.value}
+								</option>
+							)
+						})}
+					</select>
 				</ButtonsWrapper>
 			</Content>
 		</GridLeftPanel>
