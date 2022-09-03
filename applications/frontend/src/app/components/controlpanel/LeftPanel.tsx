@@ -12,6 +12,7 @@ import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
 import { useDebouncedCallback } from 'use-debounce'
+import { FatSelect } from './FatSelect'
 
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
@@ -95,15 +96,17 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		socket?.emit(DONATION_TRIGGER, donation)
 	}, [socket])
 
-	const getLanguages = useCallback(() => {
-		const voices = window.speechSynthesis.getVoices()
-		const languages = voices.map((voice) => {
-			return {
-				label: voice.lang,
-				value: voice.lang,
-			}
-		})
-		setLanguages(languages)
+	useEffect(() => {
+		window.speechSynthesis.onvoiceschanged = () => {
+			const voices = window.speechSynthesis.getVoices()
+			const languages = voices.map((voice) => {
+				return {
+					label: voice.name,
+					value: voice.lang,
+				}
+			})
+			setLanguages(languages)
+		}
 	}, [])
 
 	return (
@@ -235,20 +238,12 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 					>
 						<VolumeIndicator volume={globalState.settings.text2speech.volume} />
 					</FatButton>
-					<FatButton onClick={getLanguages}>enable speech</FatButton>
-					<select
+					<FatSelect
 						onBlur={emiteLanguageUpdate}
 						onChange={emiteLanguageUpdate}
-						defaultValue={globalState.settings.text2speech.language}
-					>
-						{languages.map((language, i) => {
-							return (
-								<option key={`${language}-${i}`} value={language.value}>
-									{language.value}
-								</option>
-							)
-						})}
-					</select>
+						items={languages}
+						value={globalState.settings.text2speech.language}
+					/>
 				</ButtonsWrapper>
 			</Content>
 		</GridLeftPanel>
