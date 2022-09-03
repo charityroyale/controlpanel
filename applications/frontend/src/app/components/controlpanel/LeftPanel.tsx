@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
-import { FaPiggyBank } from 'react-icons/fa'
 import { AiFillNotification } from 'react-icons/ai'
 import { Donation, DONATION_ALERT_UPDATE, DONATION_TRIGGER, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
@@ -111,23 +110,8 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 
 	return (
 		<GridLeftPanel>
-			<Label>
-				<IconWrapper>
-					<FaPiggyBank size="14px" style={{ marginRight: '6px' }} />
-				</IconWrapper>
-				Settings
-			</Label>
 			<Content>
 				<ButtonsWrapper>
-					<FatButton
-						icon={globalState.settings.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />}
-						active={globalState.settings.volume > 0}
-						value={globalState?.settings.volume.toString()}
-						onClick={emitVolumeUpdate}
-					>
-						<VolumeIndicator volume={globalState.settings.volume} />
-					</FatButton>
-
 					<Label
 						style={{
 							margin: '0 -8px',
@@ -152,7 +136,14 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 					>
 						<span>Donation Alert</span>
 					</FatButton>
-
+					<FatButton
+						icon={globalState.settings.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />}
+						active={globalState.settings.volume > 0}
+						value={globalState?.settings.volume.toString()}
+						onClick={emitVolumeUpdate}
+					>
+						<VolumeIndicator volume={globalState.settings.volume} />
+					</FatButton>
 					<FatButton style={{ cursor: 'default' }}>
 						<React.Fragment>
 							<Range
@@ -324,7 +315,7 @@ const IconWrapper = styled.span`
 	display: flex;
 	align-items: center;
 	* {
-		color: ${(p) => p.theme.color.piggyPink};
+		color: ${(p) => p.theme.color.charityGold};
 	}
 `
 
