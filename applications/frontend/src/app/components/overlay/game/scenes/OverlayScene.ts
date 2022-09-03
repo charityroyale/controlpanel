@@ -6,10 +6,10 @@ import { SCENES } from '../gameConfig'
 import { Text2Speech } from '../objects/behaviour/Text2Speech'
 import { Alert } from '../objects/containers/alert/Alert'
 import {
-	DonationAlertContainer,
+	DonationBannerContainer,
 	donationAlertContainerName,
-} from '../objects/containers/donationalert/DonationAlertContainer'
-import { DonationAlert } from '../objects/containers/donationalert/DonationBanner'
+} from '../objects/containers/donationBanner/DonationBannerContainer'
+import { DonationAlertBanner } from '../objects/containers/donationBanner/DonationBanner'
 import { Star } from '../objects/Star'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
@@ -48,7 +48,7 @@ const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitter
 
 export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
-	public donationBannerDontainer: DonationAlertContainer | null = null
+	public donationBannerDontainer: DonationBannerContainer | null = null
 	public isLockedOverlay = false
 	public text2speech: Text2Speech | null = null
 
@@ -58,16 +58,14 @@ export class OverlayScene extends Phaser.Scene {
 
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		this.text2speech = new Text2Speech(
-			config.initialState.donationAlert.text2speech.language,
-			config.initialState.donationAlert.text2speech.volume
+			config.initialState.settings.text2speech.language,
+			config.initialState.settings.text2speech.volume
 		)
 
 		config.socket.on(STATE_UPDATE, (state) => {
-			this.text2speech?.handleState(state.donationAlert)
-		})
-
-		config.socket.on(STATE_UPDATE, (state) => {
 			this.donationBannerDontainer?.handleState(state.donationAlert)
+			this.text2speech?.handleState(state.settings)
+
 			/**
 			 * Somehow numbers with decimals end up having more decimals
 			 * than assigned, therefore it is rounded to one decimal.
@@ -138,8 +136,8 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		// create donationAlerts
-		const dontainerBanner = new DonationAlert(this, 0, 0, initialState.donationAlert, donationAlertKey)
-		const donationAlertWithMessage = new DonationAlert(
+		const dontainerBanner = new DonationAlertBanner(this, 0, 0, initialState.donationAlert, donationAlertKey)
+		const donationAlertWithMessage = new DonationAlertBanner(
 			this,
 			0,
 			0,
@@ -148,7 +146,7 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		// create containers
-		this.donationBannerDontainer = new DonationAlertContainer(this, initialState.donationAlert, socket, {
+		this.donationBannerDontainer = new DonationBannerContainer(this, initialState.donationAlert, socket, {
 			children: [dontainerBanner, donationAlertWithMessage],
 		})
 

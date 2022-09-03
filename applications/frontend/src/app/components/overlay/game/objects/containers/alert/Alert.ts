@@ -18,9 +18,8 @@ export class Alert extends Phaser.GameObjects.Container {
 		super(scene)
 		this.setName('alert')
 
-		this.text2speech = text2speech;
+		this.text2speech = text2speech
 		this.behaviour = new Behaviour(this, starGroup, starFollowParticle, fireworksEmitter)
-		this.behaviour.startListenForDonations()
 
 		this.scene.add.existing(this)
 	}

@@ -24,6 +24,16 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		})
 	}, [globalState.settings.volume, socket])
 
+	const emiteText2SpeechVolume = useCallback(() => {
+		const newVolume = getNewVolumeFromClick(globalState.settings.text2speech.volume)
+		socket?.emit(SETTINGS_UPDATE, {
+			text2speech: {
+				...globalState.settings.text2speech,
+				volume: newVolume,
+			},
+		})
+	}, [globalState.settings.text2speech, socket])
+
 	const emiteDonationChange = useDebouncedCallback((scale: number) => {
 		socket?.emit(DONATION_ALERT_UPDATE, {
 			scale,
@@ -174,6 +184,32 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 								)}
 							/>
 						</React.Fragment>
+					</FatButton>
+
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							Text-2-Speech
+						</span>
+					</Label>
+					<FatButton
+						icon={
+							globalState.settings.text2speech.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />
+						}
+						active={globalState.settings.text2speech.volume > 0}
+						value={globalState.settings.text2speech.volume.toString()}
+						onClick={emiteText2SpeechVolume}
+					>
+						<VolumeIndicator volume={globalState.settings.text2speech.volume} />
 					</FatButton>
 				</ButtonsWrapper>
 			</Content>

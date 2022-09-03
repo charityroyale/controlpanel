@@ -5,7 +5,6 @@ import { DonationBehaviour } from './DonationBehaviour'
 export class Behaviour {
 	private alert: Alert
 	private queue: Donation[] = []
-	private donationBehaviour: DonationBehaviour
 
 	constructor(
 		alert: Alert,
@@ -14,17 +13,7 @@ export class Behaviour {
 		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter
 	) {
 		this.alert = alert
-		this.donationBehaviour = new DonationBehaviour(
-			this.alert,
-			this.queue,
-			starGroup,
-			starFollowParticle,
-			fireworksEmitter
-		)
-	}
-
-	public startListenForDonations() {
-		this.donationBehaviour.startListenForDonations()
+		new DonationBehaviour(this.alert, this.queue, starGroup, starFollowParticle, fireworksEmitter)
 	}
 
 	public addToQueue(donation: Donation) {

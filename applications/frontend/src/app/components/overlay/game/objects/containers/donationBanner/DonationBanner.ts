@@ -1,7 +1,10 @@
 import { DonationAlertState } from '@pftp/common'
-import { DonationAlertContainer } from './DonationAlertContainer'
+import { DonationBannerContainer } from './DonationBannerContainer'
 
-export class DonationAlert extends Phaser.GameObjects.Video {
+/**
+ * Videobackgroundanimation GameObject
+ */
+export class DonationAlertBanner extends Phaser.GameObjects.Video {
 	constructor(scene: Phaser.Scene, x: number, y: number, state: DonationAlertState, key: string) {
 		super(scene, x, y, key)
 		this.name = key
@@ -10,7 +13,7 @@ export class DonationAlert extends Phaser.GameObjects.Video {
 		this.setScale(state.scale)
 
 		this.on('complete', () => {
-			const donationAlertContainer = this.parentContainer as DonationAlertContainer
+			const donationAlertContainer = this.parentContainer as DonationBannerContainer
 			if (donationAlertContainer) {
 				donationAlertContainer.alpha = 0
 			}

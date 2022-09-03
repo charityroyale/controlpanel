@@ -8,12 +8,18 @@ import {
 	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../../scenes/OverlayScene'
 import { Star } from '../Star'
-import { DonationAlert } from '../containers/donationalert/DonationBanner'
-import { DonationAlertContainer, donationAlertContainerName } from '../containers/donationalert/DonationAlertContainer'
-import { DonationAlertHeaderText } from '../containers/donationalert/DonationAlertHeaderText'
-import { DonationAlertUserMessageText } from '../containers/donationalert/DonationAlertUserMessageText'
+import { DonationAlertBanner } from '../containers/donationBanner/DonationBanner'
+import {
+	DonationBannerContainer,
+	donationAlertContainerName,
+} from '../containers/donationBanner/DonationBannerContainer'
+import { DonationBannerHeaderText } from '../containers/donationBanner/DonationBannerHeaderText'
+import { DonationBannerMessageText } from '../containers/donationBanner/DonationBannerMessageText'
 import { Alert } from '../containers/alert/Alert'
-import { ALERT_FIREWORKS_MIN_AMOUNT, ALERT_STAR_RAIN_MIN_AMOUNT } from '../containers/donationalert/donationConfig'
+import {
+	ALERT_FIREWORKS_MIN_AMOUNT,
+	ALERT_STAR_RAIN_MIN_AMOUNT,
+} from '../containers/donationBanner/donationSpecialEffectsConfig'
 import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
 const { FloatBetween } = Phaser.Math
 
@@ -45,21 +51,30 @@ export class DonationBehaviour {
 		this.startListenForDonations()
 	}
 
-	public startListenForDonations() {
+	private startListenForDonations() {
 		this.checkQueueTimerId = window.setInterval(() => {
-			if (this.queue.length > 0) {
+			const donationAlertContainer = this.alert.scene.children.getByName(
+				donationAlertContainerName
+			) as DonationBannerContainer
+			const bannerWithMessage = donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertBanner
+			const bannerWithoutMessage = donationAlertContainer.getByName(donationAlertKey) as DonationAlertBanner
+
+			const bannerPlaying = bannerWithoutMessage.isPlaying() || bannerWithMessage.isPlaying()
+			const isReadyToPlayNextDonation = this.queue.length > 0 && !this.alert.text2speech.isSpeaking && !bannerPlaying
+
+			if (isReadyToPlayNextDonation) {
 				this.triggerAlert(this.queue.shift()!)
 			}
 		}, this.checkQueueTimer)
 	}
 
-	private createAlertText(donation: Donation) {
+	private createTextElements(donation: Donation) {
 		const donationAlertContainer = this.alert.scene.children.getByName(
 			donationAlertContainerName
-		) as DonationAlertContainer
+		) as DonationBannerContainer
 		const donationAlert = donation.message
-			? (donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlert)
-			: (donationAlertContainer.getByName(donationAlertKey) as DonationAlert)
+			? (donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertBanner)
+			: (donationAlertContainer.getByName(donationAlertKey) as DonationAlertBanner)
 
 		this.createDonationAlertHeaderText(donation, donationAlert, donationAlertContainer)
 
@@ -72,11 +87,11 @@ export class DonationBehaviour {
 
 	private createDonationAlertHeaderText = (
 		donation: Donation,
-		donationAlert: DonationAlert,
-		donationAlertContainer: DonationAlertContainer
+		donationAlert: DonationAlertBanner,
+		donationAlertContainer: DonationBannerContainer
 	) => {
 		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount)
-		const donationAlertHeaderText = new DonationAlertHeaderText(
+		const donationAlertHeaderText = new DonationBannerHeaderText(
 			this.alert.scene,
 			0,
 			donationAlert.displayHeight - 240 * donationAlertContainer.scale,
@@ -88,10 +103,10 @@ export class DonationBehaviour {
 
 	private createDonationAlertUserMessageText = (
 		donation: Donation,
-		donationAlert: DonationAlert,
-		donationAlertContainer: DonationAlertContainer
+		donationAlert: DonationAlertBanner,
+		donationAlertContainer: DonationBannerContainer
 	) => {
-		const donationAlertUserMessageText = new DonationAlertUserMessageText(
+		const donationAlertUserMessageText = new DonationBannerMessageText(
 			this.alert.scene,
 			donationAlert.x - (donationAlert.displayWidth / 2 - 50),
 			donationAlert.displayHeight - 540 * donationAlertContainer.scale,
@@ -103,116 +118,129 @@ export class DonationBehaviour {
 	}
 
 	private triggerAlert(donation: Donation) {
-		this.createAlert(donation)
-		this.createAlertText(donation)
+		this.createBanner(donation)
+		this.createTextElements(donation)
+		this.createVisualEffects(donation.amount)
 		this.alert.text2speech.speak(donation.message)
 	}
 
-	private createAlert(donation: Donation) {
-		const { amount, message } = donation
+	private createBanner(donation: Donation) {
+		const { message } = donation
+
 		const donationAlertContainer = this.alert.scene.children.getByName(
 			donationAlertContainerName
-		) as DonationAlertContainer
+		) as DonationBannerContainer
 		const banner = message
 			? donationAlertContainer.getByName(donationAlertWithMessageKey)
 			: donationAlertContainer.getByName(donationAlertKey)
 
 		if (donationAlertContainer && banner) {
-			const donationBanner = banner as DonationAlert
-			donationBanner.play()
-			// Prevents video freeze when game is out of focus (i.e. user changes tab on the browser)
-			donationBanner.setPaused(false)
-			donationBanner.parentContainer.alpha = 1
+			this.showBannerAndPlayVideo(banner as DonationAlertBanner)
 		}
+	}
 
+	/**
+	 * Prevents video freeze when game is out of focus (i.e. user changes tab on the browser)
+	 * donationBanner.setPaused(false)
+	 */
+	public showBannerAndPlayVideo(donationBanner: DonationAlertBanner) {
+		donationBanner.play()
+		donationBanner.setPaused(false)
+		donationBanner.parentContainer.alpha = 1
+	}
+
+	public createVisualEffects(amount: number) {
 		if (amount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
-			this.alert.scene.sound.play(STAR_RAIN_SOUND_AUDIO_KEY)
-			this.alert.scene.time.addEvent({
-				callback: () => {
-					for (let i = 0; i <= 3; i++) {
-						this.starGroup.add(
-							new Star(this.alert.scene, Phaser.Math.Between(20, 1900), -100, blueStarKey, this.starFollowParticle)
-						)
-					}
-				},
-				callbackScope: this,
-				delay: 200,
-				repeat: 60,
-			})
+			this.playStarRain()
 		} else if (amount >= ALERT_FIREWORKS_MIN_AMOUNT) {
-			const { width, height } = this.alert.scene.scale
-			const positionTimer = this.alert.scene.time.addEvent({
-				repeat: -1,
-				callback: () => {
-					this.fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
-				},
-			})
-			this.alert.scene.time.addEvent({
-				delay: 500,
-				repeat: 0,
-				callback: () => {
-					this.fireworksEmitter.start()
-				},
-			})
-
-			this.alert.scene.time.addEvent({
-				delay: 500,
-				repeat: 0,
-				callback: () => {
-					this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-				},
-			})
-
-			this.alert.scene.time.addEvent({
-				delay: 1500,
-				repeat: 0,
-				callback: () => {
-					this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-				},
-			})
-
-			this.alert.scene.time.addEvent({
-				delay: 2500,
-				repeat: 0,
-				callback: () => {
-					this.alert.scene.sound.play(FIREWORKS_SOUND_2_AUDIO_KEY)
-				},
-			})
-
-			this.alert.scene.time.addEvent({
-				delay: 3500,
-				repeat: 0,
-				callback: () => {
-					this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-				},
-			})
-
-			this.alert.scene.time.addEvent({
-				delay: 4500,
-				repeat: 0,
-				callback: () => {
-					this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-				},
-			})
-
-			this.alert.scene.time.addEvent({
-				delay: 5000,
-				repeat: 0,
-				callback: () => {
-					positionTimer.destroy()
-					this.fireworksEmitter.stop()
-				},
-			})
+			this.playFireWork()
 		}
+	}
+
+	public playFireWork() {
+		const { width, height } = this.alert.scene.scale
+		const positionTimer = this.alert.scene.time.addEvent({
+			repeat: -1,
+			callback: () => {
+				this.fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
+			},
+		})
+		this.alert.scene.time.addEvent({
+			delay: 500,
+			repeat: 0,
+			callback: () => {
+				this.fireworksEmitter.start()
+			},
+		})
+
+		this.alert.scene.time.addEvent({
+			delay: 500,
+			repeat: 0,
+			callback: () => {
+				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+			},
+		})
+
+		this.alert.scene.time.addEvent({
+			delay: 1500,
+			repeat: 0,
+			callback: () => {
+				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+			},
+		})
+
+		this.alert.scene.time.addEvent({
+			delay: 2500,
+			repeat: 0,
+			callback: () => {
+				this.alert.scene.sound.play(FIREWORKS_SOUND_2_AUDIO_KEY)
+			},
+		})
+
+		this.alert.scene.time.addEvent({
+			delay: 3500,
+			repeat: 0,
+			callback: () => {
+				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+			},
+		})
+
+		this.alert.scene.time.addEvent({
+			delay: 4500,
+			repeat: 0,
+			callback: () => {
+				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
+			},
+		})
+
+		this.alert.scene.time.addEvent({
+			delay: 5000,
+			repeat: 0,
+			callback: () => {
+				positionTimer.destroy()
+				this.fireworksEmitter.stop()
+			},
+		})
+	}
+
+	public playStarRain() {
+		this.alert.scene.sound.play(STAR_RAIN_SOUND_AUDIO_KEY)
+		this.alert.scene.time.addEvent({
+			callback: () => {
+				for (let i = 0; i <= 3; i++) {
+					this.starGroup.add(
+						new Star(this.alert.scene, Phaser.Math.Between(20, 1900), -100, blueStarKey, this.starFollowParticle)
+					)
+				}
+			},
+			callbackScope: this,
+			delay: 200,
+			repeat: 60,
+		})
 	}
 
 	public stop() {
 		window.clearInterval(this.checkQueueTimerId)
 		this.checkQueueTimerId = undefined
-	}
-
-	public reset() {
-		this.stop()
-		this.startListenForDonations()
 	}
 }

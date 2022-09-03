@@ -1,12 +1,31 @@
-import { DonationAlertState } from '@pftp/common'
+import { SettingsState } from '@pftp/common'
 
 export class Text2Speech {
 	public speechSynthesisUtterance = new SpeechSynthesisUtterance()
+	public isSpeaking = false
 	private speechSynthesis = window.speechSynthesis
 
 	constructor(language: string, volume: number) {
 		this.setVolume(volume)
 		this.setLanguage(language)
+
+		this.onSpeakEnd = this.onSpeakEnd.bind(this)
+		this.onSpeakStart = this.onSpeakStart.bind(this)
+
+		this.init()
+	}
+
+	public init() {
+		this.speechSynthesisUtterance.addEventListener('start', this.onSpeakStart)
+		this.speechSynthesisUtterance.addEventListener('end', this.onSpeakEnd)
+	}
+
+	public onSpeakEnd() {
+		this.isSpeaking = false
+	}
+
+	public onSpeakStart() {
+		this.isSpeaking = true
 	}
 
 	public isSupported() {
@@ -33,7 +52,7 @@ export class Text2Speech {
 		this.speechSynthesisUtterance.lang = voice
 	}
 
-	public handleState(state: DonationAlertState) {
+	public handleState(state: SettingsState) {
 		if (this.speechSynthesisUtterance.volume !== state.text2speech.volume) {
 			this.setVolume(state.text2speech.volume)
 		}
