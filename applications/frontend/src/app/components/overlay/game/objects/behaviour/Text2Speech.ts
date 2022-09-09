@@ -2,13 +2,15 @@ import { SettingsState } from '@pftp/common'
 
 export class Text2Speech {
 	public isSpeaking = false
+	private minDonationAmount = 10
 
 	private speechSynthesisUtterance = new SpeechSynthesisUtterance()
 	private speechSynthesis = window.speechSynthesis
 
-	constructor(language: string, volume: number) {
+	constructor(language: string, volume: number, minDonationAmount: number) {
 		this.setVolume(volume)
 		this.setLanguage(language)
+		this.setMinDonationAmount(minDonationAmount)
 
 		this.onSpeakEnd = this.onSpeakEnd.bind(this)
 		this.onSpeakStart = this.onSpeakStart.bind(this)
@@ -43,6 +45,18 @@ export class Text2Speech {
 		this.speechSynthesis.speak(this.speechSynthesisUtterance)
 	}
 
+	public setMinDonationAmount(amount: number) {
+		if (amount <= 0) {
+			this.minDonationAmount = 0
+		} else {
+			this.minDonationAmount = amount
+		}
+	}
+
+	public getMinDonationAmount() {
+		return this.minDonationAmount
+	}
+
 	public setVolume(volume: number) {
 		if (volume < 0 || volume > 1) return
 		this.speechSynthesisUtterance.volume = volume
@@ -59,6 +73,10 @@ export class Text2Speech {
 		}
 		if (this.speechSynthesisUtterance.lang !== state.text2speech.language) {
 			this.setLanguage(state.text2speech.language)
+		}
+
+		if (this.minDonationAmount !== state.text2speech.minDonationAmount) {
+			this.setMinDonationAmount(state.text2speech.minDonationAmount)
 		}
 	}
 }

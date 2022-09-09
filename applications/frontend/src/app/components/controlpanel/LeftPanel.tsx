@@ -12,6 +12,7 @@ import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
 import { useDebouncedCallback } from 'use-debounce'
 import { FatSelect } from './FatSelect'
+import { FatInput } from './FatInput'
 
 export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
 	const { socket } = useSocket()
@@ -33,6 +34,21 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 					language: e.currentTarget.value,
 				},
 			})
+		},
+		[globalState.settings.text2speech, socket]
+	)
+
+	const emitMinDonationAmountUpdate = useCallback(
+		(e) => {
+			const numberRegex = /^[0-9\b]+$/
+			if (e.target.value === '' || numberRegex.test(e.target.value)) {
+				socket?.emit(SETTINGS_UPDATE, {
+					text2speech: {
+						...globalState.settings.text2speech,
+						minDonationAmount: Number(e.currentTarget.value),
+					},
+				})
+			}
 		},
 		[globalState.settings.text2speech, socket]
 	)
@@ -229,6 +245,11 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 					>
 						<VolumeIndicator volume={globalState.settings.text2speech.volume} />
 					</FatButton>
+					<FatInput
+						name="minDonationAmountForText2Speech"
+						value={globalState.settings.text2speech.minDonationAmount}
+						onChange={emitMinDonationAmountUpdate}
+					></FatInput>
 					<FatSelect
 						onBlur={emiteLanguageUpdate}
 						onChange={emiteLanguageUpdate}
