@@ -2,6 +2,7 @@ import {
 	Donation,
 	DONATION_ALERT_UPDATE,
 	DONATION_TRIGGER,
+	DONATION_WIDGET_UPDATE,
 	GlobalState,
 	MAW_INFO_JSON_DATA_UPDATE,
 	PFTPSocketEventsMap,
@@ -11,7 +12,14 @@ import {
 } from '@pftp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
-import { donationAlertReducer, settingsReducer, updateDonationAlert, updateSettings } from './State'
+import {
+	donationAlertReducer,
+	donationWidgetReducer,
+	settingsReducer,
+	updateDonationAlert,
+	updateDonationWidget,
+	updateSettings,
+} from './State'
 import { sessionLogger as logger } from './logger'
 import { fetchMawData } from './MakeAWishApiClient'
 
@@ -20,6 +28,7 @@ export default class Session {
 	private readonly store = configureStore<GlobalState>({
 		reducer: {
 			donationAlert: donationAlertReducer,
+			donationWidget: donationWidgetReducer,
 			settings: settingsReducer,
 		},
 	})
@@ -67,6 +76,10 @@ export default class Session {
 
 		socket.on(DONATION_ALERT_UPDATE, (donationAlertUpdate) =>
 			this.store.dispatch(updateDonationAlert(donationAlertUpdate))
+		)
+
+		socket.on(DONATION_WIDGET_UPDATE, (donationWidgetUpdate) =>
+			this.store.dispatch(updateDonationWidget(donationWidgetUpdate))
 		)
 		socket.on(SETTINGS_UPDATE, (settingsUpdate) => this.store.dispatch(updateSettings(settingsUpdate)))
 	}

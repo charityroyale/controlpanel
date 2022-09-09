@@ -18,6 +18,11 @@ import {
 } from '../objects/containers/donationBanner/DonationBannerContainer'
 import { DonationAlertBanner } from '../objects/containers/donationBanner/DonationBanner'
 import { Star } from '../objects/Star'
+import {
+	DonationWidgetContainer as DonationWidgetContainer,
+	donationWidgetContainerName,
+} from '../objects/containers/donationwidget/DonationWidgetContainer'
+import { DonationWidgetBackgroundFrame } from '../objects/containers/donationwidget/DonationWidgetBackgroundFrame'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -27,6 +32,11 @@ export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
 export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
 export const STRAR_SOUND_AUDIO_KEY = 'starSound'
 export const STAR_RAIN_SOUND_AUDIO_KEY = 'starRainAudio'
+
+export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
+export const DONATION_WIDGET_STATE_LOADING = 'donatioNWidgetStateLoading'
+export const DONATION_WIDGET_FULLFILLED = 'donationWidgetStateFullfilled'
+export const DONATION_WIDGET_LEFT = 'donationWidgetLeft'
 
 export const blueStarKey = 'blueStar'
 const whiteStarFollowerKey = 'whiteFollower'
@@ -55,7 +65,8 @@ const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitter
 
 export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
-	public donationBannerDontainer: DonationBannerContainer | null = null
+	public donationBannerContainer: DonationBannerContainer | null = null
+	public donationWidgetContainer: DonationWidgetContainer | null = null
 	public isLockedOverlay = false
 	public text2speech: Text2Speech | null = null
 
@@ -71,7 +82,8 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		config.socket.on(STATE_UPDATE, (state) => {
-			this.donationBannerDontainer?.handleState(state.donationAlert)
+			this.donationBannerContainer?.handleState(state.donationAlert)
+			this.donationWidgetContainer?.handleState(state.donationWidget)
 			this.text2speech?.handleState(state.settings)
 
 			/**
@@ -113,6 +125,10 @@ export class OverlayScene extends Phaser.Scene {
 			frameHeight: 250,
 		})
 		this.load.image(whiteStarFollowerKey, '/game/stars/star_flare.png')
+		this.load.image(DONATION_WIDGET_BACKGROUND, '/game/donationwidget/donationwidget_frame.png')
+		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donationwidget_left_logo.png')
+		this.load.image(DONATION_WIDGET_FULLFILLED, '/game/donationwidget/donationwidget_wish_fullfilled.png')
+		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
 
 		// AUDIO ASSETS
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -157,14 +173,34 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		// create containers
-		this.donationBannerDontainer = new DonationBannerContainer(this, initialState.donationAlert, socket, {
+		this.donationBannerContainer = new DonationBannerContainer(this, initialState.donationAlert, socket, {
 			children: [dontainerBanner, donationAlertWithMessage],
 		})
 
-		this.input.setDraggable([this.donationBannerDontainer])
+		const donationWidgetBackgroundFrame = new DonationWidgetBackgroundFrame(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			DONATION_WIDGET_BACKGROUND
+		)
+		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
+			children: [donationWidgetBackgroundFrame],
+		})
+
+		this.input.setDraggable([this.donationBannerContainer])
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
 			if (_gameObject.name === donationAlertContainerName && !this.isLockedOverlay) {
+				_gameObject.x = dragX
+				_gameObject.y = dragY
+			}
+		})
+
+		this.input.setDraggable([this.donationWidgetContainer])
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
+			if (_gameObject.name === donationWidgetContainerName && !this.isLockedOverlay) {
 				_gameObject.x = dragX
 				_gameObject.y = dragY
 			}

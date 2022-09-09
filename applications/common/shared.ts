@@ -1,5 +1,6 @@
 export interface GlobalState {
 	donationAlert: DonationAlertState
+	donationWidget: DonationWidgetState
 	settings: SettingsState
 }
 
@@ -14,6 +15,15 @@ export interface SettingsState {
 }
 
 export interface DonationAlertState {
+	isVisible: boolean
+	scale: number
+	position: {
+		x: number
+		y: number
+	}
+}
+
+export interface DonationWidgetState {
 	isVisible: boolean
 	scale: number
 	position: {
@@ -39,6 +49,7 @@ export interface UserEntry {
 }
 
 export const DONATION_ALERT_UPDATE = 'donationAlertUpdate'
+export const DONATION_WIDGET_UPDATE = 'donationWidgetUpdate'
 export const SETTINGS_UPDATE = 'settingsUpdate'
 export const STATE_UPDATE = 'stateUpdate'
 export const REQUEST_STATE = 'requestState'
@@ -46,6 +57,7 @@ export const DONATION_TRIGGER = 'donationTrigger'
 export const MAW_INFO_JSON_DATA_UPDATE = 'mawJsonDataUpdate'
 export interface PFTPSocketEventsMap {
 	[DONATION_ALERT_UPDATE]: (donationAlertUpdate: Partial<DonationAlertState>) => void
+	[DONATION_WIDGET_UPDATE]: (donationWidgetUpdate: Partial<DonationWidgetState>) => void
 	[SETTINGS_UPDATE]: (settingsUpdate: Partial<SettingsState>) => void
 	[STATE_UPDATE]: (state: GlobalState) => void
 	[REQUEST_STATE]: () => void

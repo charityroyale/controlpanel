@@ -1,4 +1,4 @@
-import { DonationAlertState, SettingsState } from '@pftp/common'
+import { DonationAlertState, DonationWidgetState, SettingsState } from '@pftp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialSettingsState: SettingsState = {
@@ -44,8 +44,32 @@ const donationAlertSlice = createSlice({
 	},
 })
 
+const initialDonationWidgetState: DonationWidgetState = {
+	isVisible: true,
+	scale: 0.84,
+	position: {
+		x: 1920 / 2,
+		y: 400,
+	},
+}
+const donationWidgetSlice = createSlice({
+	name: 'donationwidget',
+	initialState: initialDonationWidgetState,
+	reducers: {
+		update: (state, action: PayloadAction<Partial<DonationWidgetState>>) => {
+			return {
+				...state,
+				...action.payload,
+			}
+		},
+	},
+})
+
 export const donationAlertReducer = donationAlertSlice.reducer
 export const updateDonationAlert = donationAlertSlice.actions.update
+
+export const donationWidgetReducer = donationWidgetSlice.reducer
+export const updateDonationWidget = donationWidgetSlice.actions.update
 
 export const settingsReducer = settingsSlice.reducer
 export const updateSettings = settingsSlice.actions.update
