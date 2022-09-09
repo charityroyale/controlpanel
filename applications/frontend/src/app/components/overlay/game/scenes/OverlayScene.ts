@@ -59,7 +59,8 @@ export class OverlayScene extends Phaser.Scene {
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		this.text2speech = new Text2Speech(
 			config.initialState.settings.text2speech.language,
-			config.initialState.settings.text2speech.volume
+			config.initialState.settings.text2speech.volume,
+			config.initialState.settings.text2speech.minDonationAmount
 		)
 
 		config.socket.on(STATE_UPDATE, (state) => {

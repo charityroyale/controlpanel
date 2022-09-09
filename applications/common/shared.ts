@@ -8,6 +8,7 @@ export interface SettingsState {
 	isLockedOverlay: boolean
 	text2speech: {
 		volume: number
+		minDonationAmount: number
 		language: string
 	}
 }
