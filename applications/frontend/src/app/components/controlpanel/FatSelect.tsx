@@ -34,6 +34,7 @@ export const FatSelect: FunctionComponent<FatSelectProps> = ({ items, value, ...
 
 const SelectWrapper = styled.div`
 	position: relative;
+	margin-bottom: ${(p) => p.theme.space.s}px;
 `
 
 const Select = styled.select`

@@ -1,4 +1,11 @@
-import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import {
+	DONATION_TRIGGER,
+	GlobalState,
+	MAW_INFO_JSON_DATA_UPDATE,
+	PFTPSocketEventsMap,
+	REQUEST_STATE,
+	STATE_UPDATE,
+} from '@pftp/common'
 
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
@@ -82,6 +89,9 @@ export class OverlayScene extends Phaser.Scene {
 
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
+		})
+		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
+			console.log(mawInfoJsonData)
 		})
 	}
 

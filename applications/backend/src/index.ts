@@ -10,7 +10,6 @@ import { PFTPSocketEventsMap, Donation } from '@pftp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
 import cors from 'cors'
-import { fetchMawData } from './MakeAWishApiClient'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -137,9 +136,3 @@ const sessionManager = new SessionManager(io, jwtSecret)
 
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)
-
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-setInterval(async () => {
-	// eslint-disable-next-line @typescript-eslint/no-floating-promises
-	fetchMawData()
-}, 5000)

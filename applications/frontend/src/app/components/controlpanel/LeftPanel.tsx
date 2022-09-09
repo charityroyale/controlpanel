@@ -6,7 +6,15 @@ import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { AiFillNotification } from 'react-icons/ai'
-import { Donation, DONATION_ALERT_UPDATE, DONATION_TRIGGER, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
+import {
+	Donation,
+	DONATION_ALERT_UPDATE,
+	DONATION_TRIGGER,
+	GlobalState,
+	MakeAWishInfoJsonDTO,
+	MAW_INFO_JSON_DATA_UPDATE,
+	SETTINGS_UPDATE,
+} from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
@@ -123,6 +131,12 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			setLanguages(languages)
 		}
 	}, [])
+
+	useEffect(() => {
+		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
+			console.log(mawInfoJsonData)
+		})
+	}, [socket])
 
 	return (
 		<GridLeftPanel>
@@ -256,6 +270,21 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						items={languages}
 						value={globalState.settings.text2speech.language}
 					/>
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							MAW Kids
+						</span>
+					</Label>
 				</ButtonsWrapper>
 			</Content>
 		</GridLeftPanel>
