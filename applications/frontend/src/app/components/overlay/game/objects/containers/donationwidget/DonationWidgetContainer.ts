@@ -15,7 +15,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 	) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = donationWidgetContainerName
-		this.setSize(500, 900)
+		this.setSize(590, 190)
 		this.setScale(state.scale)
 		this.setIsVisible(state.isVisible)
 		this.setPosition(1920 / 2, 500)
