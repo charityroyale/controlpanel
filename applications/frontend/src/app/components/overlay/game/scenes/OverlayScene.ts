@@ -25,6 +25,7 @@ import {
 import { DonationWidgetBackgroundFrame } from '../objects/containers/donationwidget/DonationWidgetBackgroundFrame'
 import { DonationWidgetLeftWithIcon } from '../objects/containers/donationwidget/DonationWidgetLeftWithIcon'
 import { DonationWidgetFullFilled } from '../objects/containers/donationwidget/DonationWidgetFullFilled'
+import { DonationWidgetWishHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishHeading'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -200,8 +201,14 @@ export class OverlayScene extends Phaser.Scene {
 			initialState.donationWidget,
 			DONATION_WIDGET_FULLFILLED
 		)
+		const donationWidgetWishHeading = new DonationWidgetWishHeading(this, 0, 0, initialState.donationWidget, 'SSSSSSSS')
 		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
-			children: [donationWidgetBackgroundFrame, donationWidgetLeftWithIcon, donationWidgetFullFilled],
+			children: [
+				donationWidgetBackgroundFrame,
+				donationWidgetLeftWithIcon,
+				donationWidgetFullFilled,
+				donationWidgetWishHeading,
+			],
 		})
 
 		this.input.setDraggable([this.donationBannerContainer])
