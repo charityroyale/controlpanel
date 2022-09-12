@@ -20,7 +20,7 @@ export class DonationWidgetWishLastDonation extends Phaser.GameObjects.Text {
 
 const defaultStyles = {
 	fontFamily: 'Saira Condensed',
-	fontSize: '12px',
+	fontSize: '18px',
 	color: '#BA4D76',
 	align: 'center',
 }

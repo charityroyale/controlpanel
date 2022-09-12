@@ -31,6 +31,12 @@ import { DonationWidgetWishLastDonationStatic } from '../objects/containers/dona
 import { DonationWidgetWishTopDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishTopDonationStatic'
 import { DonationWidgetWishLastDonation } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonation'
 import { DonationWidgetWishTopDonation } from '../objects/containers/donationwidget/text/DonationWidgetWishTopDonation'
+import {
+	DonationWidgetProgressBar,
+	donationWidgetProgressBarBackgroundName,
+	donationWidgetProgressBarName,
+} from '../objects/containers/donationwidget/DonationWidgetProgressBar'
+import { DonationWidgetProgressBarText } from '../objects/containers/donationwidget/text/DonationWidgetProgressBarText'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -253,8 +259,35 @@ export class OverlayScene extends Phaser.Scene {
 			'Placeholder'
 		)
 
+		const progressBarBackground = new DonationWidgetProgressBar(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			donationWidgetProgressBarBackgroundName,
+			0x2b067a
+		)
+		const progressBar = new DonationWidgetProgressBar(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			donationWidgetProgressBarName,
+			0xc03be4
+		)
+
+		const donationWidgetProgressBarText = new DonationWidgetProgressBarText(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
+		)
+
 		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
 			children: [
+				progressBarBackground,
+				progressBar,
 				donationWidgetBackgroundFrame,
 				donationWidgetLeftWithIcon,
 				donationWidgetFullFilled,
@@ -264,6 +297,7 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetWishTopDonationStatic,
 				donationWidgetWishLastDonationStatic,
 				donationWidgetWishLastDonation,
+				donationWidgetProgressBarText,
 			],
 		})
 

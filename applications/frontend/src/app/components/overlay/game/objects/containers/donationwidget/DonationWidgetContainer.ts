@@ -1,6 +1,13 @@
 import { DonationWidgetState, DONATION_WIDGET_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
+import {
+	DonationWidgetProgressBar,
+	donationWidgetProgressBarBackgroundName,
+	donationWidgetProgressBarName,
+	maxProgressBarWidth,
+} from './DonationWidgetProgressBar'
+import { DonationWidgetProgressBarText, donationWidgetProgressBarTextName } from './text/DonationWidgetProgressBarText'
 import { DonationWidgetWishHeading, donationWidgetWishHeadingName } from './text/DonationWidgetWishHeading'
 import {
 	DonationWidgetWishLastDonation,
@@ -88,6 +95,25 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		)
 		topDonation.setX(this.displayWidth - 585 * this.scale)
 		topDonation.setY(112.5 * this.scale)
+
+		const progressBarBackground = this.getByName(donationWidgetProgressBarBackgroundName) as DonationWidgetProgressBar
+		progressBarBackground.setX(this.displayWidth - 735 * this.scale)
+		progressBarBackground.setY(164.5 * this.scale)
+
+		const progressBar = this.getByName(donationWidgetProgressBarName) as DonationWidgetProgressBar
+		progressBar.setX(this.displayWidth - 735 * this.scale)
+		progressBar.setY(164.5 * this.scale)
+
+		const donationSum = Number(state.wish?.info?.current_donation_sum) ?? 0
+		const donationGoal = Number(state.wish?.info?.donation_goal) ?? 0
+		const progressInPercent = Number(percentage(donationSum, donationGoal).toFixed(2))
+		const progressBarWidth = (maxProgressBarWidth / 100) * progressInPercent
+		progressBar.width = progressBarWidth > maxProgressBarWidth ? maxProgressBarWidth : progressBarWidth
+
+		const progressBarText = this.getByName(donationWidgetProgressBarTextName) as DonationWidgetProgressBarText
+		progressBarText.setText(`${donationSum}€ (${progressInPercent}% von ${donationGoal}€)`)
+		progressBarText.setX(this.displayWidth - 315 * this.scale)
+		progressBarText.setY(164.5 * this.scale)
 	}
 
 	private scaleContainerItems = (state: DonationWidgetState) => {
@@ -105,4 +131,7 @@ interface ContainerOptions {
 	x?: number | undefined
 	y?: number | undefined
 	children?: Phaser.GameObjects.GameObject[] | undefined
+}
+function percentage(partialValue: number, totalValue: number) {
+	return (100 * partialValue) / totalValue
 }
