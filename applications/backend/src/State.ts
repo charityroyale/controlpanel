@@ -1,5 +1,6 @@
 import { DonationAlertState, DonationWidgetState, SettingsState } from '@pftp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { mawInfoJsonData } from './MakeAWishApiClient'
 
 const initialSettingsState: SettingsState = {
 	volume: 0.6,
@@ -58,6 +59,12 @@ const donationWidgetSlice = createSlice({
 	initialState: initialDonationWidgetState,
 	reducers: {
 		update: (state, action: PayloadAction<Partial<DonationWidgetState>>) => {
+			const slug = action.payload.wish?.slug ?? state.wish?.slug ?? 'noslug'
+			action.payload.wish = {
+				slug: slug,
+				info: mawInfoJsonData?.wishes[slug],
+			}
+
 			return {
 				...state,
 				...action.payload,

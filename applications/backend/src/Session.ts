@@ -77,24 +77,7 @@ export default class Session {
 		)
 
 		socket.on(DONATION_WIDGET_UPDATE, (donationWidgetUpdate) => {
-			// handle widget update without mawInfoJsoNData
-			if (mawInfoJsonData === null || donationWidgetUpdate.wish === null) {
-				this.store.dispatch(updateDonationWidget(donationWidgetUpdate))
-			} else {
-				this.store.dispatch(
-					updateDonationWidget({
-						...donationWidgetUpdate,
-						// dispatch wish info from memory
-						wish: {
-							slug: donationWidgetUpdate.wish?.slug ?? '',
-							info:
-								typeof donationWidgetUpdate.wish === 'undefined'
-									? undefined
-									: { ...mawInfoJsonData.wishes[donationWidgetUpdate.wish?.slug] } ?? null,
-						},
-					})
-				)
-			}
+			this.store.dispatch(updateDonationWidget(donationWidgetUpdate))
 		})
 		socket.on(SETTINGS_UPDATE, (settingsUpdate) => this.store.dispatch(updateSettings(settingsUpdate)))
 	}
