@@ -2,6 +2,10 @@ import { DonationWidgetState, DONATION_WIDGET_UPDATE, PFTPSocketEventsMap } from
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { DonationWidgetWishHeading, donationWidgetWishHeadingName } from './text/DonationWidgetWishHeading'
+import {
+	DonationWidgetWishLastDonation,
+	donationWidgetWishLastDonationName,
+} from './text/DonationWidgetWishLastDonation'
 import { DonationWidgetWishSubHeading, donationWidgetWishSubHeadingName } from './text/DonationWidgetWishSubHeading'
 
 /**
@@ -67,6 +71,13 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 
 		subHeadingText.setX(this.displayWidth - 315 * this.scale)
 		subHeadingText.setY(45 * this.scale)
+
+		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
+		lastDonation.setText(
+			`${state.wish?.info?.recent_donations[0].username ?? 'Placeholder'} ${
+				state.wish?.info?.recent_donations[0].amount ?? '€'
+			}`
+		)
 	}
 
 	private scaleContainerItems = (state: DonationWidgetState) => {

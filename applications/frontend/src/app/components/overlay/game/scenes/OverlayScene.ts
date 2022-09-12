@@ -27,6 +27,9 @@ import { DonationWidgetLeftWithIcon } from '../objects/containers/donationwidget
 import { DonationWidgetFullFilled } from '../objects/containers/donationwidget/DonationWidgetFullFilled'
 import { DonationWidgetWishHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishHeading'
 import { DonationWidgetWishSubHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishSubHeading'
+import { DonationWidgetWishLastDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonationStatic'
+import { DonationWidgetWishTopDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishTopDonationStatic'
+import { DonationWidgetWishLastDonation } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonation'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -216,6 +219,31 @@ export class OverlayScene extends Phaser.Scene {
 			initialState.donationWidget,
 			'Placeholder'
 		)
+
+		const donationWidgetWishTopDonationStatic = new DonationWidgetWishTopDonationStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'TOP DONATION'
+		)
+
+		const donationWidgetWishLastDonationStatic = new DonationWidgetWishLastDonationStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'LAST DONATION'
+		)
+
+		const donationWidgetWishLastDonation = new DonationWidgetWishLastDonation(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'LAST DONATION'
+		)
+
 		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
 			children: [
 				donationWidgetBackgroundFrame,
@@ -223,6 +251,9 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetFullFilled,
 				donationWidgetWishHeading,
 				donationWidgetWishSubHeading,
+				donationWidgetWishTopDonationStatic,
+				donationWidgetWishLastDonationStatic,
+				donationWidgetWishLastDonation,
 			],
 		})
 
