@@ -21,10 +21,9 @@ import {
 	updateSettings,
 } from './State'
 import { sessionLogger as logger } from './logger'
-import { fetchMawData } from './MakeAWishApiClient'
+import { mawInfoJsonData } from './MakeAWishApiClient'
 
 export default class Session {
-	private intervalId: undefined | ReturnType<typeof setInterval> = undefined
 	private readonly store = configureStore<GlobalState>({
 		reducer: {
 			donationAlert: donationAlertReducer,
@@ -36,7 +35,6 @@ export default class Session {
 	constructor(private readonly channel: string, private readonly io: Server<PFTPSocketEventsMap>) {
 		this.store.subscribe(() => {
 			this.io.to(this.channel).emit(STATE_UPDATE, this.store.getState())
-			this.pollMawInfoJsonData()
 			console.log(this.store.getState())
 		})
 	}
@@ -51,9 +49,6 @@ export default class Session {
 
 		socket.on('disconnect', (reason) => {
 			logger.info(`Socket ${socket.id} disconnected with reason: ${reason}`)
-			if (typeof this.intervalId !== 'undefined') {
-				clearInterval(this.intervalId)
-			}
 		})
 
 		socket.emit(STATE_UPDATE, this.store.getState())
@@ -63,6 +58,9 @@ export default class Session {
 
 	public sendDonation(donation: Donation) {
 		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
+		if (mawInfoJsonData != null) {
+			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawInfoJsonData)
+		}
 	}
 
 	private registerReadHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
@@ -82,18 +80,5 @@ export default class Session {
 			this.store.dispatch(updateDonationWidget(donationWidgetUpdate))
 		)
 		socket.on(SETTINGS_UPDATE, (settingsUpdate) => this.store.dispatch(updateSettings(settingsUpdate)))
-	}
-
-	private pollMawInfoJsonData() {
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
-		this.intervalId = setInterval(async () => {
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
-			const data = await fetchMawData()
-			if (data != null) {
-				this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, data)
-			}
-		}, 5000)
-
-		console.log(`Created new MAW-Data polling interval.`)
 	}
 }

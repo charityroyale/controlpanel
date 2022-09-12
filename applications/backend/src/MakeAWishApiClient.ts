@@ -15,3 +15,19 @@ export const fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
 		return null
 	}
 }
+
+let intervalId: undefined | ReturnType<typeof setInterval>
+export let mawInfoJsonData: null | MakeAWishInfoJsonDTO = null
+export const pollMawInfoJsonData = () => {
+	// eslint-disable-next-line @typescript-eslint/no-misused-promises
+	intervalId = setInterval(async () => {
+		mawInfoJsonData = await fetchMawData()
+	}, 5000)
+
+	console.log(`Created new MAW-Data polling interval.`)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+;(async () => {
+	mawInfoJsonData = await fetchMawData()
+})()

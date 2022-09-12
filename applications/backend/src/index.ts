@@ -10,6 +10,7 @@ import { PFTPSocketEventsMap, Donation } from '@pftp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
 import cors from 'cors'
+import { pollMawInfoJsonData } from './MakeAWishApiClient'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -136,3 +137,5 @@ const sessionManager = new SessionManager(io, jwtSecret)
 
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)
+
+pollMawInfoJsonData()
