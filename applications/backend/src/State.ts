@@ -51,6 +51,7 @@ const initialDonationWidgetState: DonationWidgetState = {
 		x: 1920 / 2,
 		y: 400,
 	},
+	wish: null,
 }
 const donationWidgetSlice = createSlice({
 	name: 'donationwidget',

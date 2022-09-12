@@ -28,6 +28,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
 	const [languages, setLanguages] = useState<{ value: string; label: string }[]>([])
+	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -46,6 +47,17 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			})
 		},
 		[globalState.settings.text2speech, socket]
+	)
+
+	const emitWishUpdate = useCallback(
+		(e) => {
+			socket?.emit(DONATION_WIDGET_UPDATE, {
+				wish: {
+					slug: e.currentTarget.value,
+				},
+			})
+		},
+		[socket]
 	)
 
 	const emitMinDonationAmountUpdate = useCallback(
@@ -152,7 +164,15 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 
 	useEffect(() => {
 		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
-			console.log(mawInfoJsonData)
+			// TODO: replace 'veni' with current streamer
+			const wishItems = mawInfoJsonData.streamers['veni'].wishes
+			const wishSlectableItems = []
+			if (!Array.isArray(wishItems)) {
+				for (const key of Object.keys(wishItems)) {
+					wishSlectableItems.push({ label: wishItems[key].slug, value: wishItems[key].slug })
+				}
+			}
+			setWishes(wishSlectableItems)
 		})
 	}, [socket])
 
@@ -370,6 +390,13 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 							/>
 						</React.Fragment>
 					</FatButton>
+					<FatSelect
+						id="wishes"
+						onBlur={emitWishUpdate}
+						onChange={emitWishUpdate}
+						items={wishes}
+						value={globalState.donationWidget.wish ? globalState.donationWidget.wish.slug : ''}
+					/>
 				</ButtonsWrapper>
 			</Content>
 		</GridLeftPanel>

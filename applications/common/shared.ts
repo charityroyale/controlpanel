@@ -30,6 +30,10 @@ export interface DonationWidgetState {
 		x: number
 		y: number
 	}
+	wish: {
+		slug: string
+		info?: MakeAWishRootLevelWishDTO
+	} | null
 }
 
 /**
