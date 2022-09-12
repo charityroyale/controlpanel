@@ -7,6 +7,7 @@ import {
 	donationWidgetWishLastDonationName,
 } from './text/DonationWidgetWishLastDonation'
 import { DonationWidgetWishSubHeading, donationWidgetWishSubHeadingName } from './text/DonationWidgetWishSubHeading'
+import { donationWidgetWishTopDonationName, DonationWidgetWishTopDonation } from './text/DonationWidgetWishTopDonation'
 
 /**
  * Container for visual DonationWidget
@@ -64,7 +65,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		headingText.setX(this.displayWidth - 315 * this.scale)
 		headingText.setY(15 * this.scale)
 
-		// position headingText
+		// positionnal text
 		// extract and improve
 		const subHeadingText = this.getByName(donationWidgetWishSubHeadingName) as DonationWidgetWishSubHeading
 		subHeadingText.setText(state.wish?.info?.wish ?? 'Placeholder')
@@ -75,9 +76,18 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
 		lastDonation.setText(
 			`${state.wish?.info?.recent_donations[0].username ?? 'Placeholder'} ${
-				state.wish?.info?.recent_donations[0].amount ?? '€'
-			}`
+				state.wish?.info?.recent_donations[0].amount ?? '-'
+			} €`
 		)
+		lastDonation.setX(this.displayWidth - 395 * this.scale)
+		lastDonation.setY(112.5 * this.scale)
+
+		const topDonation = this.getByName(donationWidgetWishTopDonationName) as DonationWidgetWishTopDonation
+		topDonation.setText(
+			`${state.wish?.info?.top_donors[0].username ?? 'Placeholder'} ${state.wish?.info?.top_donors[0].amount ?? '-'} €`
+		)
+		topDonation.setX(this.displayWidth - 585 * this.scale)
+		topDonation.setY(112.5 * this.scale)
 	}
 
 	private scaleContainerItems = (state: DonationWidgetState) => {

@@ -30,6 +30,7 @@ import { DonationWidgetWishSubHeading } from '../objects/containers/donationwidg
 import { DonationWidgetWishLastDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonationStatic'
 import { DonationWidgetWishTopDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishTopDonationStatic'
 import { DonationWidgetWishLastDonation } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonation'
+import { DonationWidgetWishTopDonation } from '../objects/containers/donationwidget/text/DonationWidgetWishTopDonation'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -241,7 +242,15 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationWidget,
-			'LAST DONATION'
+			'Placeholder'
+		)
+
+		const donationWidgetWishTopDonation = new DonationWidgetWishTopDonation(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
 		)
 
 		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
@@ -251,6 +260,7 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetFullFilled,
 				donationWidgetWishHeading,
 				donationWidgetWishSubHeading,
+				donationWidgetWishTopDonation,
 				donationWidgetWishTopDonationStatic,
 				donationWidgetWishLastDonationStatic,
 				donationWidgetWishLastDonation,

@@ -1,6 +1,6 @@
 import { DonationWidgetState } from '@pftp/common'
 
-export class DonationWidgetWishLastDonation extends Phaser.GameObjects.Text {
+export class DonationWidgetWishTopDonation extends Phaser.GameObjects.Text {
 	constructor(
 		scene: Phaser.Scene,
 		x: number,
@@ -11,7 +11,7 @@ export class DonationWidgetWishLastDonation extends Phaser.GameObjects.Text {
 	) {
 		super(scene, x, y, text, style)
 		this.setColor('#FFFFFF')
-		this.name = donationWidgetWishLastDonationName
+		this.name = donationWidgetWishTopDonationName
 		this.setOrigin(0.5, 0.5)
 		this.setScale(state.scale)
 		scene.add.existing(this)
@@ -25,4 +25,4 @@ const defaultStyles = {
 	align: 'center',
 }
 
-export const donationWidgetWishLastDonationName = 'donationWidgetWishLastDonation'
+export const donationWidgetWishTopDonationName = 'donationWidgetWishTopDonation'
