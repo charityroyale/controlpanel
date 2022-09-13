@@ -2,9 +2,13 @@ import { MakeAWishInfoJsonDTO } from '@pftp/common'
 import fetch from 'node-fetch'
 import { logger } from './logger'
 
+const MAW_URI_2021 = 'https://streamer.make-a-wish.at/charityroyale2021/info.json'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const MAW_URI_2022 = 'https://streamer.make-a-wish.at/charityroyale2022/info.json'
+
 export const fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
 	try {
-		const response = await fetch('https://streamer.make-a-wish.at/charityroyale2021/info.json')
+		const response = await fetch(MAW_URI_2021)
 		if (response.ok) {
 			const data = (await response.json()) as MakeAWishInfoJsonDTO
 			return data
