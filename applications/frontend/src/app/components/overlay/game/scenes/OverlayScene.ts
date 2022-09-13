@@ -1,6 +1,7 @@
 import {
 	DONATION_TRIGGER,
 	GlobalState,
+	MakeAWishInfoJsonDTO,
 	MAW_INFO_JSON_DATA_UPDATE,
 	PFTPSocketEventsMap,
 	REQUEST_STATE,
@@ -18,7 +19,10 @@ import { Star } from '../objects/Star'
 import { DonationWidgetContainer } from '../objects/containers/donationwidget/DonationWidgetContainer'
 import { DonationWidgetBackgroundFrame } from '../objects/containers/donationwidget/DonationWidgetBackgroundFrame'
 import { DonationWidgetLeftWithIcon } from '../objects/containers/donationwidget/DonationWidgetLeftWithIcon'
-import { DonationWidgetFullFilled } from '../objects/containers/donationwidget/DonationWidgetFullFilled'
+import {
+	DonationWidgetFullFilled,
+	donationWidgetFullFilledName,
+} from '../objects/containers/donationwidget/DonationWidgetFullFilled'
 import { DonationWidgetWishHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishHeading'
 import { DonationWidgetWishSubHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishSubHeading'
 import { DonationWidgetWishLastDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonationStatic'
@@ -31,6 +35,17 @@ import {
 	donationWidgetProgressBarName,
 } from '../objects/containers/donationwidget/DonationWidgetProgressBar'
 import { DonationWidgetProgressBarText } from '../objects/containers/donationwidget/text/DonationWidgetProgressBarText'
+import { SocketAuth } from '../../../../provider/SocketProvider'
+import {
+	DonationWidgetMiddleTextStatic,
+	DonationWidgetPostfixTextStatic,
+	DonationWidgetPrefixTextStatic,
+} from '../objects/containers/donationwidget/text/DonationWidgetWishFullFilledStatic'
+import {
+	DonationWidgetWishFullFilledAmount,
+	DonationWidgetWishFullFilledKidName,
+	DonationWidgetWishFullFilledWishNumber,
+} from '../objects/containers/donationwidget/text/DonationWidgetWishFullFilled'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -77,11 +92,16 @@ export class OverlayScene extends Phaser.Scene {
 	public donationWidgetContainer: DonationWidgetContainer | null = null
 	public isLockedOverlay = false
 	public text2speech: Text2Speech | null = null
+	public mawInfoJsonData: MakeAWishInfoJsonDTO | null = null
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
 	}
 
+	/**
+	 * !!!! WATCH OUT !!!!
+	 * Possible Issue with access to gameobjects from socket io event before it gets rendered
+	 */
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		this.text2speech = new Text2Speech(
 			config.initialState.settings.text2speech.language,
@@ -111,7 +131,28 @@ export class OverlayScene extends Phaser.Scene {
 			this.alert?.handleDonation(donation)
 		})
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
-			console.log(mawInfoJsonData)
+			this.mawInfoJsonData = mawInfoJsonData
+
+			const streamer = (config.socket.auth as SocketAuth).channel
+			const rootWishes = mawInfoJsonData.wishes
+			const streamerRootWishes = []
+
+			for (const key of Object.keys(rootWishes)) {
+				const rootWish = rootWishes[key]
+				// eslint-disable-next-line no-prototype-builtins
+				if (rootWish.streamers.hasOwnProperty(streamer)) {
+					streamerRootWishes.push(rootWishes[key])
+				}
+			}
+
+			const donationWidgetFullFilled = this.donationWidgetContainer?.getByName(
+				donationWidgetFullFilledName
+			) as DonationWidgetFullFilled
+
+			if (donationWidgetFullFilled) {
+				donationWidgetFullFilled.setFullFilledWishes(streamerRootWishes)
+				donationWidgetFullFilled.setFullFilledWishContent()
+			}
 		})
 	}
 
@@ -199,12 +240,14 @@ export class OverlayScene extends Phaser.Scene {
 			initialState.donationWidget,
 			DONATION_WIDGET_LEFT
 		)
+
 		const donationWidgetFullFilled = new DonationWidgetFullFilled(
 			this,
 			0,
 			0,
 			initialState.donationWidget,
-			DONATION_WIDGET_FULLFILLED
+			DONATION_WIDGET_FULLFILLED,
+			[]
 		)
 		const donationWidgetWishHeading = new DonationWidgetWishHeading(
 			this,
@@ -278,6 +321,54 @@ export class OverlayScene extends Phaser.Scene {
 			'Placeholder'
 		)
 
+		const donationWidgetPrefixTextStatic = new DonationWidgetPrefixTextStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'WUNSCH'
+		)
+
+		const donationWidgetMiddleTextStatic = new DonationWidgetMiddleTextStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'ERFÜLLT'
+		)
+
+		const donationWidgetPostfixTextStatic = new DonationWidgetPostfixTextStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'FÜR'
+		)
+
+		const donationWidgetWishFullFilledKidName = new DonationWidgetWishFullFilledKidName(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'NAME'
+		)
+
+		const donationWidgetWishFullFilledWishNumber = new DonationWidgetWishFullFilledWishNumber(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'0'
+		)
+
+		const donationWidgetWishFullFilledAmount = new DonationWidgetWishFullFilledAmount(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'000,00 €'
+		)
+
 		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
 			children: [
 				progressBarBackground,
@@ -285,6 +376,12 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetBackgroundFrame,
 				donationWidgetLeftWithIcon,
 				donationWidgetFullFilled,
+				donationWidgetPrefixTextStatic,
+				donationWidgetMiddleTextStatic,
+				donationWidgetPostfixTextStatic,
+				donationWidgetWishFullFilledKidName,
+				donationWidgetWishFullFilledWishNumber,
+				donationWidgetWishFullFilledAmount,
 				donationWidgetWishHeading,
 				donationWidgetWishSubHeading,
 				donationWidgetWishTopDonation,
@@ -301,6 +398,9 @@ export class OverlayScene extends Phaser.Scene {
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
 		socket.emit(REQUEST_STATE)
+		this.events.on('postrender', () => {
+			socket.emit(REQUEST_STATE)
+		})
 	}
 
 	private setContainerDraggable(container: Phaser.GameObjects.Container) {

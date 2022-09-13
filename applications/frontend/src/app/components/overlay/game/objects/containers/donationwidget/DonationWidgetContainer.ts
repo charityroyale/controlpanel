@@ -8,6 +8,22 @@ import {
 	donationWidgetProgressBarName,
 } from './DonationWidgetProgressBar'
 import { DonationWidgetProgressBarText, donationWidgetProgressBarTextName } from './text/DonationWidgetProgressBarText'
+import {
+	DonationWidgetWishFullFilledAmount,
+	donationWidgetWishFullFilledAmountName,
+	DonationWidgetWishFullFilledKidName,
+	donationWidgetWishFullFilledKidNameName,
+	DonationWidgetWishFullFilledWishNumber,
+	donationWidgetWishFullFilledWishNumberName,
+} from './text/DonationWidgetWishFullFilled'
+import {
+	DonationWidgetMiddleTextStatic,
+	donationWidgetMiddleTextStaticName,
+	DonationWidgetPostfixTextStatic,
+	donationWidgetPostfixTextStaticName,
+	DonationWidgetPrefixTextStatic,
+	donationWidgetPrefixTextStaticName,
+} from './text/DonationWidgetWishFullFilledStatic'
 import { DonationWidgetWishHeading, donationWidgetWishHeadingName } from './text/DonationWidgetWishHeading'
 import {
 	DonationWidgetWishLastDonation,
@@ -142,6 +158,48 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		)
 		progressBarText.setX(this.displayWidth - 315 * this.scale)
 		progressBarText.setY(164.5 * this.scale)
+
+		// fillfiledprefixtext
+		const donationWidgetPrefixTextStatic = this.getByName(
+			donationWidgetPrefixTextStaticName
+		) as DonationWidgetPrefixTextStatic
+		donationWidgetPrefixTextStatic.setX(-this.displayWidth / 2 + 20 * this.scale)
+		donationWidgetPrefixTextStatic.setY(this.displayHeight + 24 * this.scale)
+
+		// fillfiledmiddletext
+		const donationWidgetMiddleTextStatic = this.getByName(
+			donationWidgetMiddleTextStaticName
+		) as DonationWidgetMiddleTextStatic
+		donationWidgetMiddleTextStatic.setX(-this.displayWidth / 2 + 110 * this.scale)
+		donationWidgetMiddleTextStatic.setY(this.displayHeight + 24 * this.scale)
+
+		// fillfiledpostfixetext
+		const donationWidgetPostfixTextStatic = this.getByName(
+			donationWidgetPostfixTextStaticName
+		) as DonationWidgetPostfixTextStatic
+		donationWidgetPostfixTextStatic.setX(-this.displayWidth / 2 + 215 * this.scale)
+		donationWidgetPostfixTextStatic.setY(this.displayHeight + 24 * this.scale)
+
+		// kidnamed fullfiled
+		const donationWidgetWishFullFilledKidName = this.getByName(
+			donationWidgetWishFullFilledKidNameName
+		) as DonationWidgetWishFullFilledKidName
+		donationWidgetWishFullFilledKidName.setX(-this.displayWidth / 2 + 350 * this.scale)
+		donationWidgetWishFullFilledKidName.setY(this.displayHeight + 24 * this.scale)
+
+		// wish number
+		const donationWidgetWishFullFilledWishNumber = this.getByName(
+			donationWidgetWishFullFilledWishNumberName
+		) as DonationWidgetWishFullFilledWishNumber
+		donationWidgetWishFullFilledWishNumber.setX(-this.displayWidth / 2 + 93 * this.scale)
+		donationWidgetWishFullFilledWishNumber.setY(this.displayHeight + 24 * this.scale)
+
+		// wish amount
+		const donationWidgetWishFullFilledAmount = this.getByName(
+			donationWidgetWishFullFilledAmountName
+		) as DonationWidgetWishFullFilledAmount
+		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 372 * this.scale)
+		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 24 * this.scale)
 	}
 
 	private scaleContainerItems = (state: DonationWidgetState) => {
