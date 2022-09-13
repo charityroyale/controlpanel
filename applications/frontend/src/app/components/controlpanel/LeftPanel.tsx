@@ -171,6 +171,8 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: Sock
 				for (const key of Object.keys(wishItems)) {
 					wishSlectableItems.push({ label: wishItems[key].slug, value: wishItems[key].slug })
 				}
+			} else {
+				wishSlectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
 			}
 			setWishes(wishSlectableItems)
 		})
