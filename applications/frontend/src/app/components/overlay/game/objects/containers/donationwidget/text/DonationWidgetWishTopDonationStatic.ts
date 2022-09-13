@@ -1,4 +1,5 @@
 import { DonationWidgetState } from '@pftp/common'
+import { TextStyle } from '../../../config/text'
 
 export class DonationWidgetWishTopDonationStatic extends Phaser.GameObjects.Text {
 	constructor(
@@ -7,10 +8,9 @@ export class DonationWidgetWishTopDonationStatic extends Phaser.GameObjects.Text
 		y: number,
 		state: DonationWidgetState,
 		text: string | string[],
-		style: Phaser.Types.GameObjects.Text.TextStyle = defaultStyles
+		style: TextStyle = textStyle
 	) {
 		super(scene, x, y, text, style)
-		this.setColor('#FFFFFF')
 		this.name = donationWidgetWishTopDonationStaticName
 		this.setOrigin(0.5, -4.4)
 		this.setScale(state.scale)
@@ -18,10 +18,10 @@ export class DonationWidgetWishTopDonationStatic extends Phaser.GameObjects.Text
 	}
 }
 
-const defaultStyles = {
+const textStyle: TextStyle = {
 	fontFamily: 'Luckiest Guy',
 	fontSize: '18px',
-	color: '#BA4D76',
+	color: '#FFFFFF',
 	align: 'center',
 }
 

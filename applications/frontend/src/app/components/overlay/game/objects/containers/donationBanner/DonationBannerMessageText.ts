@@ -1,3 +1,4 @@
+import { TextStyle } from '../../config/text'
 import { fadeInDonationMessageText } from '../../tweens/fadeInDonationMessageText'
 import { fadeOutDonationText } from '../../tweens/fadeOutDonationText'
 
@@ -13,10 +14,9 @@ export class DonationBannerMessageText extends Phaser.GameObjects.Text {
 		text: string,
 		scale: number,
 		wordWrap: number,
-		style: Phaser.Types.GameObjects.Text.TextStyle = defaultStyles
+		style: TextStyle = textStyle
 	) {
 		super(scene, x, y, text, style)
-		this.setColor('#FFFFFF')
 		this.setWordWrapWidth(wordWrap)
 		this.setScale(scale)
 		this.name = donationAlertUserMessageTextName
@@ -28,10 +28,10 @@ export class DonationBannerMessageText extends Phaser.GameObjects.Text {
 	}
 }
 
-const defaultStyles: Phaser.Types.GameObjects.Text.TextStyle = {
+const textStyle: TextStyle = {
 	fontFamily: 'Saira Condensed',
-	fontSize: '34px',
-	color: '#BA4D76',
+	fontSize: '32px',
+	color: '#FFFFFF',
 	maxLines: 4,
 }
 
