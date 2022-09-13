@@ -1,6 +1,7 @@
 import { DonationWidgetState, DONATION_WIDGET_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
+import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'
 import {
 	DonationWidgetProgressBar,
 	donationWidgetProgressBarBackgroundName,
@@ -73,6 +74,10 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 			this.setScale(state.scale)
 			this.scaleContainerItems(state)
 		}
+
+		const donationWidgetFullFilled = this.getByName(donationWidgetFullFilledName) as DonationWidgetFullFilled
+		donationWidgetFullFilled.setX(-this.displayWidth / 2)
+		donationWidgetFullFilled.setY(this.displayHeight)
 
 		// position headingText
 		// extract and improve
