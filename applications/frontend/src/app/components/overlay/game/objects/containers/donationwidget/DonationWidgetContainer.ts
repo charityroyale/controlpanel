@@ -72,9 +72,6 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		if (this.scale != state.scale) {
 			this.setScale(state.scale)
 			this.scaleContainerItems(state)
-
-			//this.scaleDonationHeaderText()
-			//this.scaleDonationUserMessageText()
 		}
 
 		// position headingText
