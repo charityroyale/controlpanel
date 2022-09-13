@@ -12,16 +12,10 @@ import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
 import { Text2Speech } from '../objects/behaviour/Text2Speech'
 import { Alert } from '../objects/containers/alert/Alert'
-import {
-	DonationBannerContainer,
-	donationAlertContainerName,
-} from '../objects/containers/donationBanner/DonationBannerContainer'
+import { DonationBannerContainer } from '../objects/containers/donationBanner/DonationBannerContainer'
 import { DonationAlertBanner } from '../objects/containers/donationBanner/DonationBanner'
 import { Star } from '../objects/Star'
-import {
-	DonationWidgetContainer as DonationWidgetContainer,
-	donationWidgetContainerName,
-} from '../objects/containers/donationwidget/DonationWidgetContainer'
+import { DonationWidgetContainer } from '../objects/containers/donationwidget/DonationWidgetContainer'
 import { DonationWidgetBackgroundFrame } from '../objects/containers/donationwidget/DonationWidgetBackgroundFrame'
 import { DonationWidgetLeftWithIcon } from '../objects/containers/donationwidget/DonationWidgetLeftWithIcon'
 import { DonationWidgetFullFilled } from '../objects/containers/donationwidget/DonationWidgetFullFilled'
@@ -301,27 +295,23 @@ export class OverlayScene extends Phaser.Scene {
 			],
 		})
 
-		this.input.setDraggable([this.donationBannerContainer])
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			if (_gameObject.name === donationAlertContainerName && !this.isLockedOverlay) {
-				_gameObject.x = dragX
-				_gameObject.y = dragY
-			}
-		})
-
-		this.input.setDraggable([this.donationWidgetContainer])
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			if (_gameObject.name === donationWidgetContainerName && !this.isLockedOverlay) {
-				_gameObject.x = dragX
-				_gameObject.y = dragY
-			}
-		})
+		this.setContainerDraggable(this.donationBannerContainer)
+		this.setContainerDraggable(this.donationWidgetContainer)
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
 		socket.emit(REQUEST_STATE)
+	}
+
+	private setContainerDraggable(container: Phaser.GameObjects.Container) {
+		this.input.setDraggable([container])
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
+			if (_gameObject.name === container.name && !this.isLockedOverlay) {
+				_gameObject.x = dragX
+				_gameObject.y = dragY
+			}
+		})
 	}
 
 	private createStarRainInstance(starGroup: Phaser.GameObjects.Group) {
