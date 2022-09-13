@@ -11,8 +11,10 @@ export const fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
 		const response = await fetch(MAW_URI_2021)
 		if (response.ok) {
 			const data = (await response.json()) as MakeAWishInfoJsonDTO
+			logger.info(`Success fetching maw data`)
 			return data
 		}
+		logger.warn(`Issue fetching maw data`)
 		return null
 	} catch (e) {
 		logger.error(`Error fetching maw data: ${e}`)
