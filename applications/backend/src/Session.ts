@@ -21,7 +21,7 @@ import {
 	updateSettings,
 } from './State'
 import { sessionLogger as logger } from './logger'
-import { mawInfoJsonData } from './MakeAWishApiClient'
+import { mawApiClient } from './MakeAWishApiClient'
 
 export default class Session {
 	private readonly store = configureStore<GlobalState>({
@@ -35,7 +35,7 @@ export default class Session {
 	constructor(private readonly channel: string, private readonly io: Server<PFTPSocketEventsMap>) {
 		this.store.subscribe(() => {
 			this.io.to(this.channel).emit(STATE_UPDATE, this.store.getState())
-			console.log(this.store.getState())
+			// console.log(this.store.getState())
 		})
 	}
 
@@ -52,14 +52,17 @@ export default class Session {
 		})
 
 		socket.emit(STATE_UPDATE, this.store.getState())
+		if (mawApiClient.mawInfoJsonData != null) {
+			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
+		}
 
 		this.registerReadHandlers(socket)
 	}
 
 	public sendDonation(donation: Donation) {
 		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
-		if (mawInfoJsonData != null) {
-			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawInfoJsonData)
+		if (mawApiClient.mawInfoJsonData != null) {
+			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
 	}
 

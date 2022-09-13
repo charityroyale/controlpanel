@@ -2,38 +2,49 @@ import { MakeAWishInfoJsonDTO } from '@pftp/common'
 import fetch from 'node-fetch'
 import { logger } from './logger'
 
-const MAW_URI_2021 = 'https://streamer.make-a-wish.at/charityroyale2021/info.json'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const MAW_URI_2022 = 'https://streamer.make-a-wish.at/charityroyale2022/info.json'
+class MakeAWishApiClient {
+	public static readonly mawUri2021 = 'https://streamer.make-a-wish.at/charityroyale2021/info.json'
+	public static readonly mawUri2022 = 'https://streamer.make-a-wish.at/charityroyale2022/info.json'
+	public mawInfoJsonData: null | MakeAWishInfoJsonDTO = null
 
-export const fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
-	try {
-		const response = await fetch(MAW_URI_2021)
-		if (response.ok) {
-			const data = (await response.json()) as MakeAWishInfoJsonDTO
-			logger.info(`Success fetching maw data`)
-			return data
+	private intervalId: undefined | ReturnType<typeof setInterval>
+	private readonly pollIntervalInSeconds = 15
+
+	public poll() {
+		this.intervalId = setInterval(() => {
+			// eslint-disable-next-line @typescript-eslint/no-floating-promises
+			this.fetchMawData()
+				.then((data) => {
+					this.mawInfoJsonData = data
+				})
+				.catch((_e) => {
+					// fail silently
+				})
+		}, this.pollIntervalInSeconds * 1000)
+	}
+
+	public stopPoll() {
+		if (typeof this.intervalId !== 'undefined') {
+			clearInterval(this.intervalId)
 		}
-		logger.warn(`Issue fetching maw data`)
-		return null
-	} catch (e) {
-		logger.error(`Error fetching maw data: ${e}`)
-		return null
+	}
+
+	public fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
+		try {
+			const response = await fetch(MakeAWishApiClient.mawUri2021)
+			if (response.ok) {
+				const data = (await response.json()) as MakeAWishInfoJsonDTO
+				this.mawInfoJsonData = data
+				logger.info(`Success fetching maw data`)
+				return data
+			}
+			logger.warn(`Issue fetching maw data`)
+			return null
+		} catch (e) {
+			logger.error(`Error fetching maw data: ${e}`)
+			return null
+		}
 	}
 }
 
-let intervalId: undefined | ReturnType<typeof setInterval>
-export let mawInfoJsonData: null | MakeAWishInfoJsonDTO = null
-export const pollMawInfoJsonData = () => {
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises
-	intervalId = setInterval(async () => {
-		mawInfoJsonData = await fetchMawData()
-	}, 5000)
-
-	console.log(`Created new MAW-Data polling interval.`)
-}
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-;(async () => {
-	mawInfoJsonData = await fetchMawData()
-})()
+export const mawApiClient = new MakeAWishApiClient()
