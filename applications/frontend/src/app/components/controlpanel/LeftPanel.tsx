@@ -103,7 +103,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		})
 	}, 125)
 
-	const emitDonatioNWidgetVisibleUpdate = useCallback(() => {
+	const emitDonationWidgetVisibleUpdate = useCallback(() => {
 		socket?.emit(DONATION_WIDGET_UPDATE, {
 			isVisible: !globalState.donationWidget.isVisible,
 		})
@@ -327,7 +327,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						icon={<AiFillEye size="24px" />}
 						active={globalState.donationWidget.isVisible}
 						value={globalState?.donationWidget.isVisible === true ? 'true' : 'false'}
-						onClick={emitDonatioNWidgetVisibleUpdate}
+						onClick={emitDonationWidgetVisibleUpdate}
 					>
 						<span>Donation Widget</span>
 					</FatButton>
