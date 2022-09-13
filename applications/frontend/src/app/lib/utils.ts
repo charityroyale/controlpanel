@@ -9,3 +9,6 @@ export const formatCurrency = (amount: number) => {
 export const formatDonationAlertCurrenty = (amount: number) => {
 	return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(amount)
 }
+export const getPercentage = (value: number, total: number) => {
+	return (100 * value) / total
+}

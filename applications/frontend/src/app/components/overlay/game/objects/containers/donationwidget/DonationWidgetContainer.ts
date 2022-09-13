@@ -5,7 +5,6 @@ import {
 	DonationWidgetProgressBar,
 	donationWidgetProgressBarBackgroundName,
 	donationWidgetProgressBarName,
-	maxProgressBarWidth,
 } from './DonationWidgetProgressBar'
 import { DonationWidgetProgressBarText, donationWidgetProgressBarTextName } from './text/DonationWidgetProgressBarText'
 import { DonationWidgetWishHeading, donationWidgetWishHeadingName } from './text/DonationWidgetWishHeading'
@@ -132,15 +131,13 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const progressBar = this.getByName(donationWidgetProgressBarName) as DonationWidgetProgressBar
 		progressBar.setX(this.displayWidth - 735 * this.scale)
 		progressBar.setY(164.5 * this.scale)
-
-		const donationSum = Number(state.wish?.info?.current_donation_sum) ?? 0
-		const donationGoal = Number(state.wish?.info?.donation_goal) ?? 0
-		const progressInPercent = Number(percentage(donationSum, donationGoal).toFixed(2))
-		const progressBarWidth = (maxProgressBarWidth / 100) * progressInPercent
-		progressBar.width = progressBarWidth > maxProgressBarWidth ? maxProgressBarWidth : progressBarWidth
+		progressBar.updateWidth(state.wish?.info)
 
 		const progressBarText = this.getByName(donationWidgetProgressBarTextName) as DonationWidgetProgressBarText
-		progressBarText.setText(`${donationSum}€ (${progressInPercent}% von ${donationGoal}€)`)
+		const progressBarTextContent = progressBar.calcProgress(state.wish?.info)
+		progressBarText.setText(
+			`${progressBarTextContent.donationSum}€ (${progressBarTextContent.donationPercentageProgress}% von ${progressBarTextContent.donationGoal}€)`
+		)
 		progressBarText.setX(this.displayWidth - 315 * this.scale)
 		progressBarText.setY(164.5 * this.scale)
 	}
@@ -160,7 +157,4 @@ interface ContainerOptions {
 	x?: number | undefined
 	y?: number | undefined
 	children?: Phaser.GameObjects.GameObject[] | undefined
-}
-function percentage(partialValue: number, totalValue: number) {
-	return (100 * partialValue) / totalValue
 }
