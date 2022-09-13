@@ -1,5 +1,6 @@
-import { DonationAlertState, SettingsState } from '@pftp/common'
+import { DonationAlertState, DonationWidgetState, SettingsState } from '@pftp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { mawApiClient } from './MakeAWishApiClient'
 
 const initialSettingsState: SettingsState = {
 	volume: 0.6,
@@ -44,8 +45,39 @@ const donationAlertSlice = createSlice({
 	},
 })
 
+const initialDonationWidgetState: DonationWidgetState = {
+	isVisible: true,
+	scale: 0.84,
+	position: {
+		x: 1920 / 2,
+		y: 400,
+	},
+	wish: null,
+}
+const donationWidgetSlice = createSlice({
+	name: 'donationwidget',
+	initialState: initialDonationWidgetState,
+	reducers: {
+		update: (state, action: PayloadAction<Partial<DonationWidgetState>>) => {
+			const slug = action.payload.wish?.slug ?? state.wish?.slug ?? 'noslug'
+			action.payload.wish = {
+				slug: slug,
+				info: mawApiClient.mawInfoJsonData?.wishes[slug],
+			}
+
+			return {
+				...state,
+				...action.payload,
+			}
+		},
+	},
+})
+
 export const donationAlertReducer = donationAlertSlice.reducer
 export const updateDonationAlert = donationAlertSlice.actions.update
+
+export const donationWidgetReducer = donationWidgetSlice.reducer
+export const updateDonationWidget = donationWidgetSlice.actions.update
 
 export const settingsReducer = settingsSlice.reducer
 export const updateSettings = settingsSlice.actions.update

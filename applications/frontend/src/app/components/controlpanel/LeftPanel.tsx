@@ -6,18 +6,30 @@ import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { AiFillNotification } from 'react-icons/ai'
-import { Donation, DONATION_ALERT_UPDATE, DONATION_TRIGGER, GlobalState, SETTINGS_UPDATE } from '@pftp/common'
+import {
+	Donation,
+	DONATION_ALERT_UPDATE,
+	DONATION_TRIGGER,
+	DONATION_WIDGET_UPDATE,
+	GlobalState,
+	MakeAWishInfoJsonDTO,
+	MAW_INFO_JSON_DATA_UPDATE,
+	SETTINGS_UPDATE,
+} from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
 import { useDebouncedCallback } from 'use-debounce'
 import { FatSelect } from './FatSelect'
 import { FatInput } from './FatInput'
+import { SocketAuth } from '../../provider/SocketProvider'
 
-export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
+export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({ globalState, auth }) => {
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
+	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
 	const [languages, setLanguages] = useState<{ value: string; label: string }[]>([])
+	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -26,7 +38,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		})
 	}, [globalState.settings.volume, socket])
 
-	const emiteLanguageUpdate = useCallback(
+	const emitLanguageUpdate = useCallback(
 		(e) => {
 			socket?.emit(SETTINGS_UPDATE, {
 				text2speech: {
@@ -36,6 +48,17 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			})
 		},
 		[globalState.settings.text2speech, socket]
+	)
+
+	const emitWishUpdate = useCallback(
+		(e) => {
+			socket?.emit(DONATION_WIDGET_UPDATE, {
+				wish: {
+					slug: e.currentTarget.value,
+				},
+			})
+		},
+		[socket]
 	)
 
 	const emitMinDonationAmountUpdate = useCallback(
@@ -53,7 +76,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		[globalState.settings.text2speech, socket]
 	)
 
-	const emiteText2SpeechVolume = useCallback(() => {
+	const emitText2SpeechVolume = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.text2speech.volume)
 		socket?.emit(SETTINGS_UPDATE, {
 			text2speech: {
@@ -63,21 +86,37 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		})
 	}, [globalState.settings.text2speech, socket])
 
-	const emiteDonationChange = useDebouncedCallback((scale: number) => {
+	const emitDonationScaleChange = useDebouncedCallback((scale: number) => {
 		socket?.emit(DONATION_ALERT_UPDATE, {
 			scale,
 		})
 	}, 125)
 
-	const emiteDonationAlertVisibleUpdate = useCallback(() => {
+	const emitDonationAlertVisibleUpdate = useCallback(() => {
 		socket?.emit(DONATION_ALERT_UPDATE, {
 			isVisible: !globalState.donationAlert.isVisible,
 		})
 	}, [globalState.donationAlert.isVisible, socket])
 
+	const emitDonationWidgetScaleChange = useDebouncedCallback((scale: number) => {
+		socket?.emit(DONATION_WIDGET_UPDATE, {
+			scale,
+		})
+	}, 125)
+
+	const emitDonationWidgetVisibleUpdate = useCallback(() => {
+		socket?.emit(DONATION_WIDGET_UPDATE, {
+			isVisible: !globalState.donationWidget.isVisible,
+		})
+	}, [globalState.donationWidget.isVisible, socket])
+
 	useEffect(() => {
-		emiteDonationChange(scaleDonationAlert[0])
-	}, [emiteDonationChange, scaleDonationAlert])
+		emitDonationScaleChange(scaleDonationAlert[0])
+	}, [emitDonationScaleChange, scaleDonationAlert])
+
+	useEffect(() => {
+		emitDonationWidgetScaleChange(scaleDonationWidget[0])
+	}, [emitDonationWidgetScaleChange, scaleDonationWidget])
 
 	const emitRandomDonation = useCallback(() => {
 		const precision = 2
@@ -124,6 +163,21 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 		}
 	}, [])
 
+	useEffect(() => {
+		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
+			const wishItems = mawInfoJsonData.streamers[auth.channel].wishes
+			const wishSlectableItems = []
+			if (!Array.isArray(wishItems)) {
+				for (const key of Object.keys(wishItems)) {
+					wishSlectableItems.push({ label: wishItems[key].slug, value: wishItems[key].slug })
+				}
+			} else {
+				wishSlectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
+			}
+			setWishes(wishSlectableItems)
+		})
+	}, [socket, auth.channel])
+
 	return (
 		<GridLeftPanel>
 			<Content>
@@ -148,7 +202,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						icon={<AiFillEye size="24px" />}
 						active={globalState.donationAlert.isVisible}
 						value={globalState?.donationAlert.isVisible === true ? 'true' : 'false'}
-						onClick={emiteDonationAlertVisibleUpdate}
+						onClick={emitDonationAlertVisibleUpdate}
 					>
 						<span>Donation Alert</span>
 					</FatButton>
@@ -241,7 +295,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						}
 						active={globalState.settings.text2speech.volume > 0}
 						value={globalState.settings.text2speech.volume.toString()}
-						onClick={emiteText2SpeechVolume}
+						onClick={emitText2SpeechVolume}
 					>
 						<VolumeIndicator volume={globalState.settings.text2speech.volume} />
 					</FatButton>
@@ -251,10 +305,99 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 						onChange={emitMinDonationAmountUpdate}
 					></FatInput>
 					<FatSelect
-						onBlur={emiteLanguageUpdate}
-						onChange={emiteLanguageUpdate}
+						onBlur={emitLanguageUpdate}
+						onChange={emitLanguageUpdate}
 						items={languages}
 						value={globalState.settings.text2speech.language}
+					/>
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							MAW Kids
+						</span>
+					</Label>
+					<FatButton
+						icon={<AiFillEye size="24px" />}
+						active={globalState.donationWidget.isVisible}
+						value={globalState?.donationWidget.isVisible === true ? 'true' : 'false'}
+						onClick={emitDonationWidgetVisibleUpdate}
+					>
+						<span>Donation Widget</span>
+					</FatButton>
+					<FatButton style={{ cursor: 'default' }}>
+						<React.Fragment>
+							<Range
+								values={scaleDonationWidget}
+								step={0.01}
+								min={0.15}
+								max={2}
+								onChange={(values) => setScaleDonationWidget(values)}
+								renderTrack={({ props, children }) => (
+									<div
+										role="button"
+										tabIndex={-1}
+										/* eslint-disable react/prop-types */
+										onMouseDown={props.onMouseDown}
+										onTouchStart={props.onTouchStart}
+										style={{
+											...props.style,
+											height: '40px',
+											display: 'flex',
+											width: '100%',
+										}}
+									>
+										<div
+											ref={props.ref}
+											style={{
+												height: '5px',
+												width: '100%',
+												borderRadius: '2px',
+												alignSelf: 'center',
+												backgroundColor: 'rgba(255,255,255,0.2)',
+											}}
+										>
+											{children}
+										</div>
+									</div>
+								)}
+								renderThumb={({ props }) => (
+									<div
+										{...props}
+										style={{
+											/* eslint-disable react/prop-types */
+											...props.style,
+											height: '28px',
+											width: '28px',
+											borderRadius: '4px',
+											backgroundColor: '#049EE7',
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+										}}
+									>
+										<SizeIconWrapper>
+											<IoMdResize size={24} />
+										</SizeIconWrapper>
+									</div>
+								)}
+							/>
+						</React.Fragment>
+					</FatButton>
+					<FatSelect
+						id="wishes"
+						onBlur={emitWishUpdate}
+						onChange={emitWishUpdate}
+						items={wishes}
+						value={globalState.donationWidget.wish ? globalState.donationWidget.wish.slug : ''}
 					/>
 				</ButtonsWrapper>
 			</Content>

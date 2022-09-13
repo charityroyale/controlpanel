@@ -10,6 +10,7 @@ import { PFTPSocketEventsMap, Donation } from '@pftp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
 import cors from 'cors'
+import { mawApiClient } from './MakeAWishApiClient'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -133,6 +134,8 @@ if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
 const jwtSecret = process.env.SOCKETIO_AUTH_SECRET ?? 'secret'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sessionManager = new SessionManager(io, jwtSecret)
-
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+mawApiClient.fetchMawData()
+mawApiClient.poll()
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)

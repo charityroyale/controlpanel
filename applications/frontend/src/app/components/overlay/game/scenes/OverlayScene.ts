@@ -1,16 +1,36 @@
-import { DONATION_TRIGGER, GlobalState, PFTPSocketEventsMap, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import {
+	DONATION_TRIGGER,
+	GlobalState,
+	MAW_INFO_JSON_DATA_UPDATE,
+	PFTPSocketEventsMap,
+	REQUEST_STATE,
+	STATE_UPDATE,
+} from '@pftp/common'
 
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
 import { Text2Speech } from '../objects/behaviour/Text2Speech'
 import { Alert } from '../objects/containers/alert/Alert'
-import {
-	DonationBannerContainer,
-	donationAlertContainerName,
-} from '../objects/containers/donationBanner/DonationBannerContainer'
+import { DonationBannerContainer } from '../objects/containers/donationBanner/DonationBannerContainer'
 import { DonationAlertBanner } from '../objects/containers/donationBanner/DonationBanner'
 import { Star } from '../objects/Star'
+import { DonationWidgetContainer } from '../objects/containers/donationwidget/DonationWidgetContainer'
+import { DonationWidgetBackgroundFrame } from '../objects/containers/donationwidget/DonationWidgetBackgroundFrame'
+import { DonationWidgetLeftWithIcon } from '../objects/containers/donationwidget/DonationWidgetLeftWithIcon'
+import { DonationWidgetFullFilled } from '../objects/containers/donationwidget/DonationWidgetFullFilled'
+import { DonationWidgetWishHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishHeading'
+import { DonationWidgetWishSubHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishSubHeading'
+import { DonationWidgetWishLastDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonationStatic'
+import { DonationWidgetWishTopDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishTopDonationStatic'
+import { DonationWidgetWishLastDonation } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonation'
+import { DonationWidgetWishTopDonation } from '../objects/containers/donationwidget/text/DonationWidgetWishTopDonation'
+import {
+	DonationWidgetProgressBar,
+	donationWidgetProgressBarBackgroundName,
+	donationWidgetProgressBarName,
+} from '../objects/containers/donationwidget/DonationWidgetProgressBar'
+import { DonationWidgetProgressBarText } from '../objects/containers/donationwidget/text/DonationWidgetProgressBarText'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -20,6 +40,11 @@ export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
 export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
 export const STRAR_SOUND_AUDIO_KEY = 'starSound'
 export const STAR_RAIN_SOUND_AUDIO_KEY = 'starRainAudio'
+
+export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
+export const DONATION_WIDGET_STATE_LOADING = 'donatioNWidgetStateLoading'
+export const DONATION_WIDGET_FULLFILLED = 'donationWidgetStateFullfilled'
+export const DONATION_WIDGET_LEFT = 'donationWidgetLeft'
 
 export const blueStarKey = 'blueStar'
 const whiteStarFollowerKey = 'whiteFollower'
@@ -48,7 +73,8 @@ const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitter
 
 export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
-	public donationBannerDontainer: DonationBannerContainer | null = null
+	public donationBannerContainer: DonationBannerContainer | null = null
+	public donationWidgetContainer: DonationWidgetContainer | null = null
 	public isLockedOverlay = false
 	public text2speech: Text2Speech | null = null
 
@@ -64,7 +90,8 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		config.socket.on(STATE_UPDATE, (state) => {
-			this.donationBannerDontainer?.handleState(state.donationAlert)
+			this.donationBannerContainer?.handleState(state.donationAlert)
+			this.donationWidgetContainer?.handleState(state.donationWidget)
 			this.text2speech?.handleState(state.settings)
 
 			/**
@@ -82,6 +109,9 @@ export class OverlayScene extends Phaser.Scene {
 
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
+		})
+		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
+			console.log(mawInfoJsonData)
 		})
 	}
 
@@ -103,6 +133,10 @@ export class OverlayScene extends Phaser.Scene {
 			frameHeight: 250,
 		})
 		this.load.image(whiteStarFollowerKey, '/game/stars/star_flare.png')
+		this.load.image(DONATION_WIDGET_BACKGROUND, '/game/donationwidget/donationwidget_frame.png')
+		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donationwidget_left_logo.png')
+		this.load.image(DONATION_WIDGET_FULLFILLED, '/game/donationwidget/donationwidget_wish_fullfilled.png')
+		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
 
 		// AUDIO ASSETS
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -147,22 +181,137 @@ export class OverlayScene extends Phaser.Scene {
 		)
 
 		// create containers
-		this.donationBannerDontainer = new DonationBannerContainer(this, initialState.donationAlert, socket, {
+		this.donationBannerContainer = new DonationBannerContainer(this, initialState.donationAlert, socket, {
 			children: [dontainerBanner, donationAlertWithMessage],
 		})
 
-		this.input.setDraggable([this.donationBannerDontainer])
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			if (_gameObject.name === donationAlertContainerName && !this.isLockedOverlay) {
-				_gameObject.x = dragX
-				_gameObject.y = dragY
-			}
+		const donationWidgetBackgroundFrame = new DonationWidgetBackgroundFrame(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			DONATION_WIDGET_BACKGROUND
+		)
+		const donationWidgetLeftWithIcon = new DonationWidgetLeftWithIcon(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			DONATION_WIDGET_LEFT
+		)
+		const donationWidgetFullFilled = new DonationWidgetFullFilled(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			DONATION_WIDGET_FULLFILLED
+		)
+		const donationWidgetWishHeading = new DonationWidgetWishHeading(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
+		)
+		const donationWidgetWishSubHeading = new DonationWidgetWishSubHeading(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
+		)
+
+		const donationWidgetWishTopDonationStatic = new DonationWidgetWishTopDonationStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'TOP DONATION'
+		)
+
+		const donationWidgetWishLastDonationStatic = new DonationWidgetWishLastDonationStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'LAST DONATION'
+		)
+
+		const donationWidgetWishLastDonation = new DonationWidgetWishLastDonation(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
+		)
+
+		const donationWidgetWishTopDonation = new DonationWidgetWishTopDonation(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
+		)
+
+		const progressBarBackground = new DonationWidgetProgressBar(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			donationWidgetProgressBarBackgroundName,
+			0x2b067a
+		)
+		const progressBar = new DonationWidgetProgressBar(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			donationWidgetProgressBarName,
+			0xc03be4
+		)
+
+		const donationWidgetProgressBarText = new DonationWidgetProgressBarText(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
+		)
+
+		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
+			children: [
+				progressBarBackground,
+				progressBar,
+				donationWidgetBackgroundFrame,
+				donationWidgetLeftWithIcon,
+				donationWidgetFullFilled,
+				donationWidgetWishHeading,
+				donationWidgetWishSubHeading,
+				donationWidgetWishTopDonation,
+				donationWidgetWishTopDonationStatic,
+				donationWidgetWishLastDonationStatic,
+				donationWidgetWishLastDonation,
+				donationWidgetProgressBarText,
+			],
 		})
+
+		this.setContainerDraggable(this.donationBannerContainer)
+		this.setContainerDraggable(this.donationWidgetContainer)
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
 		socket.emit(REQUEST_STATE)
+	}
+
+	private setContainerDraggable(container: Phaser.GameObjects.Container) {
+		this.input.setDraggable([container])
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
+			if (_gameObject.name === container.name && !this.isLockedOverlay) {
+				_gameObject.x = dragX
+				_gameObject.y = dragY
+			}
+		})
 	}
 
 	private createStarRainInstance(starGroup: Phaser.GameObjects.Group) {

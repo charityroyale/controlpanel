@@ -1,3 +1,4 @@
+import { TextStyle } from '../../config/text'
 import { fadeInDonationText } from '../../tweens/fadeInDonationText'
 import { fadeOutDonationText } from '../../tweens/fadeOutDonationText'
 
@@ -11,10 +12,9 @@ export class DonationBannerHeaderText extends Phaser.GameObjects.Text {
 		y: number,
 		text: string | string[],
 		scale: number,
-		style: Phaser.Types.GameObjects.Text.TextStyle = defaultStyles
+		style: TextStyle = textStyle
 	) {
 		super(scene, x, y, text, style)
-		this.setColor('#FFFFFF')
 		this.name = donationAlertHeaderTextName
 		this.setOrigin(0.5)
 		this.setScale(scale)
@@ -26,10 +26,10 @@ export class DonationBannerHeaderText extends Phaser.GameObjects.Text {
 	}
 }
 
-const defaultStyles = {
+const textStyle: TextStyle = {
 	fontFamily: 'Saira Condensed',
 	fontSize: '48px',
-	color: '#BA4D76',
+	color: '#FFFFFF',
 	align: 'center',
 }
 
