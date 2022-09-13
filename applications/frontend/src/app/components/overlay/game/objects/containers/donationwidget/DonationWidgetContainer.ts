@@ -13,8 +13,22 @@ import {
 	DonationWidgetWishLastDonation,
 	donationWidgetWishLastDonationName,
 } from './text/DonationWidgetWishLastDonation'
+import {
+	DonationWidgetWishLastDonationStatic,
+	donationWidgetWishLastDonationStaticName,
+} from './text/DonationWidgetWishLastDonationStatic'
 import { DonationWidgetWishSubHeading, donationWidgetWishSubHeadingName } from './text/DonationWidgetWishSubHeading'
 import { donationWidgetWishTopDonationName, DonationWidgetWishTopDonation } from './text/DonationWidgetWishTopDonation'
+import {
+	DonationWidgetWishTopDonationStatic,
+	donationWidgetWishTopDonationStaticName,
+} from './text/DonationWidgetWishTopDonationStatic'
+
+const infoBoxHeightHeadingOffset = 95
+const infoBoxHeightContentOffset = 112.5
+
+const infoBoxTopDonationWidthOffset = 585
+const infoBoxLastDonationWidthOffset = 395
 
 /**
  * Container for visual DonationWidget
@@ -80,22 +94,37 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		subHeadingText.setX(this.displayWidth - 315 * this.scale)
 		subHeadingText.setY(45 * this.scale)
 
+		// LastDonation InfoBox
+		const lastDonationStatic = this.getByName(
+			donationWidgetWishLastDonationStaticName
+		) as DonationWidgetWishLastDonationStatic
+		lastDonationStatic.setX(this.displayWidth - infoBoxLastDonationWidthOffset * this.scale)
+		lastDonationStatic.setY(infoBoxHeightHeadingOffset * this.scale)
+
 		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
 		lastDonation.setText(
 			`${state.wish?.info?.recent_donations[0].username ?? 'Placeholder'} ${
 				state.wish?.info?.recent_donations[0].amount ?? '-'
 			} €`
 		)
-		lastDonation.setX(this.displayWidth - 395 * this.scale)
-		lastDonation.setY(112.5 * this.scale)
+		lastDonation.setX(this.displayWidth - infoBoxLastDonationWidthOffset * this.scale)
+		lastDonation.setY(infoBoxHeightContentOffset * this.scale)
+
+		// TopDonation InfoBox
+		const topDonationStatic = this.getByName(
+			donationWidgetWishTopDonationStaticName
+		) as DonationWidgetWishTopDonationStatic
+		topDonationStatic.setX(this.displayWidth - infoBoxTopDonationWidthOffset * this.scale)
+		topDonationStatic.setY(infoBoxHeightHeadingOffset * this.scale)
 
 		const topDonation = this.getByName(donationWidgetWishTopDonationName) as DonationWidgetWishTopDonation
 		topDonation.setText(
 			`${state.wish?.info?.top_donors[0].username ?? 'Placeholder'} ${state.wish?.info?.top_donors[0].amount ?? '-'} €`
 		)
-		topDonation.setX(this.displayWidth - 585 * this.scale)
-		topDonation.setY(112.5 * this.scale)
+		topDonation.setX(this.displayWidth - infoBoxTopDonationWidthOffset * this.scale)
+		topDonation.setY(infoBoxHeightContentOffset * this.scale)
 
+		// ProgressBar
 		const progressBarBackground = this.getByName(donationWidgetProgressBarBackgroundName) as DonationWidgetProgressBar
 		progressBarBackground.setX(this.displayWidth - 735 * this.scale)
 		progressBarBackground.setY(164.5 * this.scale)
