@@ -22,8 +22,9 @@ import { IoMdResize } from 'react-icons/io'
 import { useDebouncedCallback } from 'use-debounce'
 import { FatSelect } from './FatSelect'
 import { FatInput } from './FatInput'
+import { SocketAuth } from '../../provider/SocketProvider'
 
-export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
+export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({ globalState, auth }) => {
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
@@ -164,8 +165,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 
 	useEffect(() => {
 		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
-			// TODO: replace 'veni' with current streamer
-			const wishItems = mawInfoJsonData.streamers['veni'].wishes
+			const wishItems = mawInfoJsonData.streamers[auth.channel].wishes
 			const wishSlectableItems = []
 			if (!Array.isArray(wishItems)) {
 				for (const key of Object.keys(wishItems)) {
@@ -174,7 +174,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState }> = ({ glo
 			}
 			setWishes(wishSlectableItems)
 		})
-	}, [socket])
+	}, [socket, auth.channel])
 
 	return (
 		<GridLeftPanel>

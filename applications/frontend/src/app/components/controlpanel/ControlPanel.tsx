@@ -16,7 +16,9 @@ export const ControlPanel: FunctionComponent<{ globalState: GlobalState; user: U
 	return (
 		<React.Fragment>
 			<Header user={user}>Header</Header>
-			<LeftPanel globalState={globalState}>Left-Panel</LeftPanel>
+			<LeftPanel globalState={globalState} auth={auth}>
+				Left-Panel
+			</LeftPanel>
 			<CenterPanel globalState={globalState} auth={auth}>
 				Center-Panel
 			</CenterPanel>
