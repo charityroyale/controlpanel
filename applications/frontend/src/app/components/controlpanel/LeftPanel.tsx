@@ -9,7 +9,6 @@ import { AiFillNotification } from 'react-icons/ai'
 import { FaHeart } from 'react-icons/fa'
 import { FaMicrophone } from 'react-icons/fa'
 import {
-	Donation,
 	DONATION_ALERT_UPDATE,
 	DONATION_TRIGGER,
 	DONATION_WIDGET_UPDATE,
@@ -26,7 +25,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { FatSelect } from './FatSelect'
 import { FatInput } from './FatInput'
 import { SocketAuth } from '../../provider/SocketProvider'
-import { formatWishSlug } from '../../lib/utils'
+import { formatWishSlug, generateRandomDonation } from '../../lib/utils'
 
 export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState; auth: SocketAuth }>> = ({
 	globalState,
@@ -125,37 +124,12 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 		emitDonationWidgetScaleChange(scaleDonationWidget[0])
 	}, [emitDonationWidgetScaleChange, scaleDonationWidget])
 
-	const emitRandomDonation = useCallback(() => {
-		const precision = 2
-		const maxAmount = 1250
-		const randomnum =
-			Math.floor(Math.random() * (maxAmount * precision - 1 * precision) + 1 * precision) / (1 * precision)
-
-		const a = ['TestUserA_', 'TestUserB_', 'TestUserC_']
-		const b = ['Lasagne', 'StrawBerry', 'Spaghetti']
-
-		const rA = Math.floor(Math.random() * a.length)
-		const rB = Math.floor(Math.random() * b.length)
-		const name = a[rA] + b[rB]
-
-		const testMessages = [
-			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
-			'I love you <3!',
-			'Lorem ipsum dolor sit amet, consetetur sadipscingddd elitr, sed diam nonumy ei Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
-		]
-		const message = testMessages[Math.floor(Math.random() * testMessages.length)]
-
-		const donation: Donation = {
-			user: name,
-			amount: randomnum,
-			timestamp: new Date().getUTCMilliseconds(),
-			streamer: '',
-			message,
-		}
-
-		socket?.emit(DONATION_TRIGGER, donation)
-	}, [socket])
+	const emitRandomDonation = useCallback(
+		(donationAmount?: number) => {
+			socket?.emit(DONATION_TRIGGER, generateRandomDonation(donationAmount))
+		},
+		[socket]
+	)
 
 	useEffect(() => {
 		window.speechSynthesis.onvoiceschanged = () => {
@@ -219,7 +193,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 							</IconWrapper>
 							Donation Alert
 						</span>
-						<DemoAlertButton onClick={emitRandomDonation}>Demo</DemoAlertButton>
+						<DemoAlertButton onClick={() => emitRandomDonation()}>Demo</DemoAlertButton>
 					</Label>
 					<FatButton
 						icon={<AiFillEye size="24px" />}
@@ -311,6 +285,9 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 							</IconWrapper>
 							Text-2-Speech
 						</span>
+						<DemoAlertButton onClick={() => emitRandomDonation(globalState.settings.text2speech.minDonationAmount)}>
+							Demo
+						</DemoAlertButton>
 					</Label>
 					<FatButton
 						icon={

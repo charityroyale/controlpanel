@@ -1,3 +1,5 @@
+import { Donation } from '@pftp/common'
+
 export const formatTimeStamp = (timestamp: number) => {
 	return new Intl.DateTimeFormat('de-AT', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(timestamp * 1000))
 }
@@ -22,4 +24,36 @@ export const formatWishSlug = (slug: string) => {
 		})
 		.join(' ')
 	return `Wish: ${wishLabel}`
+}
+
+export const generateRandomDonation = (donationAmount?: number) => {
+	const precision = 2
+	const maxAmount = 1250
+	const randomnum = donationAmount
+		? donationAmount
+		: Math.floor(Math.random() * (maxAmount * precision - 1 * precision) + 1 * precision) / (1 * precision)
+
+	const a = ['TestUserA_', 'TestUserB_', 'TestUserC_']
+	const b = ['Lasagne', 'StrawBerry', 'Spaghetti']
+
+	const rA = Math.floor(Math.random() * a.length)
+	const rB = Math.floor(Math.random() * b.length)
+	const name = a[rA] + b[rB]
+
+	const testMessages = [
+		'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+		'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
+		'I love you <3!',
+		'Lorem ipsum dolor sit amet, consetetur sadipscingddd elitr, sed diam nonumy ei Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
+	]
+	const message = testMessages[Math.floor(Math.random() * testMessages.length)]
+
+	const donation: Donation = {
+		user: name,
+		amount: randomnum,
+		timestamp: new Date().getUTCMilliseconds(),
+		streamer: '',
+		message,
+	}
+	return donation
 }
