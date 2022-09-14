@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { createContext, FunctionComponent, useState } from 'react'
-import { GlobalState, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import { GlobalState, REQUEST_MAW_INFO_JSON_DATA, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
 import { useSocket } from '../hooks/useSocket'
 
 export interface GlobalStateContextState {
@@ -24,6 +24,7 @@ export const GlobalStateProvider: FunctionComponent = ({ children }) => {
 		if (isConnected && socket) {
 			socket.on(STATE_UPDATE, updateGlobalState)
 			socket.emit(REQUEST_STATE)
+			socket.emit(REQUEST_MAW_INFO_JSON_DATA)
 		} else if (!isConnected && socket) {
 			socket.off(STATE_UPDATE, updateGlobalState)
 		}

@@ -3,6 +3,7 @@ import {
 	GlobalState,
 	MAW_INFO_JSON_DATA_UPDATE,
 	PFTPSocketEventsMap,
+	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	STATE_UPDATE,
 } from '@pftp/common'
@@ -31,6 +32,17 @@ import {
 	donationWidgetProgressBarName,
 } from '../objects/containers/donationwidget/DonationWidgetProgressBar'
 import { DonationWidgetProgressBarText } from '../objects/containers/donationwidget/text/DonationWidgetProgressBarText'
+import { SocketAuth } from '../../../../provider/SocketProvider'
+import {
+	DonationWidgetMiddleTextStatic,
+	DonationWidgetPostfixTextStatic,
+	DonationWidgetPrefixTextStatic,
+} from '../objects/containers/donationwidget/text/DonationWidgetWishFullFilledStatic'
+import {
+	DonationWidgetWishFullFilledAmount,
+	DonationWidgetWishFullFilledKidName,
+	DonationWidgetWishFullFilledWishNumber,
+} from '../objects/containers/donationwidget/text/DonationWidgetWishFullFilled'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -82,6 +94,12 @@ export class OverlayScene extends Phaser.Scene {
 		super({ key: SCENES.OVERLAY })
 	}
 
+	/**
+	 * !!!! WATCH OUT !!!!
+	 * Possible Issue with access to gameobjects from socket io event before it gets rendered
+	 * --> Careful, socket io events may be triggered before initial render -->
+	 * therefore some gameobjects or cache/assets can be missing.
+	 */
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		this.text2speech = new Text2Speech(
 			config.initialState.settings.text2speech.language,
@@ -101,21 +119,34 @@ export class OverlayScene extends Phaser.Scene {
 			const normalizedSoundValue = Math.round(this.sound.volume * 10) / 10
 			if (normalizedSoundValue !== state.settings.volume) {
 				this.sound.volume = state.settings.volume
-				this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
+				const audio = this.game.cache.audio.exists(VOLUME_CHANGE_AUDIO_KEY)
+				if (audio) {
+					this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
+				}
 			}
 
 			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
-
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
 		})
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
-			console.log(mawInfoJsonData)
+			this.donationWidgetContainer?.handleMawJsonStateUpdate(
+				mawInfoJsonData,
+				(config.socket.auth as SocketAuth).channel
+			)
 		})
 	}
 
 	preload() {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		this.load.rexWebFont({
+			google: {
+				families: ['Luckiest Guy', 'Saira Condensed'],
+			},
+		})
+
 		// VIDEOS
 		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', 'loadeddata', false, true)
 		this.load.video(
@@ -137,6 +168,8 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donationwidget_left_logo.png')
 		this.load.image(DONATION_WIDGET_FULLFILLED, '/game/donationwidget/donationwidget_wish_fullfilled.png')
 		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
+
+		this.load.script
 
 		// AUDIO ASSETS
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
@@ -199,12 +232,14 @@ export class OverlayScene extends Phaser.Scene {
 			initialState.donationWidget,
 			DONATION_WIDGET_LEFT
 		)
+
 		const donationWidgetFullFilled = new DonationWidgetFullFilled(
 			this,
 			0,
 			0,
 			initialState.donationWidget,
-			DONATION_WIDGET_FULLFILLED
+			DONATION_WIDGET_FULLFILLED,
+			[]
 		)
 		const donationWidgetWishHeading = new DonationWidgetWishHeading(
 			this,
@@ -278,6 +313,54 @@ export class OverlayScene extends Phaser.Scene {
 			'Placeholder'
 		)
 
+		const donationWidgetPrefixTextStatic = new DonationWidgetPrefixTextStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'WUNSCH'
+		)
+
+		const donationWidgetMiddleTextStatic = new DonationWidgetMiddleTextStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'ERFÜLLT'
+		)
+
+		const donationWidgetPostfixTextStatic = new DonationWidgetPostfixTextStatic(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'FÜR'
+		)
+
+		const donationWidgetWishFullFilledKidName = new DonationWidgetWishFullFilledKidName(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'NAME'
+		)
+
+		const donationWidgetWishFullFilledWishNumber = new DonationWidgetWishFullFilledWishNumber(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'0'
+		)
+
+		const donationWidgetWishFullFilledAmount = new DonationWidgetWishFullFilledAmount(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'000,00 €'
+		)
+
 		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
 			children: [
 				progressBarBackground,
@@ -285,6 +368,12 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetBackgroundFrame,
 				donationWidgetLeftWithIcon,
 				donationWidgetFullFilled,
+				donationWidgetPrefixTextStatic,
+				donationWidgetMiddleTextStatic,
+				donationWidgetPostfixTextStatic,
+				donationWidgetWishFullFilledKidName,
+				donationWidgetWishFullFilledWishNumber,
+				donationWidgetWishFullFilledAmount,
 				donationWidgetWishHeading,
 				donationWidgetWishSubHeading,
 				donationWidgetWishTopDonation,
@@ -300,7 +389,9 @@ export class OverlayScene extends Phaser.Scene {
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
+
 		socket.emit(REQUEST_STATE)
+		socket.emit(REQUEST_MAW_INFO_JSON_DATA)
 	}
 
 	private setContainerDraggable(container: Phaser.GameObjects.Container) {

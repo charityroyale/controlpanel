@@ -6,6 +6,7 @@ import {
 	GlobalState,
 	MAW_INFO_JSON_DATA_UPDATE,
 	PFTPSocketEventsMap,
+	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
@@ -53,7 +54,7 @@ export default class Session {
 
 		socket.emit(STATE_UPDATE, this.store.getState())
 		if (mawApiClient.mawInfoJsonData != null) {
-			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
+			socket.emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
 
 		this.registerReadHandlers(socket)
@@ -68,6 +69,11 @@ export default class Session {
 
 	private registerReadHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
 		socket.on(REQUEST_STATE, () => socket.emit(STATE_UPDATE, this.store.getState()))
+		socket.on(REQUEST_MAW_INFO_JSON_DATA, () => {
+			if (mawApiClient.mawInfoJsonData != null) {
+				socket.emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
+			}
+		})
 	}
 
 	private registerWriteHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
