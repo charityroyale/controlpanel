@@ -6,6 +6,8 @@ import { FatButton } from './FatButton'
 import { AiFillEye } from 'react-icons/ai/index'
 import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { AiFillNotification } from 'react-icons/ai'
+import { FaHeart } from 'react-icons/fa'
+import { FaMicrophone } from 'react-icons/fa'
 import {
 	Donation,
 	DONATION_ALERT_UPDATE,
@@ -305,7 +307,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 					>
 						<span style={{ display: 'flex' }}>
 							<IconWrapper>
-								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+								<FaMicrophone size="14px" style={{ marginRight: '6px' }} />
 							</IconWrapper>
 							Text-2-Speech
 						</span>
@@ -341,9 +343,9 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 					>
 						<span style={{ display: 'flex' }}>
 							<IconWrapper>
-								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+								<FaHeart size="14px" style={{ marginRight: '6px' }} />
 							</IconWrapper>
-							MAW Kids
+							Wishes
 						</span>
 					</Label>
 					<FatButton
