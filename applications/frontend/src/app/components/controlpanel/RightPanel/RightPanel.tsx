@@ -8,7 +8,7 @@ import { Donations } from './DonationList'
 import { useSocket } from '../../../hooks/useSocket'
 
 const maxDonationsToDisplay = 50
-export const RightPanel: FunctionComponent = () => {
+export const RightPanel: FunctionComponent<React.PropsWithChildren<unknown>> = () => {
 	const { socket } = useSocket()
 	const [donations, setDonations] = useState<Donation[]>([])
 

@@ -6,7 +6,7 @@ import { RiListSettingsFill } from 'react-icons/ri'
 import { GlobalState } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 
-export const BottomPanel: FunctionComponent<{ globalState: GlobalState }> = ({ globalState }) => {
+export const BottomPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState }>> = ({ globalState }) => {
 	const { socket } = useSocket()
 
 	// TBA

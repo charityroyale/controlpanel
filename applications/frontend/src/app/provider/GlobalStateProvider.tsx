@@ -12,7 +12,7 @@ const globalStateDefaultValue: GlobalStateContextState = {
 }
 
 export const GlobalStateContext = createContext<GlobalStateContextState>(globalStateDefaultValue)
-export const GlobalStateProvider: FunctionComponent = ({ children }) => {
+export const GlobalStateProvider: FunctionComponent<React.PropsWithChildren<unknown>> = ({ children }) => {
 	const [globalState, setGlobalState] = useState<GlobalState | null>(globalStateDefaultValue.globalState)
 	const { socket, isConnected } = useSocket()
 

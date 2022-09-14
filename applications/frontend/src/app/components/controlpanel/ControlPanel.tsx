@@ -8,7 +8,7 @@ import { Header } from './Header'
 import { LeftPanel } from './LeftPanel'
 import { RightPanel } from './RightPanel/RightPanel'
 
-export const ControlPanel: FunctionComponent<{ globalState: GlobalState; user: UserDTO; auth: SocketAuth }> = ({
+export const ControlPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState; user: UserDTO; auth: SocketAuth }>> = ({
 	globalState,
 	user,
 	auth,

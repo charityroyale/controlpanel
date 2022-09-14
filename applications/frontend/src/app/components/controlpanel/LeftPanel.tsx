@@ -25,7 +25,10 @@ import { FatSelect } from './FatSelect'
 import { FatInput } from './FatInput'
 import { SocketAuth } from '../../provider/SocketProvider'
 
-export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({ globalState, auth }) => {
+export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState; auth: SocketAuth }>> = ({
+	globalState,
+	auth,
+}) => {
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
@@ -40,7 +43,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: Sock
 	}, [globalState.settings.volume, socket])
 
 	const emitLanguageUpdate = useCallback(
-		(e) => {
+		(e: React.ChangeEvent<HTMLSelectElement>) => {
 			socket?.emit(SETTINGS_UPDATE, {
 				text2speech: {
 					...globalState.settings.text2speech,
@@ -52,7 +55,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: Sock
 	)
 
 	const emitWishUpdate = useCallback(
-		(e) => {
+		(e: React.ChangeEvent<HTMLSelectElement>) => {
 			socket?.emit(DONATION_WIDGET_UPDATE, {
 				wish: {
 					slug: e.currentTarget.value,
@@ -63,7 +66,7 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: Sock
 	)
 
 	const emitMinDonationAmountUpdate = useCallback(
-		(e) => {
+		(e: React.ChangeEvent<HTMLInputElement>) => {
 			const numberRegex = /^[0-9\b]+$/
 			if (e.target.value === '' || numberRegex.test(e.target.value)) {
 				socket?.emit(SETTINGS_UPDATE, {
@@ -432,7 +435,7 @@ const SizeIconWrapper = styled.span`
 	}
 `
 
-const VolumeIndicator: FunctionComponent<{ volume: number }> = ({ volume }) => {
+const VolumeIndicator: FunctionComponent<React.PropsWithChildren<{ volume: number }>> = ({ volume }) => {
 	const filledCirclesCount = getStepsFromVolume(volume)
 	const notFilledCirclesCount = 5 - filledCirclesCount
 	const active = volume > 0
@@ -454,7 +457,10 @@ const VolumeIndicator: FunctionComponent<{ volume: number }> = ({ volume }) => {
 	)
 }
 
-const Circle: FunctionComponent<{ filled: boolean; active: boolean }> = ({ filled, active }) => {
+const Circle: FunctionComponent<React.PropsWithChildren<{ filled: boolean; active: boolean }>> = ({
+	filled,
+	active,
+}) => {
 	return <VolumeCircle filled={filled} active={active} />
 }
 

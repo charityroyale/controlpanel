@@ -9,7 +9,7 @@ interface LockOverlayProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const iconSize = '14px'
-export const LockOverlay: FunctionComponent<LockOverlayProps> = (props) => {
+export const LockOverlay: FunctionComponent<React.PropsWithChildren<LockOverlayProps>> = (props) => {
 	const { isLocked } = props
 	const { socket } = useSocket()
 

@@ -7,7 +7,7 @@ interface FatInputProps extends React.HTMLAttributes<HTMLInputElement> {
 	name: string
 }
 
-export const FatInput: FunctionComponent<FatInputProps> = ({ value, name, ...props }: FatInputProps) => {
+export const FatInput: FunctionComponent<React.PropsWithChildren<FatInputProps>> = ({ value, name, ...props }: FatInputProps) => {
 	return (
 		<InputWrapper>
 			<FatLabel htmlFor={name}>

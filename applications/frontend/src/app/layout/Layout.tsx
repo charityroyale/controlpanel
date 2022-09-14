@@ -10,6 +10,6 @@ interface MainLayoutProps {
 	children: React.ReactNode
 }
 
-export const MainLayout: React.FunctionComponent<MainLayoutProps> = ({ children }: MainLayoutProps) => {
+export const MainLayout: React.FunctionComponent<React.PropsWithChildren<MainLayoutProps>> = ({ children }: MainLayoutProps) => {
 	return <StyledLayout>{children}</StyledLayout>
 }

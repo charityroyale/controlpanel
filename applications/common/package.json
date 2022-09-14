@@ -9,6 +9,6 @@
 		"build": "tsc --build"
 	},
 	"dependencies": {
-		"dotenv": "^10.0.0"
+		"dotenv": "^16.0.2"
 	}
 }

@@ -9,7 +9,7 @@ interface FatButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
 	disabled?: boolean
 }
 
-export const FatButton: FunctionComponent<FatButtonProps> = ({
+export const FatButton: FunctionComponent<React.PropsWithChildren<FatButtonProps>> = ({
 	children,
 	active,
 	icon,
