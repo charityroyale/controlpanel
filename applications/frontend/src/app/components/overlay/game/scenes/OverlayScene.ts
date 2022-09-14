@@ -1,7 +1,6 @@
 import {
 	DONATION_TRIGGER,
 	GlobalState,
-	MakeAWishInfoJsonDTO,
 	MAW_INFO_JSON_DATA_UPDATE,
 	PFTPSocketEventsMap,
 	REQUEST_MAW_INFO_JSON_DATA,
@@ -20,10 +19,7 @@ import { Star } from '../objects/Star'
 import { DonationWidgetContainer } from '../objects/containers/donationwidget/DonationWidgetContainer'
 import { DonationWidgetBackgroundFrame } from '../objects/containers/donationwidget/DonationWidgetBackgroundFrame'
 import { DonationWidgetLeftWithIcon } from '../objects/containers/donationwidget/DonationWidgetLeftWithIcon'
-import {
-	DonationWidgetFullFilled,
-	donationWidgetFullFilledName,
-} from '../objects/containers/donationwidget/DonationWidgetFullFilled'
+import { DonationWidgetFullFilled } from '../objects/containers/donationwidget/DonationWidgetFullFilled'
 import { DonationWidgetWishHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishHeading'
 import { DonationWidgetWishSubHeading } from '../objects/containers/donationwidget/text/DonationWidgetWishSubHeading'
 import { DonationWidgetWishLastDonationStatic } from '../objects/containers/donationwidget/text/DonationWidgetWishLastDonationStatic'
@@ -93,7 +89,6 @@ export class OverlayScene extends Phaser.Scene {
 	public donationWidgetContainer: DonationWidgetContainer | null = null
 	public isLockedOverlay = false
 	public text2speech: Text2Speech | null = null
-	public mawInfoJsonData: MakeAWishInfoJsonDTO | null = null
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -102,6 +97,8 @@ export class OverlayScene extends Phaser.Scene {
 	/**
 	 * !!!! WATCH OUT !!!!
 	 * Possible Issue with access to gameobjects from socket io event before it gets rendered
+	 * --> Careful, socket io events may be triggered before initial render -->
+	 * therefore some gameobjects or cache/assets can be missing.
 	 */
 	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
 		this.text2speech = new Text2Speech(
@@ -122,7 +119,10 @@ export class OverlayScene extends Phaser.Scene {
 			const normalizedSoundValue = Math.round(this.sound.volume * 10) / 10
 			if (normalizedSoundValue !== state.settings.volume) {
 				this.sound.volume = state.settings.volume
-				this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
+				const audio = this.game.cache.audio.exists(VOLUME_CHANGE_AUDIO_KEY)
+				if (audio) {
+					this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
+				}
 			}
 
 			this.isLockedOverlay = state.settings.isLockedOverlay
@@ -131,28 +131,10 @@ export class OverlayScene extends Phaser.Scene {
 			this.alert?.handleDonation(donation)
 		})
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
-			this.mawInfoJsonData = mawInfoJsonData
-
-			const streamer = (config.socket.auth as SocketAuth).channel
-			const rootWishes = mawInfoJsonData.wishes
-			const streamerRootWishes = []
-
-			for (const key of Object.keys(rootWishes)) {
-				const rootWish = rootWishes[key]
-				// eslint-disable-next-line no-prototype-builtins
-				if (rootWish.streamers.hasOwnProperty(streamer)) {
-					streamerRootWishes.push(rootWishes[key])
-				}
-			}
-
-			const donationWidgetFullFilled = this.donationWidgetContainer?.getByName(
-				donationWidgetFullFilledName
-			) as DonationWidgetFullFilled
-
-			if (donationWidgetFullFilled) {
-				donationWidgetFullFilled.setFullFilledWishes(streamerRootWishes)
-				donationWidgetFullFilled.setFullFilledWishContent()
-			}
+			this.donationWidgetContainer?.handleMawJsonStateUpdate(
+				mawInfoJsonData,
+				(config.socket.auth as SocketAuth).channel
+			)
 		})
 	}
 
@@ -397,10 +379,9 @@ export class OverlayScene extends Phaser.Scene {
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
-		this.events.on('postrender', () => {
-			socket.emit(REQUEST_STATE)
-			socket.emit(REQUEST_MAW_INFO_JSON_DATA)
-		})
+
+		socket.emit(REQUEST_STATE)
+		socket.emit(REQUEST_MAW_INFO_JSON_DATA)
 	}
 
 	private setContainerDraggable(container: Phaser.GameObjects.Container) {

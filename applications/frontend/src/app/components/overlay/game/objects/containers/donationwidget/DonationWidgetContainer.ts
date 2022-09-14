@@ -1,4 +1,4 @@
-import { DonationWidgetState, DONATION_WIDGET_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
+import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, PFTPSocketEventsMap } from '@pftp/common'
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'
@@ -200,6 +200,26 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		) as DonationWidgetWishFullFilledAmount
 		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 372 * this.scale)
 		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 24 * this.scale)
+	}
+
+	public handleMawJsonStateUpdate = (mawJsonInfo: MakeAWishInfoJsonDTO, streamer: string) => {
+		const rootWishes = mawJsonInfo.wishes
+		const streamerRootWishes = []
+
+		for (const key of Object.keys(rootWishes)) {
+			const rootWish = rootWishes[key]
+			// eslint-disable-next-line no-prototype-builtins
+			if (rootWish.streamers.hasOwnProperty(streamer)) {
+				streamerRootWishes.push(rootWishes[key])
+			}
+		}
+
+		const donationWidgetFullFilled = this.getByName(donationWidgetFullFilledName) as DonationWidgetFullFilled
+
+		if (donationWidgetFullFilled) {
+			donationWidgetFullFilled.setFullFilledWishes(streamerRootWishes)
+			donationWidgetFullFilled.setFullFilledWishContent()
+		}
 	}
 
 	private scaleContainerItems = (state: DonationWidgetState) => {
