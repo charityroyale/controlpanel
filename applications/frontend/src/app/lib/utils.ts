@@ -15,7 +15,11 @@ export const getPercentage = (value: number, total: number) => {
 }
 
 export const formatWishSlug = (slug: string) => {
-	const splitByDashSlug = slug.split("-");
-	const wishLabel = splitByDashSlug.join(" ");
-	return `Kid: ${wishLabel}`
+	const wishLabel = slug
+		.split('-')
+		.map((word) => {
+			return word.toUpperCase()
+		})
+		.join(' ')
+	return `Wish: ${wishLabel}`
 }
