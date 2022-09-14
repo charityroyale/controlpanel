@@ -10,7 +10,8 @@
     "rootDir": "src",
     "noEmit": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowJs": true
   },
   "exclude": [
     "dist",

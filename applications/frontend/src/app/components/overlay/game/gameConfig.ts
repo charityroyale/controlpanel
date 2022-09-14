@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { OverlayScene } from './scenes/OverlayScene'
+import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugin.js'
 
 export const gameConfig = {
 	type: Phaser.AUTO,
@@ -22,6 +23,15 @@ export const gameConfig = {
 		},
 	},
 	scene: [OverlayScene],
+	plugins: {
+		global: [
+			{
+				key: 'rexWebFontLoader',
+				plugin: WebFontLoaderPlugin,
+				start: true,
+			},
+		],
+	},
 }
 
 export const SCENES = {

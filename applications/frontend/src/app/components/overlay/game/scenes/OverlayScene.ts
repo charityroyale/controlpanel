@@ -139,6 +139,14 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	preload() {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		this.load.rexWebFont({
+			google: {
+				families: ['Luckiest Guy', 'Saira Condensed'],
+			},
+		})
+
 		// VIDEOS
 		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', 'loadeddata', false, true)
 		this.load.video(
@@ -160,6 +168,8 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donationwidget_left_logo.png')
 		this.load.image(DONATION_WIDGET_FULLFILLED, '/game/donationwidget/donationwidget_wish_fullfilled.png')
 		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
+
+		this.load.script
 
 		// AUDIO ASSETS
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
