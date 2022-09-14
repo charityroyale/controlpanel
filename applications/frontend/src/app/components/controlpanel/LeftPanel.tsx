@@ -24,6 +24,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { FatSelect } from './FatSelect'
 import { FatInput } from './FatInput'
 import { SocketAuth } from '../../provider/SocketProvider'
+import { formatWishSlug } from '../../lib/utils'
 
 export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState; auth: SocketAuth }>> = ({
 	globalState,
@@ -173,7 +174,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 			const wishSelectableItems = []
 			if (!Array.isArray(wishItems)) {
 				for (const key of Object.keys(wishItems)) {
-					wishSelectableItems.push({ label: wishItems[key].slug, value: wishItems[key].slug })
+					wishSelectableItems.push({ label: formatWishSlug(wishItems[key].slug), value: wishItems[key].slug })
 				}
 			} else {
 				wishSelectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
