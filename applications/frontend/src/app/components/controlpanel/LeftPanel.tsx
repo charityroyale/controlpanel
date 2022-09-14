@@ -15,6 +15,7 @@ import {
 	MakeAWishInfoJsonDTO,
 	MAW_INFO_JSON_DATA_UPDATE,
 	SETTINGS_UPDATE,
+	STATE_UPDATE,
 } from '@pftp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
@@ -166,17 +167,33 @@ export const LeftPanel: FunctionComponent<{ globalState: GlobalState; auth: Sock
 	useEffect(() => {
 		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
 			const wishItems = mawInfoJsonData.streamers[auth.channel].wishes
-			const wishSlectableItems = []
+			const wishSelectableItems = []
 			if (!Array.isArray(wishItems)) {
 				for (const key of Object.keys(wishItems)) {
-					wishSlectableItems.push({ label: wishItems[key].slug, value: wishItems[key].slug })
+					wishSelectableItems.push({ label: wishItems[key].slug, value: wishItems[key].slug })
 				}
 			} else {
-				wishSlectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
+				wishSelectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
 			}
-			setWishes(wishSlectableItems)
+			setWishes(wishSelectableItems)
 		})
 	}, [socket, auth.channel])
+
+	/**
+	 * Initially set the donationwidget slug from frontend
+	 * when mawdata is available
+	 */
+	useEffect(() => {
+		socket?.on(STATE_UPDATE, (stateUpdate: GlobalState) => {
+			if (stateUpdate.donationWidget.wish?.slug === 'noslug' && wishes.length > 0) {
+				socket.emit(DONATION_WIDGET_UPDATE, {
+					wish: {
+						slug: wishes[0].value,
+					},
+				})
+			}
+		})
+	}, [socket, auth.channel, wishes])
 
 	return (
 		<GridLeftPanel>
