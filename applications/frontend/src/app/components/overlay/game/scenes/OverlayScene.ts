@@ -4,6 +4,7 @@ import {
 	MakeAWishInfoJsonDTO,
 	MAW_INFO_JSON_DATA_UPDATE,
 	PFTPSocketEventsMap,
+	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	STATE_UPDATE,
 } from '@pftp/common'
@@ -126,7 +127,6 @@ export class OverlayScene extends Phaser.Scene {
 
 			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
-
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
 		})
@@ -397,9 +397,9 @@ export class OverlayScene extends Phaser.Scene {
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
-		socket.emit(REQUEST_STATE)
 		this.events.on('postrender', () => {
 			socket.emit(REQUEST_STATE)
+			socket.emit(REQUEST_MAW_INFO_JSON_DATA)
 		})
 	}
 
