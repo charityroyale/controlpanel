@@ -63,8 +63,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		this.setScale(state.scale)
 		this.setIsVisible(state.isVisible)
 		this.setPosition(1920 / 2, 500)
-
-		this.setInteractive()
+		this.setInteractive({ cursor: 'pointer' })
 		this.on('dragend', () => {
 			socket.emit(DONATION_WIDGET_UPDATE, {
 				position: {
