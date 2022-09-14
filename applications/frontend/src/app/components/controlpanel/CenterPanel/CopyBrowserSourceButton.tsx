@@ -8,7 +8,7 @@ const iconSize = '18px'
 interface CopyBrowserSourceButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	username: string
 }
-export const CopyBrowserSourceButton: FunctionComponent<CopyBrowserSourceButtonProps> = (props) => {
+export const CopyBrowserSourceButton: FunctionComponent<React.PropsWithChildren<CopyBrowserSourceButtonProps>> = (props) => {
 	return (
 		<CopyToClipBoardButton {...props}>
 			<CopyToClipboard

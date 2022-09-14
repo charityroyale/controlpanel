@@ -1,10 +1,10 @@
-import { withSession, ServerSideHandler } from '../../app/lib/session'
+import { withSessionSsr } from '../../app/lib/session'
 
 const LogoutPage = () => {
 	return null
 }
 
-export const getServerSideProps = withSession<ServerSideHandler>(async ({ req, res }) => {
+export const getServerSideProps = withSessionSsr(async ({ req, res }) => {
 	req.session.destroy()
 	res.writeHead(301, { Location: '/login' })
 	res.end()

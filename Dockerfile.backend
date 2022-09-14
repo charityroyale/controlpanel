@@ -1,5 +1,5 @@
 # define nodejs baseimage
-FROM node:16-alpine3.11
+FROM node:16.17.0-alpine
 
 # expose ports
 EXPOSE 5200

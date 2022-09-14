@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { formatCurrency, formatTimeStamp } from '../../../lib/utils'
 
-export const Donations: FunctionComponent<{ donations: Donation[] }> = ({ donations }) => {
+export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: Donation[] }>> = ({ donations }) => {
 	return (
 		<DonationList>
 			{donations.map((donation, i) => {

@@ -1,19 +1,26 @@
-import { GetServerSideProps, GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next'
-import { withIronSession, Session } from 'next-iron-session'
+import { GetServerSidePropsContext, GetServerSidePropsResult, NextApiHandler } from 'next'
+import { withIronSessionApiRoute, withIronSessionSsr } from 'iron-session/next'
+import { UserDTO } from '../../pages/api/sessions'
 
-type NextIronRequest = NextApiRequest & { session: Session }
-type ServerSideContext = GetServerSidePropsContext & { req: NextIronRequest }
+export interface UserSessionData {
+	user?: UserDTO
+}
 
-export type ApiHandler = (req: NextIronRequest, res: NextApiResponse) => Promise<void>
+const sessionOptions = {
+	cookieName: 'pftp',
+	cookieOptions: {
+		secure: process.env.NODE_ENV === 'production' ? true : false,
+	},
+	password: process.env.APPLICATION_SECRET!,
+}
 
-export type ServerSideHandler = (context: ServerSideContext) => ReturnType<GetServerSideProps>
+export function withSessionRoute(handler: NextApiHandler) {
+	return withIronSessionApiRoute(handler, sessionOptions)
+}
 
-/* https://github.com/vvo/next-iron-session/issues/368#issuecomment-890323102 */
-export const withSession = <T extends ApiHandler | ServerSideHandler>(handler: T) =>
-	withIronSession(handler, {
-		cookieName: 'pftp',
-		cookieOptions: {
-			secure: process.env.NODE_ENV === 'production' ? true : false,
-		},
-		password: process.env.APPLICATION_SECRET!,
-	})
+// Theses types are compatible with InferGetStaticPropsType https://nextjs.org/docs/basic-features/data-fetching#typescript-use-getstaticprops
+export function withSessionSsr<P extends { [key: string]: unknown } = { [key: string]: unknown }>(
+	handler: (context: GetServerSidePropsContext) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>
+) {
+	return withIronSessionSsr(handler, sessionOptions)
+}

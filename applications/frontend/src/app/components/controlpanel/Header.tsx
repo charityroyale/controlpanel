@@ -4,7 +4,7 @@ import { UserDTO } from '../../../pages/api/sessions'
 import styled from 'styled-components'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 
-export const Header: FunctionComponent<{ user: UserDTO }> = ({ user }) => {
+export const Header: FunctionComponent<React.PropsWithChildren<{ user: UserDTO }>> = ({ user }) => {
 	return (
 		<GridHeader>
 			<HeaderLeft>

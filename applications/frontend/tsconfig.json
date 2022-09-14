@@ -11,7 +11,8 @@
     "noEmit": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "allowJs": true
+    "allowJs": true,
+    "incremental": true
   },
   "exclude": [
     "dist",

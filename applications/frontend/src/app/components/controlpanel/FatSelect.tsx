@@ -7,7 +7,7 @@ interface FatSelectProps extends React.HTMLAttributes<HTMLSelectElement> {
 	items: { value: string; label: string }[]
 }
 
-export const FatSelect: FunctionComponent<FatSelectProps> = ({ items, value, ...props }: FatSelectProps) => {
+export const FatSelect: FunctionComponent<React.PropsWithChildren<FatSelectProps>> = ({ items, value, ...props }: FatSelectProps) => {
 	return (
 		<SelectWrapper>
 			<Select {...props} value={value}>

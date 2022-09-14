@@ -8,7 +8,7 @@ import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
 import { SocketAuth } from '../../../provider/SocketProvider'
 import { LockOverlay } from './LockOverlay'
 
-export const CenterPanel: FunctionComponent<{ globalState: GlobalState; auth: SocketAuth }> = ({
+export const CenterPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState; auth: SocketAuth }>> = ({
 	auth,
 	globalState,
 }) => {

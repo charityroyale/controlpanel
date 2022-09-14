@@ -21,7 +21,10 @@ const socketDefaultValue: SockerContextState = {
 }
 
 export const SocketContext = createContext<SockerContextState>(socketDefaultValue)
-export const SocketProvider: FunctionComponent<{ auth?: SocketAuth }> = ({ children, auth }) => {
+export const SocketProvider: FunctionComponent<React.PropsWithChildren<{ auth?: SocketAuth }>> = ({
+	children,
+	auth,
+}) => {
 	const [socket, setSocket] = useState<Socket<PFTPSocketEventsMap> | null>(socketDefaultValue.socket)
 
 	useEffect(() => {
