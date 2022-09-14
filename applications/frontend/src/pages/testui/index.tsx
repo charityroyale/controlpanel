@@ -5,7 +5,7 @@ import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
 import { Donation, DONATION_TRIGGER } from '@pftp/common'
-import { withSession, ServerSideHandler } from '../../app/lib/session'
+import { UserSessionData, withSessionSsr } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { Header } from '../../app/components/controlpanel/Header'
 import { SocketAuth } from '../../app/provider/SocketProvider'
@@ -125,25 +125,25 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<TestUIPageProps> = withSession<ServerSideHandler>(
-	async ({ req, res }) => {
-		const user = req.session.get('user') as UserDTO
+export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ req, res }) => {
+	const user = (req.session as UserSessionData).user
 
-		if (!user) {
-			res.statusCode = 404
-			res.end()
-			return { props: {} as TestUIPageProps }
-		}
-
-		return {
-			props: {
-				title: 'TestUI',
-				user,
-				auth: generateSocketAuthForUser(user, 'readwrite'),
-			},
-		}
+	if (!user) {
+		res.statusCode = 404
+		res.end()
+		return { props: {} }
 	}
-)
+
+	const props = {
+		title: 'TestUI',
+		user,
+		auth: generateSocketAuthForUser(user, 'readwrite'),
+	}
+
+	return {
+		props,
+	}
+})
 ;(TestUIPage as PageWithLayoutType).layout = MainLayout
 
 const TestUIButtonWrapper = styled.div`

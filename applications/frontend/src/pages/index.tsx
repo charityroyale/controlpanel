@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { PageWithLayoutType } from '../app/layout/PageWithLayout'
 import { MainLayout } from '../app/layout/Layout'
 import styled from 'styled-components'
-import { withSession, ServerSideHandler } from '../app/lib/session'
+import { UserSessionData, withSessionSsr } from '../app/lib/session'
 import { UserDTO } from './api/sessions'
 import { Header } from '../app/components/controlpanel/Header'
 import { SocketAuth } from '../app/provider/SocketProvider'
@@ -49,28 +49,25 @@ const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
 		</>
 	)
 }
+export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ req, res }) => {
+	const user = (req.session as UserSessionData).user
 
-export const getServerSideProps: GetServerSideProps<StartPageProps> = withSession<ServerSideHandler>(
-	async ({ req, res }) => {
-		const user = req.session.get('user') as UserDTO
-
-		if (!user) {
-			res.writeHead(301, { Location: '/login' })
-			res.end()
-			return { props: {} as StartPageProps }
-		}
-
-		const props: StartPageProps = {
-			title: 'Project: Feed the Pig',
-			user,
-			auth: generateSocketAuthForUser(user, 'read'),
-		}
-
-		return {
-			props,
-		}
+	if (!user) {
+		res.writeHead(301, { Location: '/login' })
+		res.end()
+		return { props: {} }
 	}
-)
+
+	const props = {
+		title: 'Project: Feed the Pig',
+		user,
+		auth: generateSocketAuthForUser(user, 'read'),
+	}
+
+	return {
+		props,
+	}
+})
 ;(IndexPage as PageWithLayoutType).layout = MainLayout
 
 const LinkAsButton = styled.a`

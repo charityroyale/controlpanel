@@ -5,11 +5,11 @@ import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useGlobalState } from '../../app/hooks/useGlobalState'
 import { ControlPanel } from '../../app/components/controlpanel/ControlPanel'
-import { withSession, ServerSideHandler } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { SocketAuth } from '../../app/provider/SocketProvider'
 import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
 import styled from 'styled-components'
+import { UserSessionData, withSessionSsr } from '../../app/lib/session'
 
 export interface ControlPanelPageProps {
 	title?: string
@@ -32,30 +32,27 @@ const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPa
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<ControlPanelPageProps> = withSession<ServerSideHandler>(
-	async ({ req, res }) => {
-		const user = req.session.get('user') as UserDTO
+export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ req, res }) => {
+	const user = (req.session as UserSessionData).user
 
-		if (!user) {
-			res.statusCode = 404
-			res.end()
-			return { props: {} as ControlPanelPageProps }
-		}
-
-		const auth = generateSocketAuthForUser(user, 'readwrite')
-
-		// explicit type for type-safety, because return type is typed too lax (TODO)
-		const props: ControlPanelPageProps = {
-			user,
-			auth,
-			title: 'Control Panel',
-		}
-
-		return {
-			props,
-		}
+	if (!user) {
+		res.statusCode = 404
+		res.end()
+		return { props: {} }
 	}
-)
+
+	const auth = generateSocketAuthForUser(user, 'readwrite')
+
+	const props = {
+		user,
+		auth,
+		title: 'Control Panel',
+	}
+
+	return {
+		props,
+	}
+})
 ;(ControlPanelPage as PageWithLayoutType).layout = MainLayout
 
 const Grid = styled.div`
