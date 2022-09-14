@@ -396,13 +396,20 @@ export class OverlayScene extends Phaser.Scene {
 
 	private setContainerDraggable(container: Phaser.GameObjects.Container) {
 		this.input.setDraggable([container])
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		this.input.on('drag', (_pointer: any, _gameObject: any, dragX: any, dragY: any) => {
-			if (_gameObject.name === container.name && !this.isLockedOverlay) {
-				_gameObject.x = dragX
-				_gameObject.y = dragY
+		this.input.on(
+			'drag',
+			(
+				_pointer: Phaser.Input.Pointer,
+				gameObjectContainer: Phaser.GameObjects.Container,
+				dragX: number,
+				dragY: number
+			) => {
+				if (gameObjectContainer.name === container.name && !this.isLockedOverlay) {
+					gameObjectContainer.x = dragX
+					gameObjectContainer.y = dragY
+				}
 			}
-		})
+		)
 	}
 
 	private createStarRainInstance(starGroup: Phaser.GameObjects.Group) {
