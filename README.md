@@ -1,4 +1,4 @@
-# Control Panel
+# Charity Royale: Control Panel
 
 An HTML5 stream overlay.
 
