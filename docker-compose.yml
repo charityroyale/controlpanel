@@ -5,12 +5,12 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.frontend
-    image: pftp/frontend
+    image: charityroyale/frontend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pftp-frontend.rule=Host(`pftp.redcouch.at`)"
-      - "traefik.http.routers.pftp-frontend.entrypoints=websecure"
-      - "traefik.http.routers.pftp-frontend.tls.certresolver=myresolver"
+      - "traefik.http.routers.charityroyale-frontend.rule=Host(`charityroyale.redcouch.at`)"
+      - "traefik.http.routers.charityroyale-frontend.entrypoints=websecure"
+      - "traefik.http.routers.charityroyale-frontend.tls.certresolver=myresolver"
     networks:
       internal:
     restart: always
@@ -19,12 +19,12 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.backend
-    image: pftp/backend
+    image: charityroyale/backend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pftp-backend.rule=Host(`pftp.backend.redcouch.at`)"
-      - "traefik.http.routers.pftp-backend.entrypoints=websecure"
-      - "traefik.http.routers.pftp-backend.tls.certresolver=myresolver"
+      - "traefik.http.routers.charityroyale-backend.rule=Host(`charityroyale.backend.redcouch.at`)"
+      - "traefik.http.routers.charityroyale-backend.entrypoints=websecure"
+      - "traefik.http.routers.charityroyale-backend.tls.certresolver=myresolver"
     networks:
       internal:
     restart: always
