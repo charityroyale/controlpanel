@@ -1,4 +1,4 @@
-import { Donation } from '@pftp/common'
+import { Donation } from '@cp/common'
 import {
 	blueStarKey,
 	donationAlertKey,

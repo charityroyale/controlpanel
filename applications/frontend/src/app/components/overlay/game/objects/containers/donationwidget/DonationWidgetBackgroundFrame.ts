@@ -1,4 +1,4 @@
-import { DonationWidgetState } from '@pftp/common'
+import { DonationWidgetState } from '@cp/common'
 
 const donationWidgetBackgroundFrameName = 'donationWidgetBackgroundFrame'
 export class DonationWidgetBackgroundFrame extends Phaser.GameObjects.Sprite {

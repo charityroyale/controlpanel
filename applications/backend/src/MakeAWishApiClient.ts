@@ -1,4 +1,4 @@
-import { MakeAWishInfoJsonDTO } from '@pftp/common'
+import { MakeAWishInfoJsonDTO } from '@cp/common'
 import fetch from 'node-fetch'
 import { logger } from './logger'
 

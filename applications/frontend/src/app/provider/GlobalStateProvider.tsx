@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { createContext, FunctionComponent, useState } from 'react'
-import { GlobalState, REQUEST_MAW_INFO_JSON_DATA, REQUEST_STATE, STATE_UPDATE } from '@pftp/common'
+import { GlobalState, REQUEST_MAW_INFO_JSON_DATA, REQUEST_STATE, STATE_UPDATE } from '@cp/common'
 import { useSocket } from '../hooks/useSocket'
 
 export interface GlobalStateContextState {

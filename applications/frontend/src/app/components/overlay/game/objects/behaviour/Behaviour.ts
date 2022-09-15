@@ -1,4 +1,4 @@
-import { Donation } from '@pftp/common'
+import { Donation } from '@cp/common'
 import { Alert } from '../containers/alert/Alert'
 import { DonationBehaviour } from './DonationBehaviour'
 

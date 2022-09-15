@@ -1,4 +1,4 @@
-import { DonationWidgetState, MakeAWishRootLevelWishDTO } from '@pftp/common'
+import { DonationWidgetState, MakeAWishRootLevelWishDTO } from '@cp/common'
 import { getPercentage } from '../../../../../../lib/utils'
 
 const maxProgressBarWidth = 431

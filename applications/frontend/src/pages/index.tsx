@@ -27,8 +27,6 @@ const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
 			<StartPage>
 				<StartPageContent>
 					<img src="/charity_royale_logo.png" alt="Logo" />
-					<h1>Project: Feed the Pig</h1>
-
 					<ButtonsWrapper>
 						<LinkAsButton href="/controlpanel" style={{ marginRight: '4px', marginLeft: '0' }}>
 							<span>Control Panel</span>
@@ -59,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ re
 	}
 
 	const props = {
-		title: 'Project: Feed the Pig',
+		title: 'Home | Charity Royale',
 		user,
 		auth: generateSocketAuthForUser(user, 'read'),
 	}
@@ -90,7 +88,7 @@ const StartPage = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: calc(100% - 50px);
+	height: calc(100% - 300px);
 `
 
 const StartPageContent = styled.div`
@@ -103,6 +101,7 @@ const ButtonsWrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-top: ${(p) => p.theme.space.xl}px;
 `
 
 export default IndexPage

@@ -1,4 +1,4 @@
-import { SettingsState } from '@pftp/common'
+import { SettingsState } from '@cp/common'
 
 export class Text2Speech {
 	public isSpeaking = false

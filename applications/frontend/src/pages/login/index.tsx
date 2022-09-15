@@ -1,14 +1,20 @@
+import Head from 'next/head'
 import React from 'react'
 import styled from 'styled-components'
 import { LoginPageContent } from '../../app/components/controlpanel/Login/LoginPageContent'
 
 const LoginPage = () => {
 	return (
-		<LoginPageWrapper>
-			<LoginPageContentWrapper>
-				<LoginPageContent />
-			</LoginPageContentWrapper>
-		</LoginPageWrapper>
+		<React.Fragment>
+			<Head>
+				<title>Login | Charity Royale</title>
+			</Head>
+			<LoginPageWrapper>
+				<LoginPageContentWrapper>
+					<LoginPageContent />
+				</LoginPageContentWrapper>
+			</LoginPageWrapper>
+		</React.Fragment>
 	)
 }
 
@@ -23,6 +29,7 @@ const LoginPageContentWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	margin-bottom: 150px;
 `
 
 export default LoginPage

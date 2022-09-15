@@ -6,7 +6,7 @@ import {
 	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	STATE_UPDATE,
-} from '@pftp/common'
+} from '@cp/common'
 
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
@@ -194,7 +194,7 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.createStarRainInstance(starGroup)
 
-		// create pig container items
+		// create alert
 		this.alert = new Alert(
 			this,
 			this.text2speech!,

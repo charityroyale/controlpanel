@@ -1,4 +1,4 @@
-# Project: Feed the Pig
+# Control Panel
 
 An HTML5 stream overlay.
 
@@ -11,7 +11,7 @@ Recommenend way: [nvm](https://github.com/nvm-sh/nvm)
 
 # Setup
 
-Cat Crowd Party monorepo consists of `backend`, `frontend` and `common` which shares sourcecode imported by `backend` and `frontend` located under `applications/`.  
+This monorepo consists of `backend`, `frontend` and `common` which shares sourcecode imported by `backend` and `frontend` located under `applications/`.  
 Never import `backend` modules from `frontend` and vice versa to avoid cicular dependencies. Never import modules from `backend` and `frontend` in `common` package.
 
 Run `npm install` from the root directory to install dependencies for each application.  
@@ -31,7 +31,7 @@ The frontend is available at port `4200` and backend at `5200`,
 
 # Add new dependency
 
-This repository uses `npm workspaces`. Npm workpaces allows developers to manage multiple packages to be managed from the root directory (e.g. local `@pftp` namespace).
+This repository uses `npm workspaces`. Npm workpaces allows developers to manage multiple packages to be managed from the root directory (e.g. local `@cp` namespace).
 Therefore it is an absolute requirement to only install dependencies from the root directory.
 
 Use `npm install <packagename> -w <workspace-name>` to install dependencies to one application located in `applications`.

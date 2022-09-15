@@ -10,7 +10,7 @@ import {
 	REQUEST_STATE,
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
-} from '@pftp/common'
+} from '@cp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
 import {

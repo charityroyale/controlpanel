@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ re
 	const props = {
 		user,
 		auth,
-		title: 'Control Panel',
+		title: 'Control Panel | Charity Royale',
 	}
 
 	return {

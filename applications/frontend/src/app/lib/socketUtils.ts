@@ -1,4 +1,4 @@
-import { SocketJwtPayload } from '@pftp/common'
+import { SocketJwtPayload } from '@cp/common'
 import { UserDTO } from '../../pages/api/sessions'
 import { SocketAuth } from '../provider/SocketProvider'
 import jwt from 'jsonwebtoken'

@@ -4,7 +4,7 @@ import { useGlobalState } from '../../hooks/useGlobalState'
 import { useIsMounted } from '../../hooks/useIsMounted'
 import { useSocket } from '../../hooks/useSocket'
 import styled from 'styled-components'
-import { ProjectFeedThePigGame } from './game/ProjectFeedThePigGame'
+import { ControlPanelGame } from './game/ControlPanelGame'
 
 const PhaserDiv = styled.div`
 	width: 100%;
@@ -18,7 +18,7 @@ export const PhaserGame = () => {
 
 	useEffect(() => {
 		if (isMounted && socket && globalState) {
-			new ProjectFeedThePigGame(socket, 1080, 1920, globalState)
+			new ControlPanelGame(socket, 1080, 1920, globalState)
 		}
 
 		// at this point we can be sure that globalState and socketIo connectin are given

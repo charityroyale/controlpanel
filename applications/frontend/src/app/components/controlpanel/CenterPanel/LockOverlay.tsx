@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback } from 'react'
 import styled from 'styled-components'
 import { ImLock, ImUnlocked } from 'react-icons/im'
 import { useSocket } from '../../../hooks/useSocket'
-import { SETTINGS_UPDATE } from '@pftp/common'
+import { SETTINGS_UPDATE } from '@cp/common'
 
 interface LockOverlayProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	isLocked: boolean

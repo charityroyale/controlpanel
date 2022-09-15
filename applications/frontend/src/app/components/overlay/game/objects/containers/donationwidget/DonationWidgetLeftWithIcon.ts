@@ -1,4 +1,4 @@
-import { DonationWidgetState } from '@pftp/common'
+import { DonationWidgetState } from '@cp/common'
 
 const donationWidgetLeftWithIconName = 'donationWidgetLeftWithIcon'
 export class DonationWidgetLeftWithIcon extends Phaser.GameObjects.Sprite {

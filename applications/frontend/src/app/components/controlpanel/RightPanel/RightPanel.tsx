@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
 import styled from 'styled-components'
 import { GrMoney } from 'react-icons/gr'
-import { Donation, DONATION_TRIGGER } from '@pftp/common'
+import { Donation, DONATION_TRIGGER } from '@cp/common'
 import { Donations } from './DonationList'
 import { useSocket } from '../../../hooks/useSocket'
 
