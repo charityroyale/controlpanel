@@ -25,7 +25,7 @@ export const PhaserGame = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted])
 
-	return <PhaserDiv id="pftp-overlay" />
+	return <PhaserDiv id="controlpanel-overlay" />
 }
 
 export default PhaserGame

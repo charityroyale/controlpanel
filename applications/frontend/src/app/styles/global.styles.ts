@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 
-	#pftp-overlay canvas {
+	#controlpanel-overlay canvas {
 		display: block;
 	}
 
