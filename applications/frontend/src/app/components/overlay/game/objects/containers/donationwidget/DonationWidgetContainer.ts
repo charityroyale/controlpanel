@@ -1,4 +1,4 @@
-import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, PFTPSocketEventsMap } from '@cp/common'
+import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, SocketEventsMap } from '@cp/common'
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'
@@ -54,7 +54,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 	constructor(
 		scene: Phaser.Scene,
 		state: DonationWidgetState,
-		socket: Socket<PFTPSocketEventsMap>,
+		socket: Socket<SocketEventsMap>,
 		options: ContainerOptions | undefined
 	) {
 		super(scene, options?.x, options?.y, options?.children)

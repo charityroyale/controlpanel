@@ -6,7 +6,7 @@ export const gameConfig = {
 	type: Phaser.AUTO,
 	transparent: true,
 	scale: {
-		parent: 'pftp-overlay',
+		parent: 'controlpanel-overlay',
 		width: 1920,
 		height: 1080,
 		autoCenter: Phaser.Scale.NONE,

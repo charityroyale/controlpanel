@@ -5,7 +5,7 @@ import {
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
 	MAW_INFO_JSON_DATA_UPDATE,
-	PFTPSocketEventsMap,
+	SocketEventsMap,
 	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	SETTINGS_UPDATE,
@@ -33,19 +33,19 @@ export default class Session {
 		},
 	})
 
-	constructor(private readonly channel: string, private readonly io: Server<PFTPSocketEventsMap>) {
+	constructor(private readonly channel: string, private readonly io: Server<SocketEventsMap>) {
 		this.store.subscribe(() => {
 			this.io.to(this.channel).emit(STATE_UPDATE, this.store.getState())
 			// console.log(this.store.getState())
 		})
 	}
 
-	public async handleNewReadWriteConnection(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
+	public async handleNewReadWriteConnection(socket: Socket<SocketEventsMap, SocketEventsMap>) {
 		await this.handleNewReadConnection(socket)
 		this.registerWriteHandlers(socket)
 	}
 
-	public async handleNewReadConnection(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
+	public async handleNewReadConnection(socket: Socket<SocketEventsMap, SocketEventsMap>) {
 		await socket.join(this.channel)
 
 		socket.on('disconnect', (reason) => {
@@ -67,7 +67,7 @@ export default class Session {
 		}
 	}
 
-	private registerReadHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
+	private registerReadHandlers(socket: Socket<SocketEventsMap, SocketEventsMap>) {
 		socket.on(REQUEST_STATE, () => socket.emit(STATE_UPDATE, this.store.getState()))
 		socket.on(REQUEST_MAW_INFO_JSON_DATA, () => {
 			if (mawApiClient.mawInfoJsonData != null) {
@@ -76,7 +76,7 @@ export default class Session {
 		})
 	}
 
-	private registerWriteHandlers(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
+	private registerWriteHandlers(socket: Socket<SocketEventsMap, SocketEventsMap>) {
 		socket.on(DONATION_TRIGGER, (donation: Donation) => {
 			this.sendDonation(donation)
 		})

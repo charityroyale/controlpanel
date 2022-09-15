@@ -72,7 +72,7 @@ export default class MyDocument extends Document {
 					<meta name="theme-color" content="#18181B"></meta>
 					<meta charSet="utf-8" />
 				</Head>
-				<body id="pftp-body">
+				<body id="cp-body">
 					<Main />
 					<NextScript />
 				</body>
