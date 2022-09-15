@@ -5,7 +5,7 @@
 	"author": "Patrick Obermueller",
 	"license": "MIT",
 	"main": "",
-	"description": "Project: Feed the Pig Backend",
+	"description": "Charity Royale Control Panel Frontend",
 	"scripts": {
 		"dev": "next -p 4200",
 		"build:lint": "npm run lint && next build",
