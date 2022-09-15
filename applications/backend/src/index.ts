@@ -8,7 +8,6 @@ import jwt from 'jsonwebtoken'
 import SessionManager from './SessionManager'
 import { SocketEventsMap, Donation } from '@cp/common'
 import SimpleUserDbService from './SimpleUserDbService'
-import path from 'path'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
 
@@ -19,7 +18,7 @@ const whiteListedCommunicationOrigins = [
 ]
 
 const port = process.env.PORT_BACKEND ?? 5200
-const simpleUserDbService = new SimpleUserDbService(process.env.USER_DB ?? `http://localhost:${port}/userdb.yml`)
+const simpleUserDbService = new SimpleUserDbService()
 
 const app = express()
 const httpServer = createServer(app)
@@ -112,18 +111,16 @@ app.post(
 	}
 )
 
-app.get('/userdb.yml', (req, res) => {
-	try {
-		res.sendFile(path.join(__dirname, '../public/userdb.yml'))
-	} catch (e) {
-		logger.error(e)
-	}
-})
-
 app.get('/streamers', (req, res) => {
 	try {
-		res.send(simpleUserDbService.getAllStreamers())
+		if (simpleUserDbService.getAllStreamers().length <= 0) {
+			logger.warn('Streamerdata is empty')
+			throw new Error('No streamers found')
+		} else {
+			res.send(simpleUserDbService.getAllStreamers())
+		}
 	} catch (e) {
+		res.status(500).send(e)
 		logger.error(e)
 	}
 })

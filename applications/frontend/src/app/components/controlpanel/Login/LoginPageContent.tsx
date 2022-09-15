@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { UserEntry } from '@cp/common'
+import { toast } from 'react-toastify'
 
 export const LoginPageContent = () => {
 	const router = useRouter()
@@ -30,18 +31,26 @@ export const LoginPageContent = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL as string}/streamers`)
-			const json = (await result.json()) as UserEntry[]
-			const sortedStreamers = json.sort((a, b) => {
-				if (a.channel < b.channel) {
-					return -1
+			try {
+				const result = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL as string}/streamers`)
+				const json = (await result.json()) as UserEntry[]
+
+				if (json.length <= 0) {
+					throw new Error('No streamdata found.')
 				}
-				if (a.channel > b.channel) {
-					return 1
-				}
-				return 0
-			})
-			setStreamerOptions(sortedStreamers)
+				const sortedStreamers = json.sort((a, b) => {
+					if (a.channel < b.channel) {
+						return -1
+					}
+					if (a.channel > b.channel) {
+						return 1
+					}
+					return 0
+				})
+				setStreamerOptions(sortedStreamers)
+			} catch (e) {
+				toast('No streamer data was found', { type: 'warning' })
+			}
 		}
 
 		fetchData()
