@@ -51,7 +51,7 @@ export const generateRandomDonation = (donationAmount?: number) => {
 	const donation: Donation = {
 		user: name,
 		amount: randomnum,
-		timestamp: new Date().getUTCMilliseconds(),
+		timestamp: new Date().getTime() / 1000,
 		streamer: '',
 		message,
 	}
