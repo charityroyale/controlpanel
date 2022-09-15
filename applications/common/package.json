@@ -1,5 +1,5 @@
 {
-	"name": "@pftp/common",
+	"name": "@cp/common",
 	"private": true,
 	"main": "shared.js",
 	"version": "1.0.0",

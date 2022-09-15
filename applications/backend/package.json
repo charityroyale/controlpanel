@@ -1,7 +1,7 @@
 {
-  "name": "@pftp/backend",
+  "name": "@cp/backend",
   "version": "1.0.0",
-  "description": "Project: Feed the Pig Backend",
+  "description": "Charity Royale Control Panel Backend",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",

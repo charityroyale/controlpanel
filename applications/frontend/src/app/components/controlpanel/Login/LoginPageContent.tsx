@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
-import { UserEntry } from '@pftp/common'
+import { UserEntry } from '@cp/common'
 
 export const LoginPageContent = () => {
 	const router = useRouter()
@@ -49,8 +49,7 @@ export const LoginPageContent = () => {
 
 	return (
 		<React.Fragment>
-			<img src="/charity_royale_logo.png" alt="Logo" />
-			<h1>Project: Feed the Pig</h1>
+			<img src="/charity_royale_logo.png" alt="Logo" style={{ marginBottom: '24px' }} />
 			<form onSubmit={handleSubmit}>
 				<FormContent>
 					<InputRow style={{ marginBottom: '8px' }}>

@@ -1,4 +1,4 @@
-import { PFTPSocketEventsMap, SocketJwtPayload } from '@pftp/common'
+import { PFTPSocketEventsMap, SocketJwtPayload } from '@cp/common'
 import { Server, Socket } from 'socket.io'
 import Session from './Session'
 import { sessionLogger as logger } from './logger'

@@ -1,7 +1,7 @@
 import YAML from 'yaml'
 import fetch from 'node-fetch'
 import { databaseServiceLogger as logger } from './logger'
-import { UserEntry } from '@pftp/common'
+import { UserEntry } from '@cp/common'
 
 export default class SimpleUserDbService {
 	private userDatabase: UserEntry[] = []

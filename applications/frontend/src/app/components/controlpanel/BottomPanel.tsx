@@ -3,10 +3,12 @@ import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../pages/controlpanel'
 import styled from 'styled-components'
 import { RiListSettingsFill } from 'react-icons/ri'
-import { GlobalState } from '@pftp/common'
+import { GlobalState } from '@cp/common'
 import { useSocket } from '../../hooks/useSocket'
 
-export const BottomPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState }>> = ({ globalState }) => {
+export const BottomPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState }>> = ({
+	globalState,
+}) => {
 	const { socket } = useSocket()
 
 	// TBA

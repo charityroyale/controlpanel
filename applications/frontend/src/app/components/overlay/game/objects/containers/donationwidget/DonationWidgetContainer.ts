@@ -1,4 +1,4 @@
-import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, PFTPSocketEventsMap } from '@pftp/common'
+import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, PFTPSocketEventsMap } from '@cp/common'
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'

@@ -1,5 +1,5 @@
 {
-	"name": "@pftp/monorepo",
+	"name": "@cp/monorepo",
 	"private": true,
 	"version": "1.0.0",
 	"author": "Patrick Obermüller",
@@ -7,8 +7,8 @@
 	"description": "A loveable stream overlay for Charity Royale",
 	"scripts": {
 		"build:all": "npm run build --workspaces",
-		"start:frontend": "npm run start --workspace=@pftp/frontend",
-		"start:backend": "npm run start --workspace=@pftp/backend",
+		"start:frontend": "npm run start --workspace=@cp/frontend",
+		"start:backend": "npm run start --workspace=@cp/backend",
 		"build:tsc": "tsc --build",
 		"tsc:watch": "tsc --build --watch"
 	},

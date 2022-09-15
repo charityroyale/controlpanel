@@ -1,4 +1,4 @@
-import { Donation } from '@pftp/common'
+import { Donation } from '@cp/common'
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { formatCurrency, formatTimeStamp } from '../../../lib/utils'

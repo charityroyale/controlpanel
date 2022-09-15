@@ -1,4 +1,4 @@
-import { DonationWidgetState } from '@pftp/common'
+import { DonationWidgetState } from '@cp/common'
 import { TextStyle } from '../../../config/text'
 
 // kidname

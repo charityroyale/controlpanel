@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { createContext, FunctionComponent, useState } from 'react'
 import { io, ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
-import { PFTPSocketEventsMap } from '@pftp/common'
+import { PFTPSocketEventsMap } from '@cp/common'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/dist/client/router'
 

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import { GlobalState } from '@pftp/common'
+import { GlobalState } from '@cp/common'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../../pages/controlpanel'
@@ -8,10 +8,9 @@ import { CopyBrowserSourceButton } from './CopyBrowserSourceButton'
 import { SocketAuth } from '../../../provider/SocketProvider'
 import { LockOverlay } from './LockOverlay'
 
-export const CenterPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState; auth: SocketAuth }>> = ({
-	auth,
-	globalState,
-}) => {
+export const CenterPanel: FunctionComponent<
+	React.PropsWithChildren<{ globalState: GlobalState; auth: SocketAuth }>
+> = ({ auth, globalState }) => {
 	const contentRef = useRef<null | HTMLDivElement>(null)
 	const [scale, setScale] = useState(0)
 

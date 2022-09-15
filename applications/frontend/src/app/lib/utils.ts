@@ -1,4 +1,4 @@
-import { Donation } from '@pftp/common'
+import { Donation } from '@cp/common'
 
 export const formatTimeStamp = (timestamp: number) => {
 	return new Intl.DateTimeFormat('de-AT', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(timestamp * 1000))

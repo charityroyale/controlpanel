@@ -1,4 +1,4 @@
-import { DonationAlertState, DonationWidgetState, SettingsState } from '@pftp/common'
+import { DonationAlertState, DonationWidgetState, SettingsState } from '@cp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { mawApiClient } from './MakeAWishApiClient'
 

@@ -1,4 +1,4 @@
-import { DonationAlertState } from '@pftp/common'
+import { DonationAlertState } from '@cp/common'
 import { DonationBannerContainer } from './DonationBannerContainer'
 
 /**

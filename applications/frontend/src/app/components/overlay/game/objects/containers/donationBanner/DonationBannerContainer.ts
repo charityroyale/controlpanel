@@ -1,4 +1,4 @@
-import { DonationAlertState, DONATION_ALERT_UPDATE, PFTPSocketEventsMap } from '@pftp/common'
+import { DonationAlertState, DONATION_ALERT_UPDATE, PFTPSocketEventsMap } from '@cp/common'
 import { Socket } from 'socket.io-client'
 import { donationAlertKey, donationAlertWithMessageKey } from '../../../scenes/OverlayScene'
 import { DonationBannerHeaderText, donationAlertHeaderTextName } from './DonationBannerHeaderText'

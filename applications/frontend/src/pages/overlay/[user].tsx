@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async ({
 
 	return {
 		props: {
-			title: 'Overlay',
+			title: 'Overlay | Charity Royale',
 			isLockedInteraction: !(query?.unlocked ? true : false),
 			auth,
 		},

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
-import { Donation, DONATION_TRIGGER } from '@pftp/common'
+import { Donation, DONATION_TRIGGER } from '@cp/common'
 import { UserSessionData, withSessionSsr } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { Header } from '../../app/components/controlpanel/Header'
@@ -135,7 +135,7 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ re
 	}
 
 	const props = {
-		title: 'TestUI',
+		title: 'Demo | Charity Royale',
 		user,
 		auth: generateSocketAuthForUser(user, 'readwrite'),
 	}

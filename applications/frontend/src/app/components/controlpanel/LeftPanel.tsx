@@ -17,7 +17,7 @@ import {
 	MAW_INFO_JSON_DATA_UPDATE,
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
-} from '@pftp/common'
+} from '@cp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
 import { IoMdResize } from 'react-icons/io'
