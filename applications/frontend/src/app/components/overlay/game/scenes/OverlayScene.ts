@@ -2,7 +2,7 @@ import {
 	DONATION_TRIGGER,
 	GlobalState,
 	MAW_INFO_JSON_DATA_UPDATE,
-	PFTPSocketEventsMap,
+	SocketEventsMap,
 	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	STATE_UPDATE,
@@ -100,7 +100,7 @@ export class OverlayScene extends Phaser.Scene {
 	 * --> Careful, socket io events may be triggered before initial render -->
 	 * therefore some gameobjects or cache/assets can be missing.
 	 */
-	init(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
+	init(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
 		this.text2speech = new Text2Speech(
 			config.initialState.settings.text2speech.language,
 			config.initialState.settings.text2speech.volume,
@@ -180,7 +180,7 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.audio(STAR_RAIN_SOUND_AUDIO_KEY, '/audio/star_rain.ogg')
 	}
 
-	create(config: { socket: Socket<PFTPSocketEventsMap>; initialState: GlobalState }) {
+	create(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
 		const { socket, initialState } = config
 		const starGroup = this.add.group()
 

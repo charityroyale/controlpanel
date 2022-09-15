@@ -6,7 +6,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import { body, validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import SessionManager from './SessionManager'
-import { PFTPSocketEventsMap, Donation } from '@cp/common'
+import { SocketEventsMap, Donation } from '@cp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import path from 'path'
 import cors from 'cors'
@@ -23,7 +23,7 @@ const simpleUserDbService = new SimpleUserDbService(process.env.USER_DB ?? `http
 
 const app = express()
 const httpServer = createServer(app)
-const io = new Server<PFTPSocketEventsMap>(httpServer, {
+const io = new Server<SocketEventsMap>(httpServer, {
 	transports: ['websocket', 'polling'],
 	allowRequest: (req, callback) => {
 		const allowed =

@@ -60,7 +60,7 @@ export const REQUEST_STATE = 'requestState'
 export const REQUEST_MAW_INFO_JSON_DATA = 'requestMawInfoJsonData'
 export const DONATION_TRIGGER = 'donationTrigger'
 export const MAW_INFO_JSON_DATA_UPDATE = 'mawJsonDataUpdate'
-export interface PFTPSocketEventsMap {
+export interface SocketEventsMap {
 	[DONATION_ALERT_UPDATE]: (donationAlertUpdate: Partial<DonationAlertState>) => void
 	[DONATION_WIDGET_UPDATE]: (donationWidgetUpdate: Partial<DonationWidgetState>) => void
 	[SETTINGS_UPDATE]: (settingsUpdate: Partial<SettingsState>) => void

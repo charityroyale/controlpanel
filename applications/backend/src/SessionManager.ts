@@ -1,4 +1,4 @@
-import { PFTPSocketEventsMap, SocketJwtPayload } from '@cp/common'
+import { SocketEventsMap, SocketJwtPayload } from '@cp/common'
 import { Server, Socket } from 'socket.io'
 import Session from './Session'
 import { sessionLogger as logger } from './logger'
@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 export default class SessionManager {
 	private readonly sessions = new Map<string, Session>()
 
-	constructor(private readonly io: Server<PFTPSocketEventsMap>, private readonly jwtSecret: string) {
+	constructor(private readonly io: Server<SocketEventsMap>, private readonly jwtSecret: string) {
 		io.on('connection', async (socket) => {
 			logger.info(`New connection from ${socket.id}!`)
 			logger.debug(`auth: ${JSON.stringify(socket.handshake.auth)}`)
@@ -47,7 +47,7 @@ export default class SessionManager {
 		return session
 	}
 
-	private checkPermissions(socket: Socket<PFTPSocketEventsMap, PFTPSocketEventsMap>) {
+	private checkPermissions(socket: Socket<SocketEventsMap, SocketEventsMap>) {
 		if (typeof socket.handshake.auth.token === 'string') {
 			try {
 				const auth = jwt.verify(socket.handshake.auth.token, this.jwtSecret) as SocketJwtPayload

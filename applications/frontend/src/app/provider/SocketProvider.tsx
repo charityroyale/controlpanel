@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { createContext, FunctionComponent, useState } from 'react'
 import { io, ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
-import { PFTPSocketEventsMap } from '@cp/common'
+import { SocketEventsMap } from '@cp/common'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/dist/client/router'
 
 export interface SockerContextState {
-	socket: Socket<PFTPSocketEventsMap> | null
+	socket: Socket<SocketEventsMap> | null
 	isConnected: boolean
 }
 
@@ -25,7 +25,7 @@ export const SocketProvider: FunctionComponent<React.PropsWithChildren<{ auth?: 
 	children,
 	auth,
 }) => {
-	const [socket, setSocket] = useState<Socket<PFTPSocketEventsMap> | null>(socketDefaultValue.socket)
+	const [socket, setSocket] = useState<Socket<SocketEventsMap> | null>(socketDefaultValue.socket)
 
 	useEffect(() => {
 		const options: Partial<ManagerOptions & SocketOptions> = {
