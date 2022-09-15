@@ -324,6 +324,9 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 							</IconWrapper>
 							Wishes
 						</span>
+						<StyledLink target="_blank" href={`${process.env.NEXT_PUBLIC_MAW_DASHBOARD_BASE_URL}${auth.channel}`}>
+							Zum Dashboard
+						</StyledLink>
 					</Label>
 					<FatButton
 						icon={<AiFillEye size="24px" />}
@@ -476,6 +479,10 @@ const ButtonsWrapper = styled.div`
 	& > button:not(:last-child) {
 		margin-bottom: ${(p) => p.theme.space.s}px;
 	}
+`
+
+const StyledLink = styled.a`
+	font-size: ${(p) => p.theme.fontSize.s}px;
 `
 
 const IconWrapper = styled.span`

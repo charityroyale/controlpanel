@@ -48,7 +48,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		const donation: Donation = {
 			user: name,
 			amount: randomnum,
-			timestamp: new Date().getUTCMilliseconds(),
+			timestamp: new Date().getTime() / 1000,
 			streamer: '',
 			message,
 		}
