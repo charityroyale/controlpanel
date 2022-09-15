@@ -7,7 +7,7 @@ export interface UserSessionData {
 }
 
 const sessionOptions = {
-	cookieName: 'pftp',
+	cookieName: 'charity_royale_cp',
 	cookieOptions: {
 		secure: process.env.NODE_ENV === 'production' ? true : false,
 	},
