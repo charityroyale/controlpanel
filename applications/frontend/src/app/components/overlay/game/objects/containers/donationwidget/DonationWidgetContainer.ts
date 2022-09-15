@@ -2,6 +2,8 @@ import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, Sock
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'
+import { DonationWidgetLoaderFrame, donationWidgetLoaderFrameName } from './DonationWidgetLoaderFrame'
+import { DonationWidgetLoaderFrameMask, donationWidgetLoaderFrameMaskName } from './DonationWidgetLoaderFrameMask'
 import {
 	DonationWidgetProgressBar,
 	donationWidgetProgressBarBackgroundName,
@@ -51,6 +53,7 @@ const infoBoxLastDonationWidthOffset = 395
  */
 export const donationWidgetContainerName = 'donationWidgetContainer'
 export class DonationWidgetContainer extends Phaser.GameObjects.Container {
+	private currentWishId?: number
 	constructor(
 		scene: Phaser.Scene,
 		state: DonationWidgetState,
@@ -59,6 +62,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 	) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = donationWidgetContainerName
+		this.currentWishId = state.wish?.info?.id
 		this.setSize(590, 190)
 		this.setScale(state.scale)
 		this.setIsVisible(state.isVisible)
@@ -98,6 +102,18 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		// extract and improve
 		const headingText = this.getByName(donationWidgetWishHeadingName) as DonationWidgetWishHeading
 		headingText.setText(state.wish?.info?.kid_name ?? 'Placeholder')
+
+		console.log(this.currentWishId)
+		console.log(state.wish?.info?.id)
+
+		if (this.currentWishId !== state.wish?.info?.id) {
+			console.log('Hi')
+			const loaderFrameMask = this.scene.children.getByName(
+				donationWidgetLoaderFrameMaskName
+			) as DonationWidgetLoaderFrameMask
+			loaderFrameMask.startTween()
+		}
+		this.currentWishId = state.wish?.info?.id
 
 		headingText.setX(this.displayWidth - 315 * this.scale)
 		headingText.setY(15 * this.scale)
@@ -197,8 +213,12 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const donationWidgetWishFullFilledAmount = this.getByName(
 			donationWidgetWishFullFilledAmountName
 		) as DonationWidgetWishFullFilledAmount
-		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 372 * this.scale)
-		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 24 * this.scale)
+		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 368 * this.scale)
+		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 25 * this.scale)
+
+		const donationWidgetLoaderFrame = this.getByName(donationWidgetLoaderFrameName) as DonationWidgetLoaderFrame
+		donationWidgetLoaderFrame.setX(this.displayWidth / 2 + 1 * this.scale)
+		donationWidgetLoaderFrame.setY(1 * this.scale)
 	}
 
 	public handleMawJsonStateUpdate = (mawJsonInfo: MakeAWishInfoJsonDTO, streamer: string) => {
