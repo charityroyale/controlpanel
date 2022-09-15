@@ -44,6 +44,7 @@ import {
 	DonationWidgetWishFullFilledWishNumber,
 } from '../objects/containers/donationwidget/text/DonationWidgetWishFullFilled'
 import { DonationWidgetLoaderFrame } from '../objects/containers/donationwidget/DonationWidgetLoaderFrame'
+import { DonationWidgetLoaderFrameText } from '../objects/containers/donationwidget/text/DonationWidgetLoaderFrameText'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
@@ -364,6 +365,8 @@ export class OverlayScene extends Phaser.Scene {
 
 		const donationWidgetLoaderFrame = new DonationWidgetLoaderFrame(this, 0, 0, initialState.donationWidget)
 
+		const donationWidgetLoaderFrameText = new DonationWidgetLoaderFrameText(this, 0, 0, '', initialState.donationWidget)
+
 		this.donationWidgetContainer = new DonationWidgetContainer(this, initialState.donationWidget, socket, {
 			children: [
 				progressBarBackground,
@@ -385,6 +388,7 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetWishLastDonation,
 				donationWidgetProgressBarText,
 				donationWidgetLoaderFrame,
+				donationWidgetLoaderFrameText,
 			],
 		})
 

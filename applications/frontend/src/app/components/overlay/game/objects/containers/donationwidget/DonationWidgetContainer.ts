@@ -1,6 +1,7 @@
 import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, SocketEventsMap } from '@cp/common'
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
+import { loadTextItems } from '../../config/content'
 import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'
 import { DonationWidgetLoaderFrame, donationWidgetLoaderFrameName } from './DonationWidgetLoaderFrame'
 import {
@@ -8,6 +9,7 @@ import {
 	donationWidgetProgressBarBackgroundName,
 	donationWidgetProgressBarName,
 } from './DonationWidgetProgressBar'
+import { donationWidgetLoaderFrameTextName, DonationWidgetLoaderFrameText } from './text/DonationWidgetLoaderFrameText'
 import { DonationWidgetProgressBarText, donationWidgetProgressBarTextName } from './text/DonationWidgetProgressBarText'
 import {
 	DonationWidgetWishFullFilledAmount,
@@ -54,6 +56,9 @@ export const donationWidgetContainerName = 'donationWidgetContainer'
 export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 	private currentWishId?: number
 	private donationWidgetState: DonationWidgetState
+	private textLoaderTime: Phaser.Time.TimerEvent | null = null
+	private textLoaderCounter = 0
+
 	constructor(
 		scene: Phaser.Scene,
 		state: DonationWidgetState,
@@ -81,11 +86,51 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 			'swapCurrentWishText',
 			() => {
 				this.updateWishContentText()
+				this.updateLoadingText()
 			},
 			this
 		)
+		scene.events.on(
+			'hidingLoadingState',
+			() => {
+				if (this.textLoaderTime) {
+					this.textLoaderTime.destroy()
+				}
+				this.updateLoadingText('')
+				this.textLoaderCounter = 0
+			},
+			this
+		)
+
 		this.handleState(state)
 		scene.add.existing(this)
+	}
+
+	private updateLoadingText(text?: string) {
+		const donationWidgetLoaderFrameText = this.getByName(
+			donationWidgetLoaderFrameTextName
+		) as DonationWidgetLoaderFrameText
+
+		if (text === '') {
+			donationWidgetLoaderFrameText.setText(text)
+			return
+		}
+
+		/**
+		 * investigate instant fire
+		 */
+		this.textLoaderTime = this.scene.time.addEvent({
+			delay: 1500,
+			callback: () => {
+				// random text
+				// const text = loadTextItems[Phaser.Math.Between(0, loadTextItems.length-1)]
+				const text = loadTextItems[this.textLoaderCounter]
+				donationWidgetLoaderFrameText.setText(`... ${text} ...`)
+				this.textLoaderCounter++
+			},
+			callbackScope: this,
+			loop: true,
+		})
 	}
 
 	private updateWishContentText() {
@@ -231,6 +276,13 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		) as DonationWidgetWishFullFilledAmount
 		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 368 * this.scale)
 		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 25 * this.scale)
+
+		// loader text
+		const donationWidgetLoaderFrameText = this.getByName(
+			donationWidgetLoaderFrameTextName
+		) as DonationWidgetLoaderFrameText
+		donationWidgetLoaderFrameText.setX(this.displayWidth - 485 * this.scale)
+		donationWidgetLoaderFrameText.setY(this.displayHeight - 45 * this.scale)
 
 		const donationWidgetLoaderFrame = this.getByName(donationWidgetLoaderFrameName) as DonationWidgetLoaderFrame
 		donationWidgetLoaderFrame.setX(this.displayWidth / 2 + 1 * this.scale)
