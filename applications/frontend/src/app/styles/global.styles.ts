@@ -43,4 +43,13 @@ export const GlobalStyle = createGlobalStyle`
 		font-family: 'Roboto', sans-serif;
 		color: #efeff1;
 	}
+
+	@keyframes rotate {
+		from {
+			transform: translate(-50%, -50%) rotate(0) scale(2);
+		}
+		to {
+			transform: translate(-50%, -50%) rotate(360deg) scale(2);
+		}
+	}
 `

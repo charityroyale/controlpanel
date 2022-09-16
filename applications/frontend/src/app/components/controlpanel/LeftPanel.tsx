@@ -36,6 +36,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
 	const [languages, setLanguages] = useState<{ value: string; label: string }[]>([])
 	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
+	const [isDisabledWishSelected, setIsDisabledWishSelected] = useState(false)
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -63,6 +64,12 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 					slug: e.currentTarget.value,
 				},
 			})
+			setIsDisabledWishSelected(true)
+			const timer = setTimeout(() => {
+				setIsDisabledWishSelected(false)
+				clearTimeout(timer)
+			}, 10000)
+			return () => clearTimeout(timer)
 		},
 		[socket]
 	)
@@ -401,6 +408,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 						onChange={emitWishUpdate}
 						items={wishes}
 						value={globalState.donationWidget.wish ? globalState.donationWidget.wish.slug : ''}
+						disabled={isDisabledWishSelected}
 					/>
 				</ButtonsWrapper>
 			</Content>
