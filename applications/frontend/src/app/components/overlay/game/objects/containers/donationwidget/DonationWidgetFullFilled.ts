@@ -1,4 +1,5 @@
 import { DonationWidgetState, MakeAWishRootLevelWishDTO } from '@cp/common'
+import { GameObjects } from 'phaser'
 import {
 	DonationWidgetWishFullFilledAmount,
 	donationWidgetWishFullFilledAmountName,
@@ -7,6 +8,11 @@ import {
 	DonationWidgetWishFullFilledWishNumber,
 	donationWidgetWishFullFilledWishNumberName,
 } from './text/DonationWidgetWishFullFilled'
+import {
+	donationWidgetMiddleTextStaticName,
+	donationWidgetPostfixTextStaticName,
+	donationWidgetPrefixTextStaticName,
+} from './text/DonationWidgetWishFullFilledStatic'
 
 export const donationWidgetFullFilledName = 'donationWidgetFullFilled'
 export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
@@ -30,6 +36,7 @@ export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 		this.setScale(state.scale)
 		this.scene.add.existing(this)
 		this.setFullFilledWishes(fullfilledWishes)
+		this.visible = false
 		this.startRotate()
 	}
 
@@ -52,23 +59,36 @@ export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 
 	public setFullFilledWishContent() {
 		if (this.getFullFilledWishes().length <= 0) return
+		this.setVisibleStaticContent()
+		this.visible = true
 
 		const kidNameContainer = this.parentContainer.getByName(
 			donationWidgetWishFullFilledKidNameName
 		) as DonationWidgetWishFullFilledKidName
+		kidNameContainer.visible = true
 		kidNameContainer.setText(this.getFullFilledWishes()[this.currentFullFilledWishIndex].kid_name)
 
 		const wishNumber = this.parentContainer.getByName(
 			donationWidgetWishFullFilledWishNumberName
 		) as DonationWidgetWishFullFilledWishNumber
+		wishNumber.visible = true
 		wishNumber.setText(this.getFullFilledWishes()[this.currentFullFilledWishIndex].id.toString())
 
 		const wishAmount = this.parentContainer.getByName(
 			donationWidgetWishFullFilledAmountName
 		) as DonationWidgetWishFullFilledAmount
+		wishAmount.visible = true
 		wishAmount.setText(
 			this.getFullFilledWishes()[this.currentFullFilledWishIndex].current_donation_sum.toString() + '€'
 		)
+	}
+	private setVisibleStaticContent() {
+		const static0 = this.parentContainer.getByName(donationWidgetPrefixTextStaticName) as GameObjects.Text
+		const static2 = this.parentContainer.getByName(donationWidgetMiddleTextStaticName) as GameObjects.Text
+		const static3 = this.parentContainer.getByName(donationWidgetPostfixTextStaticName) as GameObjects.Text
+		static0.visible = true
+		static2.visible = true
+		static3.visible = true
 	}
 
 	private increaseCurrentWishIndex() {

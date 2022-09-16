@@ -15,6 +15,7 @@ export class DonationWidgetWishFullFilledKidName extends Phaser.GameObjects.Text
 		this.name = donationWidgetWishFullFilledKidNameName
 		this.setOrigin(0.5, 0.5)
 		this.setScale(state.scale)
+		this.visible = false
 		scene.add.existing(this)
 	}
 }
@@ -41,6 +42,7 @@ export class DonationWidgetWishFullFilledWishNumber extends Phaser.GameObjects.T
 		super(scene, x, y, text, style)
 		this.name = donationWidgetWishFullFilledWishNumberName
 		this.setOrigin(0.5, 0.5)
+		this.visible = false
 		this.setScale(state.scale)
 		scene.add.existing(this)
 	}
@@ -69,6 +71,7 @@ export class DonationWidgetWishFullFilledAmount extends Phaser.GameObjects.Text 
 		this.name = donationWidgetWishFullFilledAmountName
 		this.setOrigin(0.5, 0.5)
 		this.setScale(state.scale)
+		this.visible = false
 		scene.add.existing(this)
 	}
 }
