@@ -312,7 +312,6 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 						onChange={emitMinDonationAmountUpdate}
 					></FatInput>
 					<FatSelect
-						onBlur={emitLanguageUpdate}
 						onChange={emitLanguageUpdate}
 						items={languages}
 						value={globalState.settings.text2speech.language}
@@ -404,7 +403,6 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 					</FatButton>
 					<FatSelect
 						id="wishes"
-						onBlur={emitWishUpdate}
 						onChange={emitWishUpdate}
 						items={wishes}
 						value={globalState.donationWidget.wish ? globalState.donationWidget.wish.slug : ''}

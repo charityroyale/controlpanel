@@ -15,6 +15,7 @@ export class DonationWidgetPrefixTextStatic extends Phaser.GameObjects.Text {
 		this.name = donationWidgetPrefixTextStaticName
 		this.setOrigin(0, 0.5)
 		this.setScale(state.scale)
+		this.visible = false
 		scene.add.existing(this)
 	}
 }
@@ -42,6 +43,7 @@ export class DonationWidgetMiddleTextStatic extends Phaser.GameObjects.Text {
 		this.name = donationWidgetMiddleTextStaticName
 		this.setOrigin(0, 0.5)
 		this.setScale(state.scale)
+		this.visible = false
 		scene.add.existing(this)
 	}
 }
@@ -69,6 +71,7 @@ export class DonationWidgetPostfixTextStatic extends Phaser.GameObjects.Text {
 		this.name = donationWidgetPostfixTextStaticName
 		this.setOrigin(0, 0.5)
 		this.setScale(state.scale)
+		this.visible = false
 		scene.add.existing(this)
 	}
 }
