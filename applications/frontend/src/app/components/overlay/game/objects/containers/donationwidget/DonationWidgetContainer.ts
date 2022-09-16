@@ -116,14 +116,10 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 			return
 		}
 
-		/**
-		 * investigate instant fire
-		 */
 		this.textLoaderTime = this.scene.time.addEvent({
+			startAt: 1450,
 			delay: 1500,
 			callback: () => {
-				// random text
-				// const text = loadTextItems[Phaser.Math.Between(0, loadTextItems.length-1)]
 				const text = loadTextItems[this.textLoaderCounter]
 				donationWidgetLoaderFrameText.setText(`... ${text} ...`)
 				this.textLoaderCounter++
