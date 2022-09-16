@@ -35,7 +35,6 @@ class MakeAWishApiClient {
 			if (response.ok) {
 				const data = (await response.json()) as MakeAWishInfoJsonDTO
 				this.mawInfoJsonData = data
-				logger.info(`Success fetching maw data`)
 				return data
 			}
 			logger.warn(`Issue fetching maw data`)

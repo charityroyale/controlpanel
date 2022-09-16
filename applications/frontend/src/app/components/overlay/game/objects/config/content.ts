@@ -1,0 +1,7 @@
+export const loadTextItems = [
+	'LADE STREAMER',
+	'FÜTTERE GAMING MAUS',
+	'TASTATUR ÖLEN',
+	'VENIS MAMA BESCHEID GEBEN',
+	'WUNSCH FERTIG',
+]

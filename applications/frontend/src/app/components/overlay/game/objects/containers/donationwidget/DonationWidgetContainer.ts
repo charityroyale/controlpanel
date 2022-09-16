@@ -1,12 +1,15 @@
 import { DonationWidgetState, DONATION_WIDGET_UPDATE, MakeAWishInfoJsonDTO, SocketEventsMap } from '@cp/common'
 import { GameObjects } from 'phaser'
 import { Socket } from 'socket.io-client'
+import { loadTextItems } from '../../config/content'
 import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'
+import { DonationWidgetLoaderFrame, donationWidgetLoaderFrameName } from './DonationWidgetLoaderFrame'
 import {
 	DonationWidgetProgressBar,
 	donationWidgetProgressBarBackgroundName,
 	donationWidgetProgressBarName,
 } from './DonationWidgetProgressBar'
+import { donationWidgetLoaderFrameTextName, DonationWidgetLoaderFrameText } from './text/DonationWidgetLoaderFrameText'
 import { DonationWidgetProgressBarText, donationWidgetProgressBarTextName } from './text/DonationWidgetProgressBarText'
 import {
 	DonationWidgetWishFullFilledAmount,
@@ -51,6 +54,11 @@ const infoBoxLastDonationWidthOffset = 395
  */
 export const donationWidgetContainerName = 'donationWidgetContainer'
 export class DonationWidgetContainer extends Phaser.GameObjects.Container {
+	private currentWishId?: number
+	private donationWidgetState: DonationWidgetState
+	private textLoaderTime: Phaser.Time.TimerEvent | null = null
+	private textLoaderCounter = 0
+
 	constructor(
 		scene: Phaser.Scene,
 		state: DonationWidgetState,
@@ -59,6 +67,8 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 	) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = donationWidgetContainerName
+		this.donationWidgetState = state
+		this.currentWishId = state.wish?.info?.id
 		this.setSize(590, 190)
 		this.setScale(state.scale)
 		this.setIsVisible(state.isVisible)
@@ -72,12 +82,86 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 				},
 			})
 		})
+		scene.events.on(
+			'swapCurrentWishText',
+			() => {
+				this.updateWishContentText()
+				this.updateLoadingText()
+			},
+			this
+		)
+		scene.events.on(
+			'hidingLoadingState',
+			() => {
+				if (this.textLoaderTime) {
+					this.textLoaderTime.destroy()
+				}
+				this.updateLoadingText('')
+				this.textLoaderCounter = 0
+			},
+			this
+		)
 
 		this.handleState(state)
 		scene.add.existing(this)
 	}
 
+	private updateLoadingText(text?: string) {
+		const donationWidgetLoaderFrameText = this.getByName(
+			donationWidgetLoaderFrameTextName
+		) as DonationWidgetLoaderFrameText
+
+		if (text === '') {
+			donationWidgetLoaderFrameText.setText(text)
+			return
+		}
+
+		this.textLoaderTime = this.scene.time.addEvent({
+			startAt: 1450,
+			delay: 1500,
+			callback: () => {
+				const text = loadTextItems[this.textLoaderCounter]
+				donationWidgetLoaderFrameText.setText(`... ${text} ...`)
+				this.textLoaderCounter++
+			},
+			callbackScope: this,
+			loop: true,
+		})
+	}
+
+	private updateWishContentText() {
+		const headingText = this.getByName(donationWidgetWishHeadingName) as DonationWidgetWishHeading
+		headingText.setText(this.donationWidgetState.wish?.info?.kid_name ?? 'Placeholder')
+
+		const subHeadingText = this.getByName(donationWidgetWishSubHeadingName) as DonationWidgetWishSubHeading
+		subHeadingText.setText(this.donationWidgetState.wish?.info?.wish ?? 'Placeholder')
+
+		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
+		lastDonation.setText(
+			`${this.donationWidgetState.wish?.info?.recent_donations[0].username ?? 'Placeholder'} ${
+				this.donationWidgetState.wish?.info?.recent_donations[0].amount ?? '-'
+			} €`
+		)
+
+		const topDonation = this.getByName(donationWidgetWishTopDonationName) as DonationWidgetWishTopDonation
+		topDonation.setText(
+			`${this.donationWidgetState.wish?.info?.top_donors[0].username ?? 'Placeholder'} ${
+				this.donationWidgetState.wish?.info?.top_donors[0].amount ?? '-'
+			} €`
+		)
+
+		const progressBar = this.getByName(donationWidgetProgressBarName) as DonationWidgetProgressBar
+		progressBar.updateWidth(this.donationWidgetState.wish?.info)
+
+		const progressBarText = this.getByName(donationWidgetProgressBarTextName) as DonationWidgetProgressBarText
+		const progressBarTextContent = progressBar.calcProgress(this.donationWidgetState.wish?.info)
+		progressBarText.setText(
+			`${progressBarTextContent.donationSum}€ (${progressBarTextContent.donationPercentageProgress}% von ${progressBarTextContent.donationGoal}€)`
+		)
+	}
+
 	public handleState(state: DonationWidgetState) {
+		this.donationWidgetState = state
 		this.setIsVisible(state.isVisible)
 
 		if (this.x !== state.position.x || this.y !== state.position.y) {
@@ -97,7 +181,11 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		// position headingText
 		// extract and improve
 		const headingText = this.getByName(donationWidgetWishHeadingName) as DonationWidgetWishHeading
-		headingText.setText(state.wish?.info?.kid_name ?? 'Placeholder')
+
+		// yeah this needs some improvements
+		if (headingText.text === 'Placeholder') {
+			this.updateWishContentText()
+		}
 
 		headingText.setX(this.displayWidth - 315 * this.scale)
 		headingText.setY(15 * this.scale)
@@ -105,8 +193,6 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		// positionnal text
 		// extract and improve
 		const subHeadingText = this.getByName(donationWidgetWishSubHeadingName) as DonationWidgetWishSubHeading
-		subHeadingText.setText(state.wish?.info?.wish ?? 'Placeholder')
-
 		subHeadingText.setX(this.displayWidth - 315 * this.scale)
 		subHeadingText.setY(45 * this.scale)
 
@@ -118,11 +204,6 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		lastDonationStatic.setY(infoBoxHeightHeadingOffset * this.scale)
 
 		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
-		lastDonation.setText(
-			`${state.wish?.info?.recent_donations[0].username ?? 'Placeholder'} ${
-				state.wish?.info?.recent_donations[0].amount ?? '-'
-			} €`
-		)
 		lastDonation.setX(this.displayWidth - infoBoxLastDonationWidthOffset * this.scale)
 		lastDonation.setY(infoBoxHeightContentOffset * this.scale)
 
@@ -134,9 +215,6 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		topDonationStatic.setY(infoBoxHeightHeadingOffset * this.scale)
 
 		const topDonation = this.getByName(donationWidgetWishTopDonationName) as DonationWidgetWishTopDonation
-		topDonation.setText(
-			`${state.wish?.info?.top_donors[0].username ?? 'Placeholder'} ${state.wish?.info?.top_donors[0].amount ?? '-'} €`
-		)
 		topDonation.setX(this.displayWidth - infoBoxTopDonationWidthOffset * this.scale)
 		topDonation.setY(infoBoxHeightContentOffset * this.scale)
 
@@ -148,13 +226,8 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const progressBar = this.getByName(donationWidgetProgressBarName) as DonationWidgetProgressBar
 		progressBar.setX(this.displayWidth - 735 * this.scale)
 		progressBar.setY(164.5 * this.scale)
-		progressBar.updateWidth(state.wish?.info)
 
 		const progressBarText = this.getByName(donationWidgetProgressBarTextName) as DonationWidgetProgressBarText
-		const progressBarTextContent = progressBar.calcProgress(state.wish?.info)
-		progressBarText.setText(
-			`${progressBarTextContent.donationSum}€ (${progressBarTextContent.donationPercentageProgress}% von ${progressBarTextContent.donationGoal}€)`
-		)
 		progressBarText.setX(this.displayWidth - 315 * this.scale)
 		progressBarText.setY(164.5 * this.scale)
 
@@ -197,8 +270,24 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const donationWidgetWishFullFilledAmount = this.getByName(
 			donationWidgetWishFullFilledAmountName
 		) as DonationWidgetWishFullFilledAmount
-		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 372 * this.scale)
-		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 24 * this.scale)
+		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 368 * this.scale)
+		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 25 * this.scale)
+
+		// loader text
+		const donationWidgetLoaderFrameText = this.getByName(
+			donationWidgetLoaderFrameTextName
+		) as DonationWidgetLoaderFrameText
+		donationWidgetLoaderFrameText.setX(this.displayWidth - 485 * this.scale)
+		donationWidgetLoaderFrameText.setY(this.displayHeight - 45 * this.scale)
+
+		const donationWidgetLoaderFrame = this.getByName(donationWidgetLoaderFrameName) as DonationWidgetLoaderFrame
+		donationWidgetLoaderFrame.setX(this.displayWidth / 2 + 1 * this.scale)
+		donationWidgetLoaderFrame.setY(1 * this.scale)
+
+		if (this.currentWishId !== state.wish?.info?.id) {
+			donationWidgetLoaderFrame.showLoadingState()
+		}
+		this.currentWishId = state.wish?.info?.id
 	}
 
 	public handleMawJsonStateUpdate = (mawJsonInfo: MakeAWishInfoJsonDTO, streamer: string) => {

@@ -97,7 +97,7 @@ export const Label = styled.div`
 `
 
 export const Content = styled.div`
-	padding: ${(p) => p.theme.space.s}px;
+	padding: 0 ${(p) => p.theme.space.s}px ${(p) => p.theme.space.s}px ${(p) => p.theme.space.s}px;
 	height: calc(100% - 30px);
 
 	${(p) => p.theme.media.tablet} {
