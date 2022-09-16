@@ -3,8 +3,6 @@ import { DonationWidgetLoaderFrame } from './DonationWidgetLoaderFrame'
 
 export const donationWidgetLoaderFrameMaskName = 'donationWidgetLoaderFrameMask'
 export class DonationWidgetLoaderFrameMask extends Phaser.GameObjects.Graphics {
-	public isTweenRunning = false
-
 	constructor(scene: Phaser.Scene, donationWidgetLoaderFrame: DonationWidgetLoaderFrame) {
 		super(scene, { x: 1920, y: 0 })
 		this.name = donationWidgetLoaderFrameMaskName
