@@ -135,11 +135,14 @@ export class OverlayScene extends Phaser.Scene {
 				}
 			}
 
+			/**
+			 * investigate bug previous volume change spoken
+			 */
 			if (this.text2speech && this.text2speech.getVolume() !== state.settings.text2speech.volume) {
 				this.text2speech.speak('Charity Royale')
 			}
-
 			this.text2speech?.handleState(state.settings)
+
 			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {
