@@ -59,7 +59,9 @@ export class Text2Speech {
 
 	public getVolume() {
 		let volume = Math.round(this.speechSynthesisUtterance.volume * 10) / 10
-		if (volume <= 0.1) {
+		if (volume <= 0) {
+			volume = 0
+		} else if (volume <= 0.1) {
 			volume = 0.2
 		} else if (volume <= 0.2) {
 			volume = 0.4
@@ -70,13 +72,14 @@ export class Text2Speech {
 		} else if (volume <= 0.6) {
 			volume = 1
 		}
-		return Math.round(volume * 10) / 10
+		return volume
 	}
 
 	// v8 decimals issue??
 	public setVolume(volume: number) {
-		if (volume < 0 || volume > 1) return
-		if (volume <= 0.2) {
+		if (volume <= 0) {
+			volume = 0
+		} else if (volume <= 0.2) {
 			volume = 0.1
 		} else if (volume <= 0.4) {
 			volume = 0.2
