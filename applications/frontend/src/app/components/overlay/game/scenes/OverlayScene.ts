@@ -121,7 +121,6 @@ export class OverlayScene extends Phaser.Scene {
 		config.socket.on(STATE_UPDATE, (state) => {
 			this.donationBannerContainer?.handleState(state.donationAlert)
 			this.donationWidgetContainer?.handleState(state.donationWidget)
-			this.text2speech?.handleState(state.settings)
 
 			/**
 			 * Somehow numbers with decimals end up having more decimals
@@ -136,6 +135,11 @@ export class OverlayScene extends Phaser.Scene {
 				}
 			}
 
+			if (this.text2speech && this.text2speech.getVolume() !== state.settings.text2speech.volume) {
+				this.text2speech.speak('Charity Royale')
+			}
+
+			this.text2speech?.handleState(state.settings)
 			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {

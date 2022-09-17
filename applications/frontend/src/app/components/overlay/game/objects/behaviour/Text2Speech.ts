@@ -57,9 +57,18 @@ export class Text2Speech {
 		return this.minDonationAmount
 	}
 
+	public getVolume() {
+		return Math.round(this.speechSynthesisUtterance.volume * 10) / 10
+	}
+
+	// v8 decimals issue??
 	public setVolume(volume: number) {
 		if (volume < 0 || volume > 1) return
-		this.speechSynthesisUtterance.volume = volume
+		this.speechSynthesisUtterance.volume = Math.round(volume * 10) / 10
+	}
+
+	public getLanguage() {
+		return this.speechSynthesisUtterance.lang
 	}
 
 	public setLanguage(voice: string) {
