@@ -1,0 +1,8 @@
+export const DEFAULT_DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
+export const DONATION_ALERT_COIN_0_AUDIO_KEY = 'donationAlertAudioCoin0'
+export const DONATION_ALERT_COIN_1_AUDIO_KEY = 'donationAlertAudioCoin1'
+export const DONATION_ALERT_YOU_WIN_0_AUDIO_KEY = 'donationAlertAudioYouWinAudio0'
+export const DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY = 'donationAlertAudioMagicalHarp'
+export const DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY = 'donationAlertAudioYouWinEpic'
+export const DONATION_ALERT_DRUM_ROLL_AUDIO_KEY = 'donationAlertAudioDrumRoll'
+export const DONATION_ALERT_POWER_UP_AUDIO_KEY = 'donationAlertAudioPowerUp'

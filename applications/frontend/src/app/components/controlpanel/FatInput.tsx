@@ -5,13 +5,19 @@ import { FaEuroSign } from 'react-icons/fa/index'
 interface FatInputProps extends React.HTMLAttributes<HTMLInputElement> {
 	value: string | number
 	name: string
+	label?: string
 }
 
-export const FatInput: FunctionComponent<React.PropsWithChildren<FatInputProps>> = ({ value, name, ...props }: FatInputProps) => {
+export const FatInput: FunctionComponent<React.PropsWithChildren<FatInputProps>> = ({
+	value,
+	name,
+	label = 'Minimum Text2Speech amount',
+	...props
+}: FatInputProps) => {
 	return (
 		<InputWrapper>
 			<FatLabel htmlFor={name}>
-				<span>Minimum Text2Speech amount</span>
+				<span>{label}</span>
 				<Input {...props} value={value} name={name} id={name}></Input>
 			</FatLabel>
 			<FaEuroSign

@@ -45,9 +45,18 @@ import {
 } from '../objects/containers/donationwidget/text/DonationWidgetWishFullFilled'
 import { DonationWidgetLoaderFrame } from '../objects/containers/donationwidget/DonationWidgetLoaderFrame'
 import { DonationWidgetLoaderFrameText } from '../objects/containers/donationwidget/text/DonationWidgetLoaderFrameText'
+import {
+	DEFAULT_DONATION_ALERT_AUDIO_KEY,
+	DONATION_ALERT_COIN_0_AUDIO_KEY,
+	DONATION_ALERT_COIN_1_AUDIO_KEY,
+	DONATION_ALERT_DRUM_ROLL_AUDIO_KEY,
+	DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY,
+	DONATION_ALERT_POWER_UP_AUDIO_KEY,
+	DONATION_ALERT_YOU_WIN_0_AUDIO_KEY,
+	DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY,
+} from '../objects/config/sound'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
-const DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
 
 export const FIREWORKS_START_AUDIO_KEY = 'fireworksStartAudio'
 export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
@@ -171,15 +180,22 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.image(DONATION_WIDGET_FULLFILLED, '/game/donationwidget/donationwidget_wish_fullfilled.png')
 		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
 
-		this.load.script
-
 		// AUDIO ASSETS
 		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
-		this.load.audio(DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.mp3')
+
 		this.load.audio(FIREWORKS_START_AUDIO_KEY, '/audio/fireworks.ogg')
 		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
 		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.ogg')
 		this.load.audio(STAR_RAIN_SOUND_AUDIO_KEY, '/audio/star_rain.ogg')
+
+		this.load.audio(DEFAULT_DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.mp3')
+		this.load.audio(DONATION_ALERT_COIN_0_AUDIO_KEY, '/audio/donationalert/donation_alert_coin_0.wav')
+		this.load.audio(DONATION_ALERT_COIN_1_AUDIO_KEY, '/audio/donationalert/donation_alert_coin_1.wav')
+		this.load.audio(DONATION_ALERT_YOU_WIN_0_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_0.wav')
+		this.load.audio(DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY, '/audio/donationalert/donation_alert_magical_harp.wav')
+		this.load.audio(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_epic.wav')
+		this.load.audio(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY, '/audio/donationalert/donation_alert_drum_roll.wav')
+		this.load.audio(DONATION_ALERT_POWER_UP_AUDIO_KEY, '/audio/donationalert/donation_alert_power_up.wav')
 	}
 
 	create(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {

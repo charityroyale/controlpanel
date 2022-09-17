@@ -2,11 +2,13 @@ import { Donation } from '@cp/common'
 import Phaser from 'phaser'
 import { OverlayScene } from '../../../scenes/OverlayScene'
 import { Behaviour } from '../../behaviour/Behaviour'
+import { SoundBehaviour } from '../../behaviour/SoundBehaviour'
 import { Text2Speech } from '../../behaviour/Text2Speech'
 
 export class Alert extends Phaser.GameObjects.Container {
 	private behaviour: Behaviour
 	public text2speech: Text2Speech
+	public soundbehaviour: SoundBehaviour
 
 	constructor(
 		scene: OverlayScene,
@@ -20,6 +22,7 @@ export class Alert extends Phaser.GameObjects.Container {
 
 		this.text2speech = text2speech
 		this.behaviour = new Behaviour(this, starGroup, starFollowParticle, fireworksEmitter)
+		this.soundbehaviour = new SoundBehaviour(scene)
 
 		this.scene.add.existing(this)
 	}
