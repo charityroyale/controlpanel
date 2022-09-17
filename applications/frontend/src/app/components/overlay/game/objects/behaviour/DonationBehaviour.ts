@@ -129,6 +129,7 @@ export class DonationBehaviour {
 		// amount based effects
 		this.createVisualEffects(donation.amount)
 		this.text2SpeechSpeak(donation)
+		this.alert.soundbehaviour.playSound(donation)
 	}
 
 	private text2SpeechSpeak(donation: Donation) {
