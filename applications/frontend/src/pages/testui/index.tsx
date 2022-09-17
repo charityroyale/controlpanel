@@ -12,6 +12,7 @@ import { SocketAuth } from '../../app/provider/SocketProvider'
 import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
 import { FatButton } from '../../app/components/controlpanel/FatButton'
 import styled from 'styled-components'
+import { FatInput } from '../../app/components/controlpanel/FatInput'
 
 export interface TestUIPageProps {
 	title: string
@@ -23,6 +24,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	const { title, user } = props
 	const [message, setMessage] = useState('')
 	const { socket } = useSocket()
+	const [amount, setAmount] = useState('')
 
 	const emitRandomDonation = useCallback(() => {
 		const precision = 2
@@ -47,14 +49,14 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 
 		const donation: Donation = {
 			user: name,
-			amount: randomnum,
+			amount: Number(amount) ? Number(amount) : randomnum,
 			timestamp: new Date().getTime() / 1000,
 			streamer: '',
 			message,
 		}
 
 		socket?.emit(DONATION_TRIGGER, donation)
-	}, [socket])
+	}, [socket, amount])
 
 	const emitDonationByButtonValue = useCallback(
 		(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -94,7 +96,6 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 					<FatButton onClick={emitDonationByButtonValue} value="2" active={true} style={{ color: 'white' }}>
 						2€
 					</FatButton>
-
 					<FatButton onClick={emitDonationByButtonValue} value="10" active={true} style={{ color: 'white' }}>
 						10€
 					</FatButton>
@@ -105,6 +106,16 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 						500€
 					</FatButton>
 				</TestUIButtonWrapper>
+
+				<div style={{ margin: '0px 8px 24px 8px' }}>
+					<FatInput
+						label="Custom Amount"
+						name="amount"
+						value={amount}
+						onChange={(e) => setAmount(e.currentTarget.value)}
+					></FatInput>
+				</div>
+
 				<TestUIMessageWrapper>
 					<p style={{ marginBottom: '8px' }}>
 						Nachricht{' '}
