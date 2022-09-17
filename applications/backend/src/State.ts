@@ -6,7 +6,7 @@ const initialSettingsState: SettingsState = {
 	volume: 0.6,
 	isLockedOverlay: false,
 	text2speech: {
-		volume: 0.6,
+		volume: 0.4,
 		minDonationAmount: 10,
 		language: 'de-AT',
 	},
