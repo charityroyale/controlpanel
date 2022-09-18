@@ -6,6 +6,7 @@ import {
 	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	STATE_UPDATE,
+	WISH_FULLFILLED_TRIGGER,
 } from '@cp/common'
 
 import Phaser, { Physics } from 'phaser'
@@ -63,6 +64,7 @@ export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
 export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
 export const STRAR_SOUND_AUDIO_KEY = 'starSound'
 export const STAR_RAIN_SOUND_AUDIO_KEY = 'starRainAudio'
+export const GTA_RESPECT_SOUND_AUDIO_KEY = 'gtaRespectAudio'
 
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
 export const DONATION_WIDGET_STATE_LOADING = 'donatioNWidgetStateLoading'
@@ -136,12 +138,19 @@ export class OverlayScene extends Phaser.Scene {
 			}
 
 			this.text2speech?.handleState(state.settings)
-
 			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
 		})
+
+		config.socket.on(WISH_FULLFILLED_TRIGGER, (_donation) => {
+			const audio = this.game.cache.audio.exists(GTA_RESPECT_SOUND_AUDIO_KEY)
+			if (audio) {
+				this.sound.play(GTA_RESPECT_SOUND_AUDIO_KEY)
+			}
+		})
+
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
 			this.donationWidgetContainer?.handleMawJsonStateUpdate(
 				mawInfoJsonData,
@@ -188,6 +197,7 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
 		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.ogg')
 		this.load.audio(STAR_RAIN_SOUND_AUDIO_KEY, '/audio/star_rain.ogg')
+		this.load.audio(GTA_RESPECT_SOUND_AUDIO_KEY, '/audio/gta_respect.mp3')
 
 		this.load.audio(DEFAULT_DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.mp3')
 		this.load.audio(DONATION_ALERT_COIN_0_AUDIO_KEY, '/audio/donationalert/donation_alert_coin_0.wav')
