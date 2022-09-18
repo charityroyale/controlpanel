@@ -184,24 +184,22 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 
 	return (
 		<GridLeftPanel>
+			<Label
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+				}}
+			>
+				<span style={{ display: 'flex' }}>
+					<IconWrapper>
+						<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
+					</IconWrapper>
+					Donation Alert
+				</span>
+				<DemoAlertButton onClick={() => emitRandomDonation()}>Demo</DemoAlertButton>
+			</Label>
 			<Content>
 				<ButtonsWrapper>
-					<Label
-						style={{
-							margin: '0 -8px',
-							marginBottom: '8px',
-							display: 'flex',
-							justifyContent: 'space-between',
-						}}
-					>
-						<span style={{ display: 'flex' }}>
-							<IconWrapper>
-								<AiFillNotification size="14px" style={{ marginRight: '6px' }} />
-							</IconWrapper>
-							Donation Alert
-						</span>
-						<DemoAlertButton onClick={() => emitRandomDonation()}>Demo</DemoAlertButton>
-					</Label>
 					<FatButton
 						icon={<AiFillEye size="24px" />}
 						active={globalState.donationAlert.isVisible}
