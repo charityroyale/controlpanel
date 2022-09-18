@@ -11,7 +11,9 @@ export const Header: FunctionComponent<React.PropsWithChildren<{ user: UserDTO }
 				<a href="/" style={{ display: 'flex' }}>
 					<Logo src="/charity_royale_logo.png" alt="Charity Royale logo" height="36px" />
 				</a>
-				<Heading>Charity Royale: Control Panel</Heading>
+				<Heading>
+					<span>Charity Royale:</span> Control Panel
+				</Heading>
 			</HeaderLeft>
 
 			<HeaderRight>
@@ -57,6 +59,7 @@ const HeaderLeft = styled.div`
 const HeaderRight = styled.div`
 	display: flex;
 	align-items: center;
+	font-size: ${(p) => p.theme.fontSize.m}px;
 `
 
 const Logo = styled.img`
@@ -64,5 +67,10 @@ const Logo = styled.img`
 `
 
 const Heading = styled.h1`
-	font-size: ${(p) => p.theme.fontSize.l}px;
+	font-size: ${(p) => p.theme.fontSize.m}px;
+	display: none;
+	${(p) => p.theme.media.tablet} {
+		font-size: ${(p) => p.theme.fontSize.l}px;
+		display: inline-block;
+	}
 `

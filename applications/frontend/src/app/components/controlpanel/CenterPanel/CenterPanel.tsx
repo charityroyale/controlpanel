@@ -63,6 +63,10 @@ export const CenterPanel: FunctionComponent<
 
 const OverlayLinkPreview = styled.a`
 	font-size: 12px;
+	display: none;
+	${(p) => p.theme.media.tablet} {
+		display: inline-block;
+	}
 `
 
 const PanelButtonWrapper = styled.div`
