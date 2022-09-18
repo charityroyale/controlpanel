@@ -53,6 +53,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 			timestamp: new Date().getTime() / 1000,
 			streamer: '',
 			message,
+			fullFilledWish: false,
 		}
 
 		socket?.emit(DONATION_TRIGGER, donation)
@@ -66,6 +67,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 				timestamp: new Date().getUTCMilliseconds(),
 				streamer: '',
 				message,
+				fullFilledWish: true,
 			}
 
 			socket?.emit(DONATION_TRIGGER, donation)
@@ -85,6 +87,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 				</TestUIHeadline>
 				<p>Ab 250+ donation erscheint ein Feuwerk mit Sound</p>
 				<p>Ab 500€+ donation erscheint ein Sternenregen</p>
+				<p>Die Fixzahlen buttons faken einen Wunsch-Alert GTA sound</p>
 				<p style={{ marginBottom: '24px' }}>
 					Wird eine Nachricht mitgeschickt erscheint eine Box über dem Donationalert
 				</p>
