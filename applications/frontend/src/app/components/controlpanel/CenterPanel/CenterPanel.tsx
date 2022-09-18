@@ -41,7 +41,9 @@ export const CenterPanel: FunctionComponent<
 					StreamView
 				</div>
 				<PanelButtonWrapper>
-					<p style={{ fontSize: '12px' }}>{window.location.origin + '/overlay/' + auth.channel}</p>
+					<OverlayLinkPreview href={`${window.location.origin}/overlay/${auth.channel}`} target="_blank">
+						{window.location.origin + '/overlay/' + auth.channel}
+					</OverlayLinkPreview>
 					<CopyBrowserSourceButton title={'Copy overlay URL'} username={auth.channel} />
 					<LockOverlay isLocked={globalState.settings.isLockedOverlay} title={'Lock overlay'} />
 				</PanelButtonWrapper>
@@ -58,6 +60,14 @@ export const CenterPanel: FunctionComponent<
 		</GridCenterPanel>
 	)
 }
+
+const OverlayLinkPreview = styled.a`
+	font-size: 12px;
+	display: none;
+	${(p) => p.theme.media.tablet} {
+		display: inline-block;
+	}
+`
 
 const PanelButtonWrapper = styled.div`
 	display: flex;
