@@ -10,6 +10,7 @@ import {
 	REQUEST_STATE,
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
+	WISH_FULLFILLED_TRIGGER,
 } from '@cp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
@@ -65,6 +66,14 @@ export default class Session {
 		if (mawApiClient.mawInfoJsonData != null) {
 			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
+
+		if (donation.fullFilledWish === true) {
+			this.sendWishFullFilled(donation)
+		}
+	}
+
+	public sendWishFullFilled(donation: Donation) {
+		this.io.to(this.channel).emit(WISH_FULLFILLED_TRIGGER, donation)
 	}
 
 	private registerReadHandlers(socket: Socket<SocketEventsMap, SocketEventsMap>) {

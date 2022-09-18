@@ -85,6 +85,7 @@ app.post(
 	body('timestamp').isInt(),
 	body('message').isString(),
 	body('streamer').isString(),
+	body('fullFilledWish').isBoolean(),
 	authenticateJWT,
 	(request, response) => {
 		const errors = validationResult(request)
