@@ -54,6 +54,7 @@ export const generateRandomDonation = (donationAmount?: number) => {
 		timestamp: new Date().getTime() / 1000,
 		streamer: '',
 		message,
+		fullFilledWish: false,
 	}
 	return donation
 }
