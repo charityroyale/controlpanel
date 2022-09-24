@@ -2,6 +2,7 @@ import { Speaker } from '@cp/common'
 import textToSpeech from '@google-cloud/text-to-speech'
 import fs from 'fs'
 import util from 'util'
+import { logger } from './logger'
 
 const client = new textToSpeech.TextToSpeechClient()
 
@@ -11,11 +12,13 @@ export async function updateTts(text: string, speaker: Speaker) {
 		voice: { ...speaker },
 		audioConfig: { audioEncoding: 'MP3' },
 	}
+	try {
+		const [response] = await client.synthesizeSpeech(request)
+		const writeFile = util.promisify(fs.writeFile)
+		await writeFile('./public/tts.mp3', response.audioContent, 'binary')
 
-	// Performs the text-to-speech request
-	const [response] = await client.synthesizeSpeech(request)
-
-	const writeFile = util.promisify(fs.writeFile)
-	await writeFile('./public/tts.mp3', response.audioContent, 'binary')
-	console.log('Audio content written to file: tts.mp3')
+		logger.info('Audio content written to file: tts.mp3')
+	} catch (e) {
+		logger.error(e)
+	}
 }
