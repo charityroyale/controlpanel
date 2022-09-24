@@ -340,6 +340,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 					>
 						<span>Donation Widget</span>
 					</FatButton>
+
 					<FatButton style={{ cursor: 'default' }}>
 						<React.Fragment>
 							<Range

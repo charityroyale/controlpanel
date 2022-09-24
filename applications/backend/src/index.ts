@@ -11,6 +11,13 @@ import SimpleUserDbService from './SimpleUserDbService'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
 
+// Imports the Google Cloud client library
+import textToSpeech from '@google-cloud/text-to-speech'
+
+// Import other required libraries
+import fs from 'fs'
+import util from 'util'
+
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
 	'https://charityroyale.redcouch.at',
@@ -126,6 +133,18 @@ app.get('/streamers', (req, res) => {
 	}
 })
 
+app.get('/tts', (req, res) => {
+	try {
+		return res.download('./output.mp3', (err) => {
+			// handle errors
+			console.log(err)
+		})
+	} catch (e) {
+		res.status(500).send(e)
+		logger.error(e)
+	}
+})
+
 if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
 	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')
 }
@@ -137,3 +156,29 @@ mawApiClient.fetchMawData()
 mawApiClient.poll()
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)
+
+// Creates a client
+const client = new textToSpeech.TextToSpeechClient()
+
+async function quickStart() {
+	// The text to synthesize
+	const text = 'hallo ihr süßen, wie hört sich die stimme an?'
+
+	// Construct the request
+	const request = {
+		input: { text: text },
+		// Select the language and SSML voice gender (optional)
+		voice: { languageCode: 'de-DE', voice: 'de-DE-Wavenet-D', ssmlGender: 'MALE' },
+		// select the type of audio encoding
+		audioConfig: { audioEncoding: 'MP3' },
+	}
+
+	// Performs the text-to-speech request
+	const [response] = await client.synthesizeSpeech(request)
+	// Write the binary audio content to a local file
+	const writeFile = util.promisify(fs.writeFile)
+	await writeFile('output.mp3', response.audioContent, 'binary')
+	console.log('Audio content written to file: output.mp3')
+}
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+quickStart()
