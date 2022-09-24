@@ -10,6 +10,7 @@ import { SocketEventsMap, Donation } from '@cp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
+import path from 'path'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -93,7 +94,6 @@ app.post(
 			return response.status(400).json({ errors: errors.array() })
 		}
 		const donation = request.body as Donation
-
 		const targetChannel = simpleUserDbService.findChannelByStreamer(request.body.streamer)
 		if (targetChannel !== undefined) {
 			/**
@@ -125,6 +125,8 @@ app.get('/streamers', (req, res) => {
 		logger.error(e)
 	}
 })
+
+app.use('/static', express.static(path.join(__dirname, '../public')))
 
 if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
 	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')

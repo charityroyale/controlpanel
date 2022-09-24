@@ -10,10 +10,11 @@ export class Behaviour {
 		alert: Alert,
 		starGroup: Phaser.GameObjects.Group,
 		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter
+		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter,
+		ttsMinDonationAmount: number
 	) {
 		this.alert = alert
-		new DonationBehaviour(this.alert, this.queue, starGroup, starFollowParticle, fireworksEmitter)
+		new DonationBehaviour(this.alert, this.queue, starGroup, starFollowParticle, fireworksEmitter, ttsMinDonationAmount)
 	}
 
 	public addToQueue(donation: Donation) {

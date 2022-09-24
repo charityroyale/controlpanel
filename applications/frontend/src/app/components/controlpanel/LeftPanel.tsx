@@ -16,7 +16,9 @@ import {
 	MakeAWishInfoJsonDTO,
 	MAW_INFO_JSON_DATA_UPDATE,
 	SETTINGS_UPDATE,
+	SpeakerType,
 	STATE_UPDATE,
+	TTS_SPEAKER_SELECT_ITEMS,
 } from '@cp/common'
 import { useSocket } from '../../hooks/useSocket'
 import { Range } from 'react-range'
@@ -34,7 +36,6 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
-	const [languages, setLanguages] = useState<{ value: string; label: string }[]>([])
 	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
 	const [isDisabledWishSelected, setIsDisabledWishSelected] = useState(false)
 
@@ -50,7 +51,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 			socket?.emit(SETTINGS_UPDATE, {
 				text2speech: {
 					...globalState.settings.text2speech,
-					language: e.currentTarget.value,
+					language: e.currentTarget.value as SpeakerType,
 				},
 			})
 		},
@@ -137,19 +138,6 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 		},
 		[socket]
 	)
-
-	useEffect(() => {
-		window.speechSynthesis.onvoiceschanged = () => {
-			const voices = window.speechSynthesis.getVoices()
-			const languages = voices.map((voice) => {
-				return {
-					label: voice.name,
-					value: voice.lang,
-				}
-			})
-			setLanguages(languages)
-		}
-	}, [])
 
 	useEffect(() => {
 		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
@@ -311,7 +299,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 					></FatInput>
 					<FatSelect
 						onChange={emitLanguageUpdate}
-						items={languages}
+						items={TTS_SPEAKER_SELECT_ITEMS}
 						value={globalState.settings.text2speech.language}
 					/>
 					<Label
@@ -340,6 +328,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 					>
 						<span>Donation Widget</span>
 					</FatButton>
+
 					<FatButton style={{ cursor: 'default' }}>
 						<React.Fragment>
 							<Range

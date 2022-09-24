@@ -8,7 +8,7 @@ const initialSettingsState: SettingsState = {
 	text2speech: {
 		volume: 0.4,
 		minDonationAmount: 10,
-		language: 'de-AT',
+		language: '0',
 	},
 }
 const settingsSlice = createSlice({
