@@ -12,7 +12,6 @@ import {
 import Phaser, { Physics } from 'phaser'
 import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
-import { Text2Speech } from '../objects/behaviour/Text2Speech'
 import { Alert } from '../objects/containers/alert/Alert'
 import { DonationBannerContainer } from '../objects/containers/donationBanner/DonationBannerContainer'
 import { DonationAlertBanner } from '../objects/containers/donationBanner/DonationBanner'
@@ -79,6 +78,9 @@ export const donationAlertWithMessageKey = 'donationAlertWithMessageVideo'
 
 const flaresAtlasKey = 'flaresAtlas'
 
+const TTS_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static/tts.mp3`
+export const TTS_KEY = 'ttsaudio'
+
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
 const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
 	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
@@ -101,7 +103,8 @@ export class OverlayScene extends Phaser.Scene {
 	public donationBannerContainer: DonationBannerContainer | null = null
 	public donationWidgetContainer: DonationWidgetContainer | null = null
 	public isLockedOverlay = false
-	public text2speech: Text2Speech | null = null
+
+	private ttsVolume = 0
 
 	constructor() {
 		super({ key: SCENES.OVERLAY })
@@ -114,12 +117,6 @@ export class OverlayScene extends Phaser.Scene {
 	 * therefore some gameobjects or cache/assets can be missing.
 	 */
 	init(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
-		this.text2speech = new Text2Speech(
-			config.initialState.settings.text2speech.language,
-			config.initialState.settings.text2speech.volume,
-			config.initialState.settings.text2speech.minDonationAmount
-		)
-
 		config.socket.on(STATE_UPDATE, (state) => {
 			this.donationBannerContainer?.handleState(state.donationAlert)
 			this.donationWidgetContainer?.handleState(state.donationWidget)
@@ -137,7 +134,15 @@ export class OverlayScene extends Phaser.Scene {
 				}
 			}
 
-			this.text2speech?.handleState(state.settings)
+			/**
+			 * Somehow numbers with decimals end up having more decimals
+			 * than assigned, therefore it is rounded to one decimal.
+			 */
+			const normalizedSoundValue2 = Math.round(this.ttsVolume * 10) / 10
+			if (normalizedSoundValue2 !== state.settings.text2speech.volume) {
+				this.ttsVolume = state.settings.text2speech.volume
+			}
+
 			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {
@@ -207,19 +212,6 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.audio(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_epic.wav')
 		this.load.audio(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY, '/audio/donationalert/donation_alert_drum_roll.wav')
 		this.load.audio(DONATION_ALERT_POWER_UP_AUDIO_KEY, '/audio/donationalert/donation_alert_power_up.wav')
-
-		const ttsUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static/tts.mp3`
-		const ttsKey = 'ttsaudio'
-
-		const loadTTS = () => {
-			this.cache.audio.remove(ttsKey)
-			const loader = this.load.audio(ttsKey, ttsUrl)
-			loader.on('complete', () => {
-				this.sound.play(ttsKey)
-			})
-			loader.start()
-		}
-		this.events.on('loadtts', loadTTS)
 	}
 
 	create(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
@@ -227,6 +219,19 @@ export class OverlayScene extends Phaser.Scene {
 		const starGroup = this.add.group()
 
 		const flareParticles = this.add.particles(flaresAtlasKey)
+		this.ttsVolume = initialState.settings.text2speech.volume
+
+		const loadTTS = () => {
+			this.cache.audio.remove(TTS_KEY)
+			const loader = this.load.audio(TTS_KEY, TTS_URL)
+			loader.on('complete', () => {
+				this.sound.play(TTS_KEY, {
+					volume: this.ttsVolume > 0.2 ? this.ttsVolume - 0.1 : this.ttsVolume,
+				})
+			})
+			loader.start()
+		}
+		this.events.on('loadtts', loadTTS)
 
 		this.isLockedOverlay = initialState.settings.isLockedOverlay
 
@@ -239,10 +244,10 @@ export class OverlayScene extends Phaser.Scene {
 		// create alert
 		this.alert = new Alert(
 			this,
-			this.text2speech!,
 			starGroup,
 			this.add.particles(whiteStarFollowerKey),
-			fireworksEmitter
+			fireworksEmitter,
+			initialState.settings.text2speech.minDonationAmount
 		)
 
 		// create donationAlerts

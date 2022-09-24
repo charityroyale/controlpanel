@@ -6,6 +6,7 @@ import {
 	FIREWORKS_SOUND_1_AUDIO_KEY,
 	FIREWORKS_SOUND_2_AUDIO_KEY,
 	STAR_RAIN_SOUND_AUDIO_KEY,
+	TTS_KEY,
 } from '../../scenes/OverlayScene'
 import { Star } from '../Star'
 import { DonationAlertBanner } from '../containers/donationBanner/DonationBanner'
@@ -24,6 +25,8 @@ import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
 const { FloatBetween } = Phaser.Math
 
 export class DonationBehaviour {
+	public ttsMinDonationAmount
+
 	/**
 	 * Checky every second if the queue has items and try
 	 * start donation animation.
@@ -41,21 +44,22 @@ export class DonationBehaviour {
 		queue: Donation[],
 		starGroup: Phaser.GameObjects.Group,
 		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter
+		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter,
+		ttsMinDonationAmount: number
 	) {
 		this.alert = alert
 		this.queue = queue
 		this.starGroup = starGroup
 		this.starFollowParticle = starFollowParticle
 		this.fireworksEmitter = fireworksEmitter
+		this.ttsMinDonationAmount = ttsMinDonationAmount
 		this.startListenForDonations()
 	}
 
 	private startListenForDonations() {
 		this.checkQueueTimerId = window.setInterval(() => {
-			const isReadyToPlayNextDonation =
-				this.queue.length > 0 && !this.alert.text2speech.isSpeaking && !this.isCurrentyBannerShowing()
-
+			const isSpeaking = this.alert.scene.sound.get(TTS_KEY) ? this.alert.scene.sound.get(TTS_KEY).isPlaying : false
+			const isReadyToPlayNextDonation = this.queue.length > 0 && !isSpeaking && !this.isCurrentyBannerShowing()
 			if (isReadyToPlayNextDonation) {
 				this.triggerAlert(this.queue.shift()!)
 			}
@@ -129,7 +133,7 @@ export class DonationBehaviour {
 		// amount based effects
 		this.createVisualEffects(donation.amount)
 
-		if (donation.message && donation.amount >= this.alert.text2speech.getMinDonationAmount()) {
+		if (donation.message && donation.amount >= this.ttsMinDonationAmount) {
 			this.alert.scene.events.emit('loadtts') // and play
 		}
 		this.alert.soundbehaviour.playSound(donation)
