@@ -144,7 +144,7 @@ export class OverlayScene extends Phaser.Scene {
 			this.alert?.handleDonation(donation)
 		})
 
-		config.socket.on(WISH_FULLFILLED_TRIGGER, (_donation) => {
+		config.socket.on(WISH_FULLFILLED_TRIGGER, () => {
 			const audio = this.game.cache.audio.exists(GTA_RESPECT_SOUND_AUDIO_KEY)
 			if (audio) {
 				this.sound.play(GTA_RESPECT_SOUND_AUDIO_KEY)
@@ -211,7 +211,7 @@ export class OverlayScene extends Phaser.Scene {
 		const ttsUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static/tts.mp3`
 		const ttsKey = 'ttsaudio'
 
-		const loadTTS = async () => {
+		const loadTTS = () => {
 			this.cache.audio.remove(ttsKey)
 			const loader = this.load.audio(ttsKey, ttsUrl)
 			loader.on('complete', () => {
