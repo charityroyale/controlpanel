@@ -128,18 +128,11 @@ export class DonationBehaviour {
 
 		// amount based effects
 		this.createVisualEffects(donation.amount)
-		//this.text2SpeechSpeak(donation)
 
 		if (donation.message && donation.amount >= this.alert.text2speech.getMinDonationAmount()) {
 			this.alert.scene.events.emit('loadtts') // and play
 		}
 		this.alert.soundbehaviour.playSound(donation)
-	}
-
-	private text2SpeechSpeak(donation: Donation) {
-		if (donation.amount >= this.alert.text2speech.getMinDonationAmount()) {
-			this.alert.text2speech.speak(donation.message)
-		}
 	}
 
 	private createBanner(donation: Donation) {

@@ -11,6 +11,7 @@ import {
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
 	WISH_FULLFILLED_TRIGGER,
+	TTS_SPEAKER,
 } from '@cp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
@@ -24,7 +25,7 @@ import {
 } from './State'
 import { sessionLogger as logger } from './logger'
 import { mawApiClient } from './MakeAWishApiClient'
-import { updateTts } from '.'
+import { updateTts } from './TTS'
 
 export default class Session {
 	private readonly store = configureStore<GlobalState>({
@@ -64,15 +65,15 @@ export default class Session {
 
 	public async sendDonation(donation: Donation) {
 		if (donation.message) {
-			await updateTts(donation.message)
+			await updateTts(donation.message, TTS_SPEAKER[this.store.getState().settings.text2speech.language])
 		}
+
 		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
 		if (mawApiClient.mawInfoJsonData != null) {
 			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		if (donation.fullFilledWish === true) {
+		if (donation.fullFilledWish) {
 			this.sendWishFullFilled(donation)
 		}
 	}

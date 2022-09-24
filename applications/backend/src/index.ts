@@ -11,12 +11,6 @@ import SimpleUserDbService from './SimpleUserDbService'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
 import path from 'path'
-// Imports the Google Cloud client library
-import textToSpeech from '@google-cloud/text-to-speech'
-
-// Import other required libraries
-import fs from 'fs'
-import util from 'util'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -145,24 +139,3 @@ mawApiClient.fetchMawData()
 mawApiClient.poll()
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)
-
-// Creates a client
-const client = new textToSpeech.TextToSpeechClient()
-
-export async function updateTts(text: string) {
-	// Construct the request
-	const request = {
-		input: { text },
-		// Select the language and SSML voice gender (optional)
-		voice: { languageCode: 'de-DE', voice: 'de-DE-Wavenet-D', ssmlGender: 'MALE' },
-		// select the type of audio encoding
-		audioConfig: { audioEncoding: 'MP3' },
-	}
-
-	// Performs the text-to-speech request
-	const [response] = await client.synthesizeSpeech(request)
-	// Write the binary audio content to a local file
-	const writeFile = util.promisify(fs.writeFile)
-	await writeFile('./public/tts.mp3', response.audioContent, 'binary')
-	console.log('Audio content written to file: tts.mp3')
-}

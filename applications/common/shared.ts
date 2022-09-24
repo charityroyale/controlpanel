@@ -10,7 +10,7 @@ export interface SettingsState {
 	text2speech: {
 		volume: number
 		minDonationAmount: number
-		language: string
+		language: SpeakerType
 	}
 }
 
@@ -155,3 +155,43 @@ export class MakeAWishInfoJsonTopDonationDTO {
 	public username = ''
 	public amount = ''
 }
+
+export const TTS_SPEAKER = {
+	'0': {
+		languageCode: 'de-DE',
+		voice: 'de-DE-Wavenet-C',
+		ssmlGender: 'FEMALE',
+		label: 'Sissi (German)',
+	},
+	'1': {
+		languageCode: 'de-DE',
+		voice: 'de-DE-Wavenet-B',
+		ssmlGender: 'MALE',
+		label: 'Alex (German)',
+	},
+	'2': {
+		languageCode: 'en-US',
+		voice: 'en-US-Wavenet-H',
+		ssmlGender: 'FEMALE',
+		label: 'Corinna (English)',
+	},
+	'3': {
+		languageCode: 'en-US',
+		voice: 'en-US-Wavenet-D',
+		ssmlGender: 'MALE',
+		label: 'Patrick (English)',
+	},
+}
+
+export type SpeakerType = '0' | '1' | '2' | '3'
+
+export interface Speaker {
+	languageCode: string
+	voice: string
+	ssmlGender: string
+	label: string
+}
+
+export const TTS_SPEAKER_SELECT_ITEMS = Object.keys(TTS_SPEAKER).map((key) => {
+	return { label: TTS_SPEAKER[key as SpeakerType].label, value: key }
+})
