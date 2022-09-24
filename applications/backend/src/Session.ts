@@ -24,6 +24,7 @@ import {
 } from './State'
 import { sessionLogger as logger } from './logger'
 import { mawApiClient } from './MakeAWishApiClient'
+import { updateTts } from '.'
 
 export default class Session {
 	private readonly store = configureStore<GlobalState>({
@@ -61,12 +62,16 @@ export default class Session {
 		this.registerReadHandlers(socket)
 	}
 
-	public sendDonation(donation: Donation) {
+	public async sendDonation(donation: Donation) {
+		if (donation.message) {
+			await updateTts(donation.message)
+		}
 		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
 		if (mawApiClient.mawInfoJsonData != null) {
 			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		if (donation.fullFilledWish === true) {
 			this.sendWishFullFilled(donation)
 		}

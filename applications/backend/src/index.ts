@@ -10,7 +10,7 @@ import { SocketEventsMap, Donation } from '@cp/common'
 import SimpleUserDbService from './SimpleUserDbService'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
-
+import path from 'path'
 // Imports the Google Cloud client library
 import textToSpeech from '@google-cloud/text-to-speech'
 
@@ -100,7 +100,6 @@ app.post(
 			return response.status(400).json({ errors: errors.array() })
 		}
 		const donation = request.body as Donation
-
 		const targetChannel = simpleUserDbService.findChannelByStreamer(request.body.streamer)
 		if (targetChannel !== undefined) {
 			/**
@@ -133,17 +132,7 @@ app.get('/streamers', (req, res) => {
 	}
 })
 
-app.get('/tts', (req, res) => {
-	try {
-		return res.download('./output.mp3', (err) => {
-			// handle errors
-			console.log(err)
-		})
-	} catch (e) {
-		res.status(500).send(e)
-		logger.error(e)
-	}
-})
+app.use('/static', express.static(path.join(__dirname, '../public')))
 
 if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
 	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')
@@ -160,13 +149,10 @@ logger.info(`Backend ready on port ${port}`)
 // Creates a client
 const client = new textToSpeech.TextToSpeechClient()
 
-async function quickStart() {
-	// The text to synthesize
-	const text = 'hallo ihr süßen, wie hört sich die stimme an?'
-
+export async function updateTts(text: string) {
 	// Construct the request
 	const request = {
-		input: { text: text },
+		input: { text },
 		// Select the language and SSML voice gender (optional)
 		voice: { languageCode: 'de-DE', voice: 'de-DE-Wavenet-D', ssmlGender: 'MALE' },
 		// select the type of audio encoding
@@ -177,8 +163,6 @@ async function quickStart() {
 	const [response] = await client.synthesizeSpeech(request)
 	// Write the binary audio content to a local file
 	const writeFile = util.promisify(fs.writeFile)
-	await writeFile('output.mp3', response.audioContent, 'binary')
-	console.log('Audio content written to file: output.mp3')
+	await writeFile('./public/tts.mp3', response.audioContent, 'binary')
+	console.log('Audio content written to file: tts.mp3')
 }
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-quickStart()

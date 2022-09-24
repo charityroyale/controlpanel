@@ -207,6 +207,19 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.audio(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_epic.wav')
 		this.load.audio(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY, '/audio/donationalert/donation_alert_drum_roll.wav')
 		this.load.audio(DONATION_ALERT_POWER_UP_AUDIO_KEY, '/audio/donationalert/donation_alert_power_up.wav')
+
+		const ttsUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static/tts.mp3`
+		const ttsKey = 'ttsaudio'
+
+		const loadTTS = async () => {
+			this.cache.audio.remove(ttsKey)
+			const loader = this.load.audio(ttsKey, ttsUrl)
+			loader.on('complete', () => {
+				this.sound.play(ttsKey)
+			})
+			loader.start()
+		}
+		this.events.on('loadtts', loadTTS)
 	}
 
 	create(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {

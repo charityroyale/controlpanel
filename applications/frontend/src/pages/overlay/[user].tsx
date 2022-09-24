@@ -32,13 +32,6 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 			</Head>
 			<OverlayWrapper>
 				<Overlay />
-				<HiddenTTS>
-					<figcaption>TTS</figcaption>
-					<audio controls src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tts`}>
-						<a href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tts`}>Download audio</a>
-						<track kind="captions" />
-					</audio>
-				</HiddenTTS>
 			</OverlayWrapper>
 			<div
 				style={{
@@ -55,11 +48,6 @@ const OverlayPage: NextPage<OverlayPageProps> = (props: OverlayPageProps) => {
 		</>
 	)
 }
-
-const HiddenTTS = styled.figure`
-	position: absolute;
-	visibility: hidden;
-`
 
 export const getServerSideProps: GetServerSideProps<OverlayPageProps> = async ({ query, params }) => {
 	const auth: SocketAuth = { channel: params!.user as string }
