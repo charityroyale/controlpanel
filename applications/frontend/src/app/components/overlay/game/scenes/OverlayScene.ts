@@ -221,14 +221,21 @@ export class OverlayScene extends Phaser.Scene {
 		const flareParticles = this.add.particles(flaresAtlasKey)
 		this.ttsVolume = initialState.settings.text2speech.volume
 
+		const playTTS = () => {
+			this.sound.play(TTS_KEY, {
+				volume: this.ttsVolume > 0.2 ? this.ttsVolume - 0.1 : this.ttsVolume,
+			})
+		}
 		const loadTTS = () => {
 			this.cache.audio.remove(TTS_KEY)
 			const loader = this.load.audio(TTS_KEY, TTS_URL)
 			loader.on('complete', () => {
-				this.sound.play(TTS_KEY, {
-					volume: this.ttsVolume > 0.2 ? this.ttsVolume - 0.1 : this.ttsVolume,
+				this.time.addEvent({
+					delay: 2500,
+					callback: playTTS,
 				})
 			})
+
 			loader.start()
 		}
 		this.events.on('loadtts', loadTTS)
