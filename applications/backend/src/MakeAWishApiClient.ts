@@ -1,10 +1,12 @@
 import { MakeAWishInfoJsonDTO } from '@cp/common'
 import fetch from 'node-fetch'
 import { logger } from './logger'
+import { CmsUpcomingStreamer } from './types/cms'
 
 class MakeAWishApiClient {
 	public static readonly mawUri2022 = 'https://streamer.make-a-wish.at/charityroyale2022/info.json'
 	public mawInfoJsonData: null | MakeAWishInfoJsonDTO = null
+	public cmsMawWishes: null | CmsUpcomingStreamer[] = null
 
 	private intervalId: undefined | ReturnType<typeof setInterval>
 	private readonly pollIntervalInSeconds = 15

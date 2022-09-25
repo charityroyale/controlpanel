@@ -12,6 +12,7 @@ import {
 	STATE_UPDATE,
 	WISH_FULLFILLED_TRIGGER,
 	TTS_SPEAKER,
+	CMS_UPDATE,
 } from '@cp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
@@ -58,6 +59,15 @@ export default class Session {
 		socket.emit(STATE_UPDATE, this.store.getState())
 		if (mawApiClient.mawInfoJsonData != null) {
 			socket.emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
+		}
+
+		if (mawApiClient.cmsMawWishes != null) {
+			for (const upcomingStreamer of mawApiClient.cmsMawWishes) {
+				if (upcomingStreamer.streamerChannel.toLocaleLowerCase() === this.channel) {
+					const streamerWishes = upcomingStreamer.wishes ?? []
+					socket.emit(CMS_UPDATE, streamerWishes)
+				}
+			}
 		}
 
 		this.registerReadHandlers(socket)

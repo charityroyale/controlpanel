@@ -9,12 +9,11 @@ import { AiFillNotification } from 'react-icons/ai'
 import { FaHeart } from 'react-icons/fa'
 import { FaMicrophone } from 'react-icons/fa'
 import {
+	CMS_UPDATE,
 	DONATION_ALERT_UPDATE,
 	DONATION_TRIGGER,
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
-	MakeAWishInfoJsonDTO,
-	MAW_INFO_JSON_DATA_UPDATE,
 	SETTINGS_UPDATE,
 	SpeakerType,
 	STATE_UPDATE,
@@ -140,12 +139,11 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	)
 
 	useEffect(() => {
-		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
-			const wishItems = mawInfoJsonData.streamers[auth.channel].wishes
+		socket?.on(CMS_UPDATE, (cmsSlugs) => {
 			const wishSelectableItems = []
-			if (!Array.isArray(wishItems)) {
-				for (const key of Object.keys(wishItems)) {
-					wishSelectableItems.push({ label: formatWishSlug(wishItems[key].slug), value: wishItems[key].slug })
+			if (cmsSlugs.length > 0) {
+				for (const slug of cmsSlugs) {
+					wishSelectableItems.push({ label: formatWishSlug(slug), value: slug })
 				}
 			} else {
 				wishSelectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
