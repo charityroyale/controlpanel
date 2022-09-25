@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
-import { Donation, DONATION_TRIGGER } from '@cp/common'
+import { Donation, DONATION_TRIGGER_PREPROCESSING } from '@cp/common'
 import { UserSessionData, withSessionSsr } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { Header } from '../../app/components/controlpanel/Header'
@@ -62,7 +62,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 			fullFilledWish: false,
 		}
 
-		socket?.emit(DONATION_TRIGGER, donation)
+		socket?.emit(DONATION_TRIGGER_PREPROCESSING, donation)
 	}, [socket, amount])
 
 	const emitDonationByButtonValue = useCallback(
@@ -77,7 +77,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 				fullFilledWish: true,
 			}
 
-			socket?.emit(DONATION_TRIGGER, donation)
+			socket?.emit(DONATION_TRIGGER_PREPROCESSING, donation)
 		},
 		[socket, message]
 	)

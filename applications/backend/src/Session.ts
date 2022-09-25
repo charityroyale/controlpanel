@@ -1,7 +1,7 @@
 import {
 	Donation,
 	DONATION_ALERT_UPDATE,
-	DONATION_TRIGGER,
+	DONATION_TRIGGER_PREPROCESSING,
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
 	MAW_INFO_JSON_DATA_UPDATE,
@@ -14,6 +14,8 @@ import {
 	TTS_SPEAKER,
 	CMS_UPDATE,
 	REQUEST_CMS_DATA,
+	CREATE_TTS_FILE,
+	DONATION_TRIGGER,
 } from '@cp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
@@ -74,12 +76,8 @@ export default class Session {
 		this.registerReadHandlers(socket)
 	}
 
-	public async sendDonation(donation: Donation) {
-		if (donation.message) {
-			await updateTts(donation.message, TTS_SPEAKER[this.store.getState().settings.text2speech.language])
-		}
-
-		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
+	public async sendDonationPreprocessing(donation: Donation) {
+		this.io.to(this.channel).emit(DONATION_TRIGGER_PREPROCESSING, donation)
 		if (mawApiClient.mawInfoJsonData != null) {
 			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
@@ -87,6 +85,10 @@ export default class Session {
 		if (donation.fullFilledWish) {
 			this.sendWishFullFilled(donation)
 		}
+	}
+
+	public async sendDonation(donation: Donation) {
+		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
 	}
 
 	public sendWishFullFilled(donation: Donation) {
@@ -113,7 +115,14 @@ export default class Session {
 	}
 
 	private registerWriteHandlers(socket: Socket<SocketEventsMap, SocketEventsMap>) {
-		socket.on(DONATION_TRIGGER, (donation: Donation) => {
+		socket.on(DONATION_TRIGGER_PREPROCESSING, (donation: Donation) => {
+			this.sendDonationPreprocessing(donation)
+		})
+
+		socket.on(CREATE_TTS_FILE, async (donation: Donation) => {
+			if (donation.message) {
+				await updateTts(donation.message, TTS_SPEAKER[this.store.getState().settings.text2speech.language])
+			}
 			this.sendDonation(donation)
 		})
 

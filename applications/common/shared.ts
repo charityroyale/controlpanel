@@ -61,10 +61,12 @@ export const STATE_UPDATE = 'stateUpdate'
 export const REQUEST_STATE = 'requestState'
 export const WISH_FULLFILLED_TRIGGER = 'wishFullFilledTrigger'
 export const REQUEST_MAW_INFO_JSON_DATA = 'requestMawInfoJsonData'
+export const DONATION_TRIGGER_PREPROCESSING = 'donationTriggerPreprocessing'
 export const DONATION_TRIGGER = 'donationTrigger'
 export const MAW_INFO_JSON_DATA_UPDATE = 'mawJsonDataUpdate'
 export const REQUEST_CMS_DATA = 'requestCmsData'
 export const CMS_UPDATE = 'cmsUpdate'
+export const CREATE_TTS_FILE = 'createTtsFile'
 
 export interface SocketEventsMap {
 	[DONATION_ALERT_UPDATE]: (donationAlertUpdate: Partial<DonationAlertState>) => void
@@ -74,9 +76,11 @@ export interface SocketEventsMap {
 	[REQUEST_STATE]: () => void
 	[REQUEST_MAW_INFO_JSON_DATA]: () => void
 	[DONATION_TRIGGER]: (donation: Donation) => void
+	[DONATION_TRIGGER_PREPROCESSING]: (donation: Donation) => void
 	[WISH_FULLFILLED_TRIGGER]: (donation: Donation) => void
 	[MAW_INFO_JSON_DATA_UPDATE]: (mawInfoJsonData: MakeAWishInfoJsonDTO) => void
 	[REQUEST_CMS_DATA]: () => void
+	[CREATE_TTS_FILE]: (donation: Donation) => Promise<void>
 	[CMS_UPDATE]: (cmsStreamerWishSlugs: string[]) => void
 }
 
