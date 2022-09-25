@@ -63,6 +63,7 @@ export const WISH_FULLFILLED_TRIGGER = 'wishFullFilledTrigger'
 export const REQUEST_MAW_INFO_JSON_DATA = 'requestMawInfoJsonData'
 export const DONATION_TRIGGER = 'donationTrigger'
 export const MAW_INFO_JSON_DATA_UPDATE = 'mawJsonDataUpdate'
+export const REQUEST_CMS_DATA = 'requestCmsData'
 export const CMS_UPDATE = 'cmsUpdate'
 
 export interface SocketEventsMap {
@@ -75,6 +76,7 @@ export interface SocketEventsMap {
 	[DONATION_TRIGGER]: (donation: Donation) => void
 	[WISH_FULLFILLED_TRIGGER]: (donation: Donation) => void
 	[MAW_INFO_JSON_DATA_UPDATE]: (mawInfoJsonData: MakeAWishInfoJsonDTO) => void
+	[REQUEST_CMS_DATA]: () => void
 	[CMS_UPDATE]: (cmsStreamerWishSlugs: string[]) => void
 }
 

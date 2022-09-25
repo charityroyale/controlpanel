@@ -14,6 +14,7 @@ import {
 	DONATION_TRIGGER,
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
+	REQUEST_CMS_DATA,
 	SETTINGS_UPDATE,
 	SpeakerType,
 	STATE_UPDATE,
@@ -37,6 +38,11 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
 	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
 	const [isDisabledWishSelected, setIsDisabledWishSelected] = useState(false)
+
+	const [isMounted, setIsMounted] = useState(false)
+	useEffect(() => {
+		setIsMounted(true)
+	}, [])
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -167,6 +173,10 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 			}
 		})
 	}, [socket, auth.channel, wishes])
+
+	useEffect(() => {
+		socket?.emit(REQUEST_CMS_DATA)
+	}, [socket, isMounted])
 
 	return (
 		<GridLeftPanel>

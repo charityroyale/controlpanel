@@ -344,7 +344,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationWidget,
-			'Placeholder'
+			'DEIN NAME'
 		)
 
 		const donationWidgetWishTopDonation = new DonationWidgetWishTopDonation(
@@ -352,7 +352,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationWidget,
-			'Placeholder'
+			'DEIN NAME'
 		)
 
 		const progressBarBackground = new DonationWidgetProgressBar(
