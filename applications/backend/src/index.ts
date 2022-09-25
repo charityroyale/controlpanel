@@ -72,8 +72,10 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 	const authHeader = req.headers.authorization
 	const token = authHeader?.split(' ')[1]
 
-	if (token == null) return res.sendStatus(401)
-
+	if (token == null) {
+		logger.info(`Empty token for for ${req.ip}`)
+		return res.sendStatus(401)
+	}
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { clientId } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as any
@@ -85,23 +87,28 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.post('/sync/cms', authenticateJWT, async (request, response) => {
-	const errors = validationResult(request)
-	if (!errors.isEmpty()) {
-		return response.status(400).json({ errors: errors.array() })
-	}
-
-	const rawResponseData = await fetch(cmsDataUrl)
-	const rawData = await rawResponseData.text()
-
-	yaml.loadAll(rawData, function (doc) {
-		if (doc !== null) {
-			const cmsData = doc as CmsContent
-			mawApiClient.cmsMawWishes = cmsData.upcoming
-			// return wish slugs of streamer
-			response.send(request.body)
+app.post('/sync/cms', async (request, response) => {
+	try {
+		const errors = validationResult(request)
+		if (!errors.isEmpty()) {
+			return response.status(400).json({ errors: errors.array() })
 		}
-	})
+
+		const rawResponseData = await fetch(cmsDataUrl)
+		const rawData = await rawResponseData.text()
+
+		yaml.loadAll(rawData, function (doc) {
+			if (doc !== null) {
+				const cmsData = doc as CmsContent
+				mawApiClient.cmsMawWishes = cmsData.upcoming
+				// return wish slugs of streamer
+				response.send(request.body)
+			}
+		})
+		logger.info('CMS data synced')
+	} catch (e) {
+		logger.error(e)
+	}
 })
 
 app.post(
