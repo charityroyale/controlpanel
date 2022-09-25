@@ -42,6 +42,7 @@ export interface DonationWidgetState {
 export interface Donation {
 	user: string
 	amount: number
+	net_amount: number // netto - pure without taxes
 	message: string
 	streamer: string
 	timestamp: number
@@ -159,7 +160,7 @@ export class MakeWishInfoJsonRecentDonationDTO {
 
 export class MakeAWishInfoJsonTopDonationDTO {
 	public username = ''
-	public amount = '' // netto - pure - without taxes
+	public amount = '' // netto - pure - without taxes --> ! will be renamed by MAW
 }
 
 export const TTS_SPEAKER = {

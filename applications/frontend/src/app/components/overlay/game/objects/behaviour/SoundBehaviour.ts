@@ -18,21 +18,21 @@ export class SoundBehaviour {
 	}
 
 	public playSound(donation: Donation) {
-		const { amount } = donation
+		const { net_amount } = donation
 
-		if (amount < 5) {
+		if (net_amount < 5) {
 			this.scene.sound.play(DONATION_ALERT_COIN_0_AUDIO_KEY)
-		} else if (amount < 10) {
+		} else if (net_amount < 10) {
 			this.scene.sound.play(DEFAULT_DONATION_ALERT_AUDIO_KEY)
-		} else if (amount < 50) {
+		} else if (net_amount < 50) {
 			this.scene.sound.play(DONATION_ALERT_COIN_1_AUDIO_KEY)
-		} else if (amount < 100) {
+		} else if (net_amount < 100) {
 			this.scene.sound.play(DONATION_ALERT_YOU_WIN_0_AUDIO_KEY)
-		} else if (amount < 250) {
+		} else if (net_amount < 250) {
 			this.scene.sound.play(DONATION_ALERT_POWER_UP_AUDIO_KEY)
-		} else if (amount < 500) {
+		} else if (net_amount < 500) {
 			this.scene.sound.play(DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY)
-		} else if (amount < 1000) {
+		} else if (net_amount < 1000) {
 			this.scene.sound.play(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY)
 		} else {
 			this.scene.sound.play(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY)

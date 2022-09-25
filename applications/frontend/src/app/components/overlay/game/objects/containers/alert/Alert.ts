@@ -25,7 +25,7 @@ export class Alert extends Phaser.GameObjects.Container {
 	}
 
 	public handleDonation(donation: Donation) {
-		if (donation.amount < 2) {
+		if (donation.net_amount < 2) {
 			return
 		}
 		this.behaviour.addToQueue(donation)
