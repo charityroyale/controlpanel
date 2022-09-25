@@ -100,12 +100,13 @@ app.post('/sync/cms', async (request, response) => {
 		yaml.loadAll(rawData, function (doc) {
 			if (doc !== null) {
 				const cmsData = doc as CmsContent
+				logger.info('CMS data title ' + cmsData.title)
 				mawApiClient.cmsMawWishes = cmsData.upcoming
-				// return wish slugs of streamer
-				response.send(request.body)
+				logger.info('CMS data synced')
+			} else {
+				logger.warn('No CMS data found')
 			}
 		})
-		logger.info('CMS data synced')
 	} catch (e) {
 		logger.error(e)
 	}
