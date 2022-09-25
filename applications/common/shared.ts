@@ -87,6 +87,7 @@ export type StreamerType = 'main' | 'community'
 export class MakeAWishInfoJsonDTO {
 	public id = '' // some MAW internal ID
 	public total_donation_sum = '' // sum of donations
+	public total_donation_sum_net = '' // sum of donations netto - without taxes - pure
 	public total_donation_count = -1 // count of unqique donators
 	public last_update = -1 // unix timestamp of latest update
 	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -114,6 +115,7 @@ export class MakeAWishStreamerDTO {
 	public name = '' // streamer name
 	public type: StreamerType = 'main' // 'main' or 'community'
 	public current_donation_sum = ''
+	public current_donation_sum_net = ''
 	public current_donation_count = -1
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
@@ -128,7 +130,9 @@ export class MakeAWishRootLevelWishDTO {
 	public kid_name = ''
 	public wish = '' // MAW internal title of wish
 	public donation_goal = ''
+	public country = '' // DE | AT
 	public current_donation_sum = '0'
+	public current_donation_sum_net = ''
 	public current_donation_count = -1
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
@@ -139,6 +143,7 @@ export class MakeAWishStreamerWishDTO {
 	public id = -1 // some MAW internal ID
 	public slug = '' // identifier
 	public current_donation_sum = '0'
+	public current_donation_sum_net = ''
 	public current_donation_count = -1
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
@@ -149,11 +154,12 @@ export class MakeWishInfoJsonRecentDonationDTO {
 	public unix_timestamp = -1
 	public username = ''
 	public amount = ''
+	public amount_net = ''
 }
 
 export class MakeAWishInfoJsonTopDonationDTO {
 	public username = ''
-	public amount = ''
+	public amount = '' // netto - pure - without taxes
 }
 
 export const TTS_SPEAKER = {
