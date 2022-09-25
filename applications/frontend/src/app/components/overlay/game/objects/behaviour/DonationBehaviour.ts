@@ -19,6 +19,7 @@ import { DonationBannerMessageText } from '../containers/donationBanner/Donation
 import { Alert } from '../containers/alert/Alert'
 import {
 	ALERT_FIREWORKS_MIN_AMOUNT,
+	ALERT_STAR_AND_FIREWORK_MIN_AMOUNT,
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 } from '../containers/donationBanner/donationSpecialEffectsConfig'
 import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
@@ -165,7 +166,10 @@ export class DonationBehaviour {
 	}
 
 	public createVisualEffects(amount: number) {
-		if (amount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
+		if (amount >= ALERT_STAR_AND_FIREWORK_MIN_AMOUNT) {
+			this.playStarRain()
+			this.playFireWork()
+		} else if (amount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
 			this.playStarRain()
 		} else if (amount >= ALERT_FIREWORKS_MIN_AMOUNT) {
 			this.playFireWork()

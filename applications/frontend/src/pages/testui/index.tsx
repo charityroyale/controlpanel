@@ -13,6 +13,11 @@ import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
 import { FatButton } from '../../app/components/controlpanel/FatButton'
 import styled from 'styled-components'
 import { FatInput } from '../../app/components/controlpanel/FatInput'
+import {
+	ALERT_FIREWORKS_MIN_AMOUNT,
+	ALERT_STAR_AND_FIREWORK_MIN_AMOUNT,
+	ALERT_STAR_RAIN_MIN_AMOUNT,
+} from '../../app/components/overlay/game/objects/containers/donationBanner/donationSpecialEffectsConfig'
 
 export interface TestUIPageProps {
 	title: string
@@ -87,8 +92,12 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 				<TestUIHeadline>
 					<strong>Testing Interface</strong>
 				</TestUIHeadline>
-				<p>Ab 250+ donation erscheint ein Feuwerk mit Sound</p>
-				<p>Ab 500€+ donation erscheint ein Sternenregen</p>
+				<p>Ab {ALERT_FIREWORKS_MIN_AMOUNT}€+ donation erscheint ein Feuwerk mit Sound</p>
+				<p>Ab {ALERT_STAR_RAIN_MIN_AMOUNT}€+ donation erscheint ein Sternenregenmit Sound</p>
+				<p>
+					Ab {ALERT_STAR_AND_FIREWORK_MIN_AMOUNT}€+ donation erscheint ein Sternenregen & ein Feuerwerk mit
+					Soundüberlagerung
+				</p>
 				<p>Die Fixzahlen buttons faken einen Wunsch-Alert GTA sound</p>
 				<p style={{ marginBottom: '24px' }}>
 					Wird eine Nachricht mitgeschickt erscheint eine Box über dem Donationalert
@@ -104,8 +113,8 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 					<FatButton onClick={emitDonationByButtonValue} value="10" active={true} style={{ color: 'white' }}>
 						10€
 					</FatButton>
-					<FatButton onClick={emitDonationByButtonValue} value="250" active={true} style={{ color: 'white' }}>
-						250€
+					<FatButton onClick={emitDonationByButtonValue} value="100" active={true} style={{ color: 'white' }}>
+						100€
 					</FatButton>
 					<FatButton onClick={emitDonationByButtonValue} value="500" active={true} style={{ color: 'white' }}>
 						500€
