@@ -11,12 +11,17 @@ import SimpleUserDbService from './SimpleUserDbService'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
 import path from 'path'
+import fetch from 'node-fetch'
+import { CmsContent } from './types/cms'
+import yaml from 'js-yaml'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
 	'https://charityroyale.redcouch.at',
 	'https://streamer.make-a-wish.at',
 ]
+
+const cmsDataUrl = 'https://raw.githubusercontent.com/charityroyale/webapplication/release/_cms/charity-royale.md'
 
 const port = process.env.PORT_BACKEND ?? 5200
 const simpleUserDbService = new SimpleUserDbService()
@@ -79,6 +84,26 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.post('/sync/cms', authenticateJWT, async (request, response) => {
+	const errors = validationResult(request)
+	if (!errors.isEmpty()) {
+		return response.status(400).json({ errors: errors.array() })
+	}
+
+	const rawResponseData = await fetch(cmsDataUrl)
+	const rawData = await rawResponseData.text()
+
+	yaml.loadAll(rawData, function (doc) {
+		if (doc !== null) {
+			const cmsData = doc as CmsContent
+			mawApiClient.cmsMawWishes = cmsData.upcoming
+			// return wish slugs of streamer
+			response.send(request.body)
+		}
+	})
+})
+
 app.post(
 	'/donation',
 	body('user').isString(),
@@ -138,5 +163,20 @@ const sessionManager = new SessionManager(io, jwtSecret)
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 mawApiClient.fetchMawData()
 mawApiClient.poll()
+
+const initialMawCmsData = async () => {
+	const rawResponseData = await fetch(cmsDataUrl)
+	const rawData = await rawResponseData.text()
+
+	yaml.loadAll(rawData, function (doc) {
+		if (doc !== null) {
+			const cmsData = doc as CmsContent
+			mawApiClient.cmsMawWishes = cmsData.upcoming
+		}
+	})
+}
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+initialMawCmsData()
+
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)

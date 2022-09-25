@@ -9,12 +9,12 @@ import { AiFillNotification } from 'react-icons/ai'
 import { FaHeart } from 'react-icons/fa'
 import { FaMicrophone } from 'react-icons/fa'
 import {
+	CMS_UPDATE,
 	DONATION_ALERT_UPDATE,
 	DONATION_TRIGGER,
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
-	MakeAWishInfoJsonDTO,
-	MAW_INFO_JSON_DATA_UPDATE,
+	REQUEST_CMS_DATA,
 	SETTINGS_UPDATE,
 	SpeakerType,
 	STATE_UPDATE,
@@ -38,6 +38,11 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
 	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
 	const [isDisabledWishSelected, setIsDisabledWishSelected] = useState(false)
+
+	const [isMounted, setIsMounted] = useState(false)
+	useEffect(() => {
+		setIsMounted(true)
+	}, [])
 
 	const emitVolumeUpdate = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.volume)
@@ -140,12 +145,11 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	)
 
 	useEffect(() => {
-		socket?.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData: MakeAWishInfoJsonDTO) => {
-			const wishItems = mawInfoJsonData.streamers[auth.channel].wishes
+		socket?.on(CMS_UPDATE, (cmsSlugs) => {
 			const wishSelectableItems = []
-			if (!Array.isArray(wishItems)) {
-				for (const key of Object.keys(wishItems)) {
-					wishSelectableItems.push({ label: formatWishSlug(wishItems[key].slug), value: wishItems[key].slug })
+			if (cmsSlugs.length > 0) {
+				for (const slug of cmsSlugs) {
+					wishSelectableItems.push({ label: formatWishSlug(slug), value: slug })
 				}
 			} else {
 				wishSelectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
@@ -169,6 +173,10 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 			}
 		})
 	}, [socket, auth.channel, wishes])
+
+	useEffect(() => {
+		socket?.emit(REQUEST_CMS_DATA)
+	}, [socket, isMounted])
 
 	return (
 		<GridLeftPanel>
