@@ -49,7 +49,7 @@ export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 		const fullfilledWishes = []
 
 		for (const wish of wishes) {
-			if (Number(wish.current_donation_sum) >= Number(wish.donation_goal)) {
+			if (Number(wish.current_donation_sum_net) >= Number(wish.donation_goal)) {
 				fullfilledWishes.push(wish)
 			}
 		}
@@ -79,7 +79,7 @@ export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 		) as DonationWidgetWishFullFilledAmount
 		wishAmount.visible = true
 		wishAmount.setText(
-			this.getFullFilledWishes()[this.currentFullFilledWishIndex].current_donation_sum.toString() + '€'
+			this.getFullFilledWishes()[this.currentFullFilledWishIndex].current_donation_sum_net.toString() + '€'
 		)
 	}
 	private setVisibleStaticContent() {

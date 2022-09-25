@@ -3,7 +3,6 @@ import fetch from 'node-fetch'
 import { logger } from './logger'
 
 class MakeAWishApiClient {
-	public static readonly mawUri2021 = 'https://streamer.make-a-wish.at/charityroyale2021/info.json'
 	public static readonly mawUri2022 = 'https://streamer.make-a-wish.at/charityroyale2022/info.json'
 	public mawInfoJsonData: null | MakeAWishInfoJsonDTO = null
 
@@ -31,7 +30,7 @@ class MakeAWishApiClient {
 
 	public fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
 		try {
-			const response = await fetch(MakeAWishApiClient.mawUri2021)
+			const response = await fetch(MakeAWishApiClient.mawUri2022)
 			if (response.ok) {
 				const data = (await response.json()) as MakeAWishInfoJsonDTO
 				this.mawInfoJsonData = data
