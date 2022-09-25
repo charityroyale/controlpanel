@@ -21,6 +21,8 @@ const whiteListedCommunicationOrigins = [
 	'https://streamer.make-a-wish.at',
 ]
 
+const cmsDataUrl = 'https://raw.githubusercontent.com/charityroyale/webapplication/release/_cms/charity-royale.md'
+
 const port = process.env.PORT_BACKEND ?? 5200
 const simpleUserDbService = new SimpleUserDbService()
 
@@ -83,15 +85,13 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.post('/sync/cms', async (request, response) => {
+app.post('/sync/cms', authenticateJWT, async (request, response) => {
 	const errors = validationResult(request)
 	if (!errors.isEmpty()) {
 		return response.status(400).json({ errors: errors.array() })
 	}
 
-	const rawResponseData = await fetch(
-		'https://raw.githubusercontent.com/charityroyale/webapplication/release/_cms/charity-royale.md'
-	)
+	const rawResponseData = await fetch(cmsDataUrl)
 	const rawData = await rawResponseData.text()
 
 	yaml.loadAll(rawData, function (doc) {
@@ -165,9 +165,7 @@ mawApiClient.fetchMawData()
 mawApiClient.poll()
 
 const initialMawCmsData = async () => {
-	const rawResponseData = await fetch(
-		'https://raw.githubusercontent.com/charityroyale/webapplication/release/_cms/charity-royale.md'
-	)
+	const rawResponseData = await fetch(cmsDataUrl)
 	const rawData = await rawResponseData.text()
 
 	yaml.loadAll(rawData, function (doc) {
