@@ -6,3 +6,7 @@ export const DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY = 'donationAlertAudioMagicalH
 export const DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY = 'donationAlertAudioYouWinEpic'
 export const DONATION_ALERT_DRUM_ROLL_AUDIO_KEY = 'donationAlertAudioDrumRoll'
 export const DONATION_ALERT_POWER_UP_AUDIO_KEY = 'donationAlertAudioPowerUp'
+
+export const DONATION_ALERT_SPECIAL_NANI_AUDIO_KEY = 'donationAlertSpecialAudioNani'
+export const DONATION_ALERT_SPECIAL_SMOKE_WEED_AUDIO_KEY = 'donationAlertSpecialAudioSmokeWeed'
+export const DONATION_ALERT_SPECIAL_YOU_GOT_THAT_SOMETHING_AUDIO_KEY = 'donationAlertSpecialAudioYouGotThatSomething'
