@@ -131,12 +131,15 @@ app.post(
 		const targetChannel = simpleUserDbService.findChannelByStreamer(request.body.streamer)
 		if (targetChannel !== undefined) {
 			/**
-			 * Includes whitelist for streamers 'krokoboss' and 'shredmir'
-			 * which get mapped to channel: 'krokoboss-shredmir'
+			 * Includes whitelist for streamers 'krokoboss' and 'shredmir', 'ichbinzarbex' and 'filow'
+			 * which get mapped to channel: 'krokoboss-shredmir', 'ichbinzarbex-filow'
 			 */
 			if (targetChannel === 'krokoboss' || targetChannel === 'shredmir') {
 				sessionManager.getOrCreateSession('krokoboss').sendDonation(donation)
 				sessionManager.getOrCreateSession('shredmir').sendDonation(donation)
+			} else if (targetChannel === 'ichbinzarbex' || targetChannel === 'filow') {
+				sessionManager.getOrCreateSession('ichbinzarbex').sendDonation(donation)
+				sessionManager.getOrCreateSession('filow').sendDonation(donation)
 			} else {
 				sessionManager.getOrCreateSession(targetChannel).sendDonation(donation)
 			}
