@@ -160,7 +160,7 @@ export class MakeWishInfoJsonRecentDonationDTO {
 
 export class MakeAWishInfoJsonTopDonationDTO {
 	public username = ''
-	public amount = '' // netto - pure - without taxes --> ! will be renamed by MAW
+	public amount_net = '' // netto - pure - without taxes --> ! will be renamed by MAW
 }
 
 export const TTS_SPEAKER = {
