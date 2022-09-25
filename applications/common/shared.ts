@@ -115,7 +115,7 @@ export class MakeAWishStreamerDTO {
 	public name = '' // streamer name
 	public type: StreamerType = 'main' // 'main' or 'community'
 	public current_donation_sum = ''
-	public current_donation_sum_net = ''
+	public current_donation_sum_net = '0'
 	public current_donation_count = -1
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
@@ -132,7 +132,7 @@ export class MakeAWishRootLevelWishDTO {
 	public donation_goal = ''
 	public country = '' // DE | AT
 	public current_donation_sum = '0'
-	public current_donation_sum_net = ''
+	public current_donation_sum_net = '0'
 	public current_donation_count = -1
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
@@ -143,7 +143,7 @@ export class MakeAWishStreamerWishDTO {
 	public id = -1 // some MAW internal ID
 	public slug = '' // identifier
 	public current_donation_sum = '0'
-	public current_donation_sum_net = ''
+	public current_donation_sum_net = '0'
 	public current_donation_count = -1
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
