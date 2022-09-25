@@ -52,8 +52,11 @@ import {
 	DONATION_ALERT_DRUM_ROLL_AUDIO_KEY,
 	DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY,
 	DONATION_ALERT_POWER_UP_AUDIO_KEY,
+	DONATION_ALERT_SPECIAL_NANI_AUDIO_KEY,
 	DONATION_ALERT_YOU_WIN_0_AUDIO_KEY,
 	DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY,
+	DONATION_ALERT_SPECIAL_SMOKE_WEED_AUDIO_KEY,
+	DONATION_ALERT_SPECIAL_YOU_GOT_THAT_SOMETHING_AUDIO_KEY,
 } from '../objects/config/sound'
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
@@ -212,6 +215,16 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.audio(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_epic.wav')
 		this.load.audio(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY, '/audio/donationalert/donation_alert_drum_roll.wav')
 		this.load.audio(DONATION_ALERT_POWER_UP_AUDIO_KEY, '/audio/donationalert/donation_alert_power_up.wav')
+
+		this.load.audio(DONATION_ALERT_SPECIAL_NANI_AUDIO_KEY, '/audio/donationalert/specials/donation_alert_nani.mp3')
+		this.load.audio(
+			DONATION_ALERT_SPECIAL_SMOKE_WEED_AUDIO_KEY,
+			'/audio/donationalert/specials/donation_alert_smoke_weed_everyday.mp3'
+		)
+		this.load.audio(
+			DONATION_ALERT_SPECIAL_YOU_GOT_THAT_SOMETHING_AUDIO_KEY,
+			'/audio/donationalert/specials/donation_alert_you_got_that_something.mp3'
+		)
 	}
 
 	create(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
