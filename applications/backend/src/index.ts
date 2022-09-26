@@ -147,8 +147,11 @@ app.post(
 	}
 )
 
-app.get('/streamers', (req, res) => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.get('/streamers', async (req, res) => {
 	try {
+		await simpleUserDbService.updateDataBase()
+
 		if (simpleUserDbService.getAllStreamers().length <= 0) {
 			logger.warn('Streamerdata is empty')
 			throw new Error('No streamers found')
