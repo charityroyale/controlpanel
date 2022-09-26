@@ -183,9 +183,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const headingText = this.getByName(donationWidgetWishHeadingName) as DonationWidgetWishHeading
 
 		// yeah this needs some improvements
-		if (headingText.text === 'Placeholder') {
-			this.updateWishContentText()
-		}
+		this.updateWishContentText()
 
 		headingText.setX(this.displayWidth - 315 * this.scale)
 		headingText.setY(15 * this.scale)
