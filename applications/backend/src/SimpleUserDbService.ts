@@ -7,10 +7,10 @@ export default class SimpleUserDbService {
 
 	constructor() {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		this.loadDatabase()
+		this.updateDataBase()
 	}
 
-	private async loadDatabase() {
+	public async updateDataBase() {
 		try {
 			const userEntries = await this.fetchUserEntries()
 			this.userDatabase = userEntries
