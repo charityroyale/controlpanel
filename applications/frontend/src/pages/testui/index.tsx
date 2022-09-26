@@ -57,7 +57,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 			amount: Number(amount) ? Number(amount) : randomnum,
 			net_amount: Number(amount) ? Number(amount) : randomnum,
 			timestamp: new Date().getTime() / 1000,
-			streamer: '',
+			streamer: (socket?.auth as SocketAuth).channel,
 			message,
 			fullFilledWish: false,
 		}
@@ -72,7 +72,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 				amount: Number(e.currentTarget.value),
 				net_amount: Number(e.currentTarget.value),
 				timestamp: new Date().getUTCMilliseconds(),
-				streamer: '',
+				streamer: (socket?.auth as SocketAuth).channel,
 				message,
 				fullFilledWish: true,
 			}

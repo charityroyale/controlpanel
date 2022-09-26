@@ -121,7 +121,11 @@ export default class Session {
 
 		socket.on(CREATE_TTS_FILE, async (donation: Donation) => {
 			if (donation.message) {
-				await updateTts(donation.message, TTS_SPEAKER[this.store.getState().settings.text2speech.language])
+				await updateTts(
+					donation.message,
+					TTS_SPEAKER[this.store.getState().settings.text2speech.language],
+					donation.streamer
+				)
 			}
 			this.sendDonation(donation)
 		})

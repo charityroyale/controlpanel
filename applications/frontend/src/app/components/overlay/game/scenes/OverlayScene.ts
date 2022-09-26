@@ -83,7 +83,7 @@ export const donationAlertWithMessageKey = 'donationAlertWithMessageVideo'
 
 const flaresAtlasKey = 'flaresAtlas'
 
-const TTS_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static/tts.mp3`
+const TTS_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static`
 export const TTS_KEY = 'ttsaudio'
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
@@ -240,13 +240,17 @@ export class OverlayScene extends Phaser.Scene {
 		this.ttsVolume = initialState.settings.text2speech.volume
 
 		const playTTS = () => {
-			this.sound.play(TTS_KEY, {
-				volume: this.ttsVolume > 0.2 ? this.ttsVolume - 0.1 : this.ttsVolume,
-			})
+			if (this.cache.audio.exists(TTS_KEY)) {
+				this.sound.play(TTS_KEY, {
+					volume: this.ttsVolume > 0.2 ? this.ttsVolume - 0.1 : this.ttsVolume,
+				})
+			} else {
+				console.log('Sadly the TTS failed. Contact orga in Discord.')
+			}
 		}
 		const loadTTS = () => {
 			this.cache.audio.remove(TTS_KEY)
-			const loader = this.load.audio(TTS_KEY, TTS_URL)
+			const loader = this.load.audio(TTS_KEY, `${TTS_URL}/${(socket.auth as SocketAuth).channel}.mp3`)
 			loader.on('complete', () => {
 				this.time.addEvent({
 					delay: 2500,
