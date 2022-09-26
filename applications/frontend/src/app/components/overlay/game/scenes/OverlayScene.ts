@@ -248,14 +248,17 @@ export class OverlayScene extends Phaser.Scene {
 				console.log('Sadly the TTS failed. Contact orga in Discord.')
 			}
 		}
+
+		let loader
 		const loadTTS = () => {
 			this.cache.audio.remove(TTS_KEY)
-			const loader = this.load.audio(TTS_KEY, `${TTS_URL}/${(socket.auth as SocketAuth).channel}.mp3`)
+			loader = this.load.audio(TTS_KEY, `${TTS_URL}/${(socket.auth as SocketAuth).channel}.mp3`)
 			loader.on('complete', () => {
 				this.time.addEvent({
 					delay: 2500,
 					callback: playTTS,
 				})
+				this.load.removeListener('complete')
 			})
 
 			loader.start()
