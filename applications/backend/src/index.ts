@@ -89,8 +89,11 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post('/sync/cms', authenticateJWT, async (request, response) => {
 	try {
+		console.log(JSON.stringify(request.body))
 		yaml.loadAll(request.body, function (doc) {
 			if (doc !== null) {
+				console.log(JSON.stringify(doc))
+				console.log(doc)
 				const cmsData = doc as CmsContent
 				mawApiClient.cmsMawWishes = cmsData.upcoming
 				logger.info('CMS data synced')
