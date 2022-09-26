@@ -26,7 +26,7 @@ export const formatWishSlug = (slug: string) => {
 	return `Wish: ${wishLabel}`
 }
 
-export const generateRandomDonation = (donationAmount?: number) => {
+export const generateRandomDonation = (streamer: string, donationAmount?: number) => {
 	const precision = 2
 	const maxAmount = 1250
 	const randomnum = donationAmount
@@ -53,7 +53,7 @@ export const generateRandomDonation = (donationAmount?: number) => {
 		amount: randomnum,
 		net_amount: randomnum,
 		timestamp: new Date().getTime() / 1000,
-		streamer: '',
+		streamer,
 		message,
 		fullFilledWish: false,
 	}

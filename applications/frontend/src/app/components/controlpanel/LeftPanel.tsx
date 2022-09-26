@@ -139,9 +139,9 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 
 	const emitRandomDonation = useCallback(
 		(donationAmount?: number) => {
-			socket?.emit(DONATION_TRIGGER_PREPROCESSING, generateRandomDonation(donationAmount))
+			socket?.emit(DONATION_TRIGGER_PREPROCESSING, generateRandomDonation(auth.channel, donationAmount))
 		},
-		[socket]
+		[socket, auth.channel]
 	)
 
 	useEffect(() => {
