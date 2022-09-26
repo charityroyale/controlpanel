@@ -98,10 +98,8 @@ app.post(
 	(request, response) => {
 		try {
 			const bodyContent = request.body
-			console.log(bodyContent)
 			yaml.loadAll(bodyContent, function (doc) {
 				if (doc !== null) {
-					console.log(doc)
 					const cmsData = doc as CmsContent
 					mawApiClient.cmsMawWishes = cmsData.upcoming
 					logger.info('CMS data synced')
