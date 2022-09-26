@@ -100,11 +100,8 @@ app.post('/sync/cms', async (request, response) => {
 		yaml.loadAll(rawData, function (doc) {
 			if (doc !== null) {
 				const cmsData = doc as CmsContent
-				logger.info('CMS data title ' + cmsData.title)
 				mawApiClient.cmsMawWishes = cmsData.upcoming
 				logger.info('CMS data synced')
-			} else {
-				logger.warn('No CMS data found')
 			}
 		})
 	} catch (e) {
@@ -134,14 +131,15 @@ app.post(
 			 * Includes whitelist for streamers 'krokoboss' and 'shredmir', 'ichbinzarbex' and 'filow'
 			 * which get mapped to channel: 'krokoboss-shredmir', 'ichbinzarbex-filow'
 			 */
+
 			if (targetChannel === 'krokoboss' || targetChannel === 'shredmir') {
-				sessionManager.getOrCreateSession('krokoboss').sendDonation(donation)
-				sessionManager.getOrCreateSession('shredmir').sendDonation(donation)
+				sessionManager.getOrCreateSession('krokoboss').sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession('shredmir').sendDonationPreprocessing(donation)
 			} else if (targetChannel === 'ichbinzarbex' || targetChannel === 'filow') {
-				sessionManager.getOrCreateSession('ichbinzarbex').sendDonation(donation)
-				sessionManager.getOrCreateSession('filow').sendDonation(donation)
+				sessionManager.getOrCreateSession('ichbinzarbex').sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession('filow').sendDonationPreprocessing(donation)
 			} else {
-				sessionManager.getOrCreateSession(targetChannel).sendDonation(donation)
+				sessionManager.getOrCreateSession(targetChannel).sendDonationPreprocessing(donation)
 			}
 		}
 

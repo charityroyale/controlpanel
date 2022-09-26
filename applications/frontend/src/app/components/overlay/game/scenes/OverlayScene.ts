@@ -1,5 +1,4 @@
 import {
-	DONATION_TRIGGER,
 	GlobalState,
 	MAW_INFO_JSON_DATA_UPDATE,
 	SocketEventsMap,
@@ -7,6 +6,10 @@ import {
 	REQUEST_STATE,
 	STATE_UPDATE,
 	WISH_FULLFILLED_TRIGGER,
+	DONATION_TRIGGER,
+	CREATE_TTS_FILE,
+	Donation,
+	DONATION_TRIGGER_PREPROCESSING,
 } from '@cp/common'
 
 import Phaser, { Physics } from 'phaser'
@@ -148,6 +151,10 @@ export class OverlayScene extends Phaser.Scene {
 			this.isLockedOverlay = state.settings.isLockedOverlay
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {
+			this.events.emit('donationTrigger', donation)
+		})
+
+		config.socket.on(DONATION_TRIGGER_PREPROCESSING, (donation) => {
 			this.alert?.handleDonation(donation)
 		})
 
@@ -250,6 +257,9 @@ export class OverlayScene extends Phaser.Scene {
 			loader.start()
 		}
 		this.events.on('loadtts', loadTTS)
+		this.events.on('triggerTtsProcessing', (donation: Donation) => {
+			socket.emit(CREATE_TTS_FILE, donation)
+		})
 
 		this.isLockedOverlay = initialState.settings.isLockedOverlay
 

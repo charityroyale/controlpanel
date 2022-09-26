@@ -127,17 +127,20 @@ export class DonationBehaviour {
 	}
 
 	private triggerAlert(donation: Donation) {
-		// default behaviour
-		this.createBanner(donation)
-		this.createTextElements(donation)
+		this.alert.scene.events.emit('triggerTtsProcessing', donation)
+		this.alert.scene.events.once('donationTrigger', (donation2: Donation) => {
+			// default behaviour
+			this.createBanner(donation2)
+			this.createTextElements(donation2)
 
-		// amount based effects
-		this.createVisualEffects(donation.net_amount)
+			// amount based effects
+			this.createVisualEffects(donation2.net_amount)
 
-		if (donation.message && donation.net_amount >= this.ttsMinDonationAmount) {
-			this.alert.scene.events.emit('loadtts') // and play
-		}
-		this.alert.soundbehaviour.playSound(donation)
+			if (donation2.message && donation2.net_amount >= this.ttsMinDonationAmount) {
+				this.alert.scene.events.emit('loadtts') // and play
+			}
+			this.alert.soundbehaviour.playSound(donation2)
+		})
 	}
 
 	private createBanner(donation: Donation) {
