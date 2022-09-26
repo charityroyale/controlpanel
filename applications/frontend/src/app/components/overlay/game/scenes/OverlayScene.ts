@@ -61,7 +61,6 @@ import {
 
 const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 
-export const FIREWORKS_START_AUDIO_KEY = 'fireworksStartAudio'
 export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
 export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
 export const STRAR_SOUND_AUDIO_KEY = 'starSound'
@@ -199,22 +198,21 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
 
 		// AUDIO ASSETS
-		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.wav')
+		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/volume_change.mp3')
 
-		this.load.audio(FIREWORKS_START_AUDIO_KEY, '/audio/fireworks.ogg')
-		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.ogg')
-		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.ogg')
-		this.load.audio(STAR_RAIN_SOUND_AUDIO_KEY, '/audio/star_rain.ogg')
+		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/fireworks_sound_1.mp3')
+		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/fireworks_sound_2.mp3')
+		this.load.audio(STAR_RAIN_SOUND_AUDIO_KEY, '/audio/star_rain.mp3')
 		this.load.audio(GTA_RESPECT_SOUND_AUDIO_KEY, '/audio/gta_respect.mp3')
 
 		this.load.audio(DEFAULT_DONATION_ALERT_AUDIO_KEY, '/audio/donation_alert.mp3')
-		this.load.audio(DONATION_ALERT_COIN_0_AUDIO_KEY, '/audio/donationalert/donation_alert_coin_0.wav')
-		this.load.audio(DONATION_ALERT_COIN_1_AUDIO_KEY, '/audio/donationalert/donation_alert_coin_1.wav')
-		this.load.audio(DONATION_ALERT_YOU_WIN_0_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_0.wav')
-		this.load.audio(DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY, '/audio/donationalert/donation_alert_magical_harp.wav')
-		this.load.audio(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_epic.wav')
-		this.load.audio(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY, '/audio/donationalert/donation_alert_drum_roll.wav')
-		this.load.audio(DONATION_ALERT_POWER_UP_AUDIO_KEY, '/audio/donationalert/donation_alert_power_up.wav')
+		this.load.audio(DONATION_ALERT_COIN_0_AUDIO_KEY, '/audio/donationalert/donation_alert_coin_0.mp3')
+		this.load.audio(DONATION_ALERT_COIN_1_AUDIO_KEY, '/audio/donationalert/donation_alert_coin_1.mp3')
+		this.load.audio(DONATION_ALERT_YOU_WIN_0_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_0.mp3')
+		this.load.audio(DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY, '/audio/donationalert/donation_alert_magical_harp.mp3')
+		this.load.audio(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY, '/audio/donationalert/donation_alert_you_win_epic.mp3')
+		this.load.audio(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY, '/audio/donationalert/donation_alert_drum_roll.mp3')
+		this.load.audio(DONATION_ALERT_POWER_UP_AUDIO_KEY, '/audio/donationalert/donation_alert_power_up.mp3')
 
 		this.load.audio(DONATION_ALERT_SPECIAL_NANI_AUDIO_KEY, '/audio/donationalert/specials/donation_alert_nani.mp3')
 		this.load.audio(
