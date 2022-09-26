@@ -14,6 +14,7 @@ import path from 'path'
 import fetch from 'node-fetch'
 import { CmsContent } from './types/cms'
 import yaml from 'js-yaml'
+import bodyParser from 'body-parser'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -87,9 +88,9 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.post('/sync/cms', authenticateJWT, async (request, response) => {
+app.post('/sync/cms', bodyParser.text(), authenticateJWT, (request, response) => {
 	try {
-		const bodyContent = await request.body.text()
+		const bodyContent = request.body
 		console.log(bodyContent)
 		yaml.loadAll(bodyContent, function (doc) {
 			if (doc !== null) {
