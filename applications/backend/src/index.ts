@@ -88,9 +88,10 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.post('/sync/cms', bodyParser.text(), authenticateJWT, (request, response) => {
+app.post('/sync/cms', bodyParser.raw(), authenticateJWT, (request, response) => {
 	try {
 		const bodyContent = request.body
+		console.log('withbodyparser')
 		console.log(bodyContent)
 		yaml.loadAll(bodyContent, function (doc) {
 			if (doc !== null) {
