@@ -89,8 +89,9 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post('/sync/cms', authenticateJWT, async (request, response) => {
 	try {
-		console.log(request.body)
-		yaml.loadAll(request.body, function (doc) {
+		const bodyContent = await request.body.text()
+		console.log(bodyContent)
+		yaml.loadAll(bodyContent, function (doc) {
 			if (doc !== null) {
 				console.log(doc)
 				const cmsData = doc as CmsContent
