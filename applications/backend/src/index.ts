@@ -88,25 +88,32 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.post('/sync/cms', bodyParser.raw(), authenticateJWT, (request, response) => {
-	try {
-		const bodyContent = request.body
-		console.log('withbodyparser')
-		console.log(bodyContent)
-		yaml.loadAll(bodyContent, function (doc) {
-			if (doc !== null) {
-				console.log(doc)
-				const cmsData = doc as CmsContent
-				mawApiClient.cmsMawWishes = cmsData.upcoming
-				logger.info('CMS data synced')
-			}
-		})
-		response.sendStatus(200)
-	} catch (e) {
-		logger.error(e)
-		response.sendStatus(500)
+app.post(
+	'/sync/cms',
+	bodyParser.raw({
+		type: 'application/octet-stream',
+		limit: '5mb',
+	}),
+	authenticateJWT,
+	(request, response) => {
+		try {
+			const bodyContent = request.body
+			console.log(bodyContent)
+			yaml.loadAll(bodyContent, function (doc) {
+				if (doc !== null) {
+					console.log(doc)
+					const cmsData = doc as CmsContent
+					mawApiClient.cmsMawWishes = cmsData.upcoming
+					logger.info('CMS data synced')
+				}
+			})
+			response.sendStatus(200)
+		} catch (e) {
+			logger.error(e)
+			response.sendStatus(500)
+		}
 	}
-})
+)
 
 app.post(
 	'/donation',
