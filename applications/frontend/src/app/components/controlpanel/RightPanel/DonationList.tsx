@@ -15,8 +15,8 @@ export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: D
 						</DonationHeader>
 						<DonationCenter>{donation.message}</DonationCenter>
 						<DonationBottom>
-							<DonationAmount highlight={donation.net_amount >= 50}>
-								{formatCurrency(donation.net_amount)}
+							<DonationAmount highlight={donation.amount_net >= 50}>
+								{formatCurrency(donation.amount_net)}
 							</DonationAmount>
 						</DonationBottom>
 					</DonationItem>

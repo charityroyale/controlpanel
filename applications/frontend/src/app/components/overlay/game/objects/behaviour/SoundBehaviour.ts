@@ -21,27 +21,27 @@ export class SoundBehaviour {
 	}
 
 	public playSound(donation: Donation) {
-		const { net_amount } = donation
+		const { amount_net } = donation
 
-		if (net_amount === 13.37) {
+		if (amount_net === 13.37) {
 			this.scene.sound.play(DONATION_ALERT_SPECIAL_NANI_AUDIO_KEY)
-		} else if (net_amount === 69) {
+		} else if (amount_net === 69) {
 			this.scene.sound.play(DONATION_ALERT_SPECIAL_YOU_GOT_THAT_SOMETHING_AUDIO_KEY)
-		} else if (net_amount === 420) {
+		} else if (amount_net === 420) {
 			this.scene.sound.play(DONATION_ALERT_SPECIAL_SMOKE_WEED_AUDIO_KEY)
-		} else if (net_amount < 5) {
+		} else if (amount_net < 5) {
 			this.scene.sound.play(DONATION_ALERT_COIN_0_AUDIO_KEY)
-		} else if (net_amount < 10) {
+		} else if (amount_net < 10) {
 			this.scene.sound.play(DEFAULT_DONATION_ALERT_AUDIO_KEY)
-		} else if (net_amount < 50) {
+		} else if (amount_net < 50) {
 			this.scene.sound.play(DONATION_ALERT_COIN_1_AUDIO_KEY)
-		} else if (net_amount < 100) {
+		} else if (amount_net < 100) {
 			this.scene.sound.play(DONATION_ALERT_YOU_WIN_0_AUDIO_KEY)
-		} else if (net_amount < 250) {
+		} else if (amount_net < 250) {
 			this.scene.sound.play(DONATION_ALERT_POWER_UP_AUDIO_KEY)
-		} else if (net_amount < 500) {
+		} else if (amount_net < 500) {
 			this.scene.sound.play(DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY)
-		} else if (net_amount < 1000) {
+		} else if (amount_net < 1000) {
 			this.scene.sound.play(DONATION_ALERT_DRUM_ROLL_AUDIO_KEY)
 		} else {
 			this.scene.sound.play(DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY)

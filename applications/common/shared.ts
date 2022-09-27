@@ -42,7 +42,7 @@ export interface DonationWidgetState {
 export interface Donation {
 	user: string
 	amount: number
-	net_amount: number // netto - pure without taxes
+	amount_net: number // netto - pure without taxes
 	message: string
 	streamer: string
 	timestamp: number

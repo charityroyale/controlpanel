@@ -117,7 +117,7 @@ app.post(
 	'/donation',
 	body('user').isString(),
 	body('amount').isFloat(),
-	body('net_amount').isFloat(),
+	body('amount_net').isFloat(),
 	body('timestamp').isInt(),
 	body('message').isString(),
 	body('streamer').isString(),

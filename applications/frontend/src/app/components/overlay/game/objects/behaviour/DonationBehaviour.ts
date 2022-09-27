@@ -99,7 +99,7 @@ export class DonationBehaviour {
 		donationAlert: DonationAlertBanner,
 		donationAlertContainer: DonationBannerContainer
 	) => {
-		const formatedDonationAmount = formatDonationAlertCurrenty(donation.net_amount)
+		const formatedDonationAmount = formatDonationAlertCurrenty(donation.amount_net)
 		const donationAlertHeaderText = new DonationBannerHeaderText(
 			this.alert.scene,
 			0,
@@ -134,9 +134,9 @@ export class DonationBehaviour {
 			this.createTextElements(donation2)
 
 			// amount based effects
-			this.createVisualEffects(donation2.net_amount)
+			this.createVisualEffects(donation2.amount_net)
 
-			if (donation2.message && donation2.net_amount >= this.ttsMinDonationAmount) {
+			if (donation2.message && donation2.amount_net >= this.ttsMinDonationAmount) {
 				this.alert.scene.events.emit('loadtts') // and play
 			}
 			this.alert.soundbehaviour.playSound(donation2)
