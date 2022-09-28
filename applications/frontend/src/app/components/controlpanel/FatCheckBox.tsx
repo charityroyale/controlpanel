@@ -26,8 +26,8 @@ export const FatCheckbox: FunctionComponent<React.PropsWithChildren<FatInputProp
 const InputWrapper = styled.div`
 	margin-bottom: ${(p) => p.theme.space.s}px;
 	position: relative;
-	margin-left: 24px;
-	width: auto !important;
+	width: min-content !important;
+	margin-left: 12px;
 `
 
 const FatLabel = styled.label`

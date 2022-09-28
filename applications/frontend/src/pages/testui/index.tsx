@@ -93,7 +93,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 
 					<FatCheckbox
 						checked={isFullFilledWish}
-						label="Complete Wish"
+						label="Complete"
 						name="isWishFullFilled"
 						onChange={(e) => setIsFullFilledWish(e.currentTarget.checked)}
 					/>
@@ -115,9 +115,11 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 					></textarea>
 				</TestUIMessageWrapper>
 
-				<FatButton onClick={emitCustomDonation} active={true} style={{ color: 'white' }}>
-					Send Donation
-				</FatButton>
+				<TestUIButtonWrapper style={{ display: 'flex' }}>
+					<FatButton onClick={emitCustomDonation} active={true} style={{ color: 'white' }}>
+						Send Donation
+					</FatButton>
+				</TestUIButtonWrapper>
 			</TestUIMainWrapper>
 		</>
 	)
