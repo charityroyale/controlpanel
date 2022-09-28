@@ -1,12 +1,13 @@
-export const DEFAULT_DONATION_ALERT_AUDIO_KEY = 'donationAlertAudio'
-export const DONATION_ALERT_COIN_0_AUDIO_KEY = 'donationAlertAudioCoin0'
-export const DONATION_ALERT_COIN_1_AUDIO_KEY = 'donationAlertAudioCoin1'
-export const DONATION_ALERT_YOU_WIN_0_AUDIO_KEY = 'donationAlertAudioYouWinAudio0'
-export const DONATION_ALERT_MAGICAL_HARP_AUDIO_KEY = 'donationAlertAudioMagicalHarp'
-export const DONATION_ALERT_YOU_WIN_EPIC_AUDIO_KEY = 'donationAlertAudioYouWinEpic'
-export const DONATION_ALERT_DRUM_ROLL_AUDIO_KEY = 'donationAlertAudioDrumRoll'
-export const DONATION_ALERT_POWER_UP_AUDIO_KEY = 'donationAlertAudioPowerUp'
+// UI
+export const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
 
-export const DONATION_ALERT_SPECIAL_NANI_AUDIO_KEY = 'donationAlertSpecialAudioNani'
-export const DONATION_ALERT_SPECIAL_SMOKE_WEED_AUDIO_KEY = 'donationAlertSpecialAudioSmokeWeed'
-export const DONATION_ALERT_SPECIAL_YOU_GOT_THAT_SOMETHING_AUDIO_KEY = 'donationAlertSpecialAudioYouGotThatSomething'
+// SFX + VFX
+export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
+export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
+export const STRAR_SOUND_AUDIO_KEY = 'starSound'
+export const STAR_RAIN_SOUND_AUDIO_KEY = 'starRainAudio'
+export const GTA_RESPECT_SOUND_AUDIO_KEY = 'gtaRespectAudio'
+
+// ALERTS
+export const DONATION_ALERT_YEY_AUDIO_KEY = 'donationAlertAudioYey'
+export const DONATION_ALERT_CLICK_NOICE_AUDIO_KEY = 'donationAlertAudioClickNoice'
