@@ -1,13 +1,5 @@
 import { Donation } from '@cp/common'
-import {
-	blueStarKey,
-	donationAlertKey,
-	donationAlertWithMessageKey,
-	FIREWORKS_SOUND_1_AUDIO_KEY,
-	FIREWORKS_SOUND_2_AUDIO_KEY,
-	STAR_RAIN_SOUND_AUDIO_KEY,
-	TTS_KEY,
-} from '../../scenes/OverlayScene'
+import { blueStarKey, donationAlertKey, donationAlertWithMessageKey, TTS_KEY } from '../../scenes/OverlayScene'
 import { Star } from '../Star'
 import { DonationAlertBanner } from '../containers/donationBanner/DonationBanner'
 import {
@@ -23,6 +15,7 @@ import {
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 } from '../containers/donationBanner/donationSpecialEffectsConfig'
 import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
+import { FIREWORKS_SOUND_1_AUDIO_KEY, FIREWORKS_SOUND_2_AUDIO_KEY, STAR_RAIN_SOUND_AUDIO_KEY } from '../config/sound'
 const { FloatBetween } = Phaser.Math
 
 export class DonationBehaviour {
