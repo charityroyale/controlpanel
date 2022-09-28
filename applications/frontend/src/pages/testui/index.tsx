@@ -18,6 +18,8 @@ import {
 	ALERT_STAR_AND_FIREWORK_MIN_AMOUNT,
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 } from '../../app/components/overlay/game/objects/containers/donationBanner/donationSpecialEffectsConfig'
+import { generateRandomDonation } from '../../app/lib/utils'
+import { FatCheckbox } from '../../app/components/controlpanel/FatCheckBox'
 
 export interface TestUIPageProps {
 	title: string
@@ -27,60 +29,29 @@ export interface TestUIPageProps {
 
 const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	const { title, user } = props
-	const [message, setMessage] = useState('')
+	const [message, setMessage] = useState('Hello, lets make a wish.')
 	const { socket } = useSocket()
-	const [amount, setAmount] = useState('')
+	const [amount, setAmount] = useState('10')
+	const [isFullFilledWish, setIsFullFilledWish] = useState(false)
 
-	const emitRandomDonation = useCallback(() => {
-		const precision = 2
-		const maxAmount = 6000
-		const randomnum =
-			Math.floor(Math.random() * (maxAmount * precision - 1 * precision) + 1 * precision) / (1 * precision)
+	const emitRandomDonation = () => {
+		const donation = generateRandomDonation((socket?.auth as SocketAuth).channel)
+		socket?.emit(DONATION_TRIGGER_PREPROCESSING, donation)
+	}
 
-		const a = ['TestUserA_', 'TestUserB_', 'TestUserC_']
-		const b = ['Lasagne', 'StrawBerry', 'Spaghetti']
-
-		const rA = Math.floor(Math.random() * a.length)
-		const rB = Math.floor(Math.random() * b.length)
-		const name = a[rA] + b[rB]
-
-		const testMessages = [
-			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
-			'I love you <3!',
-			'Lorem ipsum dolor sit amet, consetetur sadipscingddd elitr, sed diam nonumy ei Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
-		]
-		const message = testMessages[Math.floor(Math.random() * testMessages.length)]
-
+	const emitCustomDonation = () => {
 		const donation: Donation = {
-			user: name,
-			amount: Number(amount) ? Number(amount) : randomnum,
-			amount_net: Number(amount) ? Number(amount) : randomnum,
+			user: 'TEST_USER',
+			amount: Number(amount) + 1,
+			amount_net: Number(amount),
 			timestamp: new Date().getTime() / 1000,
 			streamer: (socket?.auth as SocketAuth).channel,
 			message,
-			fullFilledWish: false,
+			fullFilledWish: isFullFilledWish,
 		}
 
 		socket?.emit(DONATION_TRIGGER_PREPROCESSING, donation)
-	}, [socket, amount])
-
-	const emitDonationByButtonValue = useCallback(
-		(e: React.MouseEvent<HTMLButtonElement>) => {
-			const donation: Donation = {
-				user: 'alertUser',
-				amount: Number(e.currentTarget.value),
-				amount_net: Number(e.currentTarget.value),
-				timestamp: new Date().getUTCMilliseconds(),
-				streamer: (socket?.auth as SocketAuth).channel,
-				message,
-				fullFilledWish: true,
-			}
-
-			socket?.emit(DONATION_TRIGGER_PREPROCESSING, donation)
-		},
-		[socket, message]
-	)
+	}
 
 	return (
 		<>
@@ -98,7 +69,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 					Ab {ALERT_STAR_AND_FIREWORK_MIN_AMOUNT}€+ donation erscheint ein Sternenregen & ein Feuerwerk mit
 					Soundüberlagerung
 				</p>
-				<p>Die Fixzahlen buttons faken einen Wunsch-Alert GTA sound</p>
+				<p>Complete Hakerl faked einen Spende die das Wunschziel erreicht (GTA Respect AlertSound)</p>
 				<p style={{ marginBottom: '24px' }}>
 					Wird eine Nachricht mitgeschickt erscheint eine Box über dem Donationalert
 				</p>
@@ -106,29 +77,27 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 					<FatButton onClick={emitRandomDonation} active={true} style={{ color: 'white' }}>
 						Random donation
 					</FatButton>
-
-					<FatButton onClick={emitDonationByButtonValue} value="2" active={true} style={{ color: 'white' }}>
-						2€
-					</FatButton>
-					<FatButton onClick={emitDonationByButtonValue} value="10" active={true} style={{ color: 'white' }}>
-						10€
-					</FatButton>
-					<FatButton onClick={emitDonationByButtonValue} value="100" active={true} style={{ color: 'white' }}>
-						100€
-					</FatButton>
-					<FatButton onClick={emitDonationByButtonValue} value="500" active={true} style={{ color: 'white' }}>
-						500€
-					</FatButton>
 				</TestUIButtonWrapper>
+				<TestUIHeadline>
+					<strong>Custom donation</strong>
+				</TestUIHeadline>
 
-				<div style={{ margin: '0px 8px 24px 8px' }}>
+				<TestUICustomInputWrapper style={{ margin: '0px 8px 24px 8px' }}>
 					<FatInput
 						label="Custom Amount"
 						name="amount"
 						value={amount}
+						style={{ width: '100%' }}
 						onChange={(e) => setAmount(e.currentTarget.value)}
 					></FatInput>
-				</div>
+
+					<FatCheckbox
+						checked={isFullFilledWish}
+						label="Complete"
+						name="isWishFullFilled"
+						onChange={(e) => setIsFullFilledWish(e.currentTarget.checked)}
+					/>
+				</TestUICustomInputWrapper>
 
 				<TestUIMessageWrapper>
 					<p style={{ marginBottom: '8px' }}>
@@ -145,6 +114,12 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 						rows={15}
 					></textarea>
 				</TestUIMessageWrapper>
+
+				<TestUIButtonWrapper style={{ display: 'flex' }}>
+					<FatButton onClick={emitCustomDonation} active={true} style={{ color: 'white' }}>
+						Send Donation
+					</FatButton>
+				</TestUIButtonWrapper>
 			</TestUIMainWrapper>
 		</>
 	)
@@ -170,6 +145,13 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ re
 	}
 })
 ;(TestUIPage as PageWithLayoutType).layout = MainLayout
+
+const TestUICustomInputWrapper = styled.div`
+	display: flex;
+	& > * {
+		width: 100%;
+	}
+`
 
 const TestUIButtonWrapper = styled.div`
 	display: flex;
