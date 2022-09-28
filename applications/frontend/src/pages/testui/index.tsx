@@ -69,7 +69,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 					Ab {ALERT_STAR_AND_FIREWORK_MIN_AMOUNT}€+ donation erscheint ein Sternenregen & ein Feuerwerk mit
 					Soundüberlagerung
 				</p>
-				<p>Die Fixzahlen buttons faken einen Wunsch-Alert GTA sound</p>
+				<p>Complete Hakerl faked einen Spende die das Wunschziel erreicht (GTA Respect AlertSound)</p>
 				<p style={{ marginBottom: '24px' }}>
 					Wird eine Nachricht mitgeschickt erscheint eine Box über dem Donationalert
 				</p>
