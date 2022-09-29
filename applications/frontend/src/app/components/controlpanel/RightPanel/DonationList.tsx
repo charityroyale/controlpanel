@@ -15,6 +15,7 @@ export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: D
 						</DonationHeader>
 						<DonationCenter>{donation.message}</DonationCenter>
 						<DonationBottom>
+							<DonationAmount highlight={true}>{donation.fullFilledWish ? 'Fullfilled Wish' : ''}</DonationAmount>
 							<DonationAmount highlight={donation.amount_net >= 50}>
 								{formatCurrency(donation.amount_net)}
 							</DonationAmount>
@@ -67,6 +68,6 @@ const DonationDate = styled.div`
 
 const DonationBottom = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
 	padding-top: 2px;
 `
