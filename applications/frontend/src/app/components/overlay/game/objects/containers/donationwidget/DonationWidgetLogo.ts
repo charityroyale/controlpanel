@@ -2,6 +2,8 @@ import { DonationWidgetState } from '@cp/common'
 import { CHARITY_ROYALE_LOGO_IMAGE_KEY, MAKE_A_WISH_LOGO_IMAGE_KEY } from '../../../scenes/OverlayScene'
 
 export const donationWidgetLogoName = 'donationWidgetLogo'
+
+const textureSwapInterval = 60000 // ms
 export class DonationWidgetLogo extends Phaser.GameObjects.Sprite {
 	constructor(scene: Phaser.Scene, x: number, y: number, state: DonationWidgetState) {
 		super(scene, x, y, CHARITY_ROYALE_LOGO_IMAGE_KEY)
@@ -14,7 +16,7 @@ export class DonationWidgetLogo extends Phaser.GameObjects.Sprite {
 
 	private startRotateTexture() {
 		this.scene.time.addEvent({
-			delay: 5000,
+			delay: textureSwapInterval,
 			callback: () => this.swapTexture(),
 			loop: true,
 		})
