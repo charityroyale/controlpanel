@@ -47,6 +47,12 @@ export class DonationBehaviour {
 		this.starFollowParticle = starFollowParticle
 		this.fireworksEmitter = fireworksEmitter
 		this.ttsMinDonationAmount = ttsMinDonationAmount
+
+		this.alert.scene.events.on('ttsUpdated', (ttsMinDonationAmount: number) => {
+			if (ttsMinDonationAmount !== this.ttsMinDonationAmount) {
+				this.ttsMinDonationAmount = ttsMinDonationAmount
+			}
+		})
 		this.startListenForDonations()
 	}
 

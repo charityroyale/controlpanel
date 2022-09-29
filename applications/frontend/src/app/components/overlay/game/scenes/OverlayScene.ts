@@ -140,6 +140,8 @@ export class OverlayScene extends Phaser.Scene {
 			}
 
 			this.isLockedOverlay = state.settings.isLockedOverlay
+
+			this.events.emit('ttsUpdated', state.settings.text2speech.minDonationAmount)
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.events.emit('donationTrigger', donation)
