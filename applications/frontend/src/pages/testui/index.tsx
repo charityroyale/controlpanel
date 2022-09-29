@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
