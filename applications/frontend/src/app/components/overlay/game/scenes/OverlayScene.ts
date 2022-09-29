@@ -57,11 +57,14 @@ import {
 	STAR_RAIN_SOUND_AUDIO_KEY,
 	VOLUME_CHANGE_AUDIO_KEY,
 } from '../objects/config/sound'
+import { DonationWidgetLogo } from '../objects/containers/donationwidget/DonationWidgetLogo'
 
+export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
 export const DONATION_WIDGET_STATE_LOADING = 'donatioNWidgetStateLoading'
 export const DONATION_WIDGET_FULLFILLED = 'donationWidgetStateFullfilled'
 export const DONATION_WIDGET_LEFT = 'donationWidgetLeft'
+export const CHARITY_ROYALE_LOGO_IMAGE_KEY = 'charityRoyaleLogoImage'
 
 export const blueStarKey = 'blueStar'
 const whiteStarFollowerKey = 'whiteFollower'
@@ -187,8 +190,11 @@ export class OverlayScene extends Phaser.Scene {
 			frameHeight: 250,
 		})
 		this.load.image(whiteStarFollowerKey, '/game/stars/star_flare.png')
+
+		this.load.image(MAKE_A_WISH_LOGO_IMAGE_KEY, '/game/donationwidget/donation_widget_make_a_wish_logo_white.png')
+		this.load.image(CHARITY_ROYALE_LOGO_IMAGE_KEY, '/game/donationwidget/donation_widget_charity_royale_logo.png')
 		this.load.image(DONATION_WIDGET_BACKGROUND, '/game/donationwidget/donationwidget_frame.png')
-		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donationwidget_left_logo.png')
+		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donation_widget_left_without_logo.png')
 		this.load.image(DONATION_WIDGET_FULLFILLED, '/game/donationwidget/donationwidget_wish_fullfilled.png')
 		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
 
@@ -415,6 +421,8 @@ export class OverlayScene extends Phaser.Scene {
 			'000,00 €'
 		)
 
+		const donationWidgetIcon = new DonationWidgetLogo(this, 0, 0, initialState.donationWidget)
+
 		const donationWidgetLoaderFrame = new DonationWidgetLoaderFrame(this, 0, 0, initialState.donationWidget)
 
 		const donationWidgetLoaderFrameText = new DonationWidgetLoaderFrameText(this, 0, 0, '', initialState.donationWidget)
@@ -439,6 +447,7 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetWishLastDonationStatic,
 				donationWidgetWishLastDonation,
 				donationWidgetProgressBarText,
+				donationWidgetIcon,
 				donationWidgetLoaderFrame,
 				donationWidgetLoaderFrameText,
 			],

@@ -4,6 +4,7 @@ import { Socket } from 'socket.io-client'
 import { loadTextItems } from '../../config/content'
 import { DonationWidgetFullFilled, donationWidgetFullFilledName } from './DonationWidgetFullFilled'
 import { DonationWidgetLoaderFrame, donationWidgetLoaderFrameName } from './DonationWidgetLoaderFrame'
+import { DonationWidgetLogo, donationWidgetLogoName } from './DonationWidgetLogo'
 import {
 	DonationWidgetProgressBar,
 	donationWidgetProgressBarBackgroundName,
@@ -270,6 +271,12 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		) as DonationWidgetWishFullFilledAmount
 		donationWidgetWishFullFilledAmount.setX(this.displayWidth - 368 * this.scale)
 		donationWidgetWishFullFilledAmount.setY(this.displayHeight + 25 * this.scale)
+
+		// logo
+		const donationWidgetIcon = this.getByName(donationWidgetLogoName) as DonationWidgetLogo
+		donationWidgetIcon.setX(this.displayWidth - 868 * this.scale)
+		donationWidgetIcon.setY(this.displayHeight - 100 * this.scale)
+		donationWidgetIcon.setScale(this.scale * 0.65)
 
 		// loader text
 		const donationWidgetLoaderFrameText = this.getByName(
