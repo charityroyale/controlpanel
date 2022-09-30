@@ -140,14 +140,14 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
 		lastDonation.setText(
 			`${this.donationWidgetState.wish?.info?.recent_donations[0]?.username ?? 'DEIN NAME'} ${
-				this.donationWidgetState.wish?.info?.recent_donations[0]?.amount_net ?? '-'
+				this.donationWidgetState.wish?.info?.recent_donations[0]?.amount_net ?? ''
 			} €`
 		)
 
 		const topDonation = this.getByName(donationWidgetWishTopDonationName) as DonationWidgetWishTopDonation
 		topDonation.setText(
 			`${this.donationWidgetState.wish?.info?.top_donors[0]?.username ?? 'DEIN NAME'} ${
-				this.donationWidgetState.wish?.info?.top_donors[0]?.amount_net ?? '-' // is net amount (until change)
+				this.donationWidgetState.wish?.info?.top_donors[0]?.amount_net ?? ''
 			} €`
 		)
 
