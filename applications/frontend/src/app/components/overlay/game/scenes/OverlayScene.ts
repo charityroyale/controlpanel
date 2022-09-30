@@ -193,7 +193,10 @@ export class OverlayScene extends Phaser.Scene {
 		})
 		this.load.image(whiteStarFollowerKey, '/game/stars/star_flare.png')
 
-		this.load.image(MAKE_A_WISH_LOGO_IMAGE_KEY, '/game/donationwidget/donation_widget_make_a_wish_logo_white.png')
+		this.load.image(
+			MAKE_A_WISH_LOGO_IMAGE_KEY,
+			'/game/donationwidget/donationwidget_make_a_wish_international_logo.png'
+		)
 		this.load.image(CHARITY_ROYALE_LOGO_IMAGE_KEY, '/game/donationwidget/donation_widget_charity_royale_logo.png')
 		this.load.image(DONATION_WIDGET_BACKGROUND, '/game/donationwidget/donationwidget_frame.png')
 		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donation_widget_left_without_logo.png')
