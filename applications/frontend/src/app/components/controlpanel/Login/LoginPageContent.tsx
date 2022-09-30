@@ -16,6 +16,11 @@ export const LoginPageContent = () => {
 		e.preventDefault()
 
 		setShowError(false)
+
+		if (!username) {
+			toast('No streamer was selected', { type: 'warning' })
+		}
+
 		const response = await fetch('/api/sessions', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -47,6 +52,7 @@ export const LoginPageContent = () => {
 					}
 					return 0
 				})
+				setUsername(sortedStreamers[0].streamer)
 				setStreamerOptions(sortedStreamers)
 			} catch (e) {
 				toast('No streamer data was found', { type: 'warning' })
