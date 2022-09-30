@@ -14,6 +14,7 @@ export class DonationWidgetWishTopDonation extends Phaser.GameObjects.Text {
 		this.name = donationWidgetWishTopDonationName
 		this.setOrigin(0.5, 0.5)
 		this.setScale(state.scale)
+		this.setResolution(3)
 		scene.add.existing(this)
 	}
 }

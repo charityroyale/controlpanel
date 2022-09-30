@@ -12,6 +12,7 @@ export class DonationWidgetWishLastDonationStatic extends Phaser.GameObjects.Tex
 	) {
 		super(scene, x, y, text, style)
 		this.setOrigin(0.5, 0.5)
+		this.setResolution(3)
 		this.name = donationWidgetWishLastDonationStaticName
 		this.setScale(state.scale)
 		scene.add.existing(this)

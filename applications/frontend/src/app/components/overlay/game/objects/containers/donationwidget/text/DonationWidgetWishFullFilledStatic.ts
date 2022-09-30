@@ -13,6 +13,7 @@ export class DonationWidgetPrefixTextStatic extends Phaser.GameObjects.Text {
 	) {
 		super(scene, x, y, text, style)
 		this.name = donationWidgetPrefixTextStaticName
+		this.setResolution(3)
 		this.setOrigin(0, 0.5)
 		this.setScale(state.scale)
 		this.visible = false
@@ -42,6 +43,7 @@ export class DonationWidgetMiddleTextStatic extends Phaser.GameObjects.Text {
 		super(scene, x, y, text, style)
 		this.name = donationWidgetMiddleTextStaticName
 		this.setOrigin(0, 0.5)
+		this.setResolution(3)
 		this.setScale(state.scale)
 		this.visible = false
 		scene.add.existing(this)
@@ -70,6 +72,7 @@ export class DonationWidgetPostfixTextStatic extends Phaser.GameObjects.Text {
 		super(scene, x, y, text, style)
 		this.name = donationWidgetPostfixTextStaticName
 		this.setOrigin(0, 0.5)
+		this.setResolution(3)
 		this.setScale(state.scale)
 		this.visible = false
 		scene.add.existing(this)

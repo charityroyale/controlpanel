@@ -18,6 +18,7 @@ export class DonationBannerHeaderText extends Phaser.GameObjects.Text {
 		this.name = donationAlertHeaderTextName
 		this.setOrigin(0.5)
 		this.setScale(scale)
+		this.setResolution(3)
 		this.alpha = 0
 		fadeInDonationText(scene, this)
 		fadeOutDonationText(scene, this, () => this.destroy())

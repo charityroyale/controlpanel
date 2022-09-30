@@ -7,6 +7,7 @@ export class DonationWidgetLoaderFrameText extends Phaser.GameObjects.Text {
 		super(scene, x, y, text, textStyle)
 		this.name = donationWidgetLoaderFrameTextName
 		this.setOrigin(0.5, 0.5)
+		this.setResolution(3)
 		this.setScale(state.scale)
 
 		this.scene.add.existing(this)
