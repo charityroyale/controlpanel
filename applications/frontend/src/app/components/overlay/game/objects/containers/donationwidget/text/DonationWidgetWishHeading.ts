@@ -13,6 +13,7 @@ export class DonationWidgetWishHeading extends Phaser.GameObjects.Text {
 		super(scene, x, y, text, style)
 		this.name = donationWidgetWishHeadingName
 		this.setOrigin(1, 0)
+		this.setResolution(3)
 		this.setScale(state.scale)
 		scene.add.existing(this)
 	}

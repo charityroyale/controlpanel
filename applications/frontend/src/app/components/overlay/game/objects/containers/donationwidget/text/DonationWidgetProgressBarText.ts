@@ -13,6 +13,7 @@ export class DonationWidgetProgressBarText extends Phaser.GameObjects.Text {
 		super(scene, x, y, text, style)
 		this.name = donationWidgetProgressBarTextName
 		this.setOrigin(1, 0.5)
+		this.setResolution(3)
 		this.setScale(state.scale)
 		scene.add.existing(this)
 	}
