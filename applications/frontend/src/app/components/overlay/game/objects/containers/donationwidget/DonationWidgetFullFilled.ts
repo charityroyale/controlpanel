@@ -16,7 +16,7 @@ export const donationWidgetFullFilledName = 'donationWidgetFullFilled'
 export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 	private currentFullFilledWishIndex = 0
 	private intervalId: undefined | ReturnType<typeof window.setInterval>
-	private readonly pollIntervalInSeconds = 5
+	private readonly rotateIntervalInSeconds = 60
 
 	private fullfilledWishes: MakeAWishRootLevelWishDTO[] = []
 
@@ -97,7 +97,7 @@ export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 				this.setFullFilledWishContent()
 				this.increaseCurrentWishIndex()
 			}
-		}, this.pollIntervalInSeconds * 1000)
+		}, this.rotateIntervalInSeconds * 1000)
 	}
 
 	public stopPoll() {
