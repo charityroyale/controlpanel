@@ -145,6 +145,7 @@ export class OverlayScene extends Phaser.Scene {
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.events.emit('donationTrigger', donation)
+			this.donationWidgetContainer?.updateWishContentText()
 		})
 
 		config.socket.on(DONATION_TRIGGER_PREPROCESSING, (donation) => {
@@ -159,6 +160,7 @@ export class OverlayScene extends Phaser.Scene {
 		})
 
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
+			this.donationWidgetContainer?.updateWishContentText()
 			this.donationWidgetContainer?.handleMawJsonStateUpdate(
 				mawInfoJsonData,
 				(config.socket.auth as SocketAuth).channel

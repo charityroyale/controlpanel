@@ -130,7 +130,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		})
 	}
 
-	private updateWishContentText() {
+	public updateWishContentText() {
 		const headingText = this.getByName(donationWidgetWishHeadingName) as DonationWidgetWishHeading
 		headingText.setText(this.donationWidgetState.wish?.info?.kid_name ?? 'Placeholder')
 
