@@ -89,6 +89,9 @@ export default class Session {
 
 	public async sendDonation(donation: Donation) {
 		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
+		if (mawApiClient.mawInfoJsonData) {
+			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
+		}
 	}
 
 	public sendWishFullFilled(donation: Donation) {
