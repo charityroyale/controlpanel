@@ -30,35 +30,6 @@ const textStyle: TextStyle = {
 
 export const donationWidgetWishFullFilledKidNameName = 'donationWidgetWishFullFilledKidName'
 
-// wishnumber
-export class DonationWidgetWishFullFilledWishNumber extends Phaser.GameObjects.Text {
-	constructor(
-		scene: Phaser.Scene,
-		x: number,
-		y: number,
-		state: DonationWidgetState,
-		text: string | string[],
-		style: TextStyle = wishNumberText
-	) {
-		super(scene, x, y, text, style)
-		this.name = donationWidgetWishFullFilledWishNumberName
-		this.setOrigin(0.5, 0.5)
-		this.setResolution(3)
-		this.visible = false
-		this.setScale(state.scale)
-		scene.add.existing(this)
-	}
-}
-
-const wishNumberText: TextStyle = {
-	fontFamily: 'Luckiest Guy',
-	fontSize: '18px',
-	color: '#FFFFFF',
-	align: 'center',
-}
-
-export const donationWidgetWishFullFilledWishNumberName = 'donationWidgetWishFullFilledWishNumber'
-
 // wishfullfilledamount
 export class DonationWidgetWishFullFilledAmount extends Phaser.GameObjects.Text {
 	constructor(

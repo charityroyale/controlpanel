@@ -17,8 +17,6 @@ import {
 	donationWidgetWishFullFilledAmountName,
 	DonationWidgetWishFullFilledKidName,
 	donationWidgetWishFullFilledKidNameName,
-	DonationWidgetWishFullFilledWishNumber,
-	donationWidgetWishFullFilledWishNumberName,
 } from './text/DonationWidgetWishFullFilled'
 import {
 	DonationWidgetMiddleTextStatic,
@@ -241,7 +239,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const donationWidgetMiddleTextStatic = this.getByName(
 			donationWidgetMiddleTextStaticName
 		) as DonationWidgetMiddleTextStatic
-		donationWidgetMiddleTextStatic.setX(-this.displayWidth / 2 + 110 * this.scale)
+		donationWidgetMiddleTextStatic.setX(-this.displayWidth / 2 + 104 * this.scale)
 		donationWidgetMiddleTextStatic.setY(this.displayHeight + 24 * this.scale)
 
 		// fillfiledpostfixetext
@@ -257,13 +255,6 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		) as DonationWidgetWishFullFilledKidName
 		donationWidgetWishFullFilledKidName.setX(-this.displayWidth / 2 + 350 * this.scale)
 		donationWidgetWishFullFilledKidName.setY(this.displayHeight + 24 * this.scale)
-
-		// wish number
-		const donationWidgetWishFullFilledWishNumber = this.getByName(
-			donationWidgetWishFullFilledWishNumberName
-		) as DonationWidgetWishFullFilledWishNumber
-		donationWidgetWishFullFilledWishNumber.setX(-this.displayWidth / 2 + 93 * this.scale)
-		donationWidgetWishFullFilledWishNumber.setY(this.displayHeight + 24 * this.scale)
 
 		// wish amount
 		const donationWidgetWishFullFilledAmount = this.getByName(

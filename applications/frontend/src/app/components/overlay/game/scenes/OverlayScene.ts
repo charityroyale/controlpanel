@@ -44,7 +44,6 @@ import {
 import {
 	DonationWidgetWishFullFilledAmount,
 	DonationWidgetWishFullFilledKidName,
-	DonationWidgetWishFullFilledWishNumber,
 } from '../objects/containers/donationwidget/text/DonationWidgetWishFullFilled'
 import { DonationWidgetLoaderFrame } from '../objects/containers/donationwidget/DonationWidgetLoaderFrame'
 import { DonationWidgetLoaderFrameText } from '../objects/containers/donationwidget/text/DonationWidgetLoaderFrameText'
@@ -420,14 +419,6 @@ export class OverlayScene extends Phaser.Scene {
 			'NAME'
 		)
 
-		const donationWidgetWishFullFilledWishNumber = new DonationWidgetWishFullFilledWishNumber(
-			this,
-			0,
-			0,
-			initialState.donationWidget,
-			'0'
-		)
-
 		const donationWidgetWishFullFilledAmount = new DonationWidgetWishFullFilledAmount(
 			this,
 			0,
@@ -453,7 +444,6 @@ export class OverlayScene extends Phaser.Scene {
 				donationWidgetMiddleTextStatic,
 				donationWidgetPostfixTextStatic,
 				donationWidgetWishFullFilledKidName,
-				donationWidgetWishFullFilledWishNumber,
 				donationWidgetWishFullFilledAmount,
 				donationWidgetWishHeading,
 				donationWidgetWishSubHeading,

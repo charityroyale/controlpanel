@@ -5,8 +5,6 @@ import {
 	donationWidgetWishFullFilledAmountName,
 	DonationWidgetWishFullFilledKidName,
 	donationWidgetWishFullFilledKidNameName,
-	DonationWidgetWishFullFilledWishNumber,
-	donationWidgetWishFullFilledWishNumberName,
 } from './text/DonationWidgetWishFullFilled'
 import {
 	donationWidgetMiddleTextStaticName,
@@ -67,12 +65,6 @@ export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 		) as DonationWidgetWishFullFilledKidName
 		kidNameContainer.visible = true
 		kidNameContainer.setText(this.getFullFilledWishes()[this.currentFullFilledWishIndex].kid_name)
-
-		const wishNumber = this.parentContainer.getByName(
-			donationWidgetWishFullFilledWishNumberName
-		) as DonationWidgetWishFullFilledWishNumber
-		wishNumber.visible = true
-		wishNumber.setText(this.getFullFilledWishes()[this.currentFullFilledWishIndex].id.toString())
 
 		const wishAmount = this.parentContainer.getByName(
 			donationWidgetWishFullFilledAmountName
