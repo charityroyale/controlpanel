@@ -166,6 +166,14 @@ export class OverlayScene extends Phaser.Scene {
 				(config.socket.auth as SocketAuth).channel
 			)
 		})
+
+		this.time.addEvent({
+			delay: 7500,
+			callback: () => {
+				config.socket.emit(REQUEST_MAW_INFO_JSON_DATA)
+			},
+			loop: true,
+		})
 	}
 
 	preload() {
