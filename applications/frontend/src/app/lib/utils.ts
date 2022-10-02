@@ -49,6 +49,7 @@ export const generateRandomDonation = (streamer: string, donationAmount?: number
 	const message = testMessages[Math.floor(Math.random() * testMessages.length)]
 
 	const donation: Donation = {
+		id: getRandomId(),
 		user: name,
 		amount: randomnum,
 		amount_net: randomnum,
@@ -58,4 +59,8 @@ export const generateRandomDonation = (streamer: string, donationAmount?: number
 		fullFilledWish: false,
 	}
 	return donation
+}
+
+export const getRandomId = () => {
+	return Math.floor(Math.random() * 10000)
 }

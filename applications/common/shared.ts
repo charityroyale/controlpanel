@@ -40,6 +40,7 @@ export interface DonationWidgetState {
  * Sync with /donation endpoint
  */
 export interface Donation {
+	id: number
 	user: string
 	amount: number
 	amount_net: number // netto - pure without taxes

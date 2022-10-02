@@ -18,7 +18,7 @@ import {
 	ALERT_STAR_AND_FIREWORK_MIN_AMOUNT,
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 } from '../../app/components/overlay/game/objects/containers/donationBanner/donationSpecialEffectsConfig'
-import { generateRandomDonation } from '../../app/lib/utils'
+import { generateRandomDonation, getRandomId } from '../../app/lib/utils'
 import { FatCheckbox } from '../../app/components/controlpanel/FatCheckBox'
 
 export interface TestUIPageProps {
@@ -41,6 +41,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 
 	const emitCustomDonation = () => {
 		const donation: Donation = {
+			id: getRandomId(),
 			user: 'TEST_USER',
 			amount: Number(amount) + 1,
 			amount_net: Number(amount),

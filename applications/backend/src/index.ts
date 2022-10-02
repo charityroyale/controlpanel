@@ -115,6 +115,7 @@ app.post(
 
 app.post(
 	'/donation',
+	body('id').isInt(),
 	body('user').isString(),
 	body('amount').isFloat(),
 	body('amount_net').isFloat(),
