@@ -14,8 +14,8 @@ export const BottomPanel: FunctionComponent<React.PropsWithChildren> = () => {
 				Setup guide
 			</Label>
 			<Content>
-				<p>1. Embedd browsersource 1920x1080</p>
-				<p>2. Mute tab (if open) before going live</p>
+				<p>1. Embed browsersource (link above preview) with 1920x1080 resolution</p>
+				<p>2. Mute tab (if open during stream) before going live</p>
 			</Content>
 		</GridBottomPanel>
 	)
