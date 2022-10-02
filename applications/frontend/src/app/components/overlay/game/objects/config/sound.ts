@@ -1,6 +1,3 @@
-// UI
-export const VOLUME_CHANGE_AUDIO_KEY = 'volumeChangeAudio'
-
 // SFX + VFX
 export const FIREWORKS_SOUND_1_AUDIO_KEY = 'fireworksSound1Audio'
 export const FIREWORKS_SOUND_2_AUDIO_KEY = 'fireworksSound2Audio'
