@@ -74,7 +74,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 	const token = authHeader?.split(' ')[1]
 
 	if (token == null) {
-		logger.info(`Empty token for for ${req.ip}`)
+		logger.warn(`Empty token for ${req.ip}`)
 		return res.sendStatus(401)
 	}
 	try {
@@ -82,7 +82,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 		const { clientId } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as any
 		next()
 	} catch (error) {
-		logger.info(`Denied access for ${req.ip}`)
+		logger.warn(`Denied access for ${req.ip}`)
 		res.sendStatus(403)
 	}
 }
@@ -107,7 +107,7 @@ app.post(
 			})
 			response.sendStatus(200)
 		} catch (e) {
-			logger.error(e)
+			logger.error(`CMS data failed to sync. Error ${e}`)
 			response.sendStatus(500)
 		}
 	}
@@ -126,6 +126,7 @@ app.post(
 	(request, response) => {
 		const errors = validationResult(request)
 		if (!errors.isEmpty()) {
+			logger.warn(`Invalid donation request: ${errors.array().join(';')}`)
 			return response.status(400).json({ errors: errors.array() })
 		}
 		const donation = request.body as Donation
@@ -145,6 +146,11 @@ app.post(
 			} else {
 				sessionManager.getOrCreateSession(targetChannel).sendDonationPreprocessing(donation)
 			}
+			logger.info(
+				`Received new donation: ${donation.user} send ${donation.amount_net}€ to ${donation.streamer} with message ${donation.message}`
+			)
+		} else {
+			logger.warn(`Invalid targetChannel: ${targetChannel}`)
 		}
 
 		response.send(request.body)
@@ -180,19 +186,25 @@ const sessionManager = new SessionManager(io, jwtSecret)
 mawApiClient.fetchMawData()
 mawApiClient.poll()
 
-const initialMawCmsData = async () => {
-	const rawResponseData = await fetch(cmsDataUrl)
-	const rawData = await rawResponseData.text()
+const requestAndStoreInitialCmsData = async () => {
+	try {
+		const rawResponseData = await fetch(cmsDataUrl)
+		const rawData = await rawResponseData.text()
 
-	yaml.loadAll(rawData, function (doc) {
-		if (doc !== null) {
-			const cmsData = doc as CmsContent
-			mawApiClient.cmsMawWishes = cmsData.upcoming
-		}
-	})
+		yaml.loadAll(rawData, function (doc) {
+			if (doc !== null) {
+				const cmsData = doc as CmsContent
+				mawApiClient.cmsMawWishes = cmsData.upcoming
+				logger.info('CMS data synced.')
+			}
+		})
+	} catch (e) {
+		logger.error(`CMS data failed to sync. Error ${e}`)
+	}
 }
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-initialMawCmsData()
+requestAndStoreInitialCmsData()
 
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)
