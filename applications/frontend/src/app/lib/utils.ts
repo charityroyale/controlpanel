@@ -40,12 +40,7 @@ export const generateRandomDonation = (streamer: string, donationAmount?: number
 	const rB = Math.floor(Math.random() * b.length)
 	const name = a[rA] + b[rB]
 
-	const testMessages = [
-		'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-		'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
-		'I love you <3!',
-		'Lorem ipsum dolor sit amet, consetetur sadipscingddd elitr, sed diam nonumy ei Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy ei',
-	]
+	const testMessages = ['I love <4?', 'I love <5?', 'I love you <3!']
 	const message = testMessages[Math.floor(Math.random() * testMessages.length)]
 
 	const donation: Donation = {

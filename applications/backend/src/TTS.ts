@@ -6,7 +6,7 @@ import { logger } from './logger'
 
 const client = new textToSpeech.TextToSpeechClient()
 
-export async function updateTts(text: string, speaker: Speaker, streamer: string) {
+export async function createTextToSpeechFile(text: string, speaker: Speaker, id: number) {
 	const request = {
 		input: { text },
 		voice: { ...speaker },
@@ -15,9 +15,9 @@ export async function updateTts(text: string, speaker: Speaker, streamer: string
 	try {
 		const [response] = await client.synthesizeSpeech(request)
 		const writeFile = util.promisify(fs.writeFile)
-		await writeFile(`./public/${streamer}.mp3`, response.audioContent, 'binary')
+		await writeFile(`./public/${id}.mp3`, response.audioContent, 'binary')
 
-		logger.info(`Audio content written to file: ${streamer}.mp3`)
+		logger.info(`Audio content written to file: ${id}.mp3`)
 	} catch (e) {
 		logger.error(e)
 	}

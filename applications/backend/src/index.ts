@@ -139,13 +139,13 @@ app.post(
 			 */
 
 			if (targetChannel === 'krokoboss' || targetChannel === 'shredmir') {
-				sessionManager.getOrCreateSession('krokoboss').sendDonationPreprocessing(donation)
-				sessionManager.getOrCreateSession('shredmir').sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession('krokoboss').triggerDonationAlert(donation)
+				sessionManager.getOrCreateSession('shredmir').triggerDonationAlert(donation)
 			} else if (targetChannel === 'ichbinzarbex' || targetChannel === 'filow') {
-				sessionManager.getOrCreateSession('ichbinzarbex').sendDonationPreprocessing(donation)
-				sessionManager.getOrCreateSession('filow').sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession('ichbinzarbex').triggerDonationAlert(donation)
+				sessionManager.getOrCreateSession('filow').triggerDonationAlert(donation)
 			} else {
-				sessionManager.getOrCreateSession(targetChannel).sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession(targetChannel).triggerDonationAlert(donation)
 			}
 			logger.info(
 				`Received new donation: ${donation.user} send ${donation.amount_net}€ to ${donation.streamer} with message ${donation.message}`

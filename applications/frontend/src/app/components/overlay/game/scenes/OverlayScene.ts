@@ -6,9 +6,6 @@ import {
 	REQUEST_STATE,
 	STATE_UPDATE,
 	DONATION_TRIGGER,
-	CREATE_TTS_FILE,
-	Donation,
-	DONATION_TRIGGER_PREPROCESSING,
 } from '@cp/common'
 
 import Phaser, { Physics } from 'phaser'
@@ -137,19 +134,8 @@ export class OverlayScene extends Phaser.Scene {
 			this.events.emit('ttsUpdated', state.settings.text2speech.minDonationAmount)
 		})
 		config.socket.on(DONATION_TRIGGER, (donation) => {
-			this.events.emit('donationTrigger', donation)
-			this.donationWidgetContainer?.updateWishContentText()
-
-			if (donation.fullFilledWish) {
-				const audio = this.game.cache.audio.exists(GTA_RESPECT_SOUND_AUDIO_KEY)
-				if (audio) {
-					this.sound.play(GTA_RESPECT_SOUND_AUDIO_KEY)
-				}
-			}
-		})
-
-		config.socket.on(DONATION_TRIGGER_PREPROCESSING, (donation) => {
 			this.alert?.handleDonation(donation)
+			this.donationWidgetContainer?.updateWishContentText()
 		})
 
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
@@ -233,9 +219,9 @@ export class OverlayScene extends Phaser.Scene {
 		}
 
 		let loader
-		const loadTTS = () => {
+		const loadTTS = (id: number) => {
 			this.cache.audio.remove(TTS_KEY)
-			loader = this.load.audio(TTS_KEY, `${TTS_URL}/${(socket.auth as SocketAuth).channel}.mp3`)
+			loader = this.load.audio(TTS_KEY, `${TTS_URL}/${id}.mp3`)
 			loader.on('complete', () => {
 				this.time.addEvent({
 					delay: 2500,
@@ -246,10 +232,7 @@ export class OverlayScene extends Phaser.Scene {
 
 			loader.start()
 		}
-		this.events.on('loadtts', loadTTS)
-		this.events.on('triggerTtsProcessing', (donation: Donation) => {
-			socket.emit(CREATE_TTS_FILE, donation)
-		})
+		this.events.on('loadAndPlayTTS', loadTTS)
 
 		this.isLockedOverlay = initialState.settings.isLockedOverlay
 

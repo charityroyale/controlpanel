@@ -11,10 +11,10 @@ import { FaMicrophone } from 'react-icons/fa'
 import {
 	CMS_UPDATE,
 	DONATION_ALERT_UPDATE,
-	DONATION_TRIGGER_PREPROCESSING,
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
 	REQUEST_CMS_DATA,
+	REQUEST_DONATION_TRIGGER,
 	SETTINGS_UPDATE,
 	SpeakerType,
 	STATE_UPDATE,
@@ -139,7 +139,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 
 	const emitRandomDonation = useCallback(
 		(donationAmount?: number) => {
-			socket?.emit(DONATION_TRIGGER_PREPROCESSING, generateRandomDonation(auth.channel, donationAmount))
+			socket?.emit(REQUEST_DONATION_TRIGGER, generateRandomDonation(auth.channel, donationAmount))
 		},
 		[socket, auth.channel]
 	)
