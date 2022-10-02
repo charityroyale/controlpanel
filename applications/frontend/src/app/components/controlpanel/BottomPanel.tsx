@@ -3,26 +3,20 @@ import { FunctionComponent } from 'react'
 import { Label, Content } from '../../../pages/controlpanel'
 import styled from 'styled-components'
 import { RiListSettingsFill } from 'react-icons/ri'
-import { GlobalState } from '@cp/common'
-import { useSocket } from '../../hooks/useSocket'
 
-export const BottomPanel: FunctionComponent<React.PropsWithChildren<{ globalState: GlobalState }>> = ({
-	globalState,
-}) => {
-	const { socket } = useSocket()
-
-	// TBA
-	console.log(socket)
-	console.log(globalState)
+export const BottomPanel: FunctionComponent<React.PropsWithChildren> = () => {
 	return (
 		<GridBottomPanel>
 			<Label>
 				<IconWrapper>
 					<RiListSettingsFill size="16px" style={{ marginRight: '6px' }} />
 				</IconWrapper>
-				Other Settings
+				Setup guide
 			</Label>
-			<Content>TBA</Content>
+			<Content>
+				<p>1. Embed browsersource (link above preview) with 1920x1080 resolution</p>
+				<p>2. Mute tab (if open during stream) before going live</p>
+			</Content>
 		</GridBottomPanel>
 	)
 }

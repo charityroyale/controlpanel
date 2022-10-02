@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
-import { Donation, DONATION_TRIGGER_PREPROCESSING } from '@cp/common'
+import { Donation, REQUEST_DONATION_TRIGGER } from '@cp/common'
 import { UserSessionData, withSessionSsr } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { Header } from '../../app/components/controlpanel/Header'
@@ -18,7 +18,7 @@ import {
 	ALERT_STAR_AND_FIREWORK_MIN_AMOUNT,
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 } from '../../app/components/overlay/game/objects/containers/donationBanner/donationSpecialEffectsConfig'
-import { generateRandomDonation } from '../../app/lib/utils'
+import { generateRandomDonation, getRandomId } from '../../app/lib/utils'
 import { FatCheckbox } from '../../app/components/controlpanel/FatCheckBox'
 
 export interface TestUIPageProps {
@@ -36,11 +36,12 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 
 	const emitRandomDonation = () => {
 		const donation = generateRandomDonation((socket?.auth as SocketAuth).channel)
-		socket?.emit(DONATION_TRIGGER_PREPROCESSING, donation)
+		socket?.emit(REQUEST_DONATION_TRIGGER, donation)
 	}
 
 	const emitCustomDonation = () => {
 		const donation: Donation = {
+			id: getRandomId(),
 			user: 'TEST_USER',
 			amount: Number(amount) + 1,
 			amount_net: Number(amount),
@@ -50,7 +51,7 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 			fullFilledWish: isFullFilledWish,
 		}
 
-		socket?.emit(DONATION_TRIGGER_PREPROCESSING, donation)
+		socket?.emit(REQUEST_DONATION_TRIGGER, donation)
 	}
 
 	return (

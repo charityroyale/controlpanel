@@ -15,7 +15,12 @@ import {
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 } from '../containers/donationBanner/donationSpecialEffectsConfig'
 import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
-import { FIREWORKS_SOUND_1_AUDIO_KEY, FIREWORKS_SOUND_2_AUDIO_KEY, STAR_RAIN_SOUND_AUDIO_KEY } from '../config/sound'
+import {
+	FIREWORKS_SOUND_1_AUDIO_KEY,
+	FIREWORKS_SOUND_2_AUDIO_KEY,
+	GTA_RESPECT_SOUND_AUDIO_KEY,
+	STAR_RAIN_SOUND_AUDIO_KEY,
+} from '../config/sound'
 const { FloatBetween } = Phaser.Math
 
 export class DonationBehaviour {
@@ -26,7 +31,7 @@ export class DonationBehaviour {
 	 * start donation animation.
 	 */
 	private checkQueueTimerId: undefined | number
-	private checkQueueTimer = 500
+	private checkQueueTimer = 2000
 	private alert: Alert
 	private queue
 	private starGroup
@@ -126,20 +131,24 @@ export class DonationBehaviour {
 	}
 
 	private triggerAlert(donation: Donation) {
-		this.alert.scene.events.emit('triggerTtsProcessing', donation)
-		this.alert.scene.events.once('donationTrigger', (donation2: Donation) => {
-			// default behaviour
-			this.createBanner(donation2)
-			this.createTextElements(donation2)
-
-			// amount based effects
-			this.createVisualEffects(donation2.amount_net)
-
-			if (donation2.message && donation2.amount_net >= this.ttsMinDonationAmount) {
-				this.alert.scene.events.emit('loadtts') // and play
+		if (donation.fullFilledWish) {
+			const audio = this.alert.scene.game.cache.audio.exists(GTA_RESPECT_SOUND_AUDIO_KEY)
+			if (audio) {
+				this.alert.scene.sound.play(GTA_RESPECT_SOUND_AUDIO_KEY)
 			}
-			this.alert.soundbehaviour.playSound(donation2)
-		})
+		}
+
+		// default behaviour
+		this.createBanner(donation)
+		this.createTextElements(donation)
+
+		// amount based effects
+		this.createVisualEffects(donation.amount_net)
+
+		if (donation.message && donation.amount_net >= this.ttsMinDonationAmount) {
+			this.alert.scene.events.emit('loadAndPlayTTS', donation.id) // and play
+		}
+		this.alert.soundbehaviour.playSound(donation)
 	}
 
 	private createBanner(donation: Donation) {
