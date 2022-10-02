@@ -54,7 +54,6 @@ import {
 	FIREWORKS_SOUND_2_AUDIO_KEY,
 	GTA_RESPECT_SOUND_AUDIO_KEY,
 	STAR_RAIN_SOUND_AUDIO_KEY,
-	VOLUME_CHANGE_AUDIO_KEY,
 } from '../objects/config/sound'
 import { DonationWidgetLogo } from '../objects/containers/donationwidget/DonationWidgetLogo'
 
@@ -123,10 +122,6 @@ export class OverlayScene extends Phaser.Scene {
 			const normalizedSoundValue = Math.round(this.sound.volume * 10) / 10
 			if (normalizedSoundValue !== state.settings.volume) {
 				this.sound.volume = state.settings.volume
-				const audio = this.game.cache.audio.exists(VOLUME_CHANGE_AUDIO_KEY)
-				if (audio) {
-					this.sound.play(VOLUME_CHANGE_AUDIO_KEY)
-				}
 			}
 
 			/**
@@ -211,9 +206,6 @@ export class OverlayScene extends Phaser.Scene {
 		this.load.image(DONATION_WIDGET_LEFT, '/game/donationwidget/donation_widget_left_without_logo.png')
 		this.load.image(DONATION_WIDGET_FULLFILLED, '/game/donationwidget/donationwidget_wish_fullfilled.png')
 		this.load.image(DONATION_WIDGET_STATE_LOADING, '/game/donationwidget/donationwidget_state_loading.png')
-
-		// AUDIO ASSETS
-		this.load.audio(VOLUME_CHANGE_AUDIO_KEY, '/audio/ui/volume_change.mp3')
 
 		this.load.audio(FIREWORKS_SOUND_1_AUDIO_KEY, '/audio/sfx/fireworks_sound_1.mp3')
 		this.load.audio(FIREWORKS_SOUND_2_AUDIO_KEY, '/audio/sfx/fireworks_sound_2.mp3')
