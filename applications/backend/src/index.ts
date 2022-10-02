@@ -15,6 +15,7 @@ import fetch from 'node-fetch'
 import { CmsContent } from './types/cms'
 import yaml from 'js-yaml'
 import bodyParser from 'body-parser'
+import { startCleanUpMp3FilesInterval } from './cleanup'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -206,6 +207,7 @@ const requestAndStoreInitialCmsData = async () => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 requestAndStoreInitialCmsData()
+startCleanUpMp3FilesInterval()
 
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)
