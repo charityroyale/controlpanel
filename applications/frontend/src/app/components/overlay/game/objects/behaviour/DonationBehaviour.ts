@@ -31,7 +31,7 @@ export class DonationBehaviour {
 	 * start donation animation.
 	 */
 	private checkQueueTimerId: undefined | number
-	private checkQueueTimer = 500
+	private checkQueueTimer = 2000
 	private alert: Alert
 	private queue
 	private starGroup
