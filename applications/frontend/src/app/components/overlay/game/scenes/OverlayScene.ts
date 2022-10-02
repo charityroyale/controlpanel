@@ -5,7 +5,6 @@ import {
 	REQUEST_MAW_INFO_JSON_DATA,
 	REQUEST_STATE,
 	STATE_UPDATE,
-	WISH_FULLFILLED_TRIGGER,
 	DONATION_TRIGGER,
 	CREATE_TTS_FILE,
 	Donation,
@@ -140,17 +139,17 @@ export class OverlayScene extends Phaser.Scene {
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.events.emit('donationTrigger', donation)
 			this.donationWidgetContainer?.updateWishContentText()
+
+			if (donation.fullFilledWish) {
+				const audio = this.game.cache.audio.exists(GTA_RESPECT_SOUND_AUDIO_KEY)
+				if (audio) {
+					this.sound.play(GTA_RESPECT_SOUND_AUDIO_KEY)
+				}
+			}
 		})
 
 		config.socket.on(DONATION_TRIGGER_PREPROCESSING, (donation) => {
 			this.alert?.handleDonation(donation)
-		})
-
-		config.socket.on(WISH_FULLFILLED_TRIGGER, () => {
-			const audio = this.game.cache.audio.exists(GTA_RESPECT_SOUND_AUDIO_KEY)
-			if (audio) {
-				this.sound.play(GTA_RESPECT_SOUND_AUDIO_KEY)
-			}
 		})
 
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {

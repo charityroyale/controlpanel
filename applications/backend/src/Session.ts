@@ -10,7 +10,6 @@ import {
 	REQUEST_STATE,
 	SETTINGS_UPDATE,
 	STATE_UPDATE,
-	WISH_FULLFILLED_TRIGGER,
 	TTS_SPEAKER,
 	CMS_UPDATE,
 	REQUEST_CMS_DATA,
@@ -81,10 +80,6 @@ export default class Session {
 		if (mawApiClient.mawInfoJsonData != null) {
 			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
-
-		if (donation.fullFilledWish) {
-			this.sendWishFullFilled(donation)
-		}
 	}
 
 	public async sendDonation(donation: Donation) {
@@ -92,10 +87,6 @@ export default class Session {
 		if (mawApiClient.mawInfoJsonData) {
 			this.io.to(this.channel).emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 		}
-	}
-
-	public sendWishFullFilled(donation: Donation) {
-		this.io.to(this.channel).emit(WISH_FULLFILLED_TRIGGER, donation)
 	}
 
 	private registerReadHandlers(socket: Socket<SocketEventsMap, SocketEventsMap>) {
