@@ -15,6 +15,7 @@ import fetch from 'node-fetch'
 import { CmsContent } from './types/cms'
 import yaml from 'js-yaml'
 import bodyParser from 'body-parser'
+import { startCleanUpMp3FilesInterval } from './cleanup'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -115,6 +116,7 @@ app.post(
 
 app.post(
 	'/donation',
+	body('id').isInt(),
 	body('user').isString(),
 	body('amount').isFloat(),
 	body('amount_net').isFloat(),
@@ -138,13 +140,13 @@ app.post(
 			 */
 
 			if (targetChannel === 'krokoboss' || targetChannel === 'shredmir') {
-				sessionManager.getOrCreateSession('krokoboss').sendDonationPreprocessing(donation)
-				sessionManager.getOrCreateSession('shredmir').sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession('krokoboss').triggerDonationAlert(donation)
+				sessionManager.getOrCreateSession('shredmir').triggerDonationAlert(donation)
 			} else if (targetChannel === 'ichbinzarbex' || targetChannel === 'filow') {
-				sessionManager.getOrCreateSession('ichbinzarbex').sendDonationPreprocessing(donation)
-				sessionManager.getOrCreateSession('filow').sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession('ichbinzarbex').triggerDonationAlert(donation)
+				sessionManager.getOrCreateSession('filow').triggerDonationAlert(donation)
 			} else {
-				sessionManager.getOrCreateSession(targetChannel).sendDonationPreprocessing(donation)
+				sessionManager.getOrCreateSession(targetChannel).triggerDonationAlert(donation)
 			}
 			logger.info(
 				`Received new donation: ${donation.user} send ${donation.amount_net}€ to ${donation.streamer} with message ${donation.message}`
@@ -205,6 +207,7 @@ const requestAndStoreInitialCmsData = async () => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 requestAndStoreInitialCmsData()
+startCleanUpMp3FilesInterval()
 
 httpServer.listen(port)
 logger.info(`Backend ready on port ${port}`)

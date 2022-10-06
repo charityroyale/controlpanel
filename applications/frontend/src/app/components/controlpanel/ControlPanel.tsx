@@ -21,7 +21,8 @@ export const ControlPanel: FunctionComponent<
 				Center-Panel
 			</CenterPanel>
 			<RightPanel>Right-Panel</RightPanel>
-			<BottomPanel globalState={globalState}>Bottom-Panel</BottomPanel>
+
+			<BottomPanel>Bottom-Panel</BottomPanel>
 		</React.Fragment>
 	)
 }
