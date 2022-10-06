@@ -19,12 +19,23 @@ export const LoginPageContent = () => {
 
 		if (!username) {
 			toast('No streamer was selected', { type: 'warning' })
+			return
+		}
+
+		const type = streamerOptions.find((entry) => entry.channel === username)?.type
+		if (!type) {
+			toast('No streamer type found', { type: 'warning' })
+			return
 		}
 
 		const response = await fetch('/api/sessions', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ username, password }),
+			body: JSON.stringify({
+				username,
+				password,
+				type,
+			}),
 		})
 
 		if (response.ok) {

@@ -53,6 +53,7 @@ export interface Donation {
 export interface UserEntry {
 	streamer: string
 	channel: string
+	type: StreamerType
 }
 
 export const DONATION_ALERT_UPDATE = 'donationAlertUpdate'

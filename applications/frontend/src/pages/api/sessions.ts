@@ -10,11 +10,13 @@ export interface UserDTO {
 // eslint-disable-next-line import/no-default-export
 const sessionRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method === 'POST') {
-		const { username, password } = req.body
+		const { username, password, type } = req.body
 
 		if (
-			(typeof MAIN_APPLICATION_PASSWORD === 'string' && password === MAIN_APPLICATION_PASSWORD) ||
-			(typeof COMMUNITY_APPLICATION_PASSWORD === 'string' && password === COMMUNITY_APPLICATION_PASSWORD)
+			(typeof MAIN_APPLICATION_PASSWORD === 'string' && password === MAIN_APPLICATION_PASSWORD && type === 'main') ||
+			(typeof COMMUNITY_APPLICATION_PASSWORD === 'string' &&
+				password === COMMUNITY_APPLICATION_PASSWORD &&
+				type === 'community')
 		) {
 			const user: UserDTO = { username }
 			const userSession = req.session as UserSessionData

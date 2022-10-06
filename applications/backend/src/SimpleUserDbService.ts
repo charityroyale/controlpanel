@@ -25,10 +25,11 @@ export default class SimpleUserDbService {
 	private async fetchUserEntries() {
 		const response = await mawApiClient.fetchMawData()
 		if (response !== null) {
-			const streamer = Object.keys(response.streamers).map((streamer) => {
+			const streamer = Object.keys(response.streamers).map((streamerKey) => {
 				return {
-					channel: streamer,
-					streamer,
+					channel: streamerKey,
+					streamer: streamerKey,
+					type: response.streamers[streamerKey].type,
 				}
 			})
 			return streamer
