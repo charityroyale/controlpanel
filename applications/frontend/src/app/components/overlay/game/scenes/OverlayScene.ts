@@ -312,14 +312,14 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationWidget,
-			'Placeholder'
+			'Herzenswunsch'
 		)
 		const donationWidgetWishSubHeading = new DonationWidgetWishSubHeading(
 			this,
 			0,
 			0,
 			initialState.donationWidget,
-			'Placeholder'
+			'Make-A-Wish'
 		)
 
 		const donationWidgetWishTopDonationStatic = new DonationWidgetWishTopDonationStatic(

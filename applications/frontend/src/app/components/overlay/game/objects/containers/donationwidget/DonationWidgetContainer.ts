@@ -130,10 +130,10 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 
 	public updateWishContentText() {
 		const headingText = this.getByName(donationWidgetWishHeadingName) as DonationWidgetWishHeading
-		headingText.setText(this.donationWidgetState.wish?.info?.kid_name ?? 'Placeholder')
+		headingText.setText(this.donationWidgetState.wish?.info?.kid_name ?? 'Herzenswunsch')
 
 		const subHeadingText = this.getByName(donationWidgetWishSubHeadingName) as DonationWidgetWishSubHeading
-		subHeadingText.setText(this.donationWidgetState.wish?.info?.wish ?? 'Placeholder')
+		subHeadingText.setText(this.donationWidgetState.wish?.info?.wish ?? 'Make-A-Wish')
 
 		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
 		lastDonation.setText(
