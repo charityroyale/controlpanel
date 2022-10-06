@@ -138,7 +138,9 @@ app.post(
 			 * Includes whitelist for streamers 'krokoboss' and 'shredmir', 'ichbinzarbex' and 'filow'
 			 * which get mapped to channel: 'krokoboss-shredmir', 'ichbinzarbex-filow'
 			 */
-
+			logger.info(
+				`Received new donation: ${donation.user} send ${donation.amount_net}€ to ${donation.streamer} with message ${donation.message}`
+			)
 			if (targetChannel === 'krokoboss' || targetChannel === 'shredmir') {
 				sessionManager.getOrCreateSession('krokoboss').triggerDonationAlert(donation)
 				sessionManager.getOrCreateSession('shredmir').triggerDonationAlert(donation)
@@ -148,9 +150,6 @@ app.post(
 			} else {
 				sessionManager.getOrCreateSession(targetChannel).triggerDonationAlert(donation)
 			}
-			logger.info(
-				`Received new donation: ${donation.user} send ${donation.amount_net}€ to ${donation.streamer} with message ${donation.message}`
-			)
 		} else {
 			logger.warn(`Invalid targetChannel: ${targetChannel}`)
 		}
