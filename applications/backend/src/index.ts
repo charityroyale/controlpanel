@@ -147,6 +147,9 @@ app.post(
 			} else if (targetChannel === 'ichbinzarbex' || targetChannel === 'filow') {
 				sessionManager.getOrCreateSession('ichbinzarbex').triggerDonationAlert(donation)
 				sessionManager.getOrCreateSession('filow').triggerDonationAlert(donation)
+			}else if (targetChannel === 'veni' || targetChannel === 'netrockgg') {
+				sessionManager.getOrCreateSession('veni').triggerDonationAlert(donation)
+				sessionManager.getOrCreateSession('netrockgg').triggerDonationAlert(donation)
 			} else {
 				sessionManager.getOrCreateSession(targetChannel).triggerDonationAlert(donation)
 			}
