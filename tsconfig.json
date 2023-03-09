@@ -1,7 +1,4 @@
 {
-  "references": [
-    { "path": "applications/common"},
-    { "path": "applications/backend"}
-  ],
-  "files": []
+	"references": [{ "path": "applications/common" }, { "path": "applications/backend" }],
+	"files": []
 }

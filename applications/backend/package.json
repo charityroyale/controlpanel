@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node dist/index.js",
+    "lint": "eslint ./src --ext .js,.ts"
   },
   "author": "Patrick Obermüller",
   "license": "MIT",
