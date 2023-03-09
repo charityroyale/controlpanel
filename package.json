@@ -10,7 +10,8 @@
 		"start:frontend": "npm run start --workspace=@cp/frontend",
 		"start:backend": "npm run start --workspace=@cp/backend",
 		"build:tsc": "tsc --build",
-		"tsc:watch": "tsc --build --watch"
+		"tsc:watch": "tsc --build --watch",
+		"lint:all": "npm run lint --workspaces --if-present"
 	},
 	"workspaces": [
 		"applications/*"
