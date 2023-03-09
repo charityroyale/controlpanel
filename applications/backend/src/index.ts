@@ -11,7 +11,6 @@ import SimpleUserDbService from './SimpleUserDbService'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
 import path from 'path'
-import fetch from 'node-fetch'
 import { CmsContent } from './types/cms'
 import yaml from 'js-yaml'
 import bodyParser from 'body-parser'
@@ -147,7 +146,7 @@ app.post(
 			} else if (targetChannel === 'ichbinzarbex' || targetChannel === 'filow') {
 				sessionManager.getOrCreateSession('ichbinzarbex').triggerDonationAlert(donation)
 				sessionManager.getOrCreateSession('filow').triggerDonationAlert(donation)
-			}else if (targetChannel === 'veni' || targetChannel === 'netrockgg') {
+			} else if (targetChannel === 'veni' || targetChannel === 'netrockgg') {
 				sessionManager.getOrCreateSession('veni').triggerDonationAlert(donation)
 				sessionManager.getOrCreateSession('netrockgg').triggerDonationAlert(donation)
 			} else {

@@ -1,5 +1,4 @@
 import { MakeAWishInfoJsonDTO } from '@cp/common'
-import fetch from 'node-fetch'
 import { logger } from './logger'
 import { CmsUpcomingStreamer } from './types/cms'
 
