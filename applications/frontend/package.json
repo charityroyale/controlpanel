@@ -17,7 +17,6 @@
 	"dependencies": {
 		"cross-env": "^7.0.3",
 		"iron-session": "^6.2.1",
-		"jsonwebtoken": "^8.5.1",
 		"next": "^12.3.0",
 		"phaser": "^3.55.2",
 		"phaser3-rex-plugins": "^1.1.73",
