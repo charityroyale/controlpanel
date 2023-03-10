@@ -1,23 +1,24 @@
 {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "extends": [
-      // "eslint:recommended",
-      // "plugin:@typescript-eslint/recommended",
-      "standard-with-typescript",
-      "prettier"
-    ],
-    "parserOptions": {
-      "project": "./applications/backend/tsconfig.json"
-    },
-    "rules": {
-      "@typescript-eslint/no-unused-vars": ["warn"],
-      "@typescript-eslint/restrict-template-expressions": "off",
-      "@typescript-eslint/explicit-function-return-type": "off",
-      "@typescript-eslint/no-floating-promises":["warn"],
-      "@typescript-eslint/strict-boolean-expressions": "off"
-    }
-  }
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint"],
+	"extends": ["standard-with-typescript", "prettier"],
+	"parserOptions": {
+		"ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
+		"sourceType": "module" // Allows for the use of imports
+	},
+	"rules": {
+		"@typescript-eslint/no-unused-vars": ["error"],
+		"@typescript-eslint/restrict-template-expressions": "off",
+		"@typescript-eslint/explicit-function-return-type": "off",
+		"@typescript-eslint/no-floating-promises": ["error"],
+		"@typescript-eslint/strict-boolean-expressions": "off"
+	},
+	"overrides": [
+		{
+			"files": ["*.ts"],
+			"parserOptions": {
+				"project": ["./tsconfig.json"] // Specify it only for TypeScript files
+			}
+		}
+	]
+}

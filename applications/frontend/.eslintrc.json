@@ -1,9 +1,4 @@
 {
-	"settings": {
-		"react": {
-			"version": "detect"
-		}
-	},
 	"parser": "@typescript-eslint/parser", // Specifies the ESLint parser
 	"parserOptions": {
 		"ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
@@ -17,6 +12,12 @@
 			}
 		}
 	},
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	},
+
 	"plugins": ["jsx-a11y", "@typescript-eslint", "import"],
 	"overrides": [
 		{

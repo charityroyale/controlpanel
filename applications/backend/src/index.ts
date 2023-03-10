@@ -11,7 +11,7 @@ import SimpleUserDbService from './SimpleUserDbService'
 import cors from 'cors'
 import { mawApiClient } from './MakeAWishApiClient'
 import path from 'path'
-import { CmsContent } from './types/cms'
+import { type CmsContent } from './types/cms'
 import yaml from 'js-yaml'
 import bodyParser from 'body-parser'
 import { startCleanUpMp3FilesInterval } from './cleanup'
@@ -78,8 +78,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 		return res.sendStatus(401)
 	}
 	try {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { clientId } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as any
+		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as any
 		next()
 	} catch (error) {
 		logger.warn(`Denied access for ${req.ip}`)
@@ -160,8 +159,7 @@ app.post(
 	}
 )
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-app.get('/streamers', async (req, res) => {
+app.get('/streamers', async (_req, res) => {
 	try {
 		await simpleUserDbService.updateDataBase()
 
@@ -183,9 +181,7 @@ if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
 	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')
 }
 const jwtSecret = process.env.SOCKETIO_AUTH_SECRET ?? 'secret'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const sessionManager = new SessionManager(io, jwtSecret)
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 mawApiClient.fetchMawData()
 mawApiClient.poll()
 

@@ -1,4 +1,0 @@
-{
-	"references": [{ "path": "applications/common" }, { "path": "applications/backend" }],
-	"files": []
-}
