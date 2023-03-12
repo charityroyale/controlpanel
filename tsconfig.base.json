@@ -15,7 +15,9 @@
 		"sourceMap": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"composite": true
+		"composite": true,
+		"moduleResolution": "node",
+		"incremental": true
 	},
 	"exclude": ["node_modules"]
 }

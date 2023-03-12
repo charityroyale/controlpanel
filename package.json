@@ -10,16 +10,21 @@
 		"start:frontend": "npm run start --workspace=@cp/frontend",
 		"start:backend": "npm run start --workspace=@cp/backend",
 		"build:tsc": "tsc --build",
-		"tsc:watch": "tsc --build --watch"
+		"tsc:watch": "tsc --build --watch",
+		"lint:all": "npm run lint --workspaces --if-present"
 	},
 	"workspaces": [
 		"applications/*"
 	],
+	"dependencies": {
+		"jsonwebtoken": "^9.0.0"
+	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^4.29.2",
-		"@typescript-eslint/parser": "^4.29.2",
-		"eslint": "^7.32.0",
-		"eslint-config-standard-with-typescript": "^20.0.0",
+		"@typescript-eslint/eslint-plugin": "^5.54.1",
+		"@typescript-eslint/parser": "^5.54.1",
+	    "@types/jsonwebtoken": "^9.0.1",
+		"eslint": "^8.35.0",
+		"eslint-config-standard-with-typescript": "^34.0.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"prettier": "^2.3.2",
 		"typescript": "^4.3.5"

@@ -1,29 +1,13 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "rootDir": "src",
-    "noEmit": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "incremental": true
-  },
-  "exclude": [
-    "dist",
-    ".next",
-    "out",
-    "next.config.js",
-    "node_modules/**/*"
-  ],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"jsx": "preserve",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"rootDir": "src",
+		"noEmit": true,
+		"resolveJsonModule": true
+	},
+	"exclude": ["dist", ".next", "out", "next.config.js", "node_modules/**/*"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"references": [{ "path": "../../applications/common" }]
 }
