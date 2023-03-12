@@ -12,7 +12,6 @@ class MakeAWishApiClient {
 
 	public poll() {
 		this.intervalId = setInterval(() => {
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			this.fetchMawData()
 				.then((data) => {
 					this.mawInfoJsonData = data

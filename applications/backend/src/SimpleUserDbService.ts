@@ -6,7 +6,6 @@ export default class SimpleUserDbService {
 	private userDatabase: UserEntry[] = []
 
 	constructor() {
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		this.updateDataBase()
 	}
 

@@ -65,7 +65,7 @@ app.post('/token', body('client_id').isString(), (request, response) => {
 	response.json({ accessToken })
 })
 
-const generateAccessToken = (client: {}) => {
+const generateAccessToken = (client: string | object | Buffer) => {
 	return jwt.sign(client, process.env.ACCESS_TOKEN_SECRET as string)
 }
 
@@ -78,7 +78,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 		return res.sendStatus(401)
 	}
 	try {
-		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as any
+		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string)
 		next()
 	} catch (error) {
 		logger.warn(`Denied access for ${req.ip}`)
@@ -202,7 +202,6 @@ const requestAndStoreInitialCmsData = async () => {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 requestAndStoreInitialCmsData()
 startCleanUpMp3FilesInterval()
 
