@@ -8,7 +8,7 @@ services:
     image: charityroyale/frontend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.charityroyale-frontend.rule=Host(`charityroyale.redcouch.at`)"
+      - "traefik.http.routers.charityroyale-frontend.rule=Host(`charityroyale.hammertime.studio`)"
       - "traefik.http.routers.charityroyale-frontend.entrypoints=websecure"
       - "traefik.http.routers.charityroyale-frontend.tls.certresolver=myresolver"
     networks:
@@ -22,7 +22,7 @@ services:
     image: charityroyale/backend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.charityroyale-backend.rule=Host(`charityroyale.backend.redcouch.at`)"
+      - "traefik.http.routers.charityroyale-backend.rule=Host(`charityroyale.backend.hammertime.studio`)"
       - "traefik.http.routers.charityroyale-backend.entrypoints=websecure"
       - "traefik.http.routers.charityroyale-backend.tls.certresolver=myresolver"
     networks:

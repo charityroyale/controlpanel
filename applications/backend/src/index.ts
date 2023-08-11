@@ -18,7 +18,7 @@ import { startCleanUpMp3FilesInterval } from './cleanup'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
-	'https://charityroyale.redcouch.at',
+	'https://charityroyale.hammertime.studio',
 	'https://streamer.make-a-wish.at',
 ]
 
@@ -46,7 +46,7 @@ const io = new Server<SocketEventsMap>(httpServer, {
 app.use(express.json())
 app.use(
 	cors({
-		origin: ['http://localhost:4200', 'https://redcouch.at', 'https://charityroyale.redcouch.at'],
+		origin: ['http://localhost:4200', 'https://hammertime.studio', 'https://charityroyale.hammertime.studio'],
 	})
 )
 
