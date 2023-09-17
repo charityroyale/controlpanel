@@ -25,7 +25,7 @@ export const StatsListSection: FunctionComponent<StatsListSectionProps> = ({ aut
 					<StatsItem>
 						<div>
 							<StatsItemTitle>Total report</StatsItemTitle>
-							<StatsItemSubTitle>Share you total stats</StatsItemSubTitle>
+							<StatsItemSubTitle>Share your total stats</StatsItemSubTitle>
 						</div>
 
 						<StatsItemLinkWrapper>
