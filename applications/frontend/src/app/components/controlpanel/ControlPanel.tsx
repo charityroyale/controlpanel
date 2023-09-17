@@ -20,7 +20,7 @@ export const ControlPanel: FunctionComponent<
 			<CenterPanel globalState={globalState} auth={auth}>
 				Center-Panel
 			</CenterPanel>
-			<RightPanel>Right-Panel</RightPanel>
+			<RightPanel auth={auth}>Right-Panel</RightPanel>
 
 			<BottomPanel>Bottom-Panel</BottomPanel>
 		</React.Fragment>
