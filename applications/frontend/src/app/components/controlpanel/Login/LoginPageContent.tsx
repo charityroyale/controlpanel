@@ -109,9 +109,22 @@ export const LoginPageContent = () => {
 					</LoginButton>
 				</div>
 			</form>{' '}
+			<HammertimeLink>
+				{' '}
+				powered by{' '}
+				<a href="https://hammertime.studio" target="_blank" rel="noreferrer">
+					hammertime.studio
+				</a>
+			</HammertimeLink>
 		</React.Fragment>
 	)
 }
+
+const HammertimeLink = styled.p`
+	margin-top: 12px;
+	text-align: right;
+	font-size: ${(p) => p.theme.fontSize.s}px;
+`
 
 const ErrorMessage = styled.div<{ show: boolean }>`
 	color: ${(p) => p.theme.color.recordRed};

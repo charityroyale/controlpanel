@@ -16,6 +16,15 @@ export const BottomPanel: FunctionComponent<React.PropsWithChildren> = () => {
 			<Content>
 				<p>1. Embed browsersource (link above preview) with 1920x1080 resolution</p>
 				<p>2. Mute tab (if open during stream) before going live</p>
+				<br />
+				<p>
+					Happy with Charity Royale tooling? Looking for custom made streamer applications or games?
+					<br /> This OpenSource application is lead by{' '}
+					<a href="https://hammertime.studio" target="_blank" rel="noreferrer">
+						hammertime.studio
+					</a>
+					.
+				</p>
 			</Content>
 		</GridBottomPanel>
 	)
