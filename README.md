@@ -43,3 +43,7 @@ Tech Stack, Flow Chart and Presentation are located in [docs](docs).
 # Charity Royale
 
 https://charityroyale.at
+
+# Primary contributer
+
+https://hammertime.studio
