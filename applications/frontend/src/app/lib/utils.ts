@@ -26,6 +26,16 @@ export const formatWishSlug = (slug: string) => {
 	return `Wish: ${wishLabel}`
 }
 
+export const formatWishSlugStats = (slug: string) => {
+	const wishLabel = slug
+		.split('-')
+		.map((word) => {
+			return word.charAt(0).toUpperCase() + word.slice(1)
+		})
+		.join(' ')
+	return `${wishLabel}`
+}
+
 export const generateRandomDonation = (streamer: string, donationAmount?: number) => {
 	const precision = 2
 	const maxAmount = 1250

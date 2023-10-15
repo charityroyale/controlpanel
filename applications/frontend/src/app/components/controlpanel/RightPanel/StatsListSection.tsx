@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { HiChartBar } from 'react-icons/hi'
 import { Content, Label } from '../../../../pages/controlpanel'
 import { IconWrapper } from './DonationListSection'
@@ -6,19 +6,39 @@ import styled from 'styled-components'
 import { AiFillInstagram } from 'react-icons/ai'
 import { RiTwitterXFill } from 'react-icons/ri'
 import { SocketAuth } from '../../../provider/SocketProvider'
+import { CMS_UPDATE } from '@cp/common'
+import { useSocket } from '../../../hooks/useSocket'
+import { formatWishSlugStats } from '../../../lib/utils'
 
 interface StatsListSectionProps {
 	auth: SocketAuth
 }
 
 export const StatsListSection: FunctionComponent<StatsListSectionProps> = ({ auth }) => {
+	const { socket } = useSocket()
+	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
+
+	useEffect(() => {
+		socket?.on(CMS_UPDATE, (cmsSlugs) => {
+			const wishSelectableItems = []
+			if (cmsSlugs.length > 0) {
+				for (const slug of cmsSlugs) {
+					wishSelectableItems.push({ label: formatWishSlugStats(slug), value: slug })
+				}
+			} else {
+				wishSelectableItems.push({ label: 'Keine Wünsche zugewiesen', value: '' })
+			}
+			setWishes(wishSelectableItems)
+		})
+	}, [socket, auth.channel])
+
 	return (
 		<React.Fragment>
 			<Label>
 				<IconWrapper>
 					<HiChartBar size="14px" style={{ marginRight: '6px' }} />
 				</IconWrapper>
-				My STATS
+				STATS
 			</Label>
 			<Content>
 				<StatsReport>
@@ -41,6 +61,38 @@ export const StatsListSection: FunctionComponent<StatsListSectionProps> = ({ aut
 							</a>
 						</StatsItemLinkWrapper>
 					</StatsItem>
+
+					{wishes.map((wish) => {
+						return (
+							<StatsItem key={wish.value}>
+								<div>
+									<StatsItemTitle>{wish.label}</StatsItemTitle>
+									<StatsItemSubTitle>Stats for {wish.label}</StatsItemSubTitle>
+								</div>
+
+								<StatsItemLinkWrapper>
+									<a
+										href={`https://stats.hammertime.studio/${auth.channel}/instagram?wish=${wish.value}`}
+										target="_blank"
+										rel="noreferrer"
+									>
+										<ReportLinkWrapper>
+											<AiFillInstagram size="24px" />
+										</ReportLinkWrapper>
+									</a>
+									<a
+										href={`https://stats.hammertime.studio/${auth.channel}/twitter?wish=${wish.value}`}
+										target="_blank"
+										rel="noreferrer"
+									>
+										<ReportLinkWrapper>
+											<RiTwitterXFill size="24px" />
+										</ReportLinkWrapper>
+									</a>
+								</StatsItemLinkWrapper>
+							</StatsItem>
+						)
+					})}
 				</StatsReport>
 			</Content>
 		</React.Fragment>
