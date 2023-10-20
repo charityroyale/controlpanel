@@ -3,7 +3,7 @@ import { logger } from './logger'
 import { CmsUpcomingStreamer } from './types/cms'
 
 class MakeAWishApiClient {
-	public static readonly mawUri2022 = 'https://streamer.make-a-wish.at/charityroyale2022/info.json'
+	public static readonly mawApiUrl = 'https://streamer.make-a-wish.at/charityroyale2023/info.json'
 	public mawInfoJsonData: null | MakeAWishInfoJsonDTO = null
 	public cmsMawWishes: null | CmsUpcomingStreamer[] = null
 
@@ -30,7 +30,7 @@ class MakeAWishApiClient {
 
 	public fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
 		try {
-			const response = await fetch(MakeAWishApiClient.mawUri2022)
+			const response = await fetch(MakeAWishApiClient.mawApiUrl)
 			if (response.ok) {
 				const data = (await response.json()) as MakeAWishInfoJsonDTO
 				this.mawInfoJsonData = data
