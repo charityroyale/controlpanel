@@ -15,6 +15,7 @@ import { type CmsContent } from './types/cms'
 import yaml from 'js-yaml'
 import bodyParser from 'body-parser'
 import { startCleanUpMp3FilesInterval } from './cleanup'
+import { triggerDonationAlert } from './util/multiStreamUtil'
 
 const whiteListedCommunicationOrigins = [
 	'http://localhost:4200',
@@ -132,25 +133,10 @@ app.post(
 		const donation = request.body as Donation
 		const targetChannel = simpleUserDbService.findChannelByStreamer(request.body.streamer)
 		if (targetChannel !== undefined) {
-			/**
-			 * Includes whitelist for streamers 'krokoboss' and 'shredmir', 'ichbinzarbex' and 'filow'
-			 * which get mapped to channel: 'krokoboss-shredmir', 'ichbinzarbex-filow'
-			 */
 			logger.info(
 				`Received new donation: ${donation.user} send ${donation.amount_net}€ to ${donation.streamer} with message ${donation.message}`
 			)
-			if (targetChannel === 'krokoboss' || targetChannel === 'shredmir') {
-				sessionManager.getOrCreateSession('krokoboss').triggerDonationAlert(donation)
-				sessionManager.getOrCreateSession('shredmir').triggerDonationAlert(donation)
-			} else if (targetChannel === 'ichbinzarbex' || targetChannel === 'filow') {
-				sessionManager.getOrCreateSession('ichbinzarbex').triggerDonationAlert(donation)
-				sessionManager.getOrCreateSession('filow').triggerDonationAlert(donation)
-			} else if (targetChannel === 'veni' || targetChannel === 'netrockgg') {
-				sessionManager.getOrCreateSession('veni').triggerDonationAlert(donation)
-				sessionManager.getOrCreateSession('netrockgg').triggerDonationAlert(donation)
-			} else {
-				sessionManager.getOrCreateSession(targetChannel).triggerDonationAlert(donation)
-			}
+			triggerDonationAlert(sessionManager, targetChannel, donation)
 		} else {
 			logger.warn(`Invalid targetChannel: ${targetChannel}`)
 		}
