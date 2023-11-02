@@ -19,7 +19,10 @@ Run `npm run build:all` from the root directory to build each application at onc
 
 Add and configure multiple `.env` files accordingly using `.env.example` templates .
 
-# Start
+# Local development
+
+To run backend typescript compilation in watch mode use `npm run tsc:watch`
+To run frontend with hot reloading use `npm run dev:frontend`
 
 You can start each application from the root directory seperately by running `npm run start:frontend` and `npm run start:backend`.
 The frontend is available at port `4200` and backend at `5200`,
