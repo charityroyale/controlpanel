@@ -11,6 +11,10 @@ export class DonationGoalProgressbar extends Phaser.GameObjects.Rectangle {
 		this.setOrigin(0.5, 0)
 		this.setScale(state.scale)
 
+		this.isStroked = true
+		this.lineWidth = 1.5
+		this.strokeColor = 0xffffff
+
 		this.scene.add.existing(this)
 	}
 }

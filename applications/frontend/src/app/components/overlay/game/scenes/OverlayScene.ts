@@ -59,6 +59,7 @@ import {
 	donationGoalProgressBarName,
 } from '../objects/containers/donationgoal/DonationGoalProgressbar'
 import { DonationGoalProgressBarText } from '../objects/containers/donationgoal/text/DonationGoalProgressBarText'
+import { DonationGoalProgressBarTitleText } from '../objects/containers/donationgoal/text/DonationGoalProgressBarTitleText'
 
 export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
@@ -155,7 +156,8 @@ export class OverlayScene extends Phaser.Scene {
 				(config.socket.auth as SocketAuth).channel
 			)
 
-			this.donationGoalContainer?.updateWidth(mawInfoJsonData.streamers[(config.socket.auth as SocketAuth).channel])
+			this.donationGoalContainer?.updateProgress(mawInfoJsonData.streamers[(config.socket.auth as SocketAuth).channel])
+			config.socket.emit(REQUEST_STATE)
 		})
 
 		this.time.addEvent({
@@ -466,17 +468,30 @@ export class OverlayScene extends Phaser.Scene {
 			this,
 			0,
 			0,
-			initialState.donationWidget,
+			initialState.donationGoal,
 			'Placeholder'
 		)
 
+		const donationGoalProgressBarTitleText = new DonationGoalProgressBarTitleText(
+			this,
+			0,
+			0,
+			initialState.donationGoal,
+			`${(socket.auth as SocketAuth).channel}'S Spendenziel`
+		)
+
 		this.donationGoalContainer = new DonationGoalContainer(this, initialState.donationGoal, socket, {
-			children: [donationGoalProgressbarBackground, donationGoalProgressbar, donationGoalProgressBarText],
+			children: [
+				donationGoalProgressbarBackground,
+				donationGoalProgressbar,
+				donationGoalProgressBarText,
+				donationGoalProgressBarTitleText,
+			],
 		})
 
-		this.setContainerDraggable(this.donationBannerContainer)
 		this.setContainerDraggable(this.donationWidgetContainer)
 		this.setContainerDraggable(this.donationGoalContainer)
+		this.setContainerDraggable(this.donationBannerContainer)
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
