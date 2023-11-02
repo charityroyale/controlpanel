@@ -6,11 +6,8 @@ import {
 	maxDonationGoalProgressBarWidth,
 } from './DonationGoalProgressbar'
 import { getPercentage } from '../../../../../../lib/utils'
-import { DonationGoalProgressBarText, donatioGoalProgressBarTextName } from './text/DonationGoalProgressBarText'
-import {
-	DonationGoalProgressBarTitleText,
-	donationGoalProgressBarTitleTextname,
-} from './text/DonationGoalProgressBarTitleText'
+import { LuckiestGuyText } from '../../common/LuckiestGuyText'
+import { SairaCondensedText } from '../../common/SairaCondensedText'
 
 export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	private donationGoal = 0
@@ -57,17 +54,19 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 			this.scaleContainerItems(state)
 		}
 
-		const progressBarTitleText = this.getByName(
-			donationGoalProgressBarTitleTextname
-		) as DonationGoalProgressBarTitleText
+		const progressBarTitleText = this.getByName('donationGoalProgressBarTitleText') as SairaCondensedText
 		progressBarTitleText.setX(this.displayWidth - 645 * this.scale)
 		progressBarTitleText.setY(-15 * this.scale)
 
 		this.donationGoal = state.data.goal
 
-		const progressBarText = this.getByName(donatioGoalProgressBarTextName) as DonationGoalProgressBarText
+		const progressBarText = this.getByName('donatioGoalProgressBarText') as LuckiestGuyText
 		progressBarText.setX(this.displayWidth - 230 * this.scale)
 		progressBarText.setY(15 * this.scale)
+
+		const progressBarHashTagText = this.getByName('donationGoalProgressBarHashTagText') as LuckiestGuyText
+		progressBarHashTagText.setX(this.displayWidth - 640 * this.scale)
+		progressBarHashTagText.setY(15 * this.scale)
 	}
 
 	private scaleContainerItems = (state: DonationGoalState) => {
@@ -104,8 +103,7 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	}
 
 	private updateText() {
-		const progressBarText = this.getByName(donatioGoalProgressBarTextName) as DonationGoalProgressBarText
-
+		const progressBarText = this.getByName('donatioGoalProgressBarText') as SairaCondensedText
 		progressBarText.setText(`${this.donationSum}€ (${this.donationPercentageProgress}% von ${this.donationGoal}€)`)
 	}
 }

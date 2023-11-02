@@ -58,8 +58,8 @@ import {
 	donationGoalProgressBackgroundBarName,
 	donationGoalProgressBarName,
 } from '../objects/containers/donationgoal/DonationGoalProgressbar'
-import { DonationGoalProgressBarText } from '../objects/containers/donationgoal/text/DonationGoalProgressBarText'
-import { DonationGoalProgressBarTitleText } from '../objects/containers/donationgoal/text/DonationGoalProgressBarTitleText'
+import { LuckiestGuyText } from '../objects/common/LuckiestGuyText'
+import { SairaCondensedText } from '../objects/common/SairaCondensedText'
 
 export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
@@ -464,20 +464,32 @@ export class OverlayScene extends Phaser.Scene {
 			0xc03be4
 		)
 
-		const donationGoalProgressBarText = new DonationGoalProgressBarText(
+		const donationGoalProgressBarText = new SairaCondensedText(
 			this,
 			0,
 			0,
 			initialState.donationGoal,
-			'Placeholder'
+			'Placeholder',
+			'donatioGoalProgressBarText'
 		)
 
-		const donationGoalProgressBarTitleText = new DonationGoalProgressBarTitleText(
+		const donationGoalProgressBarTitleText = new LuckiestGuyText(
 			this,
 			0,
 			0,
 			initialState.donationGoal,
-			`${(socket.auth as SocketAuth).channel}'S Spendenziel`
+			`${(socket.auth as SocketAuth).channel} für Make-A-Wish`,
+			'donationGoalProgressBarTitleText'
+		)
+
+		const donationGoalProgressBarHashTagText = new LuckiestGuyText(
+			this,
+			0,
+			0,
+			initialState.donationGoal,
+			'#charityroyale2023',
+			'donationGoalProgressBarHashTagText',
+			{ fontSize: '14px' }
 		)
 
 		this.donationGoalContainer = new DonationGoalContainer(this, initialState.donationGoal, socket, {
@@ -486,6 +498,7 @@ export class OverlayScene extends Phaser.Scene {
 				donationGoalProgressbar,
 				donationGoalProgressBarText,
 				donationGoalProgressBarTitleText,
+				donationGoalProgressBarHashTagText,
 			],
 		})
 
