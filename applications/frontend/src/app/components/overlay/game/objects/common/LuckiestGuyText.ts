@@ -1,17 +1,18 @@
 import { DonationGoalState } from '@cp/common'
-import { TextStyle } from '../../../config/text'
+import { TextStyle } from '../config/text'
 
-export class DonationGoalProgressBarTitleText extends Phaser.GameObjects.Text {
+export class LuckiestGuyText extends Phaser.GameObjects.Text {
 	constructor(
 		scene: Phaser.Scene,
 		x: number,
 		y: number,
 		state: DonationGoalState,
 		text: string | string[],
-		style: TextStyle = textStyle
+		name: string,
+		style?: Partial<TextStyle>
 	) {
-		super(scene, x, y, text, style)
-		this.name = donationGoalProgressBarTitleTextname
+		super(scene, x, y, text, { ...textStyle, ...(style ?? {}) })
+		this.name = name
 		this.setOrigin(0, 0.5)
 		this.setResolution(3)
 		this.setScale(state.scale)
@@ -25,5 +26,3 @@ const textStyle: TextStyle = {
 	color: '#FFFFFF',
 	align: 'right',
 }
-
-export const donationGoalProgressBarTitleTextname = 'donationGoalProgressBarTitleTextname'
