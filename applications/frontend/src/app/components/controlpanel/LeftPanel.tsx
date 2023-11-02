@@ -8,6 +8,7 @@ import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { AiFillNotification } from 'react-icons/ai'
 import { FaHeart } from 'react-icons/fa'
 import { FaMicrophone } from 'react-icons/fa'
+import { SiTarget } from 'react-icons/si'
 import {
 	CMS_UPDATE,
 	DONATION_ALERT_UPDATE,
@@ -272,6 +273,101 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 						</React.Fragment>
 					</FatButton>
 
+					{/* -------- */}
+
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<SiTarget size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							Personal Goal
+						</span>
+					</Label>
+
+					<DoubleCol>
+						<FatButton
+							icon={<AiFillEye size="24px" />}
+							active={globalState.donationAlert.isVisible}
+							// value={globalState?.donationAlert.isVisible === true ? 'true' : 'false'}
+							// onClick={emitDonationAlertVisibleUpdate}
+						/>
+
+						<FatInput
+							name="personalDonationGoal"
+							value=""
+							label=""
+							placeholder="500"
+							// value={globalState.settings.text2speech.minDonationAmount}
+							// onChange={emitMinDonationAmountUpdate}
+						></FatInput>
+					</DoubleCol>
+
+					<Range
+						values={[0.5]}
+						step={0.01}
+						min={0.15}
+						max={2}
+						onChange={(_values) => console.log('todo')}
+						renderTrack={({ props, children }) => (
+							<div
+								role="button"
+								tabIndex={-1}
+								/* eslint-disable react/prop-types */
+								onMouseDown={props.onMouseDown}
+								onTouchStart={props.onTouchStart}
+								style={{
+									...props.style,
+									height: '40px',
+									display: 'flex',
+									width: '100%',
+									marginBottom: '8px',
+								}}
+							>
+								<div
+									ref={props.ref}
+									style={{
+										height: '5px',
+										width: '100%',
+										borderRadius: '2px',
+										alignSelf: 'center',
+										backgroundColor: 'rgba(255,255,255,0.2)',
+									}}
+								>
+									{children}
+								</div>
+							</div>
+						)}
+						renderThumb={({ props }) => (
+							<div
+								{...props}
+								style={{
+									/* eslint-disable react/prop-types */
+									...props.style,
+									height: '28px',
+									width: '28px',
+									borderRadius: '4px',
+									backgroundColor: '#049EE7',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<SizeIconWrapper>
+									<IoMdResize size={24} />
+								</SizeIconWrapper>
+							</div>
+						)}
+					/>
+
+					{/* -------- */}
+
 					<Label
 						style={{
 							margin: '0 -8px',
@@ -310,6 +406,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 						items={TTS_SPEAKER_SELECT_ITEMS}
 						value={globalState.settings.text2speech.language}
 					/>
+
 					<Label
 						style={{
 							margin: '0 -8px',
@@ -496,6 +593,12 @@ const IconWrapper = styled.span`
 
 export const GridLeftPanel = styled.div`
 	grid-area: left-panel;
+`
+
+const DoubleCol = styled.div`
+	display: flex;
+	gap: ${(p) => p.theme.space.s}px;
+	margin-bottom: ${(p) => p.theme.space.s}px;
 `
 
 const getNewVolumeFromClick = (volume: number) => {

@@ -63,6 +63,7 @@ const IconWrapper = styled.div`
 const SelectWrapper = styled.div`
 	position: relative;
 	margin-bottom: ${(p) => p.theme.space.s}px;
+	margin-top: ${(p) => p.theme.space.s}px;
 `
 
 const Select = styled.select`
