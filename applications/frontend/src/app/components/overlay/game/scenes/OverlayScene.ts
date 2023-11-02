@@ -470,8 +470,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			initialState.donationGoal,
 			'Placeholder',
-			'donatioGoalProgressBarText',
-			{ color: '#7DF8FF' }
+			'donatioGoalProgressBarText'
 		)
 
 		const donationGoalProgressBarTitleText = new LuckiestGuyText(
