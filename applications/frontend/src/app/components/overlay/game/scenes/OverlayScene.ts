@@ -58,6 +58,7 @@ import {
 	donationGoalProgressBackgroundBarName,
 	donationGoalProgressBarName,
 } from '../objects/containers/donationgoal/DonationGoalProgressbar'
+import { DonationGoalProgressBarText } from '../objects/containers/donationgoal/text/DonationGoalProgressBarText'
 
 export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
@@ -141,6 +142,7 @@ export class OverlayScene extends Phaser.Scene {
 
 			this.events.emit('ttsUpdated', state.settings.text2speech.minDonationAmount)
 		})
+
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
 			this.donationWidgetContainer?.updateWishContentText()
@@ -460,8 +462,16 @@ export class OverlayScene extends Phaser.Scene {
 			0xc03be4
 		)
 
+		const donationGoalProgressBarText = new DonationGoalProgressBarText(
+			this,
+			0,
+			0,
+			initialState.donationWidget,
+			'Placeholder'
+		)
+
 		this.donationGoalContainer = new DonationGoalContainer(this, initialState.donationGoal, socket, {
-			children: [donationGoalProgressbarBackground, donationGoalProgressbar],
+			children: [donationGoalProgressbarBackground, donationGoalProgressbar, donationGoalProgressBarText],
 		})
 
 		this.setContainerDraggable(this.donationBannerContainer)

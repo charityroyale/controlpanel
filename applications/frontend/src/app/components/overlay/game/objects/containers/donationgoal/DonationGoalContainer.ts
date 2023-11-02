@@ -6,6 +6,7 @@ import {
 	maxDonationGoalProgressBarWidth,
 } from './DonationGoalProgressbar'
 import { getPercentage } from '../../../../../../lib/utils'
+import { DonationGoalProgressBarText, donatioGoalProgressBarTextName } from './text/DonationGoalProgressBarText'
 
 export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	constructor(
@@ -16,8 +17,8 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	) {
 		super(scene, options?.x, options?.y, options?.children)
 		this.name = donationGoalContainerName
-		this.setSize(500, 900)
 		this.setScale(state.scale)
+		this.setSize(maxDonationGoalProgressBarWidth, 30)
 		this.setIsVisible(state.isVisible)
 		this.setPosition(1920 / 2, 100)
 		this.setInteractive({ cursor: 'pointer' })
@@ -63,6 +64,10 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 		/* const progressBarText = this.getByName(donationWidgetProgressBarTextName) as DonationWidgetProgressBarText
 		progressBarText.setX(this.displayWidth - 315 * this.scale)
 		progressBarText.setY(164.5 * this.scale)*/
+
+		const progressBarText = this.getByName(donatioGoalProgressBarTextName) as DonationGoalProgressBarText
+		progressBarText.setX(this.x - this.displayWidth)
+		progressBarText.setY(this.y + this.displayHeight / 2)
 	}
 
 	private scaleContainerItems = (state: DonationGoalState) => {
@@ -120,7 +125,14 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 
 	public updateWidth(streamerInfo: MakeAWishStreamerDTO) {
 		const progressBar = this.getByName(donationGoalProgressBarName) as DonationGoalProgressbar
-		progressBar.width = this.calcProgress(Number(streamerInfo.current_donation_sum_net)).progressBarWidth
+		const progress = this.calcProgress(Number(streamerInfo.current_donation_sum_net))
+		progressBar.width = progress.progressBarWidth
+
+		const progressBarText = this.getByName(donatioGoalProgressBarTextName) as DonationGoalProgressBarText
+
+		progressBarText.setText(
+			`${progress.donationSum}€ (${progress.donationPercentageProgress}% von ${progress.donationGoal}€)`
+		)
 	}
 }
 
