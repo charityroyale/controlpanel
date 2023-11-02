@@ -44,7 +44,7 @@ see [.env.example](applications/frontend/.env.example)
 | MAIN_APPLICATION_PASSWORD          | the master password for main streamers       |
 | COMMUNITY_APPLICATION_PASSWORD     | the community password for main streamers    |
 | APPLICATION_SECRET                 | encryption key for passwords                 |
-| SOCKETIO_AUTH_SECRET               | used to sign jwt payload                     |
+| SOCKETIO_AUTH_SECRET               | used to sign socket payload                  |
 | NEXT_PUBLIC_MAW_DASHBOARD_BASE_URL | an absolute url to the current maw dashboard |
 
 # Local development
