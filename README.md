@@ -19,6 +19,34 @@ Run `npm run build:all` from the root directory to build each application at onc
 
 Add and configure multiple `.env` files accordingly using `.env.example` templates .
 
+# Environment variables
+
+Create .env files in backend and frontend application directory (next to .env.example)
+
+### Backend
+
+see [.env.example](applications/backend/.env.example)
+
+| variable             | description                                                                                           |
+| -------------------- | ----------------------------------------------------------------------------------------------------- |
+| CLIENT_ID_SECRET     | a controlpanel related secret to generate a jwt token to create an access token for the rest services |
+| ACCESS_TOKEN_SECRET  | used to sign a jwt token for the rest api                                                             |
+| LOG_LEVEL            | used to specifcy backend logging debug level (not in use)                                             |
+| SOCKETIO_AUTH_SECRET | used to sign a jwt token for the socket connection                                                    |
+
+### Frontend
+
+see [.env.example](applications/frontend/.env.example)
+
+| variable                           | description                                  |
+| ---------------------------------- | -------------------------------------------- |
+| NEXT_PUBLIC_BACKEND_URL            | an absolute url to the backend rest api      |
+| MAIN_APPLICATION_PASSWORD          | the master password for main streamers       |
+| COMMUNITY_APPLICATION_PASSWORD     | the community password for main streamers    |
+| APPLICATION_SECRET                 | encryption key for passwords                 |
+| SOCKETIO_AUTH_SECRET               | used to sign jwt payload                     |
+| NEXT_PUBLIC_MAW_DASHBOARD_BASE_URL | an absolute url to the current maw dashboard |
+
 # Local development
 
 To run backend typescript compilation in watch mode use `npm run tsc:watch`
