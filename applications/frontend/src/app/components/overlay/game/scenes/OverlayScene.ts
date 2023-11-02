@@ -52,6 +52,11 @@ import {
 	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../objects/config/sound'
 import { DonationWidgetLogo } from '../objects/containers/donationwidget/DonationWidgetLogo'
+import { DonationGoalContainer } from '../objects/containers/donationgoal/DonationGoalContainer'
+import {
+	DonationGoalProgressbar,
+	donationGoalProgressBarName,
+} from '../objects/containers/donationgoal/DonationGoalProgressbar'
 
 export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
@@ -92,6 +97,7 @@ export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
 	public donationBannerContainer: DonationBannerContainer | null = null
 	public donationWidgetContainer: DonationWidgetContainer | null = null
+	public donationGoalContainer: DonationGoalContainer | null = null
 	public isLockedOverlay = false
 
 	private ttsVolume = 0
@@ -109,6 +115,7 @@ export class OverlayScene extends Phaser.Scene {
 	init(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
 		config.socket.on(STATE_UPDATE, (state) => {
 			this.donationBannerContainer?.handleState(state.donationAlert)
+			this.donationGoalContainer?.handleState(state.donationGoal)
 			this.donationWidgetContainer?.handleState(state.donationWidget)
 
 			/**
@@ -432,8 +439,21 @@ export class OverlayScene extends Phaser.Scene {
 			],
 		})
 
+		const donationGoalProgressbar = new DonationGoalProgressbar(
+			this,
+			50,
+			250,
+			initialState.donationGoal,
+			donationGoalProgressBarName,
+			0x2b067a
+		)
+		this.donationGoalContainer = new DonationGoalContainer(this, initialState.donationGoal, socket, {
+			children: [donationGoalProgressbar],
+		})
+
 		this.setContainerDraggable(this.donationBannerContainer)
 		this.setContainerDraggable(this.donationWidgetContainer)
+		this.setContainerDraggable(this.donationGoalContainer)
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
