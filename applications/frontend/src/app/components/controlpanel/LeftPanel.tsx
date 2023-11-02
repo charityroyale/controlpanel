@@ -232,81 +232,79 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 			</Label>
 			<Content>
 				<ButtonsWrapper>
-					<FatButton
-						icon={<AiFillEye size="24px" />}
-						active={globalState.donationAlert.isVisible}
-						value={globalState?.donationAlert.isVisible === true ? 'true' : 'false'}
-						onClick={emitDonationAlertVisibleUpdate}
-					>
-						<span>Donation Alert</span>
-					</FatButton>
-					<FatButton
-						icon={globalState.settings.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />}
-						active={globalState.settings.volume > 0}
-						value={globalState?.settings.volume.toString()}
-						onClick={emitVolumeUpdate}
-					>
-						<VolumeIndicator volume={globalState.settings.volume} />
-					</FatButton>
-					<FatButton style={{ cursor: 'default' }}>
-						<React.Fragment>
-							<Range
-								values={scaleDonationAlert}
-								step={0.01}
-								min={0.15}
-								max={2}
-								onChange={(values) => setScaleDonationALert(values)}
-								renderTrack={({ props, children }) => (
-									<div
-										role="button"
-										tabIndex={-1}
-										/* eslint-disable react/prop-types */
-										onMouseDown={props.onMouseDown}
-										onTouchStart={props.onTouchStart}
-										style={{
-											...props.style,
-											height: '40px',
-											display: 'flex',
-											width: '100%',
-										}}
-									>
-										<div
-											ref={props.ref}
-											style={{
-												height: '5px',
-												width: '100%',
-												borderRadius: '2px',
-												alignSelf: 'center',
-												backgroundColor: 'rgba(255,255,255,0.2)',
-											}}
-										>
-											{children}
-										</div>
-									</div>
-								)}
-								renderThumb={({ props }) => (
-									<div
-										{...props}
-										style={{
-											/* eslint-disable react/prop-types */
-											...props.style,
-											height: '28px',
-											width: '28px',
-											borderRadius: '4px',
-											backgroundColor: '#049EE7',
-											display: 'flex',
-											justifyContent: 'center',
-											alignItems: 'center',
-										}}
-									>
-										<SizeIconWrapper>
-											<IoMdResize size={24} />
-										</SizeIconWrapper>
-									</div>
-								)}
-							/>
-						</React.Fragment>
-					</FatButton>
+					<DoubleCol>
+						<FatButton
+							icon={<AiFillEye size="24px" />}
+							active={globalState.donationAlert.isVisible}
+							value={globalState?.donationAlert.isVisible === true ? 'true' : 'false'}
+							onClick={emitDonationAlertVisibleUpdate}
+						/>
+						<FatButton
+							icon={globalState.settings.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />}
+							active={globalState.settings.volume > 0}
+							value={globalState?.settings.volume.toString()}
+							onClick={emitVolumeUpdate}
+						>
+							<VolumeIndicator volume={globalState.settings.volume} />
+						</FatButton>
+					</DoubleCol>
+
+					<Range
+						values={scaleDonationAlert}
+						step={0.01}
+						min={0.15}
+						max={2}
+						onChange={(values) => setScaleDonationALert(values)}
+						renderTrack={({ props, children }) => (
+							<div
+								role="button"
+								tabIndex={-1}
+								/* eslint-disable react/prop-types */
+								onMouseDown={props.onMouseDown}
+								onTouchStart={props.onTouchStart}
+								style={{
+									...props.style,
+									height: '40px',
+									display: 'flex',
+									width: '100%',
+									marginBottom: '8px',
+								}}
+							>
+								<div
+									ref={props.ref}
+									style={{
+										height: '5px',
+										width: '100%',
+										borderRadius: '2px',
+										alignSelf: 'center',
+										backgroundColor: 'rgba(255,255,255,0.2)',
+									}}
+								>
+									{children}
+								</div>
+							</div>
+						)}
+						renderThumb={({ props }) => (
+							<div
+								{...props}
+								style={{
+									/* eslint-disable react/prop-types */
+									...props.style,
+									height: '28px',
+									width: '28px',
+									borderRadius: '4px',
+									backgroundColor: '#049EE7',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<SizeIconWrapper>
+									<IoMdResize size={24} />
+								</SizeIconWrapper>
+							</div>
+						)}
+					/>
 
 					{/* -------- */}
 
@@ -340,7 +338,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 							placeholder="12345"
 							value={globalState.donationGoal.data.goal}
 							onChange={emitDonationGoalAmountUpdate}
-						></FatInput>
+						/>
 					</DoubleCol>
 					<Range
 						values={scaleDonationGoal}
@@ -419,21 +417,23 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 							Demo
 						</DemoAlertButton>
 					</Label>
-					<FatButton
-						icon={
-							globalState.settings.text2speech.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />
-						}
-						active={globalState.settings.text2speech.volume > 0}
-						value={globalState.settings.text2speech.volume.toString()}
-						onClick={emitText2SpeechVolume}
-					>
-						<VolumeIndicator volume={globalState.settings.text2speech.volume} />
-					</FatButton>
-					<FatInput
-						name="minDonationAmountForText2Speech"
-						value={globalState.settings.text2speech.minDonationAmount}
-						onChange={emitMinDonationAmountUpdate}
-					></FatInput>
+					<DoubleCol>
+						<FatButton
+							icon={
+								globalState.settings.text2speech.volume > 0 ? <HiVolumeUp size="24px" /> : <HiVolumeOff size="24px" />
+							}
+							active={globalState.settings.text2speech.volume > 0}
+							value={globalState.settings.text2speech.volume.toString()}
+							onClick={emitText2SpeechVolume}
+						>
+							<VolumeIndicator volume={globalState.settings.text2speech.volume} />
+						</FatButton>
+						<FatInput
+							name="minDonationAmountForText2Speech"
+							value={globalState.settings.text2speech.minDonationAmount}
+							onChange={emitMinDonationAmountUpdate}
+						/>
+					</DoubleCol>
 					<FatSelect
 						onChange={emitLanguageUpdate}
 						items={TTS_SPEAKER_SELECT_ITEMS}
@@ -458,74 +458,70 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 							Zum Dashboard
 						</StyledLink>
 					</Label>
+
 					<FatButton
 						icon={<AiFillEye size="24px" />}
 						active={globalState.donationWidget.isVisible}
 						value={globalState?.donationWidget.isVisible === true ? 'true' : 'false'}
 						onClick={emitDonationWidgetVisibleUpdate}
-					>
-						<span>Donation Widget</span>
-					</FatButton>
+					/>
 
-					<FatButton style={{ cursor: 'default' }}>
-						<React.Fragment>
-							<Range
-								values={scaleDonationWidget}
-								step={0.01}
-								min={0.15}
-								max={2}
-								onChange={(values) => setScaleDonationWidget(values)}
-								renderTrack={({ props, children }) => (
-									<div
-										role="button"
-										tabIndex={-1}
-										/* eslint-disable react/prop-types */
-										onMouseDown={props.onMouseDown}
-										onTouchStart={props.onTouchStart}
-										style={{
-											...props.style,
-											height: '40px',
-											display: 'flex',
-											width: '100%',
-										}}
-									>
-										<div
-											ref={props.ref}
-											style={{
-												height: '5px',
-												width: '100%',
-												borderRadius: '2px',
-												alignSelf: 'center',
-												backgroundColor: 'rgba(255,255,255,0.2)',
-											}}
-										>
-											{children}
-										</div>
-									</div>
-								)}
-								renderThumb={({ props }) => (
-									<div
-										{...props}
-										style={{
-											/* eslint-disable react/prop-types */
-											...props.style,
-											height: '28px',
-											width: '28px',
-											borderRadius: '4px',
-											backgroundColor: '#049EE7',
-											display: 'flex',
-											justifyContent: 'center',
-											alignItems: 'center',
-										}}
-									>
-										<SizeIconWrapper>
-											<IoMdResize size={24} />
-										</SizeIconWrapper>
-									</div>
-								)}
-							/>
-						</React.Fragment>
-					</FatButton>
+					<Range
+						values={scaleDonationWidget}
+						step={0.01}
+						min={0.15}
+						max={2}
+						onChange={(values) => setScaleDonationWidget(values)}
+						renderTrack={({ props, children }) => (
+							<div
+								role="button"
+								tabIndex={-1}
+								/* eslint-disable react/prop-types */
+								onMouseDown={props.onMouseDown}
+								onTouchStart={props.onTouchStart}
+								style={{
+									...props.style,
+									height: '40px',
+									display: 'flex',
+									width: '100%',
+								}}
+							>
+								<div
+									ref={props.ref}
+									style={{
+										height: '5px',
+										width: '100%',
+										borderRadius: '2px',
+										alignSelf: 'center',
+										backgroundColor: 'rgba(255,255,255,0.2)',
+									}}
+								>
+									{children}
+								</div>
+							</div>
+						)}
+						renderThumb={({ props }) => (
+							<div
+								{...props}
+								style={{
+									/* eslint-disable react/prop-types */
+									...props.style,
+									height: '28px',
+									width: '28px',
+									borderRadius: '4px',
+									backgroundColor: '#049EE7',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<SizeIconWrapper>
+									<IoMdResize size={24} />
+								</SizeIconWrapper>
+							</div>
+						)}
+					/>
+
 					<FatSelect
 						id="wishes"
 						onChange={emitWishUpdate}
