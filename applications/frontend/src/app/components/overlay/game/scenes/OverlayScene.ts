@@ -477,7 +477,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationGoal,
-			`${(socket.auth as SocketAuth).channel}'S Spendenziel`
+			`${(socket.auth as SocketAuth).channel} für Make-A-Wish`
 		)
 
 		this.donationGoalContainer = new DonationGoalContainer(this, initialState.donationGoal, socket, {
