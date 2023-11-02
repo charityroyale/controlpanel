@@ -1,4 +1,4 @@
-import { DonationAlertState, DonationWidgetState, SettingsState } from '@cp/common'
+import { DonationAlertState, DonationGoalState, DonationWidgetState, SettingsState } from '@cp/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { mawApiClient } from './MakeAWishApiClient'
 
@@ -16,6 +16,31 @@ const settingsSlice = createSlice({
 	initialState: initialSettingsState,
 	reducers: {
 		update: (state, action: PayloadAction<Partial<SettingsState>>) => {
+			return {
+				...state,
+				...action.payload,
+			}
+		},
+	},
+})
+
+const initialDonationGoalState: DonationGoalState = {
+	isVisible: true,
+	scale: 1,
+	data: {
+		current: 0,
+		goal: 500,
+	},
+	position: {
+		x: 1920 / 3,
+		y: 111,
+	},
+}
+const donationGoalSlice = createSlice({
+	name: 'donationgoal',
+	initialState: initialDonationGoalState,
+	reducers: {
+		update: (state, action: PayloadAction<Partial<DonationGoalState>>) => {
 			return {
 				...state,
 				...action.payload,
@@ -75,6 +100,9 @@ const donationWidgetSlice = createSlice({
 
 export const donationAlertReducer = donationAlertSlice.reducer
 export const updateDonationAlert = donationAlertSlice.actions.update
+
+export const donationGoalReducer = donationGoalSlice.reducer
+export const updateDonationGoal = donationGoalSlice.actions.update
 
 export const donationWidgetReducer = donationWidgetSlice.reducer
 export const updateDonationWidget = donationWidgetSlice.actions.update
