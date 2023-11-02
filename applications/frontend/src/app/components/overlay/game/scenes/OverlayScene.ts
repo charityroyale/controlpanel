@@ -52,6 +52,14 @@ import {
 	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../objects/config/sound'
 import { DonationWidgetLogo } from '../objects/containers/donationwidget/DonationWidgetLogo'
+import { DonationGoalContainer } from '../objects/containers/donationgoal/DonationGoalContainer'
+import {
+	DonationGoalProgressbar,
+	donationGoalProgressBackgroundBarName,
+	donationGoalProgressBarName,
+} from '../objects/containers/donationgoal/DonationGoalProgressbar'
+import { DonationGoalProgressBarText } from '../objects/containers/donationgoal/text/DonationGoalProgressBarText'
+import { DonationGoalProgressBarTitleText } from '../objects/containers/donationgoal/text/DonationGoalProgressBarTitleText'
 
 export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
@@ -92,6 +100,7 @@ export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
 	public donationBannerContainer: DonationBannerContainer | null = null
 	public donationWidgetContainer: DonationWidgetContainer | null = null
+	public donationGoalContainer: DonationGoalContainer | null = null
 	public isLockedOverlay = false
 
 	private ttsVolume = 0
@@ -109,6 +118,7 @@ export class OverlayScene extends Phaser.Scene {
 	init(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
 		config.socket.on(STATE_UPDATE, (state) => {
 			this.donationBannerContainer?.handleState(state.donationAlert)
+			this.donationGoalContainer?.handleState(state.donationGoal)
 			this.donationWidgetContainer?.handleState(state.donationWidget)
 
 			/**
@@ -133,6 +143,7 @@ export class OverlayScene extends Phaser.Scene {
 
 			this.events.emit('ttsUpdated', state.settings.text2speech.minDonationAmount)
 		})
+
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
 			this.donationWidgetContainer?.updateWishContentText()
@@ -144,6 +155,9 @@ export class OverlayScene extends Phaser.Scene {
 				mawInfoJsonData,
 				(config.socket.auth as SocketAuth).channel
 			)
+
+			this.donationGoalContainer?.updateProgress(mawInfoJsonData.streamers[(config.socket.auth as SocketAuth).channel])
+			config.socket.emit(REQUEST_STATE)
 		})
 
 		this.time.addEvent({
@@ -432,8 +446,52 @@ export class OverlayScene extends Phaser.Scene {
 			],
 		})
 
-		this.setContainerDraggable(this.donationBannerContainer)
+		const donationGoalProgressbarBackground = new DonationGoalProgressbar(
+			this,
+			0,
+			0,
+			initialState.donationGoal,
+			donationGoalProgressBackgroundBarName,
+			0x2b067a
+		)
+
+		const donationGoalProgressbar = new DonationGoalProgressbar(
+			this,
+			0,
+			0,
+			initialState.donationGoal,
+			donationGoalProgressBarName,
+			0xc03be4
+		)
+
+		const donationGoalProgressBarText = new DonationGoalProgressBarText(
+			this,
+			0,
+			0,
+			initialState.donationGoal,
+			'Placeholder'
+		)
+
+		const donationGoalProgressBarTitleText = new DonationGoalProgressBarTitleText(
+			this,
+			0,
+			0,
+			initialState.donationGoal,
+			`${(socket.auth as SocketAuth).channel}'S Spendenziel`
+		)
+
+		this.donationGoalContainer = new DonationGoalContainer(this, initialState.donationGoal, socket, {
+			children: [
+				donationGoalProgressbarBackground,
+				donationGoalProgressbar,
+				donationGoalProgressBarText,
+				donationGoalProgressBarTitleText,
+			],
+		})
+
 		this.setContainerDraggable(this.donationWidgetContainer)
+		this.setContainerDraggable(this.donationGoalContainer)
+		this.setContainerDraggable(this.donationBannerContainer)
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false

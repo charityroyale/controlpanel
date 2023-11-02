@@ -14,14 +14,17 @@ import {
 	REQUEST_CMS_DATA,
 	DONATION_TRIGGER,
 	REQUEST_DONATION_TRIGGER,
+	DONATION_GOAL_UPDATE,
 } from '@cp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
 import {
 	donationAlertReducer,
+	donationGoalReducer,
 	donationWidgetReducer,
 	settingsReducer,
 	updateDonationAlert,
+	updateDonationGoal,
 	updateDonationWidget,
 	updateSettings,
 } from './State'
@@ -34,6 +37,7 @@ export default class Session {
 		reducer: {
 			donationAlert: donationAlertReducer,
 			donationWidget: donationWidgetReducer,
+			donationGoal: donationGoalReducer,
 			settings: settingsReducer,
 		},
 	})
@@ -112,6 +116,9 @@ export default class Session {
 		socket.on(DONATION_ALERT_UPDATE, (donationAlertUpdate) =>
 			this.store.dispatch(updateDonationAlert(donationAlertUpdate))
 		)
+
+		socket.on(DONATION_GOAL_UPDATE, (donationGoalUpdate) => this.store.dispatch(updateDonationGoal(donationGoalUpdate)))
+
 		socket.on(REQUEST_DONATION_TRIGGER, (donation) => {
 			this.triggerDonationAlert(donation)
 		})

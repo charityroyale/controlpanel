@@ -8,9 +8,11 @@ import { HiVolumeOff, HiVolumeUp } from 'react-icons/hi'
 import { AiFillNotification } from 'react-icons/ai'
 import { FaHeart } from 'react-icons/fa'
 import { FaMicrophone } from 'react-icons/fa'
+import { SiTarget } from 'react-icons/si'
 import {
 	CMS_UPDATE,
 	DONATION_ALERT_UPDATE,
+	DONATION_GOAL_UPDATE,
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
 	REQUEST_CMS_DATA,
@@ -36,6 +38,8 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
+	const [scaleDonationGoal, setScaleDonationGoal] = useState([globalState.donationGoal.scale])
+
 	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
 	const [isDisabledWishSelected, setIsDisabledWishSelected] = useState(false)
 
@@ -95,6 +99,22 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 		[globalState.settings.text2speech, socket]
 	)
 
+	const emitDonationGoalAmountUpdate = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			const numberRegex = /^[0-9\b]+$/
+			if (e.target.value === '' || numberRegex.test(e.target.value)) {
+				socket?.emit(DONATION_GOAL_UPDATE, {
+					...globalState.donationGoal,
+					data: {
+						...globalState.donationGoal.data,
+						goal: Number(e.target.value),
+					},
+				})
+			}
+		},
+		[globalState.donationGoal, socket]
+	)
+
 	const emitText2SpeechVolume = useCallback(() => {
 		const newVolume = getNewVolumeFromClick(globalState.settings.text2speech.volume)
 		socket?.emit(SETTINGS_UPDATE, {
@@ -105,11 +125,11 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 		})
 	}, [globalState.settings.text2speech, socket])
 
-	const emitDonationScaleChange = useDebouncedCallback((scale: number) => {
-		socket?.emit(DONATION_ALERT_UPDATE, {
-			scale,
+	const emitDonationGoalVisibleUpdate = useCallback(() => {
+		socket?.emit(DONATION_GOAL_UPDATE, {
+			isVisible: !globalState.donationGoal.isVisible,
 		})
-	}, 125)
+	}, [globalState.donationGoal.isVisible, socket])
 
 	const emitDonationAlertVisibleUpdate = useCallback(() => {
 		socket?.emit(DONATION_ALERT_UPDATE, {
@@ -117,8 +137,19 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 		})
 	}, [globalState.donationAlert.isVisible, socket])
 
+	const emitDonationScaleChange = useDebouncedCallback((scale: number) => {
+		socket?.emit(DONATION_ALERT_UPDATE, {
+			scale,
+		})
+	}, 125)
 	const emitDonationWidgetScaleChange = useDebouncedCallback((scale: number) => {
 		socket?.emit(DONATION_WIDGET_UPDATE, {
+			scale,
+		})
+	}, 125)
+
+	const emitDonationGoalScaleChange = useDebouncedCallback((scale: number) => {
+		socket?.emit(DONATION_GOAL_UPDATE, {
 			scale,
 		})
 	}, 125)
@@ -136,6 +167,11 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	useEffect(() => {
 		emitDonationWidgetScaleChange(scaleDonationWidget[0])
 	}, [emitDonationWidgetScaleChange, scaleDonationWidget])
+
+	useEffect(() => {
+		console.log(scaleDonationGoal)
+		emitDonationGoalScaleChange(scaleDonationGoal[0])
+	}, [emitDonationGoalScaleChange, scaleDonationGoal])
 
 	const emitRandomDonation = useCallback(
 		(donationAmount?: number) => {
@@ -272,6 +308,99 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 						</React.Fragment>
 					</FatButton>
 
+					{/* -------- */}
+
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<SiTarget size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							Personal Goal
+						</span>
+					</Label>
+
+					<DoubleCol>
+						<FatButton
+							icon={<AiFillEye size="24px" />}
+							active={globalState.donationGoal.isVisible}
+							value={globalState?.donationGoal.isVisible === true ? 'true' : 'false'}
+							onClick={emitDonationGoalVisibleUpdate}
+						/>
+
+						<FatInput
+							name="personalDonationGoal"
+							label=""
+							placeholder="12345"
+							value={globalState.donationGoal.data.goal}
+							onChange={emitDonationGoalAmountUpdate}
+						></FatInput>
+					</DoubleCol>
+					<Range
+						values={scaleDonationGoal}
+						step={0.01}
+						min={0.15}
+						max={2}
+						onChange={(values) => setScaleDonationGoal(values)}
+						renderTrack={({ props, children }) => (
+							<div
+								role="button"
+								tabIndex={-1}
+								/* eslint-disable react/prop-types */
+								onMouseDown={props.onMouseDown}
+								onTouchStart={props.onTouchStart}
+								style={{
+									...props.style,
+									height: '40px',
+									display: 'flex',
+									width: '100%',
+									marginBottom: '8px',
+								}}
+							>
+								<div
+									ref={props.ref}
+									style={{
+										height: '5px',
+										width: '100%',
+										borderRadius: '2px',
+										alignSelf: 'center',
+										backgroundColor: 'rgba(255,255,255,0.2)',
+									}}
+								>
+									{children}
+								</div>
+							</div>
+						)}
+						renderThumb={({ props }) => (
+							<div
+								{...props}
+								style={{
+									/* eslint-disable react/prop-types */
+									...props.style,
+									height: '28px',
+									width: '28px',
+									borderRadius: '4px',
+									backgroundColor: '#049EE7',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<SizeIconWrapper>
+									<IoMdResize size={24} />
+								</SizeIconWrapper>
+							</div>
+						)}
+					/>
+
+					{/* -------- */}
+
 					<Label
 						style={{
 							margin: '0 -8px',
@@ -310,6 +439,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 						items={TTS_SPEAKER_SELECT_ITEMS}
 						value={globalState.settings.text2speech.language}
 					/>
+
 					<Label
 						style={{
 							margin: '0 -8px',
@@ -496,6 +626,12 @@ const IconWrapper = styled.span`
 
 export const GridLeftPanel = styled.div`
 	grid-area: left-panel;
+`
+
+const DoubleCol = styled.div`
+	display: flex;
+	gap: ${(p) => p.theme.space.s}px;
+	margin-bottom: ${(p) => p.theme.space.s}px;
 `
 
 const getNewVolumeFromClick = (volume: number) => {

@@ -1,7 +1,21 @@
 export interface GlobalState {
 	donationAlert: DonationAlertState
 	donationWidget: DonationWidgetState
+	donationGoal: DonationGoalState
 	settings: SettingsState
+}
+
+export interface DonationGoalState {
+	isVisible: boolean
+	scale: number
+	data: {
+		current: number
+		goal: number
+	}
+	position: {
+		x: number
+		y: number
+	}
 }
 
 export interface SettingsState {
@@ -58,6 +72,8 @@ export interface UserEntry {
 
 export const DONATION_ALERT_UPDATE = 'donationAlertUpdate'
 export const DONATION_WIDGET_UPDATE = 'donationWidgetUpdate'
+export const DONATION_GOAL_UPDATE = 'donationGoalUpdate'
+
 export const SETTINGS_UPDATE = 'settingsUpdate'
 export const STATE_UPDATE = 'stateUpdate'
 export const REQUEST_STATE = 'requestState'
@@ -71,6 +87,7 @@ export const REQUEST_DONATION_TRIGGER = 'requestDonationTrigger'
 export interface SocketEventsMap {
 	[DONATION_ALERT_UPDATE]: (donationAlertUpdate: Partial<DonationAlertState>) => void
 	[DONATION_WIDGET_UPDATE]: (donationWidgetUpdate: Partial<DonationWidgetState>) => void
+	[DONATION_GOAL_UPDATE]: (donationGoalUpdate: Partial<DonationGoalState>) => void
 	[SETTINGS_UPDATE]: (settingsUpdate: Partial<SettingsState>) => void
 	[STATE_UPDATE]: (state: GlobalState) => void
 	[REQUEST_STATE]: () => void
