@@ -7,6 +7,7 @@
 	"description": "A loveable stream overlay for Charity Royale",
 	"scripts": {
 		"build:all": "npm run build --workspaces",
+		"dev:frontend": "npm run dev --workspace=@cp/frontend",
 		"start:frontend": "npm run start --workspace=@cp/frontend",
 		"start:backend": "npm run start --workspace=@cp/backend",
 		"build:tsc": "tsc --build",
@@ -22,7 +23,7 @@
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^5.54.1",
 		"@typescript-eslint/parser": "^5.54.1",
-	    "@types/jsonwebtoken": "^9.0.1",
+		"@types/jsonwebtoken": "^9.0.1",
 		"eslint": "^8.35.0",
 		"eslint-config-standard-with-typescript": "^34.0.0",
 		"eslint-plugin-prettier": "^4.0.0",
