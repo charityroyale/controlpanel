@@ -1,6 +1,11 @@
-import { DonationGoalState, SocketEventsMap, DONATION_GOAL_UPDATE } from '@cp/common'
+import { DonationGoalState, SocketEventsMap, DONATION_GOAL_UPDATE, MakeAWishStreamerDTO } from '@cp/common'
 import { Socket } from 'socket.io-client'
-import { DonationGoalProgressbar } from './DonationGoalProgressbar'
+import {
+	DonationGoalProgressbar,
+	donationGoalProgressBarName,
+	maxDonationGoalProgressBarWidth,
+} from './DonationGoalProgressbar'
+import { getPercentage } from '../../../../../../lib/utils'
 
 export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	constructor(
@@ -45,6 +50,19 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 			//this.scaleDonationHeaderText()
 			//this.scaleDonationUserMessageText()
 		}
+
+		// ProgressBar
+		/*const progressBarBackground = this.getByName(donationGoalProgressBackgroundBarName) as DonationGoalProgressbar
+		progressBarBackground.setX(this.displayWidth - 735 * this.scale)
+		progressBarBackground.setY(164.5 * this.scale)
+
+		const progressBar = this.getByName(donationGoalProgressBarName) as DonationGoalProgressbar
+		progressBar.setX(this.displayWidth - 735 * this.scale)
+		progressBar.setY(164.5 * this.scale)*/
+
+		/* const progressBarText = this.getByName(donationWidgetProgressBarTextName) as DonationWidgetProgressBarText
+		progressBarText.setX(this.displayWidth - 315 * this.scale)
+		progressBarText.setY(164.5 * this.scale)*/
 	}
 
 	private scaleContainerItems = (state: DonationGoalState) => {
@@ -82,6 +100,27 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	public setIsVisible(visible: boolean) {
 		if (this.visible === visible) return
 		this.visible = visible
+	}
+
+	public calcProgress(_totalDonationSumNetCollected = 0) {
+		const donationSum = 250 // todo: change back to param
+		const donationGoal = 500 // todo: use from globalstate donationgoalstate object value
+		// todo: add text to loader
+		const donationPercentageProgress = Number(getPercentage(donationSum, donationGoal).toFixed(2))
+		const progressBarWidth = (maxDonationGoalProgressBarWidth / 100) * donationPercentageProgress
+
+		return {
+			donationSum,
+			donationGoal,
+			donationPercentageProgress,
+			progressBarWidth:
+				progressBarWidth > maxDonationGoalProgressBarWidth ? maxDonationGoalProgressBarWidth : progressBarWidth,
+		}
+	}
+
+	public updateWidth(streamerInfo: MakeAWishStreamerDTO) {
+		const progressBar = this.getByName(donationGoalProgressBarName) as DonationGoalProgressbar
+		progressBar.width = this.calcProgress(Number(streamerInfo.current_donation_sum_net)).progressBarWidth
 	}
 }
 

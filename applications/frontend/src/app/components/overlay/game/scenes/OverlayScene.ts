@@ -55,6 +55,7 @@ import { DonationWidgetLogo } from '../objects/containers/donationwidget/Donatio
 import { DonationGoalContainer } from '../objects/containers/donationgoal/DonationGoalContainer'
 import {
 	DonationGoalProgressbar,
+	donationGoalProgressBackgroundBarName,
 	donationGoalProgressBarName,
 } from '../objects/containers/donationgoal/DonationGoalProgressbar'
 
@@ -151,6 +152,8 @@ export class OverlayScene extends Phaser.Scene {
 				mawInfoJsonData,
 				(config.socket.auth as SocketAuth).channel
 			)
+
+			this.donationGoalContainer?.updateWidth(mawInfoJsonData.streamers[(config.socket.auth as SocketAuth).channel])
 		})
 
 		this.time.addEvent({
@@ -439,16 +442,26 @@ export class OverlayScene extends Phaser.Scene {
 			],
 		})
 
-		const donationGoalProgressbar = new DonationGoalProgressbar(
+		const donationGoalProgressbarBackground = new DonationGoalProgressbar(
 			this,
-			50,
-			250,
+			0,
+			0,
 			initialState.donationGoal,
-			donationGoalProgressBarName,
+			donationGoalProgressBackgroundBarName,
 			0x2b067a
 		)
+
+		const donationGoalProgressbar = new DonationGoalProgressbar(
+			this,
+			0,
+			0,
+			initialState.donationGoal,
+			donationGoalProgressBarName,
+			0xc03be4
+		)
+
 		this.donationGoalContainer = new DonationGoalContainer(this, initialState.donationGoal, socket, {
-			children: [donationGoalProgressbar],
+			children: [donationGoalProgressbarBackground, donationGoalProgressbar],
 		})
 
 		this.setContainerDraggable(this.donationBannerContainer)
