@@ -19,6 +19,34 @@ Run `npm run build:all` from the root directory to build each application at onc
 
 Add and configure multiple `.env` files accordingly using `.env.example` templates .
 
+# Environment variables
+
+Create .env files in backend and frontend application directory (next to .env.example)
+
+### Backend
+
+see [.env.example](applications/backend/.env.example)
+
+| variable             | description                                                                                           | example   |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | --------- |
+| CLIENT_ID_SECRET     | a controlpanel related secret to generate a jwt token to create an access token for the rest services | secret123 |
+| ACCESS_TOKEN_SECRET  | used to sign a jwt token for the rest api                                                             | secret456 |
+| LOG_LEVEL            | used to specifcy backend logging debug level (not in use)                                             | info      |
+| SOCKETIO_AUTH_SECRET | used to sign a jwt token for the socket connection (same as frontend)                                 | 123       |
+
+### Frontend
+
+see [.env.example](applications/frontend/.env.example)
+
+| variable                           | description                                   | example                                              |
+| ---------------------------------- | --------------------------------------------- | ---------------------------------------------------- |
+| NEXT_PUBLIC_BACKEND_URL            | an absolute url to the backend rest api       | http://localhost:5200                                |
+| MAIN_APPLICATION_PASSWORD          | the main password for main streamers          | password123                                          |
+| COMMUNITY_APPLICATION_PASSWORD     | the community password for main streamers     | password456                                          |
+| APPLICATION_SECRET                 | encryption key for passwords                  | someverylongsecretthatislongerthan32charactersplease |
+| SOCKETIO_AUTH_SECRET               | used to sign socket payload (same as backend) | 123                                                  |
+| NEXT_PUBLIC_MAW_DASHBOARD_BASE_URL | an absolute url to the current maw dashboard  | https://charityroyale.at                             |
+
 # Local development
 
 To run backend typescript compilation in watch mode use `npm run tsc:watch`
