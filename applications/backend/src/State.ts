@@ -26,14 +26,14 @@ const settingsSlice = createSlice({
 
 const initialDonationGoalState: DonationGoalState = {
 	isVisible: true,
-	scale: 1,
+	scale: 1.55,
 	data: {
 		current: 0,
-		goal: 500,
+		goal: 420,
 	},
 	position: {
-		x: 1920 / 3,
-		y: 111,
+		x: 531,
+		y: 989,
 	},
 }
 const donationGoalSlice = createSlice({
@@ -72,10 +72,10 @@ const donationAlertSlice = createSlice({
 
 const initialDonationWidgetState: DonationWidgetState = {
 	isVisible: true,
-	scale: 0.84,
+	scale: 1.14,
 	position: {
-		x: 1920 / 2,
-		y: 400,
+		x: 1525,
+		y: 16,
 	},
 	wish: null,
 }

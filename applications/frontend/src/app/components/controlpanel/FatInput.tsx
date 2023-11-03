@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { FaEuroSign } from 'react-icons/fa/index'
+import { RxQuestionMarkCircled } from 'react-icons/rx'
 
 interface FatInputProps extends React.HTMLAttributes<HTMLInputElement> {
 	value: string | number
@@ -18,18 +19,21 @@ export const FatInput: FunctionComponent<React.PropsWithChildren<FatInputProps>>
 		<InputWrapper>
 			{label && (
 				<FatLabel htmlFor={name}>
-					<span>{label}</span>
+					<LabelToolTip>
+						<RxQuestionMarkCircled></RxQuestionMarkCircled>
+					</LabelToolTip>
+					<LabelContent>{label}</LabelContent>
 				</FatLabel>
 			)}
 
-			<div style={{ position: 'relative' }}>
+			<div style={{ position: 'relative', height: '100%' }}>
 				<FaEuroSign
 					size={16}
 					style={{
 						position: 'absolute',
 						right: '12px',
 						top: '50%',
-						transform: 'translateY(-50%)',
+						transform: 'translateY(-44%)',
 					}}
 				/>
 				<Input {...props} value={value} name={name} id={name}></Input>
@@ -38,14 +42,34 @@ export const FatInput: FunctionComponent<React.PropsWithChildren<FatInputProps>>
 	)
 }
 
+const LabelToolTip = styled.div``
 const InputWrapper = styled.div`
+	position: relative;
 	width: 100%;
 `
+
 const FatLabel = styled.label`
+	z-index: 9999;
+	top: 4px;
+	left: 4px;
+	position: absolute;
+	cursor: pointer;
+
 	span {
 		font-size: ${(p) => p.theme.fontSize.s}px;
 		margin-bottom: 2px;
-		display: inline-block;
+	}
+`
+const LabelContent = styled.span`
+	display: none;
+
+	${FatLabel}:hover & {
+		background-color: ${(p) => p.theme.color.charityGold};
+		border-radius: 3px;
+		display: flex;
+		color: ${(p) => p.theme.color.background};
+		padding: ${(p) => p.theme.space.xs}px;
+		min-width: 135px;
 	}
 `
 
@@ -58,12 +82,14 @@ const Input = styled.input`
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	padding: ${(p) => p.theme.space.l}px ${(p) => p.theme.space.xxl}px ${(p) => p.theme.space.m}px
+	font-size: 14px;
+	padding: ${(p) => p.theme.space.l}px ${(p) => p.theme.space.xxl - 6}px ${(p) => p.theme.space.m}px
 		${(p) => p.theme.space.l}px;
 	width: 100%;
 	appearance: none;
 	border: 2px solid ${(p) => p.theme.color.willhaben};
 	box-shadow: 0 0px 16px 0px inset #1f1f23;
+	height: 100%;
 
 	option {
 		background-color: #464649;

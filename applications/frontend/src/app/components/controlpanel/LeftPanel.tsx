@@ -575,15 +575,15 @@ const Circle: FunctionComponent<React.PropsWithChildren<{ filled: boolean; activ
 }
 
 const VolumeCircle = styled.div<{ filled: boolean; active: boolean }>`
-	height: 12px;
-	width: 12px;
+	height: 10px;
+	width: 10px;
 	border-radius: 50%;
 	background-color: ${(p) => (!p.active ? 'transparent' : p.filled ? 'white' : 'rgba(255, 255, 255, 0.2)')};
 	border: 1px solid;
 `
 
 const CirclesWrapper = styled.div`
-	margin-top: 4px;
+	margin-top: 6px;
 	display: flex;
 
 	& > ${VolumeCircle}:not(:last-child) {
@@ -628,6 +628,13 @@ const DoubleCol = styled.div`
 	display: flex;
 	gap: ${(p) => p.theme.space.s}px;
 	margin-bottom: ${(p) => p.theme.space.s}px;
+	height: 64px;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+
+	& > * {
+		height: 100%;
+	}
 `
 
 const getNewVolumeFromClick = (volume: number) => {
