@@ -575,15 +575,15 @@ const Circle: FunctionComponent<React.PropsWithChildren<{ filled: boolean; activ
 }
 
 const VolumeCircle = styled.div<{ filled: boolean; active: boolean }>`
-	height: 12px;
-	width: 12px;
+	height: 10px;
+	width: 10px;
 	border-radius: 50%;
 	background-color: ${(p) => (!p.active ? 'transparent' : p.filled ? 'white' : 'rgba(255, 255, 255, 0.2)')};
 	border: 1px solid;
 `
 
 const CirclesWrapper = styled.div`
-	margin-top: 4px;
+	margin-top: 6px;
 	display: flex;
 
 	& > ${VolumeCircle}:not(:last-child) {
