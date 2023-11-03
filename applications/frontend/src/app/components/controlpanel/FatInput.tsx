@@ -26,7 +26,7 @@ export const FatInput: FunctionComponent<React.PropsWithChildren<FatInputProps>>
 				</FatLabel>
 			)}
 
-			<div style={{ position: 'relative' }}>
+			<div style={{ position: 'relative', height: '100%' }}>
 				<FaEuroSign
 					size={16}
 					style={{
@@ -89,6 +89,7 @@ const Input = styled.input`
 	appearance: none;
 	border: 2px solid ${(p) => p.theme.color.willhaben};
 	box-shadow: 0 0px 16px 0px inset #1f1f23;
+	height: 100%;
 
 	option {
 		background-color: #464649;

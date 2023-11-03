@@ -628,6 +628,13 @@ const DoubleCol = styled.div`
 	display: flex;
 	gap: ${(p) => p.theme.space.s}px;
 	margin-bottom: ${(p) => p.theme.space.s}px;
+	height: 64px;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+
+	& > * {
+		height: 100%;
+	}
 `
 
 const getNewVolumeFromClick = (volume: number) => {
