@@ -487,7 +487,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationGoal,
-			'#charityroyale2023',
+			'#charityroyale23',
 			'donationGoalProgressBarHashTagText',
 			{ fontSize: '14px' }
 		)
