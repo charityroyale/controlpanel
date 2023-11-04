@@ -1,4 +1,4 @@
-import { DonationGoalState, SocketEventsMap, DONATION_GOAL_UPDATE, MakeAWishStreamerDTO } from '@cp/common'
+import { DonationGoalState, SocketEventsMap, DONATION_GOAL_UPDATE } from '@cp/common'
 import { Socket } from 'socket.io-client'
 import {
 	DonationGoalProgressbar,
@@ -41,7 +41,6 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	}
 
 	public handleState(state: DonationGoalState) {
-		console.log(state.isVisible)
 		this.setIsVisible(state.isVisible)
 
 		if (this.x !== state.position.x || this.y !== state.position.y) {
@@ -92,9 +91,9 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 		}
 	}
 
-	public updateProgress(streamerInfo: MakeAWishStreamerDTO) {
+	public updateProgress(donationGoalUpdate: Partial<DonationGoalState>) {
 		const progressBar = this.getByName(donationGoalProgressBarName) as DonationGoalProgressbar
-		const progress = this.calcProgress(Number(streamerInfo.current_donation_sum_net))
+		const progress = this.calcProgress(donationGoalUpdate.data?.current)
 		progressBar.width = progress.progressBarWidth
 		this.donationSum = progress.donationSum
 		this.donationPercentageProgress = progress.donationPercentageProgress

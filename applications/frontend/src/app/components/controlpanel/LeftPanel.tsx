@@ -104,7 +104,6 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 			const numberRegex = /^[0-9\b]+$/
 			if (e.target.value === '' || numberRegex.test(e.target.value)) {
 				socket?.emit(DONATION_GOAL_UPDATE, {
-					...globalState.donationGoal,
 					data: {
 						...globalState.donationGoal.data,
 						goal: Number(e.target.value),
@@ -169,7 +168,6 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	}, [emitDonationWidgetScaleChange, scaleDonationWidget])
 
 	useEffect(() => {
-		console.log(scaleDonationGoal)
 		emitDonationGoalScaleChange(scaleDonationGoal[0])
 	}, [emitDonationGoalScaleChange, scaleDonationGoal])
 
