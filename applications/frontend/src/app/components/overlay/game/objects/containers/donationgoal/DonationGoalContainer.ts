@@ -1,4 +1,4 @@
-import { DonationGoalState, SocketEventsMap, DONATION_GOAL_UPDATE, MakeAWishStreamerDTO } from '@cp/common'
+import { DonationGoalState, SocketEventsMap, DONATION_GOAL_UPDATE } from '@cp/common'
 import { Socket } from 'socket.io-client'
 import {
 	DonationGoalProgressbar,
@@ -10,10 +10,6 @@ import { LuckiestGuyText } from '../../common/LuckiestGuyText'
 import { SairaCondensedText } from '../../common/SairaCondensedText'
 
 export class DonationGoalContainer extends Phaser.GameObjects.Container {
-	private donationGoal = 0
-	private donationPercentageProgress = 0
-	private donationSum = 0
-
 	constructor(
 		scene: Phaser.Scene,
 		state: DonationGoalState,
@@ -41,7 +37,6 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	}
 
 	public handleState(state: DonationGoalState) {
-		console.log(state.isVisible)
 		this.setIsVisible(state.isVisible)
 
 		if (this.x !== state.position.x || this.y !== state.position.y) {
@@ -58,7 +53,7 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 		progressBarTitleText.setX(this.displayWidth - 645 * this.scale)
 		progressBarTitleText.setY(-15 * this.scale)
 
-		this.donationGoal = state.data.goal
+		this.updateProgress(state)
 
 		const progressBarText = this.getByName('donatioGoalProgressBarText') as LuckiestGuyText
 		progressBarText.setX(this.displayWidth - 230 * this.scale)
@@ -79,9 +74,11 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 		this.visible = visible
 	}
 
-	public calcProgress(totalDonationSumNetCollected = 0) {
-		const donationSum = this.donationSum > 0 ? this.donationSum : totalDonationSumNetCollected
-		const donationPercentageProgress = Number(getPercentage(donationSum, this.donationGoal).toFixed(2))
+	public calcProgress(donationGoalUpdate: Partial<DonationGoalState>) {
+		const donationSum = donationGoalUpdate.data?.current ?? 0
+		const donationPercentageProgress = Number(
+			getPercentage(donationSum, donationGoalUpdate.data?.goal ?? 100).toFixed(2)
+		)
 		const progressBarWidth = (maxDonationGoalProgressBarWidth / 100) * donationPercentageProgress
 
 		return {
@@ -92,19 +89,15 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 		}
 	}
 
-	public updateProgress(streamerInfo: MakeAWishStreamerDTO) {
+	public updateProgress(donationGoalUpdate: Partial<DonationGoalState>) {
 		const progressBar = this.getByName(donationGoalProgressBarName) as DonationGoalProgressbar
-		const progress = this.calcProgress(Number(streamerInfo.current_donation_sum_net))
+		const progress = this.calcProgress(donationGoalUpdate)
 		progressBar.width = progress.progressBarWidth
-		this.donationSum = progress.donationSum
-		this.donationPercentageProgress = progress.donationPercentageProgress
 
-		this.updateText()
-	}
-
-	private updateText() {
 		const progressBarText = this.getByName('donatioGoalProgressBarText') as SairaCondensedText
-		progressBarText.setText(`${this.donationSum}€ (${this.donationPercentageProgress}% von ${this.donationGoal}€)`)
+		progressBarText.setText(
+			`${progress.donationSum}€ (${progress.donationPercentageProgress}% von ${donationGoalUpdate.data?.goal}€)`
+		)
 	}
 }
 

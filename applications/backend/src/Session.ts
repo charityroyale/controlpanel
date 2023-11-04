@@ -106,6 +106,16 @@ export default class Session {
 		})
 		socket.on(REQUEST_MAW_INFO_JSON_DATA, () => {
 			this.store.dispatch(updateDonationWidget({ ...this.store.getState().donationWidget }))
+			this.store.dispatch(
+				updateDonationGoal({
+					...this.store.getState().donationGoal,
+					data: {
+						...this.store.getState().donationGoal.data,
+						current: Number(mawApiClient.mawInfoJsonData?.streamers[this.channel].current_donation_sum_net) ?? 0,
+					},
+				})
+			)
+
 			if (mawApiClient.mawInfoJsonData != null) {
 				socket.emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
 			}

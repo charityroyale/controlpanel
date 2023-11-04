@@ -155,8 +155,6 @@ export class OverlayScene extends Phaser.Scene {
 				mawInfoJsonData,
 				(config.socket.auth as SocketAuth).channel
 			)
-
-			this.donationGoalContainer?.updateProgress(mawInfoJsonData.streamers[(config.socket.auth as SocketAuth).channel])
 			config.socket.emit(REQUEST_STATE)
 		})
 
