@@ -25,7 +25,7 @@ const settingsSlice = createSlice({
 })
 
 const initialDonationGoalState: DonationGoalState = {
-	isVisible: true,
+	isVisible: false,
 	scale: 1.55,
 	data: {
 		current: 0,
