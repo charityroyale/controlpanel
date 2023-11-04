@@ -6,7 +6,6 @@ import {
 	REQUEST_STATE,
 	STATE_UPDATE,
 	DONATION_TRIGGER,
-	DONATION_GOAL_UPDATE,
 } from '@cp/common'
 
 import Phaser, { Physics } from 'phaser'
@@ -148,10 +147,6 @@ export class OverlayScene extends Phaser.Scene {
 		config.socket.on(DONATION_TRIGGER, (donation) => {
 			this.alert?.handleDonation(donation)
 			this.donationWidgetContainer?.updateWishContentText()
-		})
-
-		config.socket.on(DONATION_GOAL_UPDATE, (donationGoalUpdate) => {
-			this.donationGoalContainer?.updateProgress(donationGoalUpdate)
 		})
 
 		config.socket.on(MAW_INFO_JSON_DATA_UPDATE, (mawInfoJsonData) => {
