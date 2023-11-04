@@ -118,7 +118,6 @@ export default class Session {
 
 			if (mawApiClient.mawInfoJsonData != null) {
 				socket.emit(MAW_INFO_JSON_DATA_UPDATE, mawApiClient.mawInfoJsonData)
-				socket.emit(DONATION_GOAL_UPDATE, this.store.getState().donationGoal)
 			}
 		})
 	}
