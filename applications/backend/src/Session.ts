@@ -111,7 +111,7 @@ export default class Session {
 					...this.store.getState().donationGoal,
 					data: {
 						...this.store.getState().donationGoal.data,
-						current: Number(mawApiClient.mawInfoJsonData?.streamers[this.channel].current_donation_sum_net) ?? 0,
+						current: Number(mawApiClient.mawInfoJsonData?.streamers[this.channel]?.current_donation_sum_net) ?? 0,
 					},
 				})
 			)
