@@ -7,6 +7,7 @@ export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: D
 	return (
 		<DonationList>
 			{donations.map((donation, i) => {
+				const donationAmount = donation.amount_net ?? donation.amount
 				return (
 					<DonationItem key={donation.user + i}>
 						<DonationHeader>
@@ -16,8 +17,8 @@ export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: D
 						<DonationCenter>{donation.message}</DonationCenter>
 						<DonationBottom>
 							<DonationAmount highlight={true}>{donation.fullFilledWish ? 'Fullfilled Wish' : ''}</DonationAmount>
-							<DonationAmount highlight={donation.amount_net >= 50}>
-								{formatCurrency(donation.amount_net)}
+							<DonationAmount highlight={donationAmount >= 50}>
+								{formatCurrency(donationAmount)} {donation.amount_net == null && "(inkl. Gebühren)"}
 							</DonationAmount>
 						</DonationBottom>
 					</DonationItem>
