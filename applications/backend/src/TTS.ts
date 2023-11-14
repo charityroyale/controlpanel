@@ -19,6 +19,7 @@ export async function createTextToSpeechFile(text: string, speaker: Speaker, id:
 
 		logger.info(`Audio content written to file: ${id}.mp3`)
 	} catch (e) {
+		logger.info(`Audio content couldn't be retrieved and saved to file with id ${id}`)
 		logger.error(e)
 	}
 }
