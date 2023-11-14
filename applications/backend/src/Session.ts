@@ -79,11 +79,13 @@ export default class Session {
 	}
 
 	public async triggerDonationAlert(donation: Donation) {
-		await createTextToSpeechFile(
-			donation.message,
-			TTS_SPEAKER[this.store.getState().settings.text2speech.language],
-			donation.id
-		)
+		if (!donation.message) {
+			await createTextToSpeechFile(
+				donation.message,
+				TTS_SPEAKER[this.store.getState().settings.text2speech.language],
+				donation.id
+			)
+		}
 
 		this.io.to(this.channel).emit(DONATION_TRIGGER, donation)
 
