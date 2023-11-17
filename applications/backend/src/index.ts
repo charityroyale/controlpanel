@@ -118,7 +118,7 @@ app.post(
 	body('id').isInt(),
 	body('user').isString(),
 	body('amount').isFloat(),
-	body('amount_net').isFloat().optional({ nullable: true}),
+	body('amount_net').isFloat().optional({ nullable: true }),
 	body('timestamp').isInt(),
 	body('message').isString(),
 	body('streamer').isString(),

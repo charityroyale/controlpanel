@@ -81,7 +81,7 @@ export default class Session {
 	public async triggerDonationAlert(donation: Donation) {
 		if (
 			donation.message &&
-			(donation?.amount_net ?? donation.amount >= this.store.getState().settings.text2speech.minDonationAmount)
+			(donation?.amount_net ?? donation.amount) >= this.store.getState().settings.text2speech.minDonationAmount
 		) {
 			await createTextToSpeechFile(
 				donation.message,
