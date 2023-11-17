@@ -57,7 +57,7 @@ export interface Donation {
 	id: number
 	user: string
 	amount: number
-	amount_net: number // netto - pure without taxes
+	amount_net: number | null // netto - pure without taxes, null equals a pending state
 	message: string
 	streamer: string
 	timestamp: number
