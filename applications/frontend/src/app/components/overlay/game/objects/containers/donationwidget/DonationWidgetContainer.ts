@@ -143,11 +143,15 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		)
 
 		const topDonation = this.getByName(donationWidgetWishTopDonationName) as DonationWidgetWishTopDonation
-		topDonation.setText(
-			`${this.donationWidgetState.wish?.info?.top_donors[0]?.username ?? 'DEIN NAME'} ${
-				this.donationWidgetState.wish?.info?.top_donors[0]?.amount_net ?? ''
-			} €`
-		)
+		const topDonorsList =
+			this.donationWidgetState.wish &&
+			this.donationWidgetState.wish.info &&
+			this.donationWidgetState.wish.info.top_donors.length > 0
+				? this.donationWidgetState.wish.info.top_donors.filter(
+						(topDonor) => topDonor.username.toLowerCase() !== 'dhalucard community'
+				  )
+				: []
+		topDonation.setText(`${topDonorsList[0]?.username ?? 'DEIN NAME'} ${topDonorsList[0]?.amount_net ?? ''} €`)
 
 		const progressBar = this.getByName(donationWidgetProgressBarName) as DonationWidgetProgressBar
 		progressBar.updateWidth(this.donationWidgetState.wish?.info)
