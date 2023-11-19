@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { createContext, FunctionComponent, useState } from 'react'
 import { io, ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
 import { SocketEventsMap } from '@cp/common'
@@ -26,8 +26,13 @@ export const SocketProvider: FunctionComponent<React.PropsWithChildren<{ auth?: 
 	auth,
 }) => {
 	const [socket, setSocket] = useState<Socket<SocketEventsMap> | null>(socketDefaultValue.socket)
+	const mounted = useRef<boolean>(false)
 
 	useEffect(() => {
+		if (mounted.current) {
+			return
+		}
+		mounted.current = true
 		const options: Partial<ManagerOptions & SocketOptions> = {
 			transports: ['websocket', 'polling'],
 		}
