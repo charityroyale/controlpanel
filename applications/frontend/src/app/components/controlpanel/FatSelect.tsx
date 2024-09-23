@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { RiArrowDropDownLine } from 'react-icons/ri/index'
+import { RiArrowDropDownLine } from 'react-icons/ri'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 
 interface FatSelectProps extends React.HTMLAttributes<HTMLSelectElement> {

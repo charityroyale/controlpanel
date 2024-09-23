@@ -11,14 +11,12 @@ export class Alert extends Phaser.GameObjects.Container {
 	constructor(
 		scene: OverlayScene,
 		starGroup: Phaser.GameObjects.Group,
-		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter,
 		ttsMinDonationAmount: number
 	) {
 		super(scene)
 		this.setName('alert')
 
-		this.behaviour = new Behaviour(this, starGroup, starFollowParticle, fireworksEmitter, ttsMinDonationAmount)
+		this.behaviour = new Behaviour(this, starGroup, ttsMinDonationAmount)
 		this.soundbehaviour = new SoundBehaviour(scene)
 
 		this.scene.add.existing(this)

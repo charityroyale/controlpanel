@@ -4,8 +4,7 @@ An HTML5 stream overlay.
 
 # Requirments
 
-npm 7.x.x+ (this project uses [npm workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces))  
-node js 18.x.x
+See `.nvmrc` for node version. (usually Node LTS)
 
 Recommenend way: [nvm](https://github.com/nvm-sh/nvm)
 

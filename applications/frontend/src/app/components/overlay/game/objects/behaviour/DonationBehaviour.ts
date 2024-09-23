@@ -1,5 +1,5 @@
 import { Donation } from '@cp/common'
-import { blueStarKey, donationAlertKey, donationAlertWithMessageKey, TTS_KEY } from '../../scenes/OverlayScene'
+import { blueStarKey, donationAlertKey, donationAlertWithMessageKey, flaresAtlasKey, TTS_KEY } from '../../scenes/OverlayScene'
 import { Star } from '../Star'
 import { DonationAlertBanner } from '../containers/donationBanner/DonationBanner'
 import {
@@ -21,7 +21,24 @@ import {
 	GTA_RESPECT_SOUND_AUDIO_KEY,
 	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../config/sound'
-const { FloatBetween } = Phaser.Math
+
+// Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
+const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
+	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
+	angle: { start: 0, end: 360, steps: 100 },
+	blendMode: 'ADD',
+	frequency: 1000,
+	gravityY: 600,
+	lifespan: 1800,
+	quantity: 500,
+	reserve: 500,
+	scale: { min: 0.02, max: 0.35 },
+	speed: { min: 200, max: 600 },
+	x: 550,
+	y: 350,
+	emitting: false
+}
+
 
 export class DonationBehaviour {
 	public ttsMinDonationAmount
@@ -35,22 +52,16 @@ export class DonationBehaviour {
 	private alert: Alert
 	private queue
 	private starGroup
-	private starFollowParticle
-	private fireworksEmitter
 
 	constructor(
 		alert: Alert,
 		queue: Donation[],
 		starGroup: Phaser.GameObjects.Group,
-		starFollowParticle: Phaser.GameObjects.Particles.ParticleEmitterManager,
-		fireworksEmitter: Phaser.GameObjects.Particles.ParticleEmitter,
 		ttsMinDonationAmount: number
 	) {
 		this.alert = alert
 		this.queue = queue
 		this.starGroup = starGroup
-		this.starFollowParticle = starFollowParticle
-		this.fireworksEmitter = fireworksEmitter
 		this.ttsMinDonationAmount = ttsMinDonationAmount
 
 		this.alert.scene.events.on('ttsUpdated', (ttsMinDonationAmount: number) => {
@@ -189,66 +200,16 @@ export class DonationBehaviour {
 
 	public playFireWork() {
 		const { width, height } = this.alert.scene.scale
-		const positionTimer = this.alert.scene.time.addEvent({
-			repeat: -1,
-			callback: () => {
-				this.fireworksEmitter.setPosition(width * FloatBetween(0.25, 0.75), height * FloatBetween(0, 0.5))
-			},
-		})
 		this.alert.scene.time.addEvent({
-			delay: 500,
-			repeat: 0,
-			callback: () => {
-				this.fireworksEmitter.start()
-			},
-		})
-
-		this.alert.scene.time.addEvent({
-			delay: 500,
-			repeat: 0,
-			callback: () => {
-				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-			},
-		})
-
-		this.alert.scene.time.addEvent({
+			repeat: 4,
 			delay: 1500,
-			repeat: 0,
+			startAt: 100,
 			callback: () => {
-				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-			},
-		})
+				const fireworksEmitter = this.alert.scene.add.particles(0,0, blueStarKey, fireworksEmitterConfig)
+				fireworksEmitter.setPosition(width * Phaser.Math.FloatBetween(0.2, 0.8), height * Phaser.Math.FloatBetween(0, 0.2))
+				fireworksEmitter.explode()
 
-		this.alert.scene.time.addEvent({
-			delay: 2500,
-			repeat: 0,
-			callback: () => {
-				this.alert.scene.sound.play(FIREWORKS_SOUND_2_AUDIO_KEY)
-			},
-		})
-
-		this.alert.scene.time.addEvent({
-			delay: 3500,
-			repeat: 0,
-			callback: () => {
-				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-			},
-		})
-
-		this.alert.scene.time.addEvent({
-			delay: 4500,
-			repeat: 0,
-			callback: () => {
-				this.alert.scene.sound.play(FIREWORKS_SOUND_1_AUDIO_KEY)
-			},
-		})
-
-		this.alert.scene.time.addEvent({
-			delay: 5000,
-			repeat: 0,
-			callback: () => {
-				positionTimer.destroy()
-				this.fireworksEmitter.stop()
+				this.alert.scene.sound.play(Phaser.Math.Between(0,1) > 0 ? FIREWORKS_SOUND_1_AUDIO_KEY: FIREWORKS_SOUND_2_AUDIO_KEY)
 			},
 		})
 	}
@@ -259,7 +220,7 @@ export class DonationBehaviour {
 			callback: () => {
 				for (let i = 0; i <= 3; i++) {
 					this.starGroup.add(
-						new Star(this.alert.scene, Phaser.Math.Between(20, 1900), -100, blueStarKey, this.starFollowParticle)
+						new Star(this.alert.scene, Phaser.Math.Between(20, 1900), -100, blueStarKey)
 					)
 				}
 			},

@@ -1,11 +1,12 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { FaEuroSign } from 'react-icons/fa/index'
+import { FaEuroSign } from 'react-icons/fa'
 import { RxQuestionMarkCircled } from 'react-icons/rx'
 
 interface FatInputProps extends React.HTMLAttributes<HTMLInputElement> {
 	value: string | number
 	name: string
+	placeholder?: string
 	label?: string
 }
 

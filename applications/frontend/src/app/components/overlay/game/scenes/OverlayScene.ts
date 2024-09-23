@@ -69,32 +69,16 @@ export const DONATION_WIDGET_LEFT = 'donationWidgetLeft'
 export const CHARITY_ROYALE_LOGO_IMAGE_KEY = 'charityRoyaleLogoImage'
 
 export const blueStarKey = 'blueStar'
-const whiteStarFollowerKey = 'whiteFollower'
+export const whiteStarFollowerKey = 'whiteFollower'
 
 export const donationAlertKey = 'donationAlertVideo'
 export const donationAlertWithMessageKey = 'donationAlertWithMessageVideo'
 
-const flaresAtlasKey = 'flaresAtlas'
+export const flaresAtlasKey = 'flaresAtlas'
 
 const TTS_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static`
 export const TTS_KEY = 'ttsaudio'
 
-// Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
-const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
-	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
-	angle: { start: 0, end: 360, steps: 100 },
-	blendMode: 'ADD',
-	frame: { frames: ['red', 'yellow', 'blue'], cycle: true, quantity: 500 },
-	frequency: 1000,
-	gravityY: 600,
-	lifespan: 1800,
-	quantity: 500,
-	reserve: 500,
-	scale: { min: 0.02, max: 0.35 },
-	speed: { min: 200, max: 600 },
-	x: 550,
-	y: 350,
-}
 
 export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
@@ -177,12 +161,10 @@ export class OverlayScene extends Phaser.Scene {
 		})
 
 		// VIDEOS
-		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', 'loadeddata', false, true)
+		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', true)
 		this.load.video(
 			donationAlertWithMessageKey,
 			'/game/donationalert/donation_alert_with_message.webm',
-			'loadeddata',
-			false,
 			true
 		)
 
@@ -217,7 +199,7 @@ export class OverlayScene extends Phaser.Scene {
 		const { socket, initialState } = config
 		const starGroup = this.add.group()
 
-		const flareParticles = this.add.particles(flaresAtlasKey)
+		// const flareParticles = this.add.particles(flaresAtlasKey)
 		this.ttsVolume = initialState.settings.text2speech.volume
 
 		const playTTS = () => {
@@ -248,9 +230,7 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.isLockedOverlay = initialState.settings.isLockedOverlay
 
-		// TODO: move emitter logic to donationbehaviour class
-		const fireworksEmitter = flareParticles.createEmitter(fireworksEmitterConfig)
-		fireworksEmitter.stop()
+
 
 		this.createStarRainInstance(starGroup)
 
@@ -258,8 +238,6 @@ export class OverlayScene extends Phaser.Scene {
 		this.alert = new Alert(
 			this,
 			starGroup,
-			this.add.particles(whiteStarFollowerKey),
-			fireworksEmitter,
 			initialState.settings.text2speech.minDonationAmount
 		)
 
@@ -547,7 +525,7 @@ export class OverlayScene extends Phaser.Scene {
 
 			if (star.bumps >= 1) {
 				star.starEmitter.killAll()
-				star.starEmitter.remove()
+				star.starEmitter.stop()
 				star.destroy()
 			} else {
 				star.bumps += 1
