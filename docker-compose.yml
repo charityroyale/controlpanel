@@ -29,5 +29,5 @@ services:
 
 networks:
   internal:
-    external:
-      name: 'paddy_internal'
+    name: 'paddy_internal'
+    external: true
