@@ -8,10 +8,8 @@
 	"description": "Charity Royale Control Panel Frontend",
 	"scripts": {
 		"dev": "next -p 4200",
-		"build:lint": "npm run lint && next build",
 		"build": "next build",
-		"start": "npm run build && next start -p 4200",
-		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
+		"start": "npm run build && next start -p 4200"
 	},
 	"dependencies": {
 		"iron-session": "^8.0.3",
@@ -35,11 +33,6 @@
 		"@types/node": "^22.5.5",
 		"@types/react": "^18.0.20",
 		"@types/react-copy-to-clipboard": "^5.0.2",
-		"@types/styled-components": "^5.1.12",
-		"eslint-config-prettier": "^8.3.0",
-		"eslint-plugin-import": "^2.24.2",
-		"eslint-plugin-jsx-a11y": "^6.4.1",
-		"eslint-plugin-react": "^7.25.1",
-		"eslint-plugin-react-hooks": "^4.2.0"
+		"@types/styled-components": "^5.1.12"
 	}
 }

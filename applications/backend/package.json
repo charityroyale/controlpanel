@@ -6,8 +6,7 @@
 	"scripts": {
 		"build": "tsc --build",
 		"dev": "npm run build && nodemon dist/index.js ",
-		"start": "npm run build && node dist/index.js",
-		"lint": "eslint ./src --ext .js,.ts"
+		"start": "npm run build && node dist/index.js"
 	},
 	"author": "Patrick Obermüller",
 	"license": "MIT",
