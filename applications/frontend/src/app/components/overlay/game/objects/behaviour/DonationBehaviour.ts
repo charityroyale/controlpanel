@@ -1,5 +1,5 @@
 import { Donation } from '@cp/common'
-import { blueStarKey, donationAlertKey, donationAlertWithMessageKey, flaresAtlasKey, TTS_KEY } from '../../scenes/OverlayScene'
+import { blueStarKey, donationAlertKey, donationAlertWithMessageKey, TTS_KEY } from '../../scenes/OverlayScene'
 import { Star } from '../Star'
 import { DonationAlertBanner } from '../containers/donationBanner/DonationBanner'
 import {
@@ -36,9 +36,8 @@ const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitter
 	speed: { min: 200, max: 600 },
 	x: 550,
 	y: 350,
-	emitting: false
+	emitting: false,
 }
-
 
 export class DonationBehaviour {
 	public ttsMinDonationAmount
@@ -53,12 +52,7 @@ export class DonationBehaviour {
 	private queue
 	private starGroup
 
-	constructor(
-		alert: Alert,
-		queue: Donation[],
-		starGroup: Phaser.GameObjects.Group,
-		ttsMinDonationAmount: number
-	) {
+	constructor(alert: Alert, queue: Donation[], starGroup: Phaser.GameObjects.Group, ttsMinDonationAmount: number) {
 		this.alert = alert
 		this.queue = queue
 		this.starGroup = starGroup
@@ -114,7 +108,9 @@ export class DonationBehaviour {
 		donationAlert: DonationAlertBanner,
 		donationAlertContainer: DonationBannerContainer
 	) => {
-		const formatedDonationAmount = donation?.amount_net ? formatDonationAlertCurrenty(donation?.amount_net) : `${formatDonationAlertCurrenty(donation.amount)} (inkl. Gebühren)`
+		const formatedDonationAmount = donation?.amount_net
+			? formatDonationAlertCurrenty(donation?.amount_net)
+			: `${formatDonationAlertCurrenty(donation.amount)} (inkl. Gebühren)`
 		const donationAlertHeaderText = new DonationBannerHeaderText(
 			this.alert.scene,
 			0,
@@ -205,11 +201,16 @@ export class DonationBehaviour {
 			delay: 1500,
 			startAt: 100,
 			callback: () => {
-				const fireworksEmitter = this.alert.scene.add.particles(0,0, blueStarKey, fireworksEmitterConfig)
-				fireworksEmitter.setPosition(width * Phaser.Math.FloatBetween(0.2, 0.8), height * Phaser.Math.FloatBetween(0, 0.2))
+				const fireworksEmitter = this.alert.scene.add.particles(0, 0, blueStarKey, fireworksEmitterConfig)
+				fireworksEmitter.setPosition(
+					width * Phaser.Math.FloatBetween(0.2, 0.8),
+					height * Phaser.Math.FloatBetween(0, 0.2)
+				)
 				fireworksEmitter.explode()
 
-				this.alert.scene.sound.play(Phaser.Math.Between(0,1) > 0 ? FIREWORKS_SOUND_1_AUDIO_KEY: FIREWORKS_SOUND_2_AUDIO_KEY)
+				this.alert.scene.sound.play(
+					Phaser.Math.Between(0, 1) > 0 ? FIREWORKS_SOUND_1_AUDIO_KEY : FIREWORKS_SOUND_2_AUDIO_KEY
+				)
 			},
 		})
 	}
@@ -219,9 +220,7 @@ export class DonationBehaviour {
 		this.alert.scene.time.addEvent({
 			callback: () => {
 				for (let i = 0; i <= 3; i++) {
-					this.starGroup.add(
-						new Star(this.alert.scene, Phaser.Math.Between(20, 1900), -100, blueStarKey)
-					)
+					this.starGroup.add(new Star(this.alert.scene, Phaser.Math.Between(20, 1900), -100, blueStarKey))
 				}
 			},
 			callbackScope: this,
