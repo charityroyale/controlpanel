@@ -5,9 +5,19 @@
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"rootDir": "src",
 		"noEmit": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"strictNullChecks": true
 	},
-	"exclude": ["dist", ".next", "out", "next.config.js", "node_modules/**/*"],
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-	"references": [{ "path": "../../applications/common" }]
+	"exclude": ["dist", ".next", "out", "next.config.mjs", "node_modules/**/*"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+	"references": [
+		{
+			"path": "../../applications/common"
+		}
+	]
 }

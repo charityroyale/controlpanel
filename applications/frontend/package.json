@@ -15,7 +15,7 @@
 	},
 	"dependencies": {
 		"iron-session": "^8.0.3",
-		"next": "^12.3.0",
+		"next": "^14.2.13",
 		"phaser": "^3.55.2",
 		"phaser3-rex-plugins": "^1.1.73",
 		"react": "^18.2.0",
@@ -36,7 +36,6 @@
 		"@types/react": "^18.0.20",
 		"@types/react-copy-to-clipboard": "^5.0.2",
 		"@types/styled-components": "^5.1.12",
-		"babel-plugin-styled-components": "^2.0.7",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-import": "^2.24.2",
 		"eslint-plugin-jsx-a11y": "^6.4.1",
