@@ -169,7 +169,6 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	}, [emitDonationWidgetScaleChange, scaleDonationWidget])
 
 	useEffect(() => {
-		console.log(scaleDonationGoal)
 		emitDonationGoalScaleChange(scaleDonationGoal[0])
 	}, [emitDonationGoalScaleChange, scaleDonationGoal])
 
