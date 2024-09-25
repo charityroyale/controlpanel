@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   frontend:
     build:
@@ -7,12 +5,12 @@ services:
       dockerfile: Dockerfile.frontend
     image: charityroyale/frontend
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.charityroyale-frontend.rule=Host(`charityroyale.hammertime.studio`)"
-      - "traefik.http.routers.charityroyale-frontend.entrypoints=websecure"
-      - "traefik.http.routers.charityroyale-frontend.tls.certresolver=myresolver"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.charityroyale-frontend.rule=Host(`charityroyale.hammertime.studio`)'
+      - 'traefik.http.routers.charityroyale-frontend.entrypoints=websecure'
+      - 'traefik.http.routers.charityroyale-frontend.tls.certresolver=myresolver'
     networks:
-      internal:
+      - internal
     restart: always
 
   backend:
@@ -21,14 +19,15 @@ services:
       dockerfile: Dockerfile.backend
     image: charityroyale/backend
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.charityroyale-backend.rule=Host(`charityroyale.backend.hammertime.studio`)"
-      - "traefik.http.routers.charityroyale-backend.entrypoints=websecure"
-      - "traefik.http.routers.charityroyale-backend.tls.certresolver=myresolver"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.charityroyale-backend.rule=Host(`charityroyale.backend.hammertime.studio`)'
+      - 'traefik.http.routers.charityroyale-backend.entrypoints=websecure'
+      - 'traefik.http.routers.charityroyale-backend.tls.certresolver=myresolver'
     networks:
-      internal:
+      - internal
     restart: always
+
 networks:
   internal:
     external:
-      name: paddy_internal
+      name: 'paddy_internal'
