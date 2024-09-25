@@ -27,7 +27,7 @@
 		"react-toastify": "^10.0.5",
 		"socket.io-client": "^4.5.2",
 		"styled-components": "^5.3.0",
-		"use-debounce": "^9.0.3"
+		"use-debounce": "^10.0.3"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.15.0",
