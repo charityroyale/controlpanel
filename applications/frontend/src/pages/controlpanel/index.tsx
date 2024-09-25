@@ -9,7 +9,7 @@ import { UserDTO } from '../api/sessions'
 import { SocketAuth } from '../../app/provider/SocketProvider'
 import { generateSocketAuthForUser } from '../../app/lib/socketUtils'
 import styled from 'styled-components'
-import { UserSessionData, withSessionSsr } from '../../app/lib/session'
+import { obtainIronSession, UserSessionData } from '../../app/lib/session'
 
 export interface ControlPanelPageProps {
 	title?: string
@@ -32,8 +32,9 @@ const ControlPanelPage: NextPage<ControlPanelPageProps> = (props: ControlPanelPa
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ req, res }) => {
-	const user = (req.session as UserSessionData).user
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+	const session = await obtainIronSession(req, res)
+	const user = (session as UserSessionData).user
 
 	if (!user) {
 		res.statusCode = 404
@@ -52,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ re
 	return {
 		props,
 	}
-})
+}
 ;(ControlPanelPage as PageWithLayoutType).layout = MainLayout
 
 const Grid = styled.div`

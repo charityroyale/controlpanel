@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { UserSessionData, withSessionRoute } from '../../app/lib/session'
+import { obtainIronSession, UserSessionData } from '../../app/lib/session'
 
 const MAIN_APPLICATION_PASSWORD = process.env.MAIN_APPLICATION_PASSWORD
 const COMMUNITY_APPLICATION_PASSWORD = process.env.COMMUNITY_APPLICATION_PASSWORD
@@ -11,7 +11,7 @@ export interface UserDTO {
 const sessionRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method === 'POST') {
 		const { username, password, type } = req.body
-
+		const session = await obtainIronSession(req, res)
 		if (
 			(typeof MAIN_APPLICATION_PASSWORD === 'string' && password === MAIN_APPLICATION_PASSWORD && type === 'main') ||
 			(typeof COMMUNITY_APPLICATION_PASSWORD === 'string' &&
@@ -19,9 +19,9 @@ const sessionRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 				type === 'community')
 		) {
 			const user: UserDTO = { username }
-			const userSession = req.session as UserSessionData
+			const userSession = session as UserSessionData
 			userSession.user = user
-			await req.session.save()
+			await session.save()
 			return res.status(201).send('')
 		}
 
@@ -32,4 +32,4 @@ const sessionRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 // eslint-disable-next-line import/no-default-export
-export default withSessionRoute(sessionRoute)
+export default sessionRoute

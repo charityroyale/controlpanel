@@ -5,7 +5,7 @@ import { MainLayout } from '../../app/layout/Layout'
 import { PageWithLayoutType } from '../../app/layout/PageWithLayout'
 import { useSocket } from '../../app/hooks/useSocket'
 import { Donation, REQUEST_DONATION_TRIGGER } from '@cp/common'
-import { UserSessionData, withSessionSsr } from '../../app/lib/session'
+import { obtainIronSession, UserSessionData } from '../../app/lib/session'
 import { UserDTO } from '../api/sessions'
 import { Header } from '../../app/components/controlpanel/Header'
 import { SocketAuth } from '../../app/provider/SocketProvider'
@@ -126,8 +126,9 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ req, res }) => {
-	const user = (req.session as UserSessionData).user
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+	const session = await obtainIronSession(req, res)
+	const user = (session as UserSessionData).user
 
 	if (!user) {
 		res.statusCode = 404
@@ -144,7 +145,7 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ re
 	return {
 		props,
 	}
-})
+}
 ;(TestUIPage as PageWithLayoutType).layout = MainLayout
 
 const TestUICustomInputWrapper = styled.div`

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { PageWithLayoutType } from '../app/layout/PageWithLayout'
 import { MainLayout } from '../app/layout/Layout'
 import styled from 'styled-components'
-import { UserSessionData, withSessionSsr } from '../app/lib/session'
+import { obtainIronSession, UserSessionData } from '../app/lib/session'
 import { UserDTO } from './api/sessions'
 import { Header } from '../app/components/controlpanel/Header'
 import { SocketAuth } from '../app/provider/SocketProvider'
@@ -47,8 +47,9 @@ const IndexPage: NextPage<StartPageProps> = (props: StartPageProps) => {
 		</>
 	)
 }
-export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ req, res }) => {
-	const user = (req.session as UserSessionData).user
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+	const session = await obtainIronSession(req, res)
+	const user = (session as UserSessionData).user
 
 	if (!user) {
 		res.writeHead(301, { Location: '/login' })
@@ -65,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = withSessionSsr(async ({ re
 	return {
 		props,
 	}
-})
+}
 ;(IndexPage as PageWithLayoutType).layout = MainLayout
 
 const LinkAsButton = styled.a`

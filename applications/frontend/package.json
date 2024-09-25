@@ -14,7 +14,7 @@
 		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
 	},
 	"dependencies": {
-		"iron-session": "^6.2.1",
+		"iron-session": "^8.0.3",
 		"next": "^12.3.0",
 		"phaser": "^3.55.2",
 		"phaser3-rex-plugins": "^1.1.73",
