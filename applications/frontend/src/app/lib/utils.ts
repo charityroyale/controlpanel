@@ -4,12 +4,12 @@ export const formatTimeStamp = (timestamp: number) => {
 	return new Intl.DateTimeFormat('de-AT', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(timestamp * 1000))
 }
 
-export const formatCurrency = (amount: number) => {
-	return new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' }).format(amount)
-}
-
-export const formatDonationAlertCurrenty = (amount: number) => {
-	return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(amount)
+export function formatMoney(amount: string | number | undefined, ignoreCents: boolean = false) {
+	const parsed = parseFloat(`${amount}`)
+	if (isNaN(parsed)) {
+		return '0,00'
+	}
+	return (ignoreCents ? parsed : parsed / 100).toLocaleString('de-DE', { minimumFractionDigits: 2 })
 }
 
 export const getPercentage = (value: number, total: number) => {
@@ -56,8 +56,8 @@ export const generateRandomDonation = (streamer: string, donationAmount?: number
 	const donation: Donation = {
 		id: getRandomId(),
 		user: name,
-		amount: randomnum,
-		amount_net: randomnum,
+		amount: randomnum * 100,
+		amount_net: randomnum * 100,
 		timestamp: new Date().getTime() / 1000,
 		streamer,
 		message,

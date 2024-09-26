@@ -134,7 +134,7 @@ app.post(
 		const targetChannel = simpleUserDbService.findChannelByStreamer(request.body.streamer)
 		if (targetChannel !== undefined) {
 			logger.info(
-				`Received new donation: ${donation.user} send ${donation.amount_net}€ to ${donation.streamer} with message ${donation.message}`
+				`Received new donation: ${donation.user} send ${donation.amount_net}€ cents to ${donation.streamer} with message ${donation.message}`
 			)
 			triggerDonationAlert(sessionManager, targetChannel, donation)
 		} else {

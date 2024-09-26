@@ -43,8 +43,8 @@ const TestUIPage: NextPage<TestUIPageProps> = (props: TestUIPageProps) => {
 		const donation: Donation = {
 			id: getRandomId(),
 			user: 'TEST_USER',
-			amount: Number(amount) + 1,
-			amount_net: Number(amount),
+			amount: (Number(amount) + 1) * 100,
+			amount_net: Number(amount) * 100,
 			timestamp: new Date().getTime() / 1000,
 			streamer: (socket?.auth as SocketAuth).channel,
 			message,

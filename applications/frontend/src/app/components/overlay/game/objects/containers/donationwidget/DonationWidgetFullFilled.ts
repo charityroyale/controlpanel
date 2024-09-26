@@ -11,6 +11,7 @@ import {
 	donationWidgetPostfixTextStaticName,
 	donationWidgetPrefixTextStaticName,
 } from './text/DonationWidgetWishFullFilledStatic'
+import { formatMoney } from '../../../../../../lib/utils'
 
 export const donationWidgetFullFilledName = 'donationWidgetFullFilled'
 export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
@@ -71,7 +72,7 @@ export class DonationWidgetFullFilled extends Phaser.GameObjects.Sprite {
 		) as DonationWidgetWishFullFilledAmount
 		wishAmount.visible = true
 		wishAmount.setText(
-			this.getFullFilledWishes()[this.currentFullFilledWishIndex].current_donation_sum_net.toString() + '€'
+			formatMoney(this.getFullFilledWishes()[this.currentFullFilledWishIndex].current_donation_sum_net.toString()) + '€'
 		)
 	}
 	private setVisibleStaticContent() {

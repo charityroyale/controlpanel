@@ -41,6 +41,7 @@ import {
 	DonationWidgetWishTopDonationStatic,
 	donationWidgetWishTopDonationStaticName,
 } from './text/DonationWidgetWishTopDonationStatic'
+import { formatMoney } from '../../../../../../lib/utils'
 
 const infoBoxHeightHeadingOffset = 95
 const infoBoxHeightContentOffset = 112.5
@@ -138,7 +139,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const lastDonation = this.getByName(donationWidgetWishLastDonationName) as DonationWidgetWishLastDonation
 		lastDonation.setText(
 			`${this.donationWidgetState.wish?.info?.recent_donations[0]?.username ?? 'DEIN NAME'} ${
-				this.donationWidgetState.wish?.info?.recent_donations[0]?.amount_net ?? ''
+				formatMoney(this.donationWidgetState.wish?.info?.recent_donations[0]?.amount_net) ?? ''
 			} €`
 		)
 
@@ -149,9 +150,11 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 			this.donationWidgetState.wish.info.top_donors.length > 0
 				? this.donationWidgetState.wish.info.top_donors.filter(
 						(topDonor) => topDonor.username.toLowerCase() !== 'dhalucard community'
-				  )
+					)
 				: []
-		topDonation.setText(`${topDonorsList[0]?.username ?? 'DEIN NAME'} ${topDonorsList[0]?.amount_net ?? ''} €`)
+		topDonation.setText(
+			`${topDonorsList[0]?.username ?? 'DEIN NAME'} ${formatMoney(topDonorsList[0]?.amount_net) ?? ''} €`
+		)
 
 		const progressBar = this.getByName(donationWidgetProgressBarName) as DonationWidgetProgressBar
 		progressBar.updateWidth(this.donationWidgetState.wish?.info)
@@ -159,7 +162,7 @@ export class DonationWidgetContainer extends Phaser.GameObjects.Container {
 		const progressBarText = this.getByName(donationWidgetProgressBarTextName) as DonationWidgetProgressBarText
 		const progressBarTextContent = progressBar.calcProgress(this.donationWidgetState.wish?.info)
 		progressBarText.setText(
-			`${progressBarTextContent.donationSum}€ (${progressBarTextContent.donationPercentageProgress}% von ${progressBarTextContent.donationGoal}€)`
+			`${formatMoney(progressBarTextContent.donationSum, true)}€ (${progressBarTextContent.donationPercentageProgress}% von ${formatMoney(progressBarTextContent.donationGoal)}€)`
 		)
 	}
 

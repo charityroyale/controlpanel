@@ -42,7 +42,10 @@ export default class Session {
 		},
 	})
 
-	constructor(private readonly channel: string, private readonly io: Server<SocketEventsMap>) {
+	constructor(
+		private readonly channel: string,
+		private readonly io: Server<SocketEventsMap>
+	) {
 		this.store.subscribe(() => {
 			this.io.to(this.channel).emit(STATE_UPDATE, this.store.getState())
 			// console.log(this.store.getState())
@@ -81,7 +84,7 @@ export default class Session {
 	public async triggerDonationAlert(donation: Donation) {
 		if (
 			donation.message &&
-			(donation?.amount_net ?? donation.amount) >= this.store.getState().settings.text2speech.minDonationAmount
+			(donation?.amount_net ?? donation.amount) / 100 >= this.store.getState().settings.text2speech.minDonationAmount
 		) {
 			await createTextToSpeechFile(
 				donation.message,

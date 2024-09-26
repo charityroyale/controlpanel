@@ -5,7 +5,7 @@ import {
 	donationGoalProgressBarName,
 	maxDonationGoalProgressBarWidth,
 } from './DonationGoalProgressbar'
-import { getPercentage } from '../../../../../../lib/utils'
+import { formatMoney, getPercentage } from '../../../../../../lib/utils'
 import { LuckiestGuyText } from '../../common/LuckiestGuyText'
 import { SairaCondensedText } from '../../common/SairaCondensedText'
 
@@ -77,7 +77,7 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 	public calcProgress(donationGoalUpdate: Partial<DonationGoalState>) {
 		const donationSum = donationGoalUpdate.data?.current ?? 0
 		const donationPercentageProgress = Number(
-			getPercentage(donationSum, donationGoalUpdate.data?.goal ?? 100).toFixed(2)
+			getPercentage(donationSum / 100, donationGoalUpdate.data?.goal ?? 100).toFixed(2)
 		)
 		const progressBarWidth = (maxDonationGoalProgressBarWidth / 100) * donationPercentageProgress
 
@@ -96,7 +96,7 @@ export class DonationGoalContainer extends Phaser.GameObjects.Container {
 
 		const progressBarText = this.getByName('donatioGoalProgressBarText') as SairaCondensedText
 		progressBarText.setText(
-			`${progress.donationSum}€ (${progress.donationPercentageProgress}% von ${donationGoalUpdate.data?.goal}€)`
+			`${formatMoney(progress.donationSum)}€ (${progress.donationPercentageProgress}% von ${formatMoney(donationGoalUpdate.data?.goal, true)}€)`
 		)
 	}
 }

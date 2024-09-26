@@ -14,13 +14,13 @@ import {
 	ALERT_STAR_AND_FIREWORK_MIN_AMOUNT,
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 } from '../containers/donationBanner/donationSpecialEffectsConfig'
-import { formatDonationAlertCurrenty } from '../../../../../lib/utils'
 import {
 	FIREWORKS_SOUND_1_AUDIO_KEY,
 	FIREWORKS_SOUND_2_AUDIO_KEY,
 	GTA_RESPECT_SOUND_AUDIO_KEY,
 	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../config/sound'
+import { formatMoney } from '../../../../../lib/utils'
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
 const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
@@ -109,13 +109,13 @@ export class DonationBehaviour {
 		donationAlertContainer: DonationBannerContainer
 	) => {
 		const formatedDonationAmount = donation?.amount_net
-			? formatDonationAlertCurrenty(donation?.amount_net)
-			: `${formatDonationAlertCurrenty(donation.amount)} (inkl. Gebühren)`
+			? formatMoney(donation?.amount_net)
+			: `${formatMoney(donation.amount)} (inkl. Gebühren)`
 		const donationAlertHeaderText = new DonationBannerHeaderText(
 			this.alert.scene,
 			0,
 			donationAlert.displayHeight - 240 * donationAlertContainer.scale,
-			`${donation.user} spendet ${formatedDonationAmount}`,
+			`${donation.user} spendet ${formatedDonationAmount} €`,
 			donationAlert.scale
 		)
 		donationAlertContainer.add(donationAlertHeaderText)

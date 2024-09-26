@@ -1,7 +1,7 @@
 import { Donation } from '@cp/common'
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { formatCurrency, formatTimeStamp } from '../../../lib/utils'
+import { formatMoney, formatTimeStamp } from '../../../lib/utils'
 
 export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: Donation[] }>> = ({ donations }) => {
 	return (
@@ -18,7 +18,7 @@ export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: D
 						<DonationBottom>
 							<DonationAmount highlight={true}>{donation.fullFilledWish ? 'Fullfilled Wish' : ''}</DonationAmount>
 							<DonationAmount highlight={donationAmount >= 50}>
-								{formatCurrency(donationAmount)} {donation.amount_net == null && "(inkl. Gebühren)"}
+								{formatMoney(donationAmount)} € {donation.amount_net == null && '(inkl. Gebühren)'}
 							</DonationAmount>
 						</DonationBottom>
 					</DonationItem>
@@ -60,7 +60,7 @@ const DonationHeader = styled.div`
 
 const DonationAmount = styled.div<{ highlight: boolean }>`
 	color: ${(p) => (p.highlight ? p.theme.color.charityGold : 'inherit')};
-	font-weight: ${(p) => (p.highlight ? 'bold' : 'normal')}; ;
+	font-weight: ${(p) => (p.highlight ? 'bold' : 'normal')};
 `
 
 const DonationDate = styled.div`

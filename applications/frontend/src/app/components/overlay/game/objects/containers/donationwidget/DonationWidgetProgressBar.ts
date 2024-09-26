@@ -22,9 +22,9 @@ export class DonationWidgetProgressBar extends Phaser.GameObjects.Rectangle {
 			}
 		}
 
-		const donationSum = Number(wishInfo.current_donation_sum_net)
+		const donationSum = Number(wishInfo.current_donation_sum_net) / 100
 		const donationGoal = Number(wishInfo.donation_goal)
-		const donationPercentageProgress = Number(getPercentage(donationSum, donationGoal).toFixed(2))
+		const donationPercentageProgress = Number(getPercentage(donationSum, donationGoal / 100).toFixed(2))
 		const progressBarWidth = (maxProgressBarWidth / 100) * donationPercentageProgress
 
 		return {
