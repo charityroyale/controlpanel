@@ -49,6 +49,7 @@ import {
 	FIREWORKS_SOUND_1_AUDIO_KEY,
 	FIREWORKS_SOUND_2_AUDIO_KEY,
 	GTA_RESPECT_SOUND_AUDIO_KEY,
+	KONFETTI_POP_KEY,
 	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../objects/config/sound'
 import { DonationWidgetLogo } from '../objects/containers/donationwidget/DonationWidgetLogo'
@@ -203,6 +204,7 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.load.audio(DONATION_ALERT_YEY_AUDIO_KEY, '/audio/alert/donation_alert_yey.mp3')
 		this.load.audio(DONATION_ALERT_CLICK_NOICE_AUDIO_KEY, '/audio/alert/donation_alert_click_noice.mp3')
+		this.load.audio(KONFETTI_POP_KEY, '/audio/alert/cork_pop_open_bottle_boing_01.wav')
 	}
 
 	create(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {

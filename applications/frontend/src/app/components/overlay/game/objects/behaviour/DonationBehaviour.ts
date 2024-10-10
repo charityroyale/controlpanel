@@ -15,7 +15,7 @@ import {
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 	CONFETTI_MIN_AMOUNT,
 } from '../containers/donationBanner/donationSpecialEffectsConfig'
-import { GTA_RESPECT_SOUND_AUDIO_KEY, STAR_RAIN_SOUND_AUDIO_KEY } from '../config/sound'
+import { GTA_RESPECT_SOUND_AUDIO_KEY, KONFETTI_POP_KEY, STAR_RAIN_SOUND_AUDIO_KEY } from '../config/sound'
 import { formatMoney } from '../../../../../lib/utils'
 import { playFireWork } from './specialeffects/fireworks'
 
@@ -176,7 +176,9 @@ export class DonationBehaviour {
 		const parsedAmount = amount / 100
 		if (parsedAmount >= CONFETTI_MIN_AMOUNT) {
 			this.playConfetti()
-		} else if (parsedAmount >= ALERT_STAR_AND_FIREWORK_MIN_AMOUNT) {
+		}
+
+		if (parsedAmount >= ALERT_STAR_AND_FIREWORK_MIN_AMOUNT) {
 			this.playStarRain()
 			playFireWork(this.alert)
 		} else if (parsedAmount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
@@ -226,7 +228,7 @@ export class DonationBehaviour {
 					lifespan: { min: 2000, max: 4000 },
 					speed: { min: 800, max: 1000 },
 					gravityY: 420,
-					scale: { start: 2, end: 0.5 },
+					scale: { start: 2.5, end: 0.5 },
 					rotate: { min: 0, max: 360 },
 					blendMode: 'ADD',
 					// Emit continuously every 50ms
@@ -247,12 +249,18 @@ export class DonationBehaviour {
 	}
 
 	playConfetti() {
-		console.log(this.emitters)
+		this.alert.scene.sound.play(KONFETTI_POP_KEY, { volume: 0.12 })
+
 		for (let i = 0; i < this.maxEmitters; i++) {
 			// @ts-expect-error
 			this.emitters[i].forEach((emitter) => {
 				// Restart continuous emission
 				emitter.start()
+
+				if (i % 2 === 0) {
+					emitter.setDepth(999)
+				}
+
 				// Stop emitter after 3 seconds (or any duration you prefer)
 				this.alert.scene.time.delayedCall(200, () => {
 					emitter.stop()

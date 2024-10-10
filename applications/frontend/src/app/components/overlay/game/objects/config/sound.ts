@@ -8,3 +8,4 @@ export const GTA_RESPECT_SOUND_AUDIO_KEY = 'gtaRespectAudio'
 // ALERTS
 export const DONATION_ALERT_YEY_AUDIO_KEY = 'donationAlertAudioYey'
 export const DONATION_ALERT_CLICK_NOICE_AUDIO_KEY = 'donationAlertAudioClickNoice'
+export const KONFETTI_POP_KEY = 'konfettiAudio'
