@@ -2,10 +2,24 @@ export interface GlobalState {
 	donationAlert: DonationAlertState
 	donationWidget: DonationWidgetState
 	donationGoal: DonationGoalState
+	donationChallengeWidget: DonationGoalState
 	settings: SettingsState
 }
 
 export interface DonationGoalState {
+	isVisible: boolean
+	scale: number
+	data: {
+		current: number
+		goal: number
+	}
+	position: {
+		x: number
+		y: number
+	}
+}
+
+export interface DonationChallengeState {
 	isVisible: boolean
 	scale: number
 	data: {
@@ -73,6 +87,7 @@ export interface UserEntry {
 export const DONATION_ALERT_UPDATE = 'donationAlertUpdate'
 export const DONATION_WIDGET_UPDATE = 'donationWidgetUpdate'
 export const DONATION_GOAL_UPDATE = 'donationGoalUpdate'
+export const DONATION_CHALLENGE_UPDATE = 'donationChallengeUpdate'
 
 export const SETTINGS_UPDATE = 'settingsUpdate'
 export const STATE_UPDATE = 'stateUpdate'
@@ -88,12 +103,17 @@ export interface SocketEventsMap {
 	[DONATION_ALERT_UPDATE]: (donationAlertUpdate: Partial<DonationAlertState>) => void
 	[DONATION_WIDGET_UPDATE]: (donationWidgetUpdate: Partial<DonationWidgetState>) => void
 	[DONATION_GOAL_UPDATE]: (donationGoalUpdate: Partial<DonationGoalState>) => void
+	[DONATION_CHALLENGE_UPDATE]: (donationChallengeUpdate: Partial<DonationChallengeState>) => void
+
 	[SETTINGS_UPDATE]: (settingsUpdate: Partial<SettingsState>) => void
 	[STATE_UPDATE]: (state: GlobalState) => void
+
 	[REQUEST_STATE]: () => void
 	[REQUEST_MAW_INFO_JSON_DATA]: () => void
+
 	[DONATION_TRIGGER]: (donation: Donation) => void
 	[REQUEST_DONATION_TRIGGER]: (donation: Donation) => void
+
 	[MAW_INFO_JSON_DATA_UPDATE]: (mawInfoJsonData: MakeAWishInfoJsonDTO) => void
 	[REQUEST_CMS_DATA]: () => void
 	[CMS_UPDATE]: (cmsStreamerWishSlugs: string[]) => void

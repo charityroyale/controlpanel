@@ -15,15 +15,18 @@ import {
 	DONATION_TRIGGER,
 	REQUEST_DONATION_TRIGGER,
 	DONATION_GOAL_UPDATE,
+	DONATION_CHALLENGE_UPDATE,
 } from '@cp/common'
 import { configureStore } from '@reduxjs/toolkit'
 import { Server, Socket } from 'socket.io'
 import {
 	donationAlertReducer,
+	donationChallengeWidgetReducer,
 	donationGoalReducer,
 	donationWidgetReducer,
 	settingsReducer,
 	updateDonationAlert,
+	updateDonationCHallengeWidget,
 	updateDonationGoal,
 	updateDonationWidget,
 	updateSettings,
@@ -37,6 +40,7 @@ export default class Session {
 		reducer: {
 			donationAlert: donationAlertReducer,
 			donationWidget: donationWidgetReducer,
+			donationChallengeWidget: donationChallengeWidgetReducer,
 			donationGoal: donationGoalReducer,
 			settings: settingsReducer,
 		},
@@ -141,16 +145,20 @@ export default class Session {
 		socket.on(DONATION_ALERT_UPDATE, (donationAlertUpdate) =>
 			this.store.dispatch(updateDonationAlert(donationAlertUpdate))
 		)
-
-		socket.on(DONATION_GOAL_UPDATE, (donationGoalUpdate) => this.store.dispatch(updateDonationGoal(donationGoalUpdate)))
+		socket.on(DONATION_GOAL_UPDATE, (donationGoalUpdate) => {
+			this.store.dispatch(updateDonationGoal(donationGoalUpdate))
+		})
+		socket.on(DONATION_WIDGET_UPDATE, (donationWidgetUpdate) => {
+			this.store.dispatch(updateDonationWidget(donationWidgetUpdate))
+		})
+		socket.on(DONATION_CHALLENGE_UPDATE, (donationChallengeWidgetUpdate) => {
+			this.store.dispatch(updateDonationCHallengeWidget(donationChallengeWidgetUpdate))
+		})
 
 		socket.on(REQUEST_DONATION_TRIGGER, (donation) => {
 			this.triggerDonationAlert(donation)
 		})
 
-		socket.on(DONATION_WIDGET_UPDATE, (donationWidgetUpdate) => {
-			this.store.dispatch(updateDonationWidget(donationWidgetUpdate))
-		})
 		socket.on(SETTINGS_UPDATE, (settingsUpdate) => this.store.dispatch(updateSettings(settingsUpdate)))
 	}
 }

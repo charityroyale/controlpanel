@@ -12,6 +12,7 @@ import { SiTarget } from 'react-icons/si'
 import {
 	CMS_UPDATE,
 	DONATION_ALERT_UPDATE,
+	DONATION_CHALLENGE_UPDATE,
 	DONATION_GOAL_UPDATE,
 	DONATION_WIDGET_UPDATE,
 	GlobalState,
@@ -38,6 +39,9 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	const { socket } = useSocket()
 	const [scaleDonationAlert, setScaleDonationALert] = useState([globalState.donationAlert.scale])
 	const [scaleDonationWidget, setScaleDonationWidget] = useState([globalState.donationWidget.scale])
+	const [scaleDonationChallengeWidget, setScaleDonationChallengeWidget] = useState([
+		globalState.donationChallengeWidget.scale,
+	])
 	const [scaleDonationGoal, setScaleDonationGoal] = useState([globalState.donationGoal.scale])
 
 	const [wishes, setWishes] = useState<{ value: string; label: string }[]>([])
@@ -148,6 +152,12 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 		})
 	}, 125)
 
+	const emitDonationChallengeWidgetScaleChange = useDebouncedCallback((scale: number) => {
+		socket?.emit(DONATION_CHALLENGE_UPDATE, {
+			scale,
+		})
+	}, 125)
+
 	const emitDonationGoalScaleChange = useDebouncedCallback((scale: number) => {
 		socket?.emit(DONATION_GOAL_UPDATE, {
 			scale,
@@ -167,6 +177,10 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 	useEffect(() => {
 		emitDonationWidgetScaleChange(scaleDonationWidget[0])
 	}, [emitDonationWidgetScaleChange, scaleDonationWidget])
+
+	useEffect(() => {
+		emitDonationChallengeWidgetScaleChange(scaleDonationChallengeWidget[0])
+	}, [emitDonationChallengeWidgetScaleChange, scaleDonationChallengeWidget])
 
 	useEffect(() => {
 		emitDonationGoalScaleChange(scaleDonationGoal[0])
@@ -527,6 +541,80 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 						items={wishes}
 						value={globalState.donationWidget.wish ? globalState.donationWidget.wish.slug : ''}
 						disabled={isDisabledWishSelected}
+					/>
+
+					{/* -------- */}
+
+					<Label
+						style={{
+							margin: '0 -8px',
+							marginBottom: '8px',
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<span style={{ display: 'flex' }}>
+							<IconWrapper>
+								<FaHeart size="14px" style={{ marginRight: '6px' }} />
+							</IconWrapper>
+							Donationchallenge
+						</span>
+					</Label>
+
+					<Range
+						values={scaleDonationChallengeWidget}
+						step={0.01}
+						min={0.15}
+						max={2}
+						onChange={(values) => setScaleDonationChallengeWidget(values)}
+						renderTrack={({ props, children }) => (
+							<div
+								role="button"
+								tabIndex={-1}
+								/* eslint-disable react/prop-types */
+								onMouseDown={props.onMouseDown}
+								onTouchStart={props.onTouchStart}
+								style={{
+									...props.style,
+									height: '40px',
+									display: 'flex',
+									width: '100%',
+								}}
+							>
+								<div
+									ref={props.ref}
+									style={{
+										height: '5px',
+										width: '100%',
+										borderRadius: '2px',
+										alignSelf: 'center',
+										backgroundColor: 'rgba(255,255,255,0.2)',
+									}}
+								>
+									{children}
+								</div>
+							</div>
+						)}
+						renderThumb={({ props }) => (
+							<div
+								{...props}
+								style={{
+									/* eslint-disable react/prop-types */
+									...props.style,
+									height: '28px',
+									width: '28px',
+									borderRadius: '4px',
+									backgroundColor: '#049EE7',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<SizeIconWrapper>
+									<IoMdResize size={24} />
+								</SizeIconWrapper>
+							</div>
+						)}
 					/>
 				</ButtonsWrapper>
 			</Content>

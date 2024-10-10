@@ -60,6 +60,12 @@ import {
 } from '../objects/containers/donationgoal/DonationGoalProgressbar'
 import { LuckiestGuyText } from '../objects/common/LuckiestGuyText'
 import { SairaCondensedText } from '../objects/common/SairaCondensedText'
+import { DonationChallengeContainer } from '../objects/containers/donationchallenge/DonationChallengeContainer'
+import {
+	DonationChallengeProgressbar,
+	donationChallengeProgressBarName,
+	maxDonationGoalProgressBarWidth,
+} from '../objects/containers/donationchallenge/DonationChallengeProgressbar'
 
 export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
@@ -84,6 +90,8 @@ export class OverlayScene extends Phaser.Scene {
 	public donationBannerContainer: DonationBannerContainer | null = null
 	public donationWidgetContainer: DonationWidgetContainer | null = null
 	public donationGoalContainer: DonationGoalContainer | null = null
+	public donationChallengeContainer: DonationChallengeContainer | null = null
+
 	public isLockedOverlay = false
 
 	private ttsVolume = 0
@@ -103,6 +111,7 @@ export class OverlayScene extends Phaser.Scene {
 			this.donationBannerContainer?.handleState(state.donationAlert)
 			this.donationGoalContainer?.handleState(state.donationGoal)
 			this.donationWidgetContainer?.handleState(state.donationWidget)
+			this.donationChallengeContainer?.handleState(state.donationChallengeWidget)
 
 			/**
 			 * Somehow numbers with decimals end up having more decimals
@@ -473,9 +482,95 @@ export class OverlayScene extends Phaser.Scene {
 			],
 		})
 
+		const donationChallengeProgressBarBackground = new DonationChallengeProgressbar(
+			this,
+			0,
+			0,
+			initialState.donationChallengeWidget,
+			donationGoalProgressBackgroundBarName,
+			0x2b067a
+		)
+
+		const donationChallengeProgressBar = new DonationChallengeProgressbar(
+			this,
+			0,
+			0,
+			initialState.donationChallengeWidget,
+			donationChallengeProgressBarName,
+			0xc03be4
+		)
+
+		const donationChallengeProgressBarText = new SairaCondensedText(
+			this,
+			0,
+			0,
+			initialState.donationChallengeWidget,
+			'Placeholder',
+			'donationChallengeProgressBarText'
+		)
+
+		const donationChallengeProgressBarTitleText = new LuckiestGuyText(
+			this,
+			0,
+			0,
+			initialState.donationChallengeWidget,
+			`🎯DonationChallenge`,
+			'donationChallengeProgressBarTitleText'
+		)
+
+		const donationChallengeProgressBarHashTagText = new LuckiestGuyText(
+			this,
+			0,
+			0,
+			initialState.donationChallengeWidget,
+			'Hinweis Rezept Kartoffelgulasch',
+			'donationChallengeProgressBarHashTagText',
+			{ fontSize: '14px' }
+		)
+
+		const donationChallengeTimerText = new LuckiestGuyText(
+			this,
+			0,
+			0,
+			initialState.donationChallengeWidget,
+			'Countdown: 23s',
+			'donationChallengeTimerText',
+			{ fontSize: '8px' }
+		).setOrigin(0, 1)
+
+		const donationChallengeDescriptionText = new LuckiestGuyText(
+			this,
+			0,
+			0,
+			initialState.donationChallengeWidget,
+			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores ',
+			'donationChallengeDescriptionText',
+			{ fontSize: '12px', align: 'left' }
+		)
+			.setWordWrapWidth(maxDonationGoalProgressBarWidth)
+			.setOrigin(0, 0)
+
+		this.donationChallengeContainer = new DonationChallengeContainer(
+			this,
+			initialState.donationChallengeWidget,
+			socket,
+			{
+				children: [
+					donationChallengeProgressBarBackground,
+					donationChallengeProgressBar,
+					donationChallengeProgressBarText,
+					donationChallengeProgressBarTitleText,
+					donationChallengeProgressBarHashTagText,
+					donationChallengeTimerText,
+					donationChallengeDescriptionText,
+				],
+			}
+		)
+
 		this.setContainerDraggable(this.donationWidgetContainer)
 		this.setContainerDraggable(this.donationGoalContainer)
 		this.setContainerDraggable(this.donationBannerContainer)
+		this.setContainerDraggable(this.donationChallengeContainer)
 
 		// global world env objects and settings
 		this.sound.pauseOnBlur = false
@@ -485,7 +580,7 @@ export class OverlayScene extends Phaser.Scene {
 	}
 
 	private setContainerDraggable(container: Phaser.GameObjects.Container) {
-		this.input.setDraggable([container])
+		this.input.setDraggable(container)
 		this.input.on(
 			'drag',
 			(
