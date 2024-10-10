@@ -3,7 +3,7 @@ import { logger } from './logger'
 import { CmsUpcomingStreamer } from './types/cms'
 
 class MakeAWishApiClient {
-	public static readonly mawApiUrl = 'https://streamer.make-a-wish.at/charityroyale2023/info.json'
+	public static readonly mawApiUrl = 'https://streamer.make-a-wish.at/charityroyale2024/info.json'
 	public mawInfoJsonData: null | MakeAWishInfoJsonDTO = null
 	public cmsMawWishes: null | CmsUpcomingStreamer[] = null
 

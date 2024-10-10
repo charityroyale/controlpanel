@@ -79,7 +79,6 @@ export const flaresAtlasKey = 'flaresAtlas'
 const TTS_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/static`
 export const TTS_KEY = 'ttsaudio'
 
-
 export class OverlayScene extends Phaser.Scene {
 	public alert: Alert | null = null
 	public donationBannerContainer: DonationBannerContainer | null = null
@@ -162,11 +161,13 @@ export class OverlayScene extends Phaser.Scene {
 
 		// VIDEOS
 		this.load.video(donationAlertKey, '/game/donationalert/donation_alert.webm', true)
-		this.load.video(
-			donationAlertWithMessageKey,
-			'/game/donationalert/donation_alert_with_message.webm',
-			true
-		)
+		this.load.video(donationAlertWithMessageKey, '/game/donationalert/donation_alert_with_message.webm', true)
+
+		this.load.atlas('purple_confetti', '/game/confetti/purple.png', '/game/confetti/purple.json')
+		this.load.atlas('blue_confetti', '/game/confetti/blue.png', '/game/confetti/blue.json')
+		this.load.atlas('green_confetti', '/game/confetti/green.png', '/game/confetti/green.json')
+		this.load.atlas('orange_confetti', '/game/confetti/orange.png', '/game/confetti/orange.json')
+		this.load.atlas('red_confetti', '/game/confetti/red.png', '/game/confetti/red.json')
 
 		// ATLAS, SPRITESHEETS & IMAGES
 		this.load.atlas(flaresAtlasKey, '/game/flares.png', '/game/flares.json')
@@ -230,16 +231,10 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.isLockedOverlay = initialState.settings.isLockedOverlay
 
-
-
 		this.createStarRainInstance(starGroup)
 
 		// create alert
-		this.alert = new Alert(
-			this,
-			starGroup,
-			initialState.settings.text2speech.minDonationAmount
-		)
+		this.alert = new Alert(this, starGroup, initialState.settings.text2speech.minDonationAmount)
 
 		// create donationAlerts
 		const dontainerBanner = new DonationAlertBanner(this, 0, 0, initialState.donationAlert, donationAlertKey)

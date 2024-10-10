@@ -13,31 +13,11 @@ import {
 	ALERT_FIREWORKS_MIN_AMOUNT,
 	ALERT_STAR_AND_FIREWORK_MIN_AMOUNT,
 	ALERT_STAR_RAIN_MIN_AMOUNT,
+	CONFETTI_MIN_AMOUNT,
 } from '../containers/donationBanner/donationSpecialEffectsConfig'
-import {
-	FIREWORKS_SOUND_1_AUDIO_KEY,
-	FIREWORKS_SOUND_2_AUDIO_KEY,
-	GTA_RESPECT_SOUND_AUDIO_KEY,
-	STAR_RAIN_SOUND_AUDIO_KEY,
-} from '../config/sound'
+import { GTA_RESPECT_SOUND_AUDIO_KEY, STAR_RAIN_SOUND_AUDIO_KEY } from '../config/sound'
 import { formatMoney } from '../../../../../lib/utils'
-
-// Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
-const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
-	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
-	angle: { start: 0, end: 360, steps: 100 },
-	blendMode: 'ADD',
-	frequency: 1000,
-	gravityY: 600,
-	lifespan: 1800,
-	quantity: 500,
-	reserve: 500,
-	scale: { min: 0.02, max: 0.35 },
-	speed: { min: 200, max: 600 },
-	x: 550,
-	y: 350,
-	emitting: false,
-}
+import { playFireWork } from './specialeffects/fireworks'
 
 export class DonationBehaviour {
 	public ttsMinDonationAmount
@@ -52,7 +32,15 @@ export class DonationBehaviour {
 	private queue
 	private starGroup
 
+	private centerX: number
+	private centerY: number
+	private emitters: any = [] as any
+	private maxEmitters = 4
+
 	constructor(alert: Alert, queue: Donation[], starGroup: Phaser.GameObjects.Group, ttsMinDonationAmount: number) {
+		this.centerX = alert.scene.cameras.main.width / 2
+		this.centerY = alert.scene.cameras.main.height / 2
+
 		this.alert = alert
 		this.queue = queue
 		this.starGroup = starGroup
@@ -63,6 +51,7 @@ export class DonationBehaviour {
 				this.ttsMinDonationAmount = ttsMinDonationAmount
 			}
 		})
+		this.initConfetti()
 		this.startListenForDonations()
 	}
 
@@ -184,35 +173,17 @@ export class DonationBehaviour {
 	}
 
 	public createVisualEffects(amount: number) {
-		if (amount >= ALERT_STAR_AND_FIREWORK_MIN_AMOUNT) {
+		const parsedAmount = amount / 100
+		if (parsedAmount >= CONFETTI_MIN_AMOUNT) {
+			this.playConfetti()
+		} else if (parsedAmount >= ALERT_STAR_AND_FIREWORK_MIN_AMOUNT) {
 			this.playStarRain()
-			this.playFireWork()
-		} else if (amount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
+			playFireWork(this.alert)
+		} else if (parsedAmount >= ALERT_STAR_RAIN_MIN_AMOUNT) {
 			this.playStarRain()
-		} else if (amount >= ALERT_FIREWORKS_MIN_AMOUNT) {
-			this.playFireWork()
+		} else if (parsedAmount >= ALERT_FIREWORKS_MIN_AMOUNT) {
+			playFireWork(this.alert)
 		}
-	}
-
-	public playFireWork() {
-		const { width, height } = this.alert.scene.scale
-		this.alert.scene.time.addEvent({
-			repeat: 4,
-			delay: 1500,
-			startAt: 100,
-			callback: () => {
-				const fireworksEmitter = this.alert.scene.add.particles(0, 0, blueStarKey, fireworksEmitterConfig)
-				fireworksEmitter.setPosition(
-					width * Phaser.Math.FloatBetween(0.2, 0.8),
-					height * Phaser.Math.FloatBetween(0, 0.2)
-				)
-				fireworksEmitter.explode()
-
-				this.alert.scene.sound.play(
-					Phaser.Math.Between(0, 1) > 0 ? FIREWORKS_SOUND_1_AUDIO_KEY : FIREWORKS_SOUND_2_AUDIO_KEY
-				)
-			},
-		})
 	}
 
 	public playStarRain() {
@@ -227,6 +198,67 @@ export class DonationBehaviour {
 			delay: 200,
 			repeat: 60,
 		})
+	}
+
+	initConfetti() {
+		// Confetti asset keys
+		const confettiTextures = ['purple_confetti', 'blue_confetti', 'green_confetti', 'orange_confetti', 'red_confetti']
+
+		// Limit the number of emitters (e.g., 5 emitters)
+		const fullHeight = this.alert.scene.cameras.main.height
+		const position = [
+			{ x: 0, y: fullHeight },
+			{ x: 0, y: fullHeight },
+			{ x: this.alert.scene.cameras.main.width, y: fullHeight },
+			{ x: this.alert.scene.cameras.main.width, y: fullHeight },
+		]
+
+		// Create emitters at random positions initially
+		for (let i = 0; i < this.maxEmitters; i++) {
+			const emitterGroup = [] as any
+			const angleToCenter = Phaser.Math.Angle.Between(position[i].x, position[i].y, this.centerX, this.centerY - 150)
+
+			confettiTextures.forEach((texture) => {
+				// Create emitters with continuous emission
+				console.log(texture)
+				const emitter = this.alert.scene.add.particles(0, 0, texture, {
+					quantity: 10, // Number of particles per emission
+					lifespan: { min: 2000, max: 4000 },
+					speed: { min: 800, max: 1000 },
+					gravityY: 420,
+					scale: { start: 2, end: 0.5 },
+					rotate: { min: 0, max: 360 },
+					blendMode: 'ADD',
+					// Emit continuously every 50ms
+					frequency: 50,
+					// @ts-expect-error
+					emitZone: {
+						type: 'random', // Emit from random positions within the zone
+						source: new Phaser.Geom.Line(position[i].x, position[i].y, position[i].x + 50, position[i].y), // Circle zone around the random position
+					},
+					angle: { min: Phaser.Math.RadToDeg(angleToCenter) - 90, max: Phaser.Math.RadToDeg(angleToCenter) + 90 },
+				})
+				emitter.stop()
+				emitterGroup.push(emitter)
+			})
+
+			this.emitters.push(emitterGroup)
+		}
+	}
+
+	playConfetti() {
+		console.log(this.emitters)
+		for (let i = 0; i < this.maxEmitters; i++) {
+			// @ts-expect-error
+			this.emitters[i].forEach((emitter) => {
+				// Restart continuous emission
+				emitter.start()
+				// Stop emitter after 3 seconds (or any duration you prefer)
+				this.alert.scene.time.delayedCall(200, () => {
+					emitter.stop()
+				})
+			})
+		}
 	}
 
 	public stop() {
