@@ -1,14 +1,7 @@
 import { Donation } from '@cp/common'
 import SessionManager from '../SessionManager'
 
-const multiStreams = [
-	['s0ulrider', 'xmrcr4zy'],
-	['tjan', 'fuxelbau'],
-	['nooreax', 'faister'],
-	['jatti4win', 'gedropptesitems_timon'],
-	['elibold', 'chugzockt'],
-	['veni', 'netrockgg'],
-]
+const multiStreams = [['icyvace', 'cherryylein']]
 
 const flatMultiStreams = multiStreams.reduce((prev, curr) => prev.concat(curr), [])
 
