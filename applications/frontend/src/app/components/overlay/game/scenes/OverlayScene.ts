@@ -61,11 +61,6 @@ import {
 import { LuckiestGuyText } from '../objects/common/LuckiestGuyText'
 import { SairaCondensedText } from '../objects/common/SairaCondensedText'
 import { DonationChallengeContainer } from '../objects/containers/donationchallenge/DonationChallengeContainer'
-import {
-	DonationChallengeProgressbar,
-	donationChallengeProgressBarName,
-	maxDonationGoalProgressBarWidth,
-} from '../objects/containers/donationchallenge/DonationChallengeProgressbar'
 
 export const MAKE_A_WISH_LOGO_IMAGE_KEY = 'makeAwishLogoImage'
 export const DONATION_WIDGET_BACKGROUND = 'donationWidgetBackground'
