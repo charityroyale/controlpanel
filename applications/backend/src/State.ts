@@ -31,15 +31,15 @@ const settingsSlice = createSlice({
 })
 
 const initialDonationGoalState: DonationGoalState = {
-	isVisible: false,
-	scale: 1.55,
+	isVisible: true,
+	scale: 1.37,
 	data: {
-		current: 0,
+		current: 9800,
 		goal: 420,
 	},
 	position: {
-		x: 531,
-		y: 989,
+		x: 417,
+		y: 1008,
 	},
 }
 const donationGoalSlice = createSlice({
@@ -78,10 +78,10 @@ const donationAlertSlice = createSlice({
 
 const initialDonationWidgetState: DonationWidgetState = {
 	isVisible: true,
-	scale: 1.14,
+	scale: 1.08,
 	position: {
-		x: 1525,
-		y: 16,
+		x: 1564,
+		y: 849,
 	},
 	wish: null,
 }
@@ -105,15 +105,15 @@ const donationWidgetSlice = createSlice({
 })
 
 const initialDonationChallengeWidgetState: DonationChallengeState = {
-	isVisible: true,
-	scale: 1.55,
+	isVisible: false,
+	scale: 1.3,
 	data: {
 		current: 0,
-		goal: 420,
+		goal: 69,
 	},
 	position: {
-		x: 111,
-		y: 666,
+		x: 378,
+		y: 55,
 	},
 }
 const donationChallengeWidgetSlice = createSlice({

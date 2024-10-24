@@ -167,7 +167,7 @@ if (typeof process.env.SOCKETIO_AUTH_SECRET !== 'string') {
 	logger.warn('No secret for socket-io auth set. Please set the env variable SOCKETIO_AUTH_SECRET')
 }
 const jwtSecret = process.env.SOCKETIO_AUTH_SECRET ?? 'secret'
-const sessionManager = new SessionManager(io, jwtSecret)
+export const sessionManager = new SessionManager(io, jwtSecret)
 mawApiClient.fetchMawData()
 mawApiClient.poll()
 

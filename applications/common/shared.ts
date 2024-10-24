@@ -167,7 +167,7 @@ export class MakeAWishStreamerDTO {
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
 	public wishes: [] | { [wishSlug: string]: MakeAWishStreamerWishDTO } = []
-	public active_challenge: DonationChallengeRootDTO | null = null
+	public active_challenge: number | null = null
 }
 
 // Wish DTOs
@@ -250,7 +250,7 @@ export const TTS_SPEAKER_SELECT_ITEMS = Object.keys(TTS_SPEAKER).map((key) => {
 	return { label: TTS_SPEAKER[key as SpeakerType].label, value: key }
 })
 
-type DonationChallengeType = 'running' | 'failed' | 'complete' | ''
+type DonationChallengeType = 'running' | 'failed' | 'completed' | ''
 
 export class DonationChallengeRootDTO {
 	public id: number = -1

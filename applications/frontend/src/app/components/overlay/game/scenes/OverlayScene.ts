@@ -49,7 +49,6 @@ import {
 	FIREWORKS_SOUND_1_AUDIO_KEY,
 	FIREWORKS_SOUND_2_AUDIO_KEY,
 	GTA_RESPECT_SOUND_AUDIO_KEY,
-	KONFETTI_POP_KEY,
 	STAR_RAIN_SOUND_AUDIO_KEY,
 } from '../objects/config/sound'
 import { DonationWidgetLogo } from '../objects/containers/donationwidget/DonationWidgetLogo'
@@ -209,7 +208,6 @@ export class OverlayScene extends Phaser.Scene {
 
 		this.load.audio(DONATION_ALERT_YEY_AUDIO_KEY, '/audio/alert/donation_alert_yey.mp3')
 		this.load.audio(DONATION_ALERT_CLICK_NOICE_AUDIO_KEY, '/audio/alert/donation_alert_click_noice.mp3')
-		this.load.audio(KONFETTI_POP_KEY, '/audio/alert/cork_pop_open_bottle_boing_01.wav')
 	}
 
 	create(config: { socket: Socket<SocketEventsMap>; initialState: GlobalState }) {
@@ -489,90 +487,7 @@ export class OverlayScene extends Phaser.Scene {
 			],
 		})
 
-		const donationChallengeProgressBarBackground = new DonationChallengeProgressbar(
-			this,
-			0,
-			0,
-			initialState.donationChallengeWidget,
-			donationGoalProgressBackgroundBarName,
-			0x2b067a
-		)
-
-		const donationChallengeProgressBar = new DonationChallengeProgressbar(
-			this,
-			0,
-			0,
-			initialState.donationChallengeWidget,
-			donationChallengeProgressBarName,
-			0xc03be4
-		)
-
-		const donationChallengeProgressBarText = new SairaCondensedText(
-			this,
-			0,
-			0,
-			initialState.donationChallengeWidget,
-			'Placeholder',
-			'donationChallengeProgressBarText'
-		)
-
-		const donationChallengeProgressBarTitleText = new LuckiestGuyText(
-			this,
-			0,
-			0,
-			initialState.donationChallengeWidget,
-			`Placeholder`,
-			'donationChallengeProgressBarTitleText'
-		)
-
-		const donationChallengeProgressBarHashTagText = new LuckiestGuyText(
-			this,
-			0,
-			0,
-			initialState.donationChallengeWidget,
-			'Placeholder',
-			'donationChallengeProgressBarHashTagText',
-			{ fontSize: '14px' }
-		)
-
-		const donationChallengeTimerText = new LuckiestGuyText(
-			this,
-			0,
-			0,
-			initialState.donationChallengeWidget,
-			'Placeholder',
-			'donationChallengeTimerText',
-			{ fontSize: '8px' }
-		).setOrigin(0, 1)
-
-		const donationChallengeDescriptionText = new LuckiestGuyText(
-			this,
-			0,
-			0,
-			initialState.donationChallengeWidget,
-			'Placeholder',
-			'donationChallengeDescriptionText',
-			{ fontSize: '12px', align: 'left' }
-		)
-			.setWordWrapWidth(maxDonationGoalProgressBarWidth)
-			.setOrigin(0, 0)
-
-		this.donationChallengeContainer = new DonationChallengeContainer(
-			this,
-			initialState.donationChallengeWidget,
-			socket,
-			{
-				children: [
-					donationChallengeProgressBarBackground,
-					donationChallengeProgressBar,
-					donationChallengeProgressBarText,
-					donationChallengeProgressBarTitleText,
-					donationChallengeProgressBarHashTagText,
-					donationChallengeTimerText,
-					donationChallengeDescriptionText,
-				],
-			}
-		)
+		this.donationChallengeContainer = new DonationChallengeContainer(this, initialState.donationChallengeWidget, socket)
 
 		this.setContainerDraggable(this.donationWidgetContainer)
 		this.setContainerDraggable(this.donationGoalContainer)

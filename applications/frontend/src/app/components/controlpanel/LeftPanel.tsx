@@ -557,7 +557,7 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 							<IconWrapper>
 								<FaHeart size="14px" style={{ marginRight: '6px' }} />
 							</IconWrapper>
-							Donationchallenge
+							Donationchallenge (nur SpecialEvents Streams)
 						</span>
 					</Label>
 

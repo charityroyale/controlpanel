@@ -15,7 +15,7 @@ import {
 	ALERT_STAR_RAIN_MIN_AMOUNT,
 	CONFETTI_MIN_AMOUNT,
 } from '../containers/donationBanner/donationSpecialEffectsConfig'
-import { GTA_RESPECT_SOUND_AUDIO_KEY, KONFETTI_POP_KEY, STAR_RAIN_SOUND_AUDIO_KEY } from '../config/sound'
+import { GTA_RESPECT_SOUND_AUDIO_KEY, STAR_RAIN_SOUND_AUDIO_KEY } from '../config/sound'
 import { formatMoney } from '../../../../../lib/utils'
 import { playFireWork } from './specialeffects/fireworks'
 
@@ -249,8 +249,6 @@ export class DonationBehaviour {
 	}
 
 	playConfetti() {
-		this.alert.scene.sound.play(KONFETTI_POP_KEY, { volume: 0.12 })
-
 		for (let i = 0; i < this.maxEmitters; i++) {
 			// @ts-expect-error
 			this.emitters[i].forEach((emitter) => {
