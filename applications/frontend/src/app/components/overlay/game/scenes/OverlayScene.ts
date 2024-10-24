@@ -148,6 +148,11 @@ export class OverlayScene extends Phaser.Scene {
 				mawInfoJsonData,
 				(config.socket.auth as SocketAuth).channel
 			)
+
+			this.donationChallengeContainer?.handleMawJsonStateUpdate(
+				mawInfoJsonData,
+				(config.socket.auth as SocketAuth).channel
+			)
 			config.socket.emit(REQUEST_STATE)
 		})
 
@@ -516,7 +521,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationChallengeWidget,
-			`🎯DonationChallenge`,
+			`Placeholder`,
 			'donationChallengeProgressBarTitleText'
 		)
 
@@ -525,7 +530,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationChallengeWidget,
-			'Hinweis Rezept Kartoffelgulasch',
+			'Placeholder',
 			'donationChallengeProgressBarHashTagText',
 			{ fontSize: '14px' }
 		)
@@ -535,7 +540,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationChallengeWidget,
-			'Countdown: 23s',
+			'Placeholder',
 			'donationChallengeTimerText',
 			{ fontSize: '8px' }
 		).setOrigin(0, 1)
@@ -545,7 +550,7 @@ export class OverlayScene extends Phaser.Scene {
 			0,
 			0,
 			initialState.donationChallengeWidget,
-			'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores ',
+			'Placeholder',
 			'donationChallengeDescriptionText',
 			{ fontSize: '12px', align: 'left' }
 		)

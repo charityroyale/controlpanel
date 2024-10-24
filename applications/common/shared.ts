@@ -22,13 +22,14 @@ export interface DonationGoalState {
 export interface DonationChallengeState {
 	isVisible: boolean
 	scale: number
-	data: {
-		current: number
-		goal: number
-	}
 	position: {
 		x: number
 		y: number
+	}
+	// maw info json data, challenges per streamer
+	data: {
+		current: number
+		goal: number
 	}
 }
 
@@ -141,6 +142,7 @@ export class MakeAWishInfoJsonDTO {
 	public wishes = {} as { [wishSlug: string]: MakeAWishRootLevelWishDTO }
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = [] // latest 10 donations made over all wishes
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = [] // top 10 donations made over all wishes
+	public challenges = {} as { [id: string]: DonationChallengeRootDTO } // donation challenges
 }
 
 // Streamer DTOs
@@ -165,6 +167,7 @@ export class MakeAWishStreamerDTO {
 	public top_donors: MakeAWishInfoJsonTopDonationDTO[] = []
 	public recent_donations: MakeWishInfoJsonRecentDonationDTO[] = []
 	public wishes: [] | { [wishSlug: string]: MakeAWishStreamerWishDTO } = []
+	public active_challenge: DonationChallengeRootDTO | null = null
 }
 
 // Wish DTOs
@@ -246,3 +249,18 @@ export interface Speaker {
 export const TTS_SPEAKER_SELECT_ITEMS = Object.keys(TTS_SPEAKER).map((key) => {
 	return { label: TTS_SPEAKER[key as SpeakerType].label, value: key }
 })
+
+type DonationChallengeType = 'running' | 'failed' | 'complete' | ''
+
+export class DonationChallengeRootDTO {
+	public id: number = -1
+	public title: string = ''
+	public description: string = ''
+	public max_time: number = -1
+	public start: number = -1
+	public status: DonationChallengeType = ''
+
+	public current_amount_net: number = -1
+	public amount: number = -1 // current? or goal?, most likely goal
+	public streamers: string[] = []
+}

@@ -112,8 +112,8 @@ const initialDonationChallengeWidgetState: DonationChallengeState = {
 		goal: 420,
 	},
 	position: {
-		x: 531,
-		y: 989,
+		x: 111,
+		y: 666,
 	},
 }
 const donationChallengeWidgetSlice = createSlice({
@@ -121,8 +121,6 @@ const donationChallengeWidgetSlice = createSlice({
 	initialState: initialDonationChallengeWidgetState,
 	reducers: {
 		update: (state, action: PayloadAction<Partial<DonationChallengeState>>) => {
-			// TODO: obtain info about current challenge status or changes made
-
 			return {
 				...state,
 				...action.payload,

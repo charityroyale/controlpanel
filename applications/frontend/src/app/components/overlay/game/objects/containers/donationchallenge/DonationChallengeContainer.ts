@@ -1,4 +1,10 @@
-import { DONATION_CHALLENGE_UPDATE, DonationChallengeState, SocketEventsMap } from '@cp/common'
+import {
+	DONATION_CHALLENGE_UPDATE,
+	DonationChallengeRootDTO,
+	DonationChallengeState,
+	MakeAWishInfoJsonDTO,
+	SocketEventsMap,
+} from '@cp/common'
 import { Socket } from 'socket.io-client'
 import {
 	DonationChallengeProgressbar,
@@ -39,8 +45,9 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 	}
 
 	public handleState(state: DonationChallengeState) {
+		// get it invisible until, first challenge
+
 		this.setIsVisible(state.isVisible)
-		console.log('hi')
 
 		if (this.x !== state.position.x || this.y !== state.position.y) {
 			this.x = state.position.x
@@ -52,40 +59,52 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 			this.scaleContainerItems(state)
 		}
 
-		const progressBarTitleText = this.getByName('donationChallengeProgressBarTitleText') as SairaCondensedText
-		progressBarTitleText.setX(this.displayWidth - 645 * this.scale)
-		progressBarTitleText.setY(-15 * this.scale)
+		this.updateChallengeLabel(`🎯DonationChallenge`)
+		this.updateProgressBarAndStatsText(state)
+		this.updateTimer('Ziel bis 19:00')
+		this.updateTitle('Rezept Testgulasch')
+		this.updateDescription('Rezept Testgulasch Rezept Testgulasch Rezept Testgulasch Rezept Testgulasch ')
+	}
 
-		this.updateProgress(state)
-
-		const progressBarText = this.getByName('donationChallengeProgressBarText') as LuckiestGuyText
-		progressBarText.setX(this.displayWidth - 230 * this.scale)
-		progressBarText.setY(15 * this.scale)
-
-		const progressBarHashTagText = this.getByName('donationChallengeProgressBarHashTagText') as LuckiestGuyText
-		progressBarHashTagText.setX(this.displayWidth - 640 * this.scale)
-		progressBarHashTagText.setY(15 * this.scale)
-
+	updateTimer(timerText: string) {
 		const donationChallengeTimerText = this.getByName('donationChallengeTimerText') as LuckiestGuyText
+		donationChallengeTimerText.setText(timerText)
 		donationChallengeTimerText.setX(this.displayWidth - 280 * this.scale)
 		donationChallengeTimerText.setY(-5 * this.scale)
+	}
 
+	updateChallengeLabel(labelText: string) {
+		const progressBarTitleText = this.getByName('donationChallengeProgressBarTitleText') as SairaCondensedText
+		progressBarTitleText.setText(labelText)
+		progressBarTitleText.setX(this.displayWidth - 645 * this.scale)
+		progressBarTitleText.setY(-15 * this.scale)
+	}
+
+	updateTitle(titleText: string) {
+		const progressBarHashTagText = this.getByName('donationChallengeProgressBarHashTagText') as LuckiestGuyText
+		progressBarHashTagText.setText(titleText)
+		progressBarHashTagText.setX(this.displayWidth - 640 * this.scale)
+		progressBarHashTagText.setY(15 * this.scale)
+	}
+
+	updateDescription(descriptionText: string) {
 		const donationChallengeDescriptionText = this.getByName('donationChallengeDescriptionText') as LuckiestGuyText
+		donationChallengeDescriptionText.setText(descriptionText)
 		donationChallengeDescriptionText.setX(this.displayWidth - 640 * this.scale)
 		donationChallengeDescriptionText.setY(33 * this.scale)
 	}
 
-	private scaleContainerItems = (state: DonationChallengeState) => {
+	scaleContainerItems = (state: DonationChallengeState) => {
 		const containerItems = this.getAll() as DonationChallengeProgressbar[]
 		containerItems.map((items) => items.setScale(state.scale))
 	}
 
-	public setIsVisible(visible: boolean) {
+	setIsVisible(visible: boolean) {
 		if (this.visible === visible) return
 		this.visible = visible
 	}
 
-	public calcProgress(donationGoalUpdate: Partial<DonationChallengeState>) {
+	calcProgress(donationGoalUpdate: Partial<DonationChallengeState>) {
 		const donationSum = donationGoalUpdate.data?.current ?? 0
 		const donationPercentageProgress = Number(
 			getPercentage(donationSum / 100, donationGoalUpdate.data?.goal ?? 100).toFixed(2)
@@ -100,7 +119,7 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 		}
 	}
 
-	public updateProgress(donationGoalUpdate: Partial<DonationChallengeState>) {
+	updateProgressBarAndStatsText(donationGoalUpdate: Partial<DonationChallengeState>) {
 		const progressBar = this.getByName(donationChallengeProgressBarName) as DonationChallengeProgressbar
 		const progress = this.calcProgress(donationGoalUpdate)
 		progressBar.width = progress.progressBarWidth
@@ -109,6 +128,40 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 		progressBarText.setText(
 			`${formatMoney(progress.donationSum)}€ (${progress.donationPercentageProgress}% von ${formatMoney(donationGoalUpdate.data?.goal, true)}€)`
 		)
+
+		progressBarText.setX(this.displayWidth - 230 * this.scale)
+		progressBarText.setY(15 * this.scale)
+	}
+
+	updateChallengeData(challengeData: DonationChallengeRootDTO) {
+		// this.updateChallengeLabel(`🎯DonationChallenge`)
+		this.updateProgressBarAndStatsText({
+			data: { current: challengeData.current_amount_net, goal: challengeData.amount },
+		})
+
+		const startDate = new Date(challengeData.start * 1000)
+		const targetDate = new Date(startDate.getTime() + challengeData.max_time * 60 * 1000)
+		const formattedDate = new Intl.DateTimeFormat('de-AT', {
+			timeStyle: 'short',
+		}).format(targetDate)
+
+		this.updateTimer(`Ziel bis ${formattedDate}`)
+		this.updateTitle(challengeData.title)
+		this.updateDescription(challengeData.description)
+	}
+
+	handleMawJsonStateUpdate = (mawJsonInfo: MakeAWishInfoJsonDTO, streamer: string) => {
+		const allStreamers = mawJsonInfo.streamers
+
+		if (allStreamers[streamer]) {
+			const active_challenge = allStreamers[streamer].active_challenge
+			if (!active_challenge) {
+				this.setVisible(false)
+			} else {
+				this.setVisible(true)
+				this.updateChallengeData(active_challenge)
+			}
+		}
 	}
 }
 
