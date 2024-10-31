@@ -4,6 +4,7 @@ import SessionManager from '../SessionManager'
 const multiStreams = [
 	['icyvace', 'cherryylein'],
 	['xmrcr4zy', 's0ulrider'],
+	['stephantschany', 'yourhostlaura'],
 ]
 
 const flatMultiStreams = multiStreams.reduce((prev, curr) => prev.concat(curr), [])
