@@ -119,10 +119,7 @@ export default class Session {
 		socket.on(REQUEST_MAW_INFO_JSON_DATA, () => {
 			this.store.dispatch(updateDonationWidget({ ...this.store.getState().donationWidget }))
 
-			if (
-				mawApiClient.mawInfoJsonData?.streamers[this.channel]?.current_donation_sum_net &&
-				Number(mawApiClient.mawInfoJsonData?.streamers[this.channel]?.current_donation_sum_net)
-			) {
+			if (Number(mawApiClient.mawInfoJsonData?.streamers[this.channel]?.current_donation_sum_net) >= 0) {
 				this.store.dispatch(
 					updateDonationGoal({
 						...this.store.getState().donationGoal,
@@ -134,7 +131,7 @@ export default class Session {
 				)
 			} else {
 				logger.warn(
-					`Couldn't find streamer data in maw infoJson for channel ${this.channel} to access "current_donation_sum_net".`
+					`Couldn't find streamer data in maw infoJson for channel ${this.channel} to access "current_donation_sum_net". ${mawApiClient.mawInfoJsonData?.streamers[this.channel]?.current_donation_sum_net}`
 				)
 			}
 
