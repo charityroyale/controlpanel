@@ -51,7 +51,7 @@ export class DonationBehaviour {
 				this.ttsMinDonationAmount = ttsMinDonationAmount
 			}
 		})
-		this.initConfetti()
+		// this.initConfetti()
 		this.startListenForDonations()
 	}
 
@@ -174,9 +174,9 @@ export class DonationBehaviour {
 
 	public createVisualEffects(amount: number) {
 		const parsedAmount = amount / 100
-		if (parsedAmount >= CONFETTI_MIN_AMOUNT) {
+		/*if (parsedAmount >= CONFETTI_MIN_AMOUNT) {
 			this.playConfetti()
-		}
+		}*/
 
 		if (parsedAmount >= ALERT_STAR_AND_FIREWORK_MIN_AMOUNT) {
 			this.playStarRain()
@@ -221,26 +221,23 @@ export class DonationBehaviour {
 			const angleToCenter = Phaser.Math.Angle.Between(position[i].x, position[i].y, this.centerX, this.centerY - 150)
 
 			confettiTextures.forEach((texture) => {
-				// Create emitters with continuous emission
-				console.log(texture)
 				const emitter = this.alert.scene.add.particles(0, 0, texture, {
-					quantity: 10, // Number of particles per emission
+					quantity: 10,
 					lifespan: { min: 2000, max: 4000 },
 					speed: { min: 800, max: 1000 },
 					gravityY: 420,
 					scale: { start: 2.5, end: 0.5 },
 					rotate: { min: 0, max: 360 },
 					blendMode: 'ADD',
-					// Emit continuously every 50ms
 					frequency: 50,
 					// @ts-expect-error
 					emitZone: {
-						type: 'random', // Emit from random positions within the zone
-						source: new Phaser.Geom.Line(position[i].x, position[i].y, position[i].x + 50, position[i].y), // Circle zone around the random position
+						type: 'random',
+						source: new Phaser.Geom.Line(position[i].x, position[i].y, position[i].x + 50, position[i].y),
 					},
 					angle: { min: Phaser.Math.RadToDeg(angleToCenter) - 90, max: Phaser.Math.RadToDeg(angleToCenter) + 90 },
+					emitting: false,
 				})
-				emitter.stop()
 				emitterGroup.push(emitter)
 			})
 
@@ -248,16 +245,12 @@ export class DonationBehaviour {
 		}
 	}
 
-	playConfetti() {
+	/*playConfetti() {
 		for (let i = 0; i < this.maxEmitters; i++) {
 			// @ts-expect-error
 			this.emitters[i].forEach((emitter) => {
 				// Restart continuous emission
 				emitter.start()
-
-				if (i % 2 === 0) {
-					emitter.setDepth(999)
-				}
 
 				// Stop emitter after 3 seconds (or any duration you prefer)
 				this.alert.scene.time.delayedCall(200, () => {
@@ -265,7 +258,7 @@ export class DonationBehaviour {
 				})
 			})
 		}
-	}
+	}*/
 
 	public stop() {
 		window.clearInterval(this.checkQueueTimerId)
