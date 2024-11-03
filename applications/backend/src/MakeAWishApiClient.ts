@@ -8,7 +8,7 @@ class MakeAWishApiClient {
 	public cmsMawWishes: null | CmsUpcomingStreamer[] = null
 
 	private intervalId: undefined | ReturnType<typeof setInterval>
-	private readonly pollIntervalInSeconds = 15
+	private readonly pollIntervalInSeconds = 10
 
 	public poll() {
 		this.intervalId = setInterval(() => {
