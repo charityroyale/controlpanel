@@ -4,7 +4,7 @@ import { DonationBannerContainer } from './DonationBannerContainer'
 /**
  * Videobackgroundanimation GameObject
  */
-export class DonationAlertBanner extends Phaser.GameObjects.Video {
+export class DonationAlertVideo extends Phaser.GameObjects.Video {
 	constructor(scene: Phaser.Scene, x: number, y: number, state: DonationAlertState, key: string) {
 		super(scene, x, y, key)
 		this.name = key

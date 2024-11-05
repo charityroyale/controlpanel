@@ -1,7 +1,7 @@
 import { Donation } from '@cp/common'
 import { blueStarKey, donationAlertKey, donationAlertWithMessageKey, TTS_KEY } from '../../scenes/OverlayScene'
 import { Star } from '../Star'
-import { DonationAlertBanner } from '../containers/donationBanner/DonationBanner'
+import { DonationAlertVideo } from '../containers/donationBanner/DonationBanner'
 import {
 	DonationBannerContainer,
 	donationAlertContainerName,
@@ -69,8 +69,8 @@ export class DonationBehaviour {
 		const donationAlertContainer = this.alert.scene.children.getByName(
 			donationAlertContainerName
 		) as DonationBannerContainer
-		const bannerWithMessage = donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertBanner
-		const bannerWithoutMessage = donationAlertContainer.getByName(donationAlertKey) as DonationAlertBanner
+		const bannerWithMessage = donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertVideo
+		const bannerWithoutMessage = donationAlertContainer.getByName(donationAlertKey) as DonationAlertVideo
 
 		return bannerWithoutMessage.isPlaying() || bannerWithMessage.isPlaying()
 	}
@@ -80,8 +80,8 @@ export class DonationBehaviour {
 			donationAlertContainerName
 		) as DonationBannerContainer
 		const donationAlert = donation.message
-			? (donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertBanner)
-			: (donationAlertContainer.getByName(donationAlertKey) as DonationAlertBanner)
+			? (donationAlertContainer.getByName(donationAlertWithMessageKey) as DonationAlertVideo)
+			: (donationAlertContainer.getByName(donationAlertKey) as DonationAlertVideo)
 
 		this.createDonationAlertHeaderText(donation, donationAlert, donationAlertContainer)
 
@@ -94,34 +94,35 @@ export class DonationBehaviour {
 
 	private createDonationAlertHeaderText = (
 		donation: Donation,
-		donationAlert: DonationAlertBanner,
+		donationAlertVideo: DonationAlertVideo,
 		donationAlertContainer: DonationBannerContainer
 	) => {
 		const formatedDonationAmount = donation?.amount_net
 			? formatMoney(donation?.amount_net)
 			: `${formatMoney(donation.amount)} (inkl. Gebühren)`
+
 		const donationAlertHeaderText = new DonationBannerHeaderText(
 			this.alert.scene,
 			0,
-			donationAlert.displayHeight - 240 * donationAlertContainer.scale,
+			360 * donationAlertContainer.scale,
 			`${donation.user} spendet ${formatedDonationAmount} €`,
-			donationAlert.scale
+			donationAlertVideo.scale
 		)
 		donationAlertContainer.add(donationAlertHeaderText)
 	}
 
 	private createDonationAlertUserMessageText = (
 		donation: Donation,
-		donationAlert: DonationAlertBanner,
+		donationAlert: DonationAlertVideo,
 		donationAlertContainer: DonationBannerContainer
 	) => {
 		const donationAlertUserMessageText = new DonationBannerMessageText(
 			this.alert.scene,
-			donationAlert.x - (donationAlert.displayWidth / 2 - 50),
-			donationAlert.displayHeight - 540 * donationAlertContainer.scale,
+			-545 * donationAlertContainer.scale,
+			55 * donationAlertContainer.scale,
 			donation.message,
 			donationAlert.scale,
-			donationAlert.displayWidth - 70 * donationAlertContainer.scale * 2
+			1000 * donationAlertContainer.scale
 		)
 		donationAlertContainer.add(donationAlertUserMessageText)
 	}
@@ -158,7 +159,7 @@ export class DonationBehaviour {
 			: donationAlertContainer.getByName(donationAlertKey)
 
 		if (donationAlertContainer && banner) {
-			this.showBannerAndPlayVideo(banner as DonationAlertBanner)
+			this.showBannerAndPlayVideo(banner as DonationAlertVideo)
 		}
 	}
 
@@ -166,7 +167,7 @@ export class DonationBehaviour {
 	 * Prevents video freeze when game is out of focus (i.e. user changes tab on the browser)
 	 * donationBanner.setPaused(false)
 	 */
-	public showBannerAndPlayVideo(donationBanner: DonationAlertBanner) {
+	public showBannerAndPlayVideo(donationBanner: DonationAlertVideo) {
 		donationBanner.play()
 		donationBanner.setPaused(false)
 		donationBanner.parentContainer.alpha = 1

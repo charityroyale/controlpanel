@@ -13,7 +13,7 @@ import { Socket } from 'socket.io-client'
 import { SCENES } from '../gameConfig'
 import { Alert } from '../objects/containers/alert/Alert'
 import { DonationBannerContainer } from '../objects/containers/donationBanner/DonationBannerContainer'
-import { DonationAlertBanner } from '../objects/containers/donationBanner/DonationBanner'
+import { DonationAlertVideo } from '../objects/containers/donationBanner/DonationBanner'
 import { Star } from '../objects/Star'
 import { DonationWidgetContainer } from '../objects/containers/donationwidget/DonationWidgetContainer'
 import { DonationWidgetBackgroundFrame } from '../objects/containers/donationwidget/DonationWidgetBackgroundFrame'
@@ -246,8 +246,8 @@ export class OverlayScene extends Phaser.Scene {
 		this.alert = new Alert(this, starGroup, initialState.settings.text2speech.minDonationAmount)
 
 		// create donationAlerts
-		const dontainerBanner = new DonationAlertBanner(this, 0, 0, initialState.donationAlert, donationAlertKey)
-		const donationAlertWithMessage = new DonationAlertBanner(
+		const dontainerBanner = new DonationAlertVideo(this, 0, 0, initialState.donationAlert, donationAlertKey)
+		const donationAlertWithMessage = new DonationAlertVideo(
 			this,
 			0,
 			0,

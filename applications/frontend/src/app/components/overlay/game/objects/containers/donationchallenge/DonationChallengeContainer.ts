@@ -20,7 +20,6 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 	donationChallengeProgressBarText!: SairaCondensedText
 	donationChallengeProgressBarTitleText!: LuckiestGuyText
 	donationChallengeProgressBarHashTagText!: LuckiestGuyText
-	donationChallengeTimerText!: LuckiestGuyText
 	donationChallengeDescriptionText!: LuckiestGuyText
 
 	constructor(
@@ -39,7 +38,6 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 			this.donationChallengeProgressBarText,
 			this.donationChallengeProgressBarTitleText,
 			this.donationChallengeProgressBarHashTagText,
-			this.donationChallengeTimerText,
 			this.donationChallengeDescriptionText,
 		])
 
@@ -102,16 +100,6 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 			{ fontSize: '14px' }
 		)
 
-		this.donationChallengeTimerText = new LuckiestGuyText(
-			this.scene,
-			0,
-			0,
-			this.cpState,
-			'Placeholder',
-			'donationChallengeTimerText',
-			{ fontSize: '12px' }
-		).setOrigin(0, 1)
-
 		this.donationChallengeDescriptionText = new LuckiestGuyText(
 			this.scene,
 			0,
@@ -139,25 +127,16 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 		if (!this.initialized) {
 			this.updateChallengeLabel(`🎯DonationChallenge`)
 			this.updateProgressBarAndStatsText(state)
-			this.updateTimer('Zeit bis XX:XX')
 			this.updateTitle('Challenge')
 			this.updateDescription('Hier könnte eine Challenge stehen!')
 			this.initialized = true
 		} else {
 			this.updateChallengeLabel()
 			this.updateProgressBarAndStatsText()
-			this.updateTimer()
 			this.updateTitle()
 			this.updateDescription()
 			this.initialized = true
 		}
-	}
-
-	updateTimer(timerText?: string) {
-		if (timerText) {
-			this.donationChallengeTimerText.setText(timerText)
-		}
-		this.donationChallengeTimerText.setPosition(this.displayWidth - 290 * this.scale, -5 * this.scale)
 	}
 
 	updateChallengeLabel(labelText?: string) {
@@ -235,13 +214,6 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 			data: { current: challengeData.current_amount_net, goal: challengeData.amount / 100 },
 		})
 
-		const startDate = new Date(challengeData.start * 1000)
-		const targetDate = new Date(startDate.getTime() + challengeData.max_time * 60 * 1000)
-
-		const formattedDate = new Intl.DateTimeFormat('de-AT', {
-			timeStyle: 'short',
-		}).format(targetDate)
-		this.updateTimer(`Zeit bis ${formattedDate}`)
 		this.updateTitle(challengeData.title)
 		this.updateDescription(challengeData.description)
 	}
