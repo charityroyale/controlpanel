@@ -118,7 +118,7 @@ export default class Session {
 		})
 		socket.on(REQUEST_MAW_INFO_JSON_DATA, () => {
 			this.store.dispatch(updateDonationWidget({ ...this.store.getState().donationWidget }))
-			if (!mawApiClient.mawInfoJsonData?.streamers[this.channel]) {
+			if (!mawApiClient.mawInfoJsonData?.streamers[this.channel] || this.channel.toLowerCase() == 'lostsize') {
 				return
 			}
 

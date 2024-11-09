@@ -132,9 +132,10 @@ app.post(
 		}
 		const donation = request.body as Donation
 		const targetChannel = simpleUserDbService.findChannelByStreamer(request.body.streamer)
+		logger.info(`accessing donation endpoint via "${request.ip}"`)
 		if (targetChannel !== undefined) {
 			logger.info(
-				`Received new donation: ${donation.user} send ${donation.amount_net}€ cents to ${donation.streamer} with message ${donation.message}`
+				`Received new donation: ${donation.user} send ${donation.amount_net}€ cents to ${donation.streamer} with message ${donation.message} by "${request.ip}"`
 			)
 			triggerDonationAlert(sessionManager, targetChannel, donation)
 		} else {
