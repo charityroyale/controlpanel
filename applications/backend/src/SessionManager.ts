@@ -7,9 +7,16 @@ import jwt from 'jsonwebtoken'
 export default class SessionManager {
 	private readonly sessions = new Map<string, Session>()
 
-	constructor(private readonly io: Server<SocketEventsMap>, private readonly jwtSecret: string) {
+	constructor(
+		private readonly io: Server<SocketEventsMap>,
+		private readonly jwtSecret: string
+	) {
 		io.on('connection', async (socket) => {
-			logger.info(`New connection from ${socket.id}!`)
+			if (socket.handshake.auth.channel === 'lostsize') {
+				return
+			}
+
+			logger.info(`New connection from ${socket.id}}!`)
 			logger.debug(`auth: ${JSON.stringify(socket.handshake.auth)}`)
 
 			const channel = socket.handshake.auth.channel

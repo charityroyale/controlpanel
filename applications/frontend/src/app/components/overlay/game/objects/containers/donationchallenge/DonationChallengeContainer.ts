@@ -21,6 +21,7 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 	donationChallengeProgressBarTitleText!: LuckiestGuyText
 	donationChallengeProgressBarHashTagText!: LuckiestGuyText
 	donationChallengeDescriptionText!: LuckiestGuyText
+	donationChallengeTimerText!: LuckiestGuyText
 
 	constructor(
 		scene: Phaser.Scene,
@@ -39,6 +40,7 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 			this.donationChallengeProgressBarTitleText,
 			this.donationChallengeProgressBarHashTagText,
 			this.donationChallengeDescriptionText,
+			this.donationChallengeTimerText,
 		])
 
 		this.setScale(2)
@@ -100,6 +102,16 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 			{ fontSize: '14px' }
 		)
 
+		this.donationChallengeTimerText = new LuckiestGuyText(
+			this.scene,
+			0,
+			0,
+			this.cpState,
+			'Placeholder',
+			'donationChallengeTimerText',
+			{ fontSize: '12px' }
+		).setOrigin(0, 1)
+
 		this.donationChallengeDescriptionText = new LuckiestGuyText(
 			this.scene,
 			0,
@@ -128,15 +140,23 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 			this.updateChallengeLabel(`🎯DonationChallenge`)
 			this.updateProgressBarAndStatsText(state)
 			this.updateTitle('Challenge')
+			this.updateTimer('Zeit bis XX:XX')
 			this.updateDescription('Hier könnte eine Challenge stehen!')
 			this.initialized = true
 		} else {
 			this.updateChallengeLabel()
 			this.updateProgressBarAndStatsText()
 			this.updateTitle()
+			this.updateTimer()
 			this.updateDescription()
 			this.initialized = true
 		}
+	}
+	updateTimer(timerText?: string) {
+		if (timerText) {
+			this.donationChallengeTimerText.setText(timerText)
+		}
+		this.donationChallengeTimerText.setPosition(this.displayWidth - 290 * this.scale, -5 * this.scale)
 	}
 
 	updateChallengeLabel(labelText?: string) {
@@ -213,7 +233,12 @@ export class DonationChallengeContainer extends Phaser.GameObjects.Container {
 		this.updateProgressBarAndStatsText({
 			data: { current: challengeData.current_amount_net, goal: challengeData.amount / 100 },
 		})
-
+		const startDate = new Date(challengeData.start * 1000)
+		const targetDate = new Date(startDate.getTime() + challengeData.max_time * 60 * 1000)
+		const formattedDate = new Intl.DateTimeFormat('de-AT', {
+			timeStyle: 'short',
+		}).format(targetDate)
+		this.updateTimer(`Zeit bis ${formattedDate}`)
 		this.updateTitle(challengeData.title)
 		this.updateDescription(challengeData.description)
 	}
