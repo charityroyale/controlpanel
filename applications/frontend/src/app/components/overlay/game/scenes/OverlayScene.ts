@@ -212,11 +212,19 @@ export class OverlayScene extends Phaser.Scene {
 		// const flareParticles = this.add.particles(flaresAtlasKey)
 		this.ttsVolume = initialState.settings.text2speech.volume
 
-		const playTTS = () => {
+		const playTTS = (url: string) => {
 			if (this.cache.audio.exists(TTS_KEY)) {
-				this.sound.play(TTS_KEY, {
-					volume: this.ttsVolume > 0.2 ? this.ttsVolume - 0.1 : this.ttsVolume,
-				})
+				try {
+					const audio = new Audio(url)
+					audio.volume = this.ttsVolume > 0.2 ? this.ttsVolume - 0.1 : this.ttsVolume
+					audio.play()
+					audio.addEventListener('ended', () => {
+						audio.remove()
+						console.log('Audio playback completed and instance destroyed.')
+					})
+				} catch (e) {
+					console.log(e)
+				}
 			} else {
 				console.log('Sadly the TTS failed. Contact orga in Discord.')
 			}
@@ -229,7 +237,7 @@ export class OverlayScene extends Phaser.Scene {
 			loader.on('complete', () => {
 				this.time.addEvent({
 					delay: 2500,
-					callback: playTTS,
+					callback: () => playTTS(`${TTS_URL}/${id}.mp3`),
 				})
 				this.load.removeListener('complete')
 			})
