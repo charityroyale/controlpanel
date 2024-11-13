@@ -179,6 +179,14 @@ export class DonationBehaviour {
 			this.playConfetti()
 		}*/
 
+		const donationAlertContainer = this.alert.scene.children.getByName(
+			donationAlertContainerName
+		) as DonationBannerContainer
+
+		if (!donationAlertContainer.visible) {
+			return
+		}
+
 		if (parsedAmount >= ALERT_STAR_AND_FIREWORK_MIN_AMOUNT) {
 			this.playStarRain()
 			playFireWork(this.alert)
