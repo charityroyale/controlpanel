@@ -44,8 +44,8 @@ export const CenterPanel: FunctionComponent<
 					<OverlayLinkPreview href={`${window.location.origin}/overlay/${auth.channel}`} target="_blank">
 						{window.location.origin + '/overlay/' + auth.channel}
 					</OverlayLinkPreview>
-					<CopyBrowserSourceButton title={'Copy overlay URL'} username={auth.channel} />
-					<LockOverlay isLocked={globalState.settings.isLockedOverlay} title={'Lock overlay'} />
+					<CopyBrowserSourceButton title={'Copy overlay URL'} $username={auth.channel} />
+					<LockOverlay $isLocked={globalState.settings.isLockedOverlay} title={'Lock overlay'} />
 				</PanelButtonWrapper>
 			</Label>
 			<Content ref={contentRef} style={{ padding: 0, position: 'relative', backgroundColor: 'black' }}>

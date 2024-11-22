@@ -18,17 +18,17 @@ export const FatButton: FunctionComponent<React.PropsWithChildren<FatButtonProps
 	...props
 }: FatButtonProps) => {
 	return (
-		<Button {...props} value={value} isActive={active ? true : false} disabled={disabled}>
+		<Button {...props} value={value} $isActive={active ? true : false} disabled={disabled}>
 			{icon}
 			{children}
 		</Button>
 	)
 }
 
-const Button = styled.button<{ isActive: boolean }>`
+const Button = styled.button<{ $isActive: boolean }>`
 	border: none;
 	border-radius: ${(p) => p.theme.space.xs}px;
-	background-color: ${(p) => (p.isActive ? p.theme.color.willhaben : 'rgba(255, 255, 255, 0.2)')};
+	background-color: ${(p) => (p.$isActive ? p.theme.color.willhaben : 'rgba(255, 255, 255, 0.2)')};
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -41,6 +41,6 @@ const Button = styled.button<{ isActive: boolean }>`
 	}
 
 	* {
-		color: ${(p) => (p.isActive ? p.theme.color.white : 'rgba(255, 255, 255, 0.2)')};
+		color: ${(p) => (p.$isActive ? p.theme.color.white : 'rgba(255, 255, 255, 0.2)')};
 	}
 `

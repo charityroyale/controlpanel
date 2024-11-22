@@ -16,8 +16,8 @@ export const Donations: FunctionComponent<React.PropsWithChildren<{ donations: D
 						</DonationHeader>
 						<DonationCenter>{donation.message}</DonationCenter>
 						<DonationBottom>
-							<DonationAmount highlight={true}>{donation.fullFilledWish ? 'Fullfilled Wish' : ''}</DonationAmount>
-							<DonationAmount highlight={donationAmount >= 50}>
+							<DonationAmount $highlight={true}>{donation.fullFilledWish ? 'Fullfilled Wish' : ''}</DonationAmount>
+							<DonationAmount $highlight={donationAmount >= 50}>
 								{formatMoney(donationAmount)} € {donation.amount_net == null && '(inkl. Gebühren)'}
 							</DonationAmount>
 						</DonationBottom>
@@ -58,9 +58,9 @@ const DonationHeader = styled.div`
 	justify-content: space-between;
 `
 
-const DonationAmount = styled.div<{ highlight: boolean }>`
-	color: ${(p) => (p.highlight ? p.theme.color.charityGold : 'inherit')};
-	font-weight: ${(p) => (p.highlight ? 'bold' : 'normal')};
+const DonationAmount = styled.div<{ $highlight: boolean }>`
+	color: ${(p) => (p.$highlight ? p.theme.color.charityGold : 'inherit')};
+	font-weight: ${(p) => (p.$highlight ? 'bold' : 'normal')};
 `
 
 const DonationDate = styled.div`

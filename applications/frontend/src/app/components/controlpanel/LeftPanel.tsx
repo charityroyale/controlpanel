@@ -297,26 +297,29 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 								</div>
 							</div>
 						)}
-						renderThumb={({ props }) => (
-							<div
-								{...props}
-								style={{
-									/* eslint-disable react/prop-types */
-									...props.style,
-									height: '28px',
-									width: '28px',
-									borderRadius: '4px',
-									backgroundColor: '#049EE7',
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}
-							>
-								<SizeIconWrapper>
-									<IoMdResize size={24} />
-								</SizeIconWrapper>
-							</div>
-						)}
+						renderThumb={({ props }) => {
+							const { key, ...restProps } = props
+							return (
+								<div
+									key={key}
+									{...restProps}
+									style={{
+										...restProps.style,
+										height: '28px',
+										width: '28px',
+										borderRadius: '4px',
+										backgroundColor: '#049EE7',
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<SizeIconWrapper>
+										<IoMdResize size={24} />
+									</SizeIconWrapper>
+								</div>
+							)
+						}}
 					/>
 
 					{/* -------- */}
@@ -388,26 +391,29 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 								</div>
 							</div>
 						)}
-						renderThumb={({ props }) => (
-							<div
-								{...props}
-								style={{
-									/* eslint-disable react/prop-types */
-									...props.style,
-									height: '28px',
-									width: '28px',
-									borderRadius: '4px',
-									backgroundColor: '#049EE7',
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}
-							>
-								<SizeIconWrapper>
-									<IoMdResize size={24} />
-								</SizeIconWrapper>
-							</div>
-						)}
+						renderThumb={({ props }) => {
+							const { key, ...restProps } = props
+							return (
+								<div
+									key={key}
+									{...restProps}
+									style={{
+										...restProps.style,
+										height: '28px',
+										width: '28px',
+										borderRadius: '4px',
+										backgroundColor: '#049EE7',
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<SizeIconWrapper>
+										<IoMdResize size={24} />
+									</SizeIconWrapper>
+								</div>
+							)
+						}}
 					/>
 
 					{/* -------- */}
@@ -513,26 +519,29 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 								</div>
 							</div>
 						)}
-						renderThumb={({ props }) => (
-							<div
-								{...props}
-								style={{
-									/* eslint-disable react/prop-types */
-									...props.style,
-									height: '28px',
-									width: '28px',
-									borderRadius: '4px',
-									backgroundColor: '#049EE7',
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}
-							>
-								<SizeIconWrapper>
-									<IoMdResize size={24} />
-								</SizeIconWrapper>
-							</div>
-						)}
+						renderThumb={({ props }) => {
+							const { key, ...restProps } = props
+							return (
+								<div
+									key={key}
+									{...restProps}
+									style={{
+										...restProps.style,
+										height: '28px',
+										width: '28px',
+										borderRadius: '4px',
+										backgroundColor: '#049EE7',
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<SizeIconWrapper>
+										<IoMdResize size={24} />
+									</SizeIconWrapper>
+								</div>
+							)
+						}}
 					/>
 
 					<FatSelect
@@ -595,26 +604,29 @@ export const LeftPanel: FunctionComponent<React.PropsWithChildren<{ globalState:
 								</div>
 							</div>
 						)}
-						renderThumb={({ props }) => (
-							<div
-								{...props}
-								style={{
-									/* eslint-disable react/prop-types */
-									...props.style,
-									height: '28px',
-									width: '28px',
-									borderRadius: '4px',
-									backgroundColor: '#049EE7',
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}
-							>
-								<SizeIconWrapper>
-									<IoMdResize size={24} />
-								</SizeIconWrapper>
-							</div>
-						)}
+						renderThumb={({ props }) => {
+							const { key, ...restProps } = props
+							return (
+								<div
+									key={key}
+									{...restProps}
+									style={{
+										...restProps.style,
+										height: '28px',
+										width: '28px',
+										borderRadius: '4px',
+										backgroundColor: '#049EE7',
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<SizeIconWrapper>
+										<IoMdResize size={24} />
+									</SizeIconWrapper>
+								</div>
+							)
+						}}
 					/>
 				</ButtonsWrapper>
 			</Content>
@@ -658,14 +670,14 @@ const Circle: FunctionComponent<React.PropsWithChildren<{ filled: boolean; activ
 	filled,
 	active,
 }) => {
-	return <VolumeCircle filled={filled} active={active} />
+	return <VolumeCircle $filled={filled} $active={active} />
 }
 
-const VolumeCircle = styled.div<{ filled: boolean; active: boolean }>`
+const VolumeCircle = styled.div<{ $filled: boolean; $active: boolean }>`
 	height: 10px;
 	width: 10px;
 	border-radius: 50%;
-	background-color: ${(p) => (!p.active ? 'transparent' : p.filled ? 'white' : 'rgba(255, 255, 255, 0.2)')};
+	background-color: ${(p) => (!p.$active ? 'transparent' : p.$filled ? 'white' : 'rgba(255, 255, 255, 0.2)')};
 	border: 1px solid;
 `
 

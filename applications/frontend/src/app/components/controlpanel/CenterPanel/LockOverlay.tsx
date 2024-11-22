@@ -5,23 +5,23 @@ import { useSocket } from '../../../hooks/useSocket'
 import { SETTINGS_UPDATE } from '@cp/common'
 
 interface LockOverlayProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-	isLocked: boolean
+	$isLocked: boolean
 }
 
 const iconSize = '14px'
 export const LockOverlay: FunctionComponent<React.PropsWithChildren<LockOverlayProps>> = (props) => {
-	const { isLocked } = props
+	const { $isLocked } = props
 	const { socket } = useSocket()
 
 	const emiteCharacterIsLocked = useCallback(() => {
 		socket?.emit(SETTINGS_UPDATE, {
-			isLockedOverlay: !isLocked,
+			isLockedOverlay: !$isLocked,
 		})
-	}, [socket, isLocked])
+	}, [socket, $isLocked])
 
 	return (
 		<LabelButton aria-label="Lock Overlay" onClick={emiteCharacterIsLocked} {...props}>
-			<IconWrapper>{isLocked ? <ImLock size={iconSize} /> : <ImUnlocked size={iconSize} />}</IconWrapper>
+			<IconWrapper>{$isLocked ? <ImLock size={iconSize} /> : <ImUnlocked size={iconSize} />}</IconWrapper>
 		</LabelButton>
 	)
 }
