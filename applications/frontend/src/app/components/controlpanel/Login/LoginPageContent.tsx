@@ -102,7 +102,7 @@ export const LoginPageContent = () => {
 					</InputRow>
 				</FormContent>
 
-				<ErrorMessage show={showError}>🧙You shall not pass.🧙</ErrorMessage>
+				<ErrorMessage $show={showError}>🧙You shall not pass.🧙</ErrorMessage>
 				<div>
 					<LoginButton type="submit">
 						<span>Login</span>
@@ -126,10 +126,10 @@ const HammertimeLink = styled.p`
 	font-size: ${(p) => p.theme.fontSize.s}px;
 `
 
-const ErrorMessage = styled.div<{ show: boolean }>`
+const ErrorMessage = styled.div<{ $show: boolean }>`
 	color: ${(p) => p.theme.color.recordRed};
 	margin: ${(p) => p.theme.space.m}px 0;
-	visibility: ${(p) => (p.show ? 'visible' : 'hidden')};
+	visibility: ${(p) => (p.$show ? 'visible' : 'hidden')};
 	text-align: center;
 `
 
