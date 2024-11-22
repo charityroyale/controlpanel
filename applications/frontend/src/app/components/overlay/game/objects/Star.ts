@@ -1,15 +1,10 @@
-import { whiteStarFollowerKey } from "../scenes/OverlayScene"
+import { whiteStarFollowerKey } from '../scenes/OverlayScene'
 
 export class Star extends Phaser.Physics.Arcade.Sprite {
 	public bumps = 0
 	public starEmitter
 
-	constructor(
-		scene: Phaser.Scene,
-		x: number,
-		y: number,
-		texture: string | Phaser.Textures.Texture,
-	) {
+	constructor(scene: Phaser.Scene, x: number, y: number, texture: string | Phaser.Textures.Texture) {
 		super(scene, x, y, texture)
 		scene.add.existing(this)
 		scene.physics.add.existing(this)
@@ -26,12 +21,12 @@ export class Star extends Phaser.Physics.Arcade.Sprite {
 			angle: 360,
 		})
 
-		this.starEmitter = scene.add.particles(0, 0, whiteStarFollowerKey,{
-			frequency: 7,
+		this.starEmitter = scene.add.particles(0, 0, whiteStarFollowerKey, {
+			frequency: 50,
 			radial: false,
-			alpha: 0.2,
-			lifespan: 1000,
-			maxParticles: 200,
+			alpha: { start: 0.2, end: 0 },
+			lifespan: 500,
+			maxParticles: 100,
 			scale: 0.5,
 		})
 

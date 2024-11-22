@@ -24,7 +24,7 @@ export const loadingStateMaskTween = (scene: Scene, target: Phaser.GameObjects.G
 					scene.events.emit('hidingLoadingState')
 				},
 				onComplete: () => {
-					target.destroy()
+					target.destroy(true)
 				},
 			})
 		},

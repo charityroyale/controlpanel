@@ -3,15 +3,13 @@ import { FIREWORKS_SOUND_1_AUDIO_KEY, FIREWORKS_SOUND_2_AUDIO_KEY } from '../../
 import { Alert } from '../../containers/alert/Alert'
 
 // Inspired by https://codepen.io/samme/pen/eYEearb @sammee on github
-const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
+export const fireworksEmitterConfig: Phaser.Types.GameObjects.Particles.ParticleEmitterConfig = {
 	alpha: { start: 1, end: 0, ease: 'Cubic.easeIn' },
 	angle: { start: 0, end: 360, steps: 100 },
-	frequency: 1000,
 	gravityY: 600,
 	lifespan: 1800,
-	quantity: 500,
-	reserve: 500,
-	scale: { min: 0.02, max: 0.35 },
+	quantity: 300,
+	scale: { min: 0.1, max: 0.35 },
 	speed: { min: 200, max: 600 },
 	emitting: false,
 }
@@ -29,6 +27,9 @@ export const playFireWork = (alert: Alert) => {
 				height * Phaser.Math.FloatBetween(0, 0.2)
 			)
 			fireworksEmitter.explode()
+			fireworksEmitter.on('complete', () => {
+				fireworksEmitter.destroy(true)
+			})
 			alert.scene.sound.play(Phaser.Math.Between(0, 1) > 0 ? FIREWORKS_SOUND_1_AUDIO_KEY : FIREWORKS_SOUND_2_AUDIO_KEY)
 		},
 	})

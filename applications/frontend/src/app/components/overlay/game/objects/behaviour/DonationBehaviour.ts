@@ -22,10 +22,6 @@ import { playFireWork } from './specialeffects/fireworks'
 export class DonationBehaviour {
 	public ttsMinDonationAmount
 
-	/**
-	 * Checky every second if the queue has items and try
-	 * start donation animation.
-	 */
 	private checkQueueTimerId: undefined | number
 	private checkQueueTimer = 2000
 	private alert: Alert
@@ -45,13 +41,13 @@ export class DonationBehaviour {
 		this.queue = queue
 		this.starGroup = starGroup
 		this.ttsMinDonationAmount = ttsMinDonationAmount
+		this.initConfetti()
 
 		this.alert.scene.events.on('ttsUpdated', (ttsMinDonationAmount: number) => {
 			if (ttsMinDonationAmount !== this.ttsMinDonationAmount) {
 				this.ttsMinDonationAmount = ttsMinDonationAmount
 			}
 		})
-		// this.initConfetti()
 		this.startListenForDonations()
 	}
 
@@ -128,6 +124,13 @@ export class DonationBehaviour {
 	}
 
 	private triggerAlert(donation: Donation) {
+		for (let child of this.alert.scene.children.getAll()) {
+			if (child instanceof Star) {
+				child.starEmitter.destroy(true)
+				child.destroy(true)
+			}
+		}
+
 		if (donation.fullFilledWish) {
 			const audio = this.alert.scene.game.cache.audio.exists(GTA_RESPECT_SOUND_AUDIO_KEY)
 			if (audio) {
@@ -143,7 +146,7 @@ export class DonationBehaviour {
 		this.createVisualEffects(donation.amount_net ?? donation.amount)
 
 		if (donation.message && (donation.amount_net || donation.amount) >= this.ttsMinDonationAmount) {
-			this.alert.scene.events.emit('loadAndPlayTTS', donation.id) // and play
+			this.alert.scene.events.emit('loadAndPlayTTS', donation.id)
 		}
 		this.alert.soundbehaviour.playSound(donation)
 	}
@@ -175,9 +178,6 @@ export class DonationBehaviour {
 
 	public createVisualEffects(amount: number) {
 		const parsedAmount = amount / 100
-		/*if (parsedAmount >= CONFETTI_MIN_AMOUNT) {
-			this.playConfetti()
-		}*/
 
 		const donationAlertContainer = this.alert.scene.children.getByName(
 			donationAlertContainerName
@@ -194,6 +194,8 @@ export class DonationBehaviour {
 			this.playStarRain()
 		} else if (parsedAmount >= ALERT_FIREWORKS_MIN_AMOUNT) {
 			playFireWork(this.alert)
+		} else if (parsedAmount >= CONFETTI_MIN_AMOUNT) {
+			this.playConfetti()
 		}
 	}
 
@@ -207,15 +209,12 @@ export class DonationBehaviour {
 			},
 			callbackScope: this,
 			delay: 200,
-			repeat: 60,
+			repeat: 30,
 		})
 	}
-
 	initConfetti() {
-		// Confetti asset keys
 		const confettiTextures = ['purple_confetti', 'blue_confetti', 'green_confetti', 'orange_confetti', 'red_confetti']
 
-		// Limit the number of emitters (e.g., 5 emitters)
 		const fullHeight = this.alert.scene.cameras.main.height
 		const position = [
 			{ x: 0, y: fullHeight },
@@ -224,7 +223,6 @@ export class DonationBehaviour {
 			{ x: this.alert.scene.cameras.main.width, y: fullHeight },
 		]
 
-		// Create emitters at random positions initially
 		for (let i = 0; i < this.maxEmitters; i++) {
 			const emitterGroup = [] as any
 			const angleToCenter = Phaser.Math.Angle.Between(position[i].x, position[i].y, this.centerX, this.centerY - 150)
@@ -238,6 +236,7 @@ export class DonationBehaviour {
 					scale: { start: 2.5, end: 0.5 },
 					rotate: { min: 0, max: 360 },
 					blendMode: 'ADD',
+					reserve: 10,
 					frequency: 50,
 					// @ts-expect-error
 					emitZone: {
@@ -254,20 +253,17 @@ export class DonationBehaviour {
 		}
 	}
 
-	/*playConfetti() {
+	playConfetti() {
 		for (let i = 0; i < this.maxEmitters; i++) {
 			// @ts-expect-error
 			this.emitters[i].forEach((emitter) => {
-				// Restart continuous emission
 				emitter.start()
-
-				// Stop emitter after 3 seconds (or any duration you prefer)
 				this.alert.scene.time.delayedCall(200, () => {
 					emitter.stop()
 				})
 			})
 		}
-	}*/
+	}
 
 	public stop() {
 		window.clearInterval(this.checkQueueTimerId)

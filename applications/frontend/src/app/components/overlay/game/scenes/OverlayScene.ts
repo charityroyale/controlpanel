@@ -527,7 +527,7 @@ export class OverlayScene extends Phaser.Scene {
 
 		const starColliderSprite = new Phaser.Physics.Arcade.Sprite(this, 960, height + 40, blueStarKey)
 		const physicsBody = new Physics.Arcade.Body(this.physics.world, starColliderSprite)
-		physicsBody.setSize(1920, 10)
+		physicsBody.setSize(2120, 100)
 		physicsBody.allowGravity = false
 		physicsBody.immovable = true
 		starColliderSprite.body = physicsBody
@@ -535,15 +535,14 @@ export class OverlayScene extends Phaser.Scene {
 		this.physics.add.existing(starColliderSprite)
 		this.physics.world.setBoundsCollision(true, true, false, false)
 		this.physics.add.collider(starGroup, starColliderSprite, (gameObject1) => {
-			const star = gameObject1 as Star
-			star.setVelocityX(Phaser.Math.Between(-200, 200))
+			;(gameObject1 as Star).setVelocityX(Phaser.Math.Between(-200, 200))
 
-			if (star.bumps >= 1) {
-				star.starEmitter.killAll()
-				star.starEmitter.stop()
-				star.destroy()
+			if ((gameObject1 as Star).bumps >= 1) {
+				;(gameObject1 as Star).starEmitter.killAll()
+				;(gameObject1 as Star).starEmitter.destroy(true)
+				;(gameObject1 as Star).destroy(true)
 			} else {
-				star.bumps += 1
+				;(gameObject1 as Star).bumps += 1
 			}
 		})
 	}
