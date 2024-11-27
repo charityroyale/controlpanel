@@ -31,12 +31,13 @@ class MakeAWishApiClient {
 	public fetchMawData = async (): Promise<MakeAWishInfoJsonDTO | null> => {
 		try {
 			const response = await fetch(MakeAWishApiClient.mawApiUrl)
-			if (response.ok) {
+			if (response.ok || response.status === 304) {
 				const data = (await response.json()) as MakeAWishInfoJsonDTO
 				this.mawInfoJsonData = data
 				return data
 			}
-			logger.warn(`Issue fetching maw data`)
+			const body = await response.text()
+			logger.warn(`Issue fetching maw data ${response.status} ${body} via "${MakeAWishApiClient.mawApiUrl}".`)
 			return null
 		} catch (e) {
 			logger.error(`Error fetching maw data: ${e}`)
