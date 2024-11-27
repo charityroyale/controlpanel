@@ -32,6 +32,7 @@ class MakeAWishApiClient {
 		try {
 			const response = await fetch(MakeAWishApiClient.mawApiUrl)
 			if (response.ok || response.status === 304) {
+				logger.info('Success fetch MAW data')
 				const data = (await response.json()) as MakeAWishInfoJsonDTO
 				this.mawInfoJsonData = data
 				return data
