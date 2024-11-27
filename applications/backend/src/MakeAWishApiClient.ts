@@ -40,7 +40,17 @@ class MakeAWishApiClient {
 			logger.warn(`Issue fetching maw data ${response.status} ${body} via "${MakeAWishApiClient.mawApiUrl}".`)
 			return null
 		} catch (e) {
-			logger.error(`Error fetching maw data: ${e}`)
+			if (e instanceof TypeError) {
+				logger.error(`Network error issue while fetching maw data: ${e.message}`)
+				logger.error(`Stack trace: ${e.stack}`)
+				logger.debug(`URL: ${MakeAWishApiClient.mawApiUrl}`)
+			} else if (e instanceof Error) {
+				logger.error(`Unexpected error while fetching maw data: ${e.message}`)
+				logger.error(`Stack trace: ${e.stack}`)
+				logger.debug(`URL: ${MakeAWishApiClient.mawApiUrl}`)
+			} else {
+				logger.error(`Unknown error while fetching maw data: ${e}`)
+			}
 			return null
 		}
 	}
